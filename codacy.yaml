@@ -1,0 +1,4 @@
+---
+exclude_paths:
+# Example of an exclusion:
+#- "client/src/main/java/io/spine/net/Patterns.java"
