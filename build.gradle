@@ -1,0 +1,346 @@
+import groovy.time.TimeCategory
+
+//
+// Copyright 2017, TeamDev Ltd. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+buildscript {
+    ext {
+        guavaVersion = '20.0'
+        protobufGradlePluginVerison = '0.8.0'
+
+        spineRepository = 'http://maven.teamdev.com/repository/spine'
+        spineSnapshotsRepository = 'http://maven.teamdev.com/repository/spine-snapshots'
+        spineVersion = '0.9.25-SNAPSHOT'
+        spineToolsVersion = '0.9.10-SNAPSHOT'
+
+        // Defines option for the `spine-model-compiler` plugin.
+        // Indicates whether the generation of the validating builders is enabled.
+        generateValidatingBuildersValue = true
+    }
+
+    repositories {
+        jcenter()
+        // Google's mirror of Maven Central
+        maven { url = 'https://maven-central.storage.googleapis.com' }
+
+        mavenCentral()
+        mavenLocal()
+
+        // Spine releases repository.
+        maven { url = spineRepository }
+
+        // Spine snapshots repository.
+        maven { url = spineSnapshotsRepository }
+    }
+
+    dependencies {
+        classpath group: 'com.google.guava', name: 'guava', version: guavaVersion
+        classpath(group: 'com.google.protobuf', name: 'protobuf-gradle-plugin', version: protobufGradlePluginVerison) {
+            // exclude an old Guava version
+            exclude group: 'com.google.guava'
+        }
+        classpath group: 'io.spine.tools', name: 'spine-model-compiler', version: spineToolsVersion
+
+        /* Uncomment the below statement if you want the dependency to be fetched on each build.
+           Please note that offline builds will not be available then. */
+        //, changing: true
+
+        classpath group: 'io.spine.tools', name: 'spine-codestyle-checker', version: spineToolsVersion
+        classpath group: 'io.spine.tools', name: 'gcs-plugin', version: spineToolsVersion
+    }
+    configurations.all({
+        resolutionStrategy.cacheChangingModulesFor(0, 'seconds')
+    })
+}
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
+    apply plugin: 'idea'
+
+    group = 'io.spine'
+    // Use separate version numbering for the Spine Users library.
+    version = '0.0.1'
+}
+
+ext {
+    protobufVersion = '3.2.0'
+    protobufDependency = "com.google.protobuf:protoc:${protobufVersion}"
+    gRpcVersion = '1.1.2'
+    slf4JVersion = '1.7.21'
+    jUnitVersion = '4.12'
+
+    spineProtobufPluginId = 'io.spine.tools.spine-model-compiler'
+    spineCodestyleCheckerId = 'io.spine.tools.spine-codestyle-checker'
+    publishPlugin = "$rootDir/scripts/publish.gradle"
+
+    credentialsPropertyFile = 'credentials.properties'
+    projectsToPublish = ["core"]
+}
+
+subprojects {
+
+    configurations {
+        // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
+        runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
+        testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
+    }
+
+    project.ext {
+        sourcesRootDir = "$projectDir/src"
+        generatedRootDir = "$projectDir/generated"
+
+        generatedJavaDir = "$generatedRootDir/main/java"
+        generatedTestJavaDir = "$generatedRootDir/test/java"
+
+        generatedGrpcDir = "$generatedRootDir/main/grpc"
+        generatedTestGrpcDir = "$generatedRootDir/test/grpc"
+
+        generatedSpineDir = "$generatedRootDir/main/spine"
+        generatedTestSpineDir = "$generatedRootDir/test/spine"
+
+        testArtifactsScript = "${rootDir}/scripts/test-artifacts.gradle"
+        generateDescriptorSetScript = "${rootDir}/scripts/generate-descriptor-set.gradle"
+        gRpcScript = "${rootDir}/scripts/grpc.gradle"
+    }
+
+    apply plugin: 'com.google.protobuf'
+    apply plugin: 'java'
+
+    apply plugin: 'io.spine.tools.spine-codestyle-checker'
+
+    // Verifies code style.
+    // The parameters are same for any kind of verification:
+    //
+    //      - "threshold" - is a number of code style violations to consider check passed.
+    //      - "reportType" - report type if a check is not passed. Can be either "error" or "warn".
+    //              * "warn" - the violations are logged to the build report.
+    //              * "error" - build will fail and its report will contain the violations.
+    //
+    //      For more details please see io.spine.tools.codestyle.CodestyleCheckerPlugin
+    codestyleChecker {
+
+        // Javadoc @link/@linkplain format checker.
+        //
+        // Finds and reports FQNs used in links in the wrong format.
+        javadocLinkChecker {
+            threshold = 0
+            reportType = "warn"
+        }
+
+        // Right margin line checker.
+        //
+        // Finds and reports about the lines of a code with length above threshold.
+        rightMarginWrappingChecker {
+            maxTextWidth = 100
+        }
+    }
+
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+    // Set Java home to point to JDK7 in gradle.properties file.
+    //
+    // For Mac OS X, it looks like this:
+    //
+    // # suppress inspection "UnusedProperty"
+    // org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/
+
+    repositories {
+        jcenter()
+        // Google's mirror of Maven Central
+        maven { url = 'https://maven-central.storage.googleapis.com' }
+        mavenCentral()
+        mavenLocal()
+
+        // Spine releases repository.
+        maven { url = spineRepository }
+
+        // Spine snapshots repository.
+        maven { url = spineSnapshotsRepository }
+    }
+
+    dependencies {
+        compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+        compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
+
+        // As a Library, we provide logging facade API, not specific logger bindings.
+        // Target apps are free to use any binding they need.
+        compile group: 'org.slf4j', name: 'slf4j-api', version: slf4JVersion
+
+        compile group: 'com.google.protobuf', name: 'protobuf-java', version: protobufVersion
+        compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: protobufVersion
+
+        compile group: 'io.spine', name: 'spine-client-core', version: spineVersion
+        compile group: 'io.spine', name: 'spine-server-core', version: spineVersion
+
+        // Use jdk14 bindings for test purposes only.
+        testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: slf4JVersion
+        testCompile(group: 'junit', name: 'junit', version: jUnitVersion) {
+            exclude(module: 'hamcrest-core')
+        }
+        testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+        testCompile group: 'com.google.guava', name: 'guava-testlib', version: guavaVersion
+        testCompile group: 'io.spine', name: 'spine-testutil-core', version: spineVersion
+    }
+
+    sourceSets {
+        main {
+            proto.srcDirs = ["$sourcesRootDir/main/proto"]
+            java.srcDirs = [generatedJavaDir, "$sourcesRootDir/main/java", generatedSpineDir]
+            resources.srcDirs = ["$generatedRootDir/main/resources"]
+        }
+        test {
+            proto.srcDirs = ["$sourcesRootDir/test/proto"]
+            java.srcDirs = [generatedTestJavaDir, "$sourcesRootDir/test/java", generatedTestSpineDir]
+            resources.srcDirs = ["$generatedRootDir/test/resources"]
+        }
+    }
+
+    /* Uncomment this block if you need to display console output during the Gradle build.*/
+    test {
+        testLogging {
+            // Make sure output from standard out or error is shown in Gradle output.
+            showStandardStreams = true
+
+            // Or we use events method:
+            // events 'standard_out', 'standard_error'
+
+            // Or set property events:
+            // events = ['standard_out', 'standard_error']
+
+            // Instead of string values we can
+            // use enum values:
+            // events org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
+            //        org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
+        }
+    }
+
+
+    protobuf {
+        // The below suppressions `GroovyAssignabilityCheck` is a workaround for the IDEA bug.
+        // See: https://youtrack.jetbrains.com/issue/IDEA-141744
+        //noinspection GroovyAssignabilityCheck
+        plugins {
+            grpc {
+                artifact = "io.grpc:protoc-gen-grpc-java:$gRpcVersion"
+            }
+        }
+        generatedFilesBaseDir = generatedRootDir
+        protoc {
+            artifact = protobufDependency
+        }
+
+        // The below code removes deprecation annotations from the code generated by
+        // Protobuf compiler.
+        // See details at the link below:
+        //    https://github.com/google/protobuf/issues/2054
+        generateProtoTasks {
+            all().each { final task ->
+                task.descriptorSetOptions.includeSourceInfo = true
+                task.doLast {
+                    ant.replaceregexp(
+                            match:'@java.lang.Deprecated|@deprecated',
+                            replace:'',
+                            flags:'g',
+                            byline:true
+                    ) {
+                        fileset(dir: "${protobuf.generatedFilesBaseDir}/main/java")
+
+                        final generatedTests = "${protobuf.generatedFilesBaseDir}/test/java"
+                        if (new File(generatedTests).exists()) {
+                            fileset(dir: generatedTests)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    javadoc {
+        source = sourceSets.main.allJava
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier "sources"
+    }
+
+    task testOutputJar(type: Jar) {
+        from sourceSets.test.output
+        classifier "test"
+    }
+
+    task javadocJar(type: Jar, dependsOn: 'javadoc') {
+        from ("$projectDir/build/docs/javadoc")
+        classifier "javadoc"
+    }
+
+    apply from: "${rootDir}/scripts/no-internal-javadoc.gradle"
+
+    idea.module.iml {
+        beforeMerged { final module ->
+            module.dependencies.clear()
+        }
+        whenMerged { final module ->
+            module.dependencies*.exported = true
+        }
+    }
+
+    idea.module {
+        generatedSourceDirs += file(generatedJavaDir)
+        testSourceDirs += file(generatedTestJavaDir)
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+}
+
+idea.project.ipr {
+    beforeMerged { final project ->
+        project.modulePaths.clear()
+    }
+    withXml { final provider ->
+        provider.node.component
+                .find { it.@name == 'VcsDirectoryMappings' }
+                .mapping.@vcs = 'Git'
+    }
+}
+
+// Aggregated coverage report across all subprojects.
+apply from: "${rootDir}/scripts/jacoco.gradle"
+
+apply from: publishPlugin
+
+apply plugin: 'io.spine.tools.gcs-plugin'
+
+cleanGCS {
+    final Properties properties = new Properties()
+    final File gcsProperties = project.file("gcs.properties")
+    properties.load(gcsProperties.newDataInputStream())
+
+    authKeyPath = "gcs-auth-key.json"
+    bucketName = properties.getProperty("artifacts.bucket")
+    targetFolder = properties.getProperty("artifacts.folder")
+    threshold = TimeCategory.getDays(10)
+}
