@@ -26,7 +26,7 @@ buildscript {
 
         spineRepository = 'http://maven.teamdev.com/repository/spine'
         spineSnapshotsRepository = 'http://maven.teamdev.com/repository/spine-snapshots'
-        spineVersion = '0.9.24-SNAPSHOT'
+        spineVersion = '0.9.25-SNAPSHOT'
         spineToolsVersion = '0.9.10-SNAPSHOT'
 
         // Defines option for the `spine-model-compiler` plugin.
