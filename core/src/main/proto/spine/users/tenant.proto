@@ -28,10 +28,8 @@ option java_multiple_files = true;
 option java_outer_classname = "TenantProto";
 option java_generate_equals_and_hash = true;
 
-import "google/protobuf/timestamp.proto";
-
 import "spine/options.proto";
-import "spine/base/tenant_id.proto";
+import "spine/core/tenant_id.proto";
 import "spine/users/user_profile.proto";
 import "spine/users/organization.proto";
 
@@ -39,7 +37,7 @@ import "spine/users/organization.proto";
 message Tenant {
 
     // The identifier of the tenant.
-    base.TenantId id = 1;
+    core.TenantId id = 1;
 
     // An application can allow only organizational tenants, or only persons, or both.
     // This requirement would define what a valid `Tenant` message is.

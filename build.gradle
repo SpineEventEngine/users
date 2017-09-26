@@ -26,8 +26,9 @@ buildscript {
 
         spineRepository = 'http://maven.teamdev.com/repository/spine'
         spineSnapshotsRepository = 'http://maven.teamdev.com/repository/spine-snapshots'
-        spineVersion = '0.9.25-SNAPSHOT'
-        spineToolsVersion = '0.9.10-SNAPSHOT'
+        spineVersion = '0.9.67-SNAPSHOT'
+        spineBaseVersion = '0.9.55-SNAPSHOT'
+        spineToolsVersion = '0.9.41-SNAPSHOT'
 
         // Defines option for the `spine-model-compiler` plugin.
         // Indicates whether the generation of the validating builders is enabled.
@@ -187,8 +188,8 @@ subprojects {
         compile group: 'com.google.protobuf', name: 'protobuf-java', version: protobufVersion
         compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: protobufVersion
 
-        compile group: 'io.spine', name: 'spine-client-core', version: spineVersion
-        compile group: 'io.spine', name: 'spine-server-core', version: spineVersion
+        compile group: 'io.spine', name: 'spine-base', version: spineBaseVersion
+        compile group: 'io.spine', name: 'spine-server', version: spineVersion
 
         // Use jdk14 bindings for test purposes only.
         testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: slf4JVersion
