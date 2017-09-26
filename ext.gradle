@@ -22,7 +22,6 @@ final def SPINE_VERSION = "0.9.67-SNAPSHOT"
 
 ext {
     spineVersion = SPINE_VERSION
-    spineBaseVersion = '0.9.55-SNAPSHOT'
     spineToolsVersion = '0.9.41-SNAPSHOT'
 
     guavaVersion = '20.0'

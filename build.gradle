@@ -180,7 +180,6 @@ subprojects {
         compile group: 'com.google.protobuf', name: 'protobuf-java', version: protobufVersion
         compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: protobufVersion
 
-        compile group: 'io.spine', name: 'spine-base', version: spineBaseVersion
         compile group: 'io.spine', name: 'spine-server', version: spineVersion
 
         // Use jdk14 bindings for test purposes only.
