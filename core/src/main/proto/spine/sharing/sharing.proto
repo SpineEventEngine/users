@@ -28,7 +28,7 @@ option java_outer_classname = "SharingProto";
 option java_package = "io.spine.sharing";
 
 import "spine/options.proto";
-import "spine/base/user_id.proto";
+import "spine/core/user_id.proto";
 import "spine/users/group.proto";
 
 // Definition of specific people who can access a shared object.
@@ -39,7 +39,7 @@ message Subject {
     oneof kind {
 
         // A user with the ID can access.
-        base.UserId user = 1;
+        core.UserId user = 1;
 
         // A user belonging to the group with the ID can access.
         users.GroupId group = 2;

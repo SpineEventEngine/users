@@ -33,14 +33,14 @@ option java_generate_equals_and_hash = true;
 import "google/protobuf/field_mask.proto";
 
 import "spine/options.proto";
-import "spine/base/user_id.proto";
+import "spine/core/user_id.proto";
 import "spine/users/user_account.proto";
 
 // The request for obtaining multiple user accounts at once.
 message UserAccountRequest {
 
     // Identifiers of users for whom we need account details.
-    repeated base.UserId user_id = 1;
+    repeated core.UserId user_id = 1;
 
     // Specification of fields to be included into the returned results.
     // If not set, all fields will be returned.
