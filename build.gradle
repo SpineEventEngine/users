@@ -52,7 +52,7 @@ buildscript {
             // exclude an old Guava version
             exclude group: 'com.google.guava'
         }
-        classpath group: 'io.spine.tools', name: 'spine-model-compiler', version: spineToolsVersion
+        classpath group: 'io.spine.tools', name: 'spine-model-compiler', version: spineVersion
 
         /* Uncomment the below statement if you want the dependency to be fetched on each build.
            Please note that offline builds will not be available then. */
