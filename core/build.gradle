@@ -23,14 +23,3 @@ dependencies {
     compile group: 'io.grpc', name: 'grpc-stub', version: gRpcVersion
 }
 
-apply from: gRpcScript
-
-apply from: generateDescriptorSetScript
-
-apply from: testArtifactsScript
-
-apply plugin: spineProtobufPluginId
-
-modelCompiler {
-    generateValidatingBuilders = generateValidatingBuildersValue
-}

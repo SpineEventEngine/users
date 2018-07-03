@@ -145,8 +145,8 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     // Set Java home to point to JDK7 in gradle.properties file.
     //
@@ -284,8 +284,6 @@ subprojects {
         classifier "javadoc"
     }
 
-    apply from: "${rootDir}/scripts/no-internal-javadoc.gradle"
-
     idea.module.iml {
         beforeMerged { final module ->
             module.dependencies.clear()
@@ -317,22 +315,4 @@ idea.project.ipr {
                 .find { it.@name == 'VcsDirectoryMappings' }
                 .mapping.@vcs = 'Git'
     }
-}
-
-// Aggregated coverage report across all subprojects.
-apply from: "${rootDir}/scripts/jacoco.gradle"
-
-apply from: publishPlugin
-
-apply plugin: 'io.spine.tools.gcs-plugin'
-
-cleanGCS {
-    final Properties properties = new Properties()
-    final File gcsProperties = project.file("gcs.properties")
-    properties.load(gcsProperties.newDataInputStream())
-
-    authKeyPath = "gcs-auth-key.json"
-    bucketName = properties.getProperty("artifacts.bucket")
-    targetFolder = properties.getProperty("artifacts.folder")
-    threshold = TimeCategory.getDays(10)
 }
