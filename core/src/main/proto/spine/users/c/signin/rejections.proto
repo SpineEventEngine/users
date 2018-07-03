@@ -1,0 +1,28 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin";
+option java_multiple_files = false;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/user_auth_identity.proto";
+
+// This rejection is generated when a remote identity provider didn't find a requested identity.
+//
+message RemoteIdentityNotFound {
+
+    spine.core.UserId id = 1;
+
+    UserAuthIdentity identity = 2;
+}

@@ -1,0 +1,36 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin";
+option java_outer_classname = "ValuesProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/timestamp.proto";
+import "spine/core/user_id.proto";
+import "spine/users/c/user/user.proto";
+import "spine/users/user_auth_identity.proto";
+
+// Authentication tokens provided by Firebase.
+//
+message FirebaseTokens {
+
+    // The access token.
+    string access_token = 1;
+
+    // The refresh token.
+    string refresh_token = 2;
+
+    // The time when `access_token` expires.
+    google.protobuf.Timestamp expiration_time = 3;
+}

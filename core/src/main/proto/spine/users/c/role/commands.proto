@@ -1,0 +1,58 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.role;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.role";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/users/identifiers.proto";
+
+// The command to create a role.
+//
+message CreateRole {
+    option (events) = "RoleCreated";
+    option (required_field) = "organization|org_unit";
+
+    RoleId id = 1;
+
+    // The name of a role to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // A part of the organization this role belongs to.
+    oneof belongs_to {
+
+        OrganizationId organization = 3;
+
+        OrgUnitId org_unit = 4;
+    }
+}
+
+// The command to delete a role
+//
+message DeleteRole {
+    option (events) = "RoleDeleted";
+
+    RoleId id = 1;
+}
+
+// The command to rename a role.
+//
+message RenameRole {
+    option (events) = "RoleRenamed";
+
+    RoleId id = 1;
+
+    // The new name of a role.
+    string new_name = 2 [(required) = true];
+}

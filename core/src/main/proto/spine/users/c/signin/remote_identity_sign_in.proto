@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin";
+option java_outer_classname = "BasicSignInProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/c/user/user.proto";
+import "spine/users/user_auth_identity.proto";
+
+// The sign-in process that works with remote identity providers.
+//
+// On every sign-in, the process manager checks:
+//  * if the user exists in the system;
+//  * if the user is still active at the remote identity provider.
+//
+// If the user is not yet in the system, the process manager fetches the user profile from the
+// remote identity provider and creates the new `User` aggregate.
+//
+// If the user is active, the process ends with `UserSignInFinished` event. Otherwise, the process
+// ends with `UserSignInFailed` event. If necessary, the process manager synchronizes the user status
+// between TPIP and the `User` aggregate state.
+//
+// IMPORTANT: This process manager delegates TPIP querying to the `IdentityProvider` process manager.
+// Please, make sure to have the `IdentityProvider` registered in the bounded context.
+//
+message RemoteIdentitySignIn {
+    option (entity).kind = PROCESS_MANAGER;
+
+    spine.core.UserId id = 1;
+
+    // The current status of the process.
+    Status status = 2;
+
+    // The current status of the user fetched from the identity provider.
+    user.User.Status user_status = 3;
+
+    // The authentication identity to sign in with.
+    UserAuthIdentity identity = 4;
+
+    // A status of the sign-in process.
+    enum Status {
+
+        SIS_UNKNOWN = 0;
+
+        // Indicates that the process manager is checking if user is active or not.
+        USER_STATUS_CHECK = 1;
+
+        // Indicate that the process manager is fetching the user profile.
+        USER_PROFILE_FETCHING = 2;
+
+        // Indicates that the user doesn't exist and the process manager is creating it.
+        USER_CREATING = 3;
+
+        // A user is signed-in.
+        SIGNED_IN = 4;
+
+        // The sign-in process failed and should be repeated.
+        FAILED = 5;
+    }
+}

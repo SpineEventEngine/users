@@ -1,0 +1,110 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "UserProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/time/time.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+import "spine/users/c/user/user_attribute.proto";
+import "spine/users/user_profile.proto";
+import "spine/users/user_auth_identity.proto";
+
+// A user of the application.
+//
+// A user interacts with the application by sending commands and making queries.
+//
+// ## User Attributes
+//
+// To make `User` meet specific requirements of the application, it can be extended via
+// custom `UserAttribute`s.
+//
+// The following commands are available to work with the user attributes:
+//
+// * `AddUserAttribute` to add a new attribute, or replace the existing one;
+// * `RemoveUserAttribute` to remove an attribute;
+//
+// ## Organizational Structure
+//
+// A user can be a leaf in the hierarchical structure of the organization. It can have either
+// a single `Organization` or single `OrgUnit` as a parent organizational entity.
+//
+message User {
+    option (entity).kind = AGGREGATE;
+
+    spine.core.UserId id = 1;
+
+    // The user name to be displayed on UI.
+    string display_name = 2 [(required) = true];
+
+    // The roles assigned to the user directly (aka not propagated by a group membership).
+    repeated RoleId role = 3;
+
+    // The group memberships of the user.
+    //
+    // Every group membership propagates its own roles to the user.
+    //
+    repeated GroupId membership = 4;
+
+    // The parent entity in the organizational structure, if applicable.
+    ParentEntity parent_entity = 5;
+
+    // The attributes of the user.
+    repeated UserAttribute attribute = 6;
+
+    // General profile information for a user.
+    UserProfile profile = 7;
+
+    // The status of the user.
+    Status status = 8 [(required) = true];
+
+    // The primary authentication identity of the user.
+    UserAuthIdentity primary_auth_identity = 9 [(required) = true];
+
+    // The authentication identities of a user.
+    //
+    // Doesn't include the primary authentication identity.
+    //
+    repeated UserAuthIdentity auth_identity = 10;
+
+    // The time and date when user signed in.
+    spine.time.OffsetDateTime when_created = 11;
+
+    // A status of the user.
+    enum Status {
+
+        US_UNKNOWN = 0;
+
+        // A user is created but not yet ready to work.
+        //
+        // For example, the hasn't accepted invitation yet, or hasn't finished the registration.
+        //
+        NOT_READY = 1;
+
+        // The user is active and ready to work.
+        ACTIVE = 2;
+
+        // The user is suspended.
+        //
+        // A user could become suspended when:
+        //  * the corresponding user at third-party identity provider was suspended;
+        //  * an application admin suspended the user from within the application.
+        //
+        SUSPENDED = 3;
+    }
+}

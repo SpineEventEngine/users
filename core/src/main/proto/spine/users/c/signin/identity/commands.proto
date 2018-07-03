@@ -1,0 +1,52 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin.identity;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin.identity";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/user_auth_identity.proto";
+import "spine/users/c/signin/values.proto";
+
+// The command to check if user account is active and thus can be signed in.
+//
+message CheckUserStatus {
+    option (events) = "UserStatusChecked";
+    option (rejections) = "RemoteIdentityNotFound";
+
+    RemoteIdentityProviderId id = 1;
+
+    // The ID of a user to check status.
+    spine.core.UserId user_id = 2;
+
+    // An identity used to check the status.
+    UserAuthIdentity identity = 3 [(required) = true];
+}
+
+// The command to fetch detailed information about a user (such as user profile)
+// from the identity provider.
+//
+message FetchUserDetails {
+    option (events) = "UserDetailsFetched";
+
+    RemoteIdentityProviderId id = 1;
+
+    // The ID of a user to fetch details.
+    spine.core.UserId user_id = 2;
+
+    // An identity used to check the status.
+    UserAuthIdentity identity = 3 [(required) = true];
+}

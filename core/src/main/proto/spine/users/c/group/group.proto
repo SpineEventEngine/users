@@ -1,0 +1,70 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.group";
+option java_outer_classname = "GroupProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+import "spine/users/c/group/group_attribute.proto";
+
+// A group allows to propagate roles to multiple members at once.
+//
+// Both users and another groups can be members. The roles derived from the upper groups are
+// passed on to the member groups too.
+//
+// ## Group Attributes
+//
+// To make `Group` meet specific requirements of the application, it can be extended via
+// custom `GroupAttribute`s.
+//
+// The following commands are available to work with the group attributes:
+//
+// * `AddGroupAttribute` to add a new attribute, or replace the existing one;
+// * `RemoveGroupAttribute` to remove an attribute;
+//
+message Group {
+    option (entity).kind = AGGREGATE;
+    option (required_field) = "unit|organization";
+
+    GroupId id = 1;
+
+    // The name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // An interent domain of the group.
+    spine.net.InternetDomain domain = 3;
+
+    // The parent entity in the organizational structure.
+    ParentEntity parent_entity = 4 [(required) = true];
+
+    // The nested group memberships of this group.
+    //
+    // Every group membership propagates its own roles to this group.
+    //
+    repeated GroupId membership = 6;
+
+    // The attributes of the group.
+    repeated GroupAttribute attribute = 7;
+
+    // The roles assigned to the group directly (aka not propagated by a group membership).
+    repeated RoleId role = 8;
+
+    // The group owner.
+    spine.core.UserId owner = 9 [(required) = true];
+}

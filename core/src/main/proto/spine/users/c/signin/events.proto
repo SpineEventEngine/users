@@ -1,0 +1,55 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/users/c/user/user.proto";
+import "spine/users/user_auth_identity.proto";
+
+// The event is emitted when the sign-in process is successfully finished.
+//
+message RemoteIdentitySignInFinished {
+
+    spine.core.UserId id = 1;
+
+    // The authentication identity used to sign-in.
+    UserAuthIdentity identity = 2;
+}
+
+// The event is emitted when a sign-in attempt failed.
+//
+message RemoteIdentitySignInFailed {
+
+    spine.core.UserId id = 1;
+
+    // The authentication identity used to sign-in.
+    UserAuthIdentity identity = 2;
+}
+
+// The event is emitted when process manager command handler wants to send a command
+// from within a command handler.
+//
+// This event is a workaround direct delivery when running the application locally.
+//
+message CommandSent {
+
+    spine.core.UserId id = 1;
+
+    // A command to send.
+    google.protobuf.Any command = 2;
+}

@@ -1,0 +1,209 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.user";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+import "spine/users/c/user/user.proto";
+import "spine/users/user_auth_identity.proto";
+import "spine/users/c/user/user_attribute.proto";
+import "spine/users/user_profile.proto";
+
+// The command to create a new user.
+//
+message CreateUser {
+    option (events) = "UserCreated";
+
+    spine.core.UserId id = 1;
+
+    // The user name to be displayed on UI.
+    string display_name = 2 [(required) = true];
+
+    // The roles to be assigned to the user.
+    repeated RoleId role = 3;
+
+    // The parent entity in the organizational structure, if applicable.
+    ParentEntity parent_entity = 4;
+
+    // The attributes of the user.
+    repeated UserAttribute attribute = 5;
+
+    // Primary authentication identity of the user.
+    UserAuthIdentity primary_identity = 6 [(required) = true];
+
+    // The user profile.
+    UserProfile profile = 7;
+
+    // The initial status of the user;
+    User.Status status = 8 [(required) = true];
+}
+
+// The command to move a user from one organization or organizational unit to another.
+//
+message MoveUser {
+    option (events) = "UserMoved";
+
+    spine.core.UserId id = 1;
+
+    // The new parent entity in the organizational structure.
+    ParentEntity new_parent_entity = 2 [(required) = true];
+}
+
+// The command to start a group membership.
+//
+message StartGroupMembership {
+    option (events) = "GroupMembershipStarted";
+
+    spine.core.UserId id = 1;
+
+    // The ID of a group.
+    GroupId group_id = 2 [(required) = true];
+}
+
+// The command to stop a group membership.
+//
+message StopGroupMembership {
+    option (events) = "GroupMembershipStopped";
+
+    spine.core.UserId id = 1;
+
+    // The ID of a group.
+    GroupId group_id = 2 [(required) = true];
+}
+
+// The command to delete a user.
+//
+message DeleteUser {
+    option (events) = "UserDeleted";
+
+    spine.core.UserId id = 1;
+}
+
+// The command to assign a role to a user.
+//
+message AssignRoleToUser {
+    option (events) = "RoleAssignedToUser";
+
+    spine.core.UserId id = 1;
+
+    // The ID of a role to assign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to unassign a role from a user.
+//
+message UnassignRoleFromUser {
+    option (events) = "RoleUnassignedFromUser";
+
+    spine.core.UserId id = 1;
+
+    // The ID of a role to unassign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to add a new attribute to a user.
+//
+// If attribute with this name already exists it will be overwritten.
+//
+message AddUserAttribute {
+    option (events) = "UserAttributeAdded";
+
+    spine.core.UserId id = 1;
+
+    // An attribute to add.
+    UserAttribute attribute = 2 [(required) = true];
+}
+
+// The command to remove an attribute from a user.
+//
+message RemoveUserAttribute {
+    option (events) = "UserAttributeRemoved";
+
+    spine.core.UserId id = 1;
+
+    // The name of the attribute to remove.
+    string attribute_name = 2 [(required) = true];
+}
+
+// The command to update a user attribute.
+//
+message UpdateUserAttribute {
+
+    option (events) = "UserAttributeUpdated";
+
+    spine.core.UserId id = 1;
+
+    // The new value of an attribute.
+    UserAttribute attribute = 2 [(required) = true];
+}
+
+
+// The command to change the user status.
+//
+message ChangeUserStatus {
+    option (events) = "UserStatusChanged";
+
+    spine.core.UserId id = 1;
+
+    // The new status.
+    User.Status status = 2 [(required) = true];
+}
+
+// The command to sign a user out.
+//
+message SignUserOut {
+    option (events) = "UserSignedOut";
+
+    spine.core.UserId id = 1;
+}
+
+// The command to add a new authentication identity to the user.
+//
+message AddAuthIdentity {
+    option (events) = "AuthIdentityAdded";
+
+    spine.core.UserId id = 1;
+
+    // The identity to add.
+    UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The command to remove an authentication identity to the user.
+//
+message RemoveAuthIdentity {
+    option (events) = "AuthIdentityRemoved";
+
+    spine.core.UserId id = 1;
+
+    // The user identifier as specified by the authentication provider.
+    string uid = 2 [(required) = true];
+
+    // The unique identifier of the authentication provider.
+    RemoteIdentityProviderId provider_id = 3 [(required) = true];
+}
+
+// The command to change the primary authentication identity.
+//
+message ChangePrimaryAuthIdentity {
+    option (events) = "PrimaryAuthIdentityChanged";
+
+    spine.core.UserId id = 1;
+
+    // The new primary identity.
+    UserAuthIdentity identity = 2 [(required) = true];
+}

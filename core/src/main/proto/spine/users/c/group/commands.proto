@@ -1,0 +1,157 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.group";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+import "spine/users/c/group/group_attribute.proto";
+
+// The command to create a group.
+//
+message CreateGroup {
+    option (events) = "GroupCreated";
+    option (required_field) = "unit|organization";
+
+    GroupId id = 1;
+
+    // The name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // The roles assigned to the user directly (aka not propagated by a group membership).
+    repeated RoleId role = 3;
+
+    // The parent entity in the organizational structure.
+    ParentEntity parent_entity = 4 [(required) = true];
+
+    // The attributes of the group.
+    repeated GroupAttribute attribute = 5;
+
+    // The owner of the group.
+    spine.core.UserId owner = 6 [(required) = true];
+}
+
+// The command to change the owner of a group.
+//
+message ChangeGroupOwner {
+    option (events) = "GroupOwnerChanged";
+
+    GroupId id = 1;
+
+    // The ID of the owner.
+    spine.core.UserId owner = 2 [(required) = true];
+}
+
+// The command to move a group from one organization or orgunit to another.
+//
+message MoveGroup {
+    option (required_field) = "unit|organization";
+    option (events) = "GroupMoved";
+
+    GroupId id = 1;
+
+    // The new parent entity in the organizational structure.
+    ParentEntity new_parent_entity = 2 [(required) = true];
+}
+
+// The command to delete a group.
+//
+message DeleteGroup {
+    option (events) = "GroupDeleted";
+
+    GroupId id = 1;
+}
+
+// The command to start a nested group membership.
+//
+message StartNestedGroupMembership {
+    option (events) = "NestedGroupMembershipStarted";
+
+    GroupId id = 1;
+
+    // The ID of the upper group.
+    GroupId upper_group_id = 2 [(required) = true];
+}
+
+// The command to stop a nested group membership.
+//
+message StopNestedGroupMembership {
+    option (events) = "NestedGroupMembershipStopped";
+
+    GroupId id = 1;
+
+    // The ID of the upper group.
+    GroupId upper_group_id = 2 [(required) = true];
+}
+
+// The command to assign a `Role` to the group.
+//
+message AssignRoleToGroup {
+    option (events) = "RoleAssignedToGroup";
+
+    GroupId id = 1;
+
+    // The ID of a role to assign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to assign a `Role` from the group.
+//
+message UnassignRoleFromGroup {
+    option (events) = "RoleUnassignedFromGroup";
+
+    GroupId id = 1;
+
+    // The ID of a role to unassign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to add a new attribute to a group.
+//
+// If attribute with this name already exists it will be overwritten.
+//
+message AddGroupAttribute {
+    option (events) = "GroupAttributeAdded";
+
+    GroupId id = 1;
+
+    // An attribute to add.
+    GroupAttribute attribute = 2 [(required) = true];
+}
+
+// The command to remove an attribute from a group.
+//
+message RemoveGroupAttribute {
+    option (events) = "GroupAttributeRemoved";
+
+    GroupId id = 1;
+
+    // The name of the attribute to remove.
+    string attribute_name = 2 [(required) = true];
+}
+
+// The command to update a group attribute.
+//
+message UpdateGroupAttribute {
+
+    option (events) = "GroupAttributeUpdated";
+
+    GroupId id = 1;
+
+    // The new value of an attribute.
+    GroupAttribute attribute = 2 [(required) = true];
+}
