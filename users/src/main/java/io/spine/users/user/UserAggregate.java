@@ -29,7 +29,6 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * A user of the application.
  *
- *
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.

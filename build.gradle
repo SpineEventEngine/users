@@ -99,7 +99,6 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-//    apply plugin: 'io.spine.tools.spine-codestyle-checker'
     apply from: "$rootDir/ext.gradle"
     apply plugin: spineProtobufPluginId
 

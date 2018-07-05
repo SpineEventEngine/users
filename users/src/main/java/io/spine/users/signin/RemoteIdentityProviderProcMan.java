@@ -40,9 +40,9 @@ import io.spine.server.tuple.EitherOfTwo;
  *     EitherOfTwo<UserStatusChecked ,  Empty> checkStatus(CheckUserStatus command, ...) {
  *        String provider = command.getId().getValue();
  *        if (GOOGLE.equals(provider)) {
- *            return Empty.getDefaultInstance();
- *        } else {
  *            // ...
+ *        } else {
+ *            return Empty.getDefaultInstance();
  *        }
  *     }
  * }
@@ -72,7 +72,7 @@ abstract public class RemoteIdentityProviderProcMan
      * @param command        a command to check the user status
      * @param commandContext a command context
      * @return {@code Empty} if the command is ignored or {@link UserStatusChecked} otherwise
-     * @throws RemoteIdentityNotFound if when a remote identity provider didn't find a
+     * @throws RemoteIdentityNotFound if when a remote identity provider didn't find the
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.
@@ -89,7 +89,7 @@ abstract public class RemoteIdentityProviderProcMan
      * @param command a command to fetch user details
      * @param context a command context
      * @return {@code Empty} if the command is ignored or {@link UserDetailsFetched} otherwise
-     * @throws RemoteIdentityNotFound if when a remote identity provider didn't find a
+     * @throws RemoteIdentityNotFound if when a remote identity provider didn't find the
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.

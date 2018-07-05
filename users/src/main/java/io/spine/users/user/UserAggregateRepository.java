@@ -10,7 +10,7 @@ import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregateRepository;
 
 /**
- * The repository fo {@linkplain UserAggregate User aggregate}.
+ * The repository for {@linkplain UserAggregate User aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */

@@ -21,8 +21,7 @@ import io.spine.users.signin.RemoteIdentitySignInFinished;
  *
  * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings("OverlyCoupledClass")
-// It's OK for an event factory
+@SuppressWarnings("OverlyCoupledClass") // It's OK for an event factory
 final class UserEventFactory {
 
     private final ActorContext actorContext;
