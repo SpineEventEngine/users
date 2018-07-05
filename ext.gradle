@@ -18,18 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-final def SPINE_VERSION = '0.10.36-SNAPSHOT'
+final def SPINE_VERSION = '0.10.44-SNAPSHOT'
 
 ext {
     spineVersion = SPINE_VERSION
-    spineBaseVersion = '0.10.32-SNAPSHOT'
-    spineToolsVersion = '0.10.32-SNAPSHOT'
-
-    guavaVersion = '20.0'
-    protobufGradlePluginVerison = '0.8.3'
-    protobufVersion = '3.2.0'
-    gRpcVersion = '1.1.2'
-    slf4JVersion = '1.7.21'
-    jUnitVersion = '4.12'
-    hamcrestVersion = '1.3'
+    spineBaseVersion = '0.10.44-SNAPSHOT'
 }
