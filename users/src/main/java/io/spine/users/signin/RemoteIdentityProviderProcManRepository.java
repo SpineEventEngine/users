@@ -14,6 +14,6 @@ import io.spine.server.procman.ProcessManagerRepository;
  *
  * @author Vladyslav Lubenskyi
  */
-abstract class RemoteIdentityProviderProcManRepository<P extends RemoteIdentityProviderProcMan>
+abstract public class RemoteIdentityProviderProcManRepository<P extends RemoteIdentityProviderProcMan>
         extends ProcessManagerRepository<RemoteIdentityProviderId, P, RemoteIdentityProvider> {
 }

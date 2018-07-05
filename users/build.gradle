@@ -17,9 +17,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
+group = 'io.spine'
+
 dependencies {
-    compile group: 'io.grpc', name: 'grpc-okhttp', version: gRpcVersion
-    compile group: 'io.grpc', name: 'grpc-protobuf', version: gRpcVersion
-    compile group: 'io.grpc', name: 'grpc-stub', version: gRpcVersion
 }
 
+configurations {
+    // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
+    runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
+    testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
+}
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'

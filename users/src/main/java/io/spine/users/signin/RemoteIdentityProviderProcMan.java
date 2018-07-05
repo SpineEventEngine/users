@@ -49,9 +49,9 @@ import io.spine.server.tuple.EitherOfTwo;
  * }
  * </pre>
  *
- * @author Vladyslav Lubenskyi
+ * @author Vladyslav LubenskyiModelVerifier
  */
-abstract class RemoteIdentityProviderProcMan
+abstract public class RemoteIdentityProviderProcMan
         extends ProcessManager<RemoteIdentityProviderId,
                                RemoteIdentityProvider,
                                RemoteIdentityProviderVBuilder> {
@@ -59,7 +59,7 @@ abstract class RemoteIdentityProviderProcMan
     /**
      * @see ProcessManager#ProcessManager(Object)
      */
-    RemoteIdentityProviderProcMan(RemoteIdentityProviderId id) {
+    protected RemoteIdentityProviderProcMan(RemoteIdentityProviderId id) {
         super(id);
     }
 
@@ -76,7 +76,7 @@ abstract class RemoteIdentityProviderProcMan
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.
-    abstract EitherOfTwo<UserStatusChecked, Empty> checkStatus(CheckUserStatus command,
+    abstract protected EitherOfTwo<UserStatusChecked, Empty> checkStatus(CheckUserStatus command,
                                                                CommandContext commandContext)
             throws RemoteIdentityNotFound;
 
@@ -93,7 +93,7 @@ abstract class RemoteIdentityProviderProcMan
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.
-    abstract EitherOfTwo<UserDetailsFetched, Empty> fetchUserDetails(FetchUserDetails command,
+    abstract protected EitherOfTwo<UserDetailsFetched, Empty> fetchUserDetails(FetchUserDetails command,
                                                                      CommandContext context)
             throws RemoteIdentityNotFound;
 }

@@ -197,7 +197,7 @@ final class UserEventFactory {
         return event;
     }
 
-    public OffsetDateTime now() {
+    private OffsetDateTime now() {
         final ZoneOffset zoneOffset = actorContext.getZoneOffset();
         return OffsetDateTimes.now(zoneOffset);
     }

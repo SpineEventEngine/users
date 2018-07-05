@@ -19,13 +19,6 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/people/person_name.proto";
 
-// Details about the user to be shown on UI.
-//
-message UserDetails {
-
-    spine.people.PersonName name = 2;
-}
-
 // A parent organizational entity of another organizational entity.
 //
 message ParentEntity {
