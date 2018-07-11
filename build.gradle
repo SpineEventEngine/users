@@ -138,6 +138,11 @@ subprojects {
         testImplementation deps.test.guavaTestlib
         testImplementation deps.test.junit5Api
         testImplementation deps.test.junit5Runner
+
+        testCompile("io.spine:spine-testutil-server:${spineVersion}") {
+            // We are using JUnit 5.x instead of 4.x dependency of Spine testing framework.
+            exclude group: 'junit'
+        }
     }
 
     sourceSets {
