@@ -18,7 +18,6 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/user_auth_identity.proto";
-import "spine/users/c/signin/values.proto";
 
 // The command to start the sign-in process.
 //
@@ -28,11 +27,4 @@ message SignInRemoteIdentity {
 
     // The authentication identity to sign-in with.
     UserAuthIdentity identity = 2;
-
-    // The credentials used during sign-in.
-    oneof credentials {
-
-        // Firebase access and refresh tokens.
-        FirebaseTokens firebase_token_set = 3;
-    }
 }
