@@ -8,7 +8,7 @@ package io.spine.users.user;
 
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
-import io.spine.server.aggregate.AggregateCommandTest;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.server.entity.Repository;
 import io.spine.users.User;
 

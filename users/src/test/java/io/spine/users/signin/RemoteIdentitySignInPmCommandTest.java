@@ -9,7 +9,7 @@ package io.spine.users.signin;
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.server.procman.ProcessManagerCommandTest;
+import io.spine.testing.server.procman.ProcessManagerCommandTest;
 
 import static io.spine.users.signin.given.SignInTestEnv.userId;
 

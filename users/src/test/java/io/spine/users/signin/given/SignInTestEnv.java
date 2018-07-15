@@ -13,10 +13,9 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
-import io.spine.server.entity.given.Given;
+import io.spine.testing.server.entity.given.Given;
+import io.spine.time.OffsetDateTime;
 import io.spine.users.*;
-import io.spine.users.signin.FirebaseTokens;
-import io.spine.users.signin.FirebaseTokensVBuilder;
 import io.spine.users.signin.RemoteIdentitySignInProcMan;
 import io.spine.users.user.UserAggregate;
 import io.spine.users.user.UserAggregateRepository;
@@ -25,6 +24,8 @@ import io.spine.users.user.UserAttributeVBuilder;
 import org.mockito.Mockito;
 
 import static io.spine.protobuf.AnyPacker.pack;
+import static io.spine.time.OffsetDateTimes.now;
+import static io.spine.time.ZoneOffsets.utc;
 import static io.spine.users.User.Status.NOT_READY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -74,10 +75,10 @@ public class SignInTestEnv {
                                  .addAttribute(attribute())
                                  .addRole(adminRoleId())
                                  .build();
-        final UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
-                                             .withState(state)
-                                             .withId(userId())
-                                             .build();
+        UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
+                .withState(state)
+                .withId(userId())
+                .build();
         return aggregate;
     }
 
@@ -92,7 +93,7 @@ public class SignInTestEnv {
                                   .build();
     }
 
-    static ParentEntity parentEntity() {
+    private static ParentEntity parentEntity() {
         return ParentEntityVBuilder.newBuilder()
                                    .setOrganization(organizationId())
                                    .build();
@@ -106,20 +107,17 @@ public class SignInTestEnv {
                                        .build();
     }
 
-    static RoleId adminRoleId() {
+    private static RoleId adminRoleId() {
         return RoleIdVBuilder.newBuilder()
                              .setValue("admin_role")
                              .build();
     }
 
     static UserAttribute attribute() {
-        FirebaseTokens tokenSet = FirebaseTokensVBuilder.newBuilder()
-                                                        .setAccessToken("access-token")
-                                                        .setRefreshToken("refresh-token")
-                                                        .build();
+        OffsetDateTime time = now(utc());
         return UserAttributeVBuilder.newBuilder()
-                                    .setName("firebase_token")
-                                    .setValue(pack(tokenSet))
+                                    .setName("when_registered")
+                                    .setValue(pack(time))
                                     .build();
     }
 

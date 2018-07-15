@@ -6,7 +6,6 @@
 
 package io.spine.users.signin.given;
 
-import io.spine.time.OffsetDateTimes;
 import io.spine.users.signin.RemoteIdentitySignInProcMan;
 import io.spine.users.signin.identity.UserDetailsFetched;
 import io.spine.users.signin.identity.UserStatusChecked;
@@ -15,7 +14,7 @@ import io.spine.users.user.UserCreated;
 import io.spine.users.user.UserCreatedVBuilder;
 
 import static io.spine.time.OffsetDateTimes.now;
-import static io.spine.time.ZoneOffsets.UTC;
+import static io.spine.time.ZoneOffsets.utc;
 import static io.spine.users.User.Status.ACTIVE;
 import static io.spine.users.User.Status.SUSPENDED;
 import static io.spine.users.signin.given.SignInTestEnv.*;
@@ -59,7 +58,7 @@ public class SignInTestEvents {
                                   .setStatus(ACTIVE)
                                   .setDisplayName(displayName())
                                   .setPrimaryIdentity(identity())
-                                  .setWhenCreated(now(UTC))
+                                  .setWhenCreated(now(utc()))
                                   .build();
     }
 }

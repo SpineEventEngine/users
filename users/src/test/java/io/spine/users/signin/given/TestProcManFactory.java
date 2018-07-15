@@ -6,7 +6,7 @@
 
 package io.spine.users.signin.given;
 
-import io.spine.server.entity.given.Given;
+import io.spine.testing.server.entity.given.Given;
 import io.spine.users.signin.RemoteIdentitySignIn;
 import io.spine.users.signin.RemoteIdentitySignIn.Status;
 import io.spine.users.signin.RemoteIdentitySignInProcMan;

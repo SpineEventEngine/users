@@ -6,7 +6,7 @@
 
 package io.spine.users.user.given;
 
-import io.spine.server.entity.given.Given;
+import io.spine.testing.server.entity.given.Given;
 import io.spine.users.User;
 import io.spine.users.UserVBuilder;
 import io.spine.users.user.UserAggregate;

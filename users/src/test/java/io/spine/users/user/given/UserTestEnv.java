@@ -12,14 +12,15 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
+import io.spine.time.OffsetDateTime;
 import io.spine.users.*;
-import io.spine.users.signin.FirebaseTokens;
-import io.spine.users.signin.FirebaseTokensVBuilder;
 import io.spine.users.user.UserAggregate;
 import io.spine.users.user.UserAttribute;
 import io.spine.users.user.UserAttributeVBuilder;
 
 import static io.spine.protobuf.AnyPacker.pack;
+import static io.spine.time.OffsetDateTimes.now;
+import static io.spine.time.ZoneOffsets.utc;
 
 /**
  * The environment for the {@link UserAggregate} tests.
@@ -98,14 +99,11 @@ public class UserTestEnv {
     }
 
     static UserAttribute attribute() {
-        FirebaseTokens tokenSet = FirebaseTokensVBuilder.newBuilder()
-                .setAccessToken("access-token")
-                .setRefreshToken("refresh-token")
-                .build();
+        OffsetDateTime time = now(utc());
         return UserAttributeVBuilder.newBuilder()
-                .setName("firebase_token")
-                .setValue(pack(tokenSet))
-                .build();
+                                    .setName("when_registered")
+                                    .setValue(pack(time))
+                                    .build();
     }
 
     private static RemoteIdentityProviderId googleProviderId() {

@@ -10,7 +10,7 @@ import com.google.protobuf.Message;
 import io.spine.core.Enrichment;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.server.procman.ProcessManagerEventReactionTest;
+import io.spine.testing.server.procman.ProcessManagerEventReactionTest;
 
 import static io.spine.users.signin.given.SignInTestEnv.userId;
 
