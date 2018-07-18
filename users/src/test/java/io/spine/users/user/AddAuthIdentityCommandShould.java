@@ -41,5 +41,4 @@ public class AddAuthIdentityCommandShould extends UserCommandTest<AddAuthIdentit
     protected AddAuthIdentity createMessage() {
         return addAuthIdentity();
     }
-
 }

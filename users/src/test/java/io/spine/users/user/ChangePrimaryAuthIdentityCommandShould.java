@@ -41,5 +41,4 @@ public class ChangePrimaryAuthIdentityCommandShould extends UserCommandTest<Chan
     protected ChangePrimaryAuthIdentity createMessage() {
         return changePrimaryIdentity();
     }
-
 }

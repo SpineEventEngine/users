@@ -41,5 +41,4 @@ public class AddUserAttributeCommandShould extends UserCommandTest<AddUserAttrib
     protected AddUserAttribute createMessage() {
         return addUserAttribute();
     }
-
 }

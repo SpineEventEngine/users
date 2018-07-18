@@ -43,5 +43,4 @@ public class RemoveUserAttributeCommandShould extends UserCommandTest<RemoveUser
     protected RemoveUserAttribute createMessage() {
         return removeUserAttribute();
     }
-
 }

@@ -41,5 +41,4 @@ public class StartGroupMembershipCommandShould extends UserCommandTest<StartGrou
     protected StartGroupMembership createMessage() {
         return startGroupMembership();
     }
-
 }

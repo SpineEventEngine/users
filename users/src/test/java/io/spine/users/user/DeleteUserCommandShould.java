@@ -41,5 +41,4 @@ public class DeleteUserCommandShould extends UserCommandTest<DeleteUser> {
     protected DeleteUser createMessage() {
         return deleteUser();
     }
-
 }

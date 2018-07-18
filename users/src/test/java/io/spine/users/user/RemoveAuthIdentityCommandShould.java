@@ -45,5 +45,4 @@ public class RemoveAuthIdentityCommandShould extends UserCommandTest<RemoveAuthI
     protected RemoveAuthIdentity createMessage() {
         return removeAuthIdentity();
     }
-
 }

@@ -36,5 +36,4 @@ public class RemoteIdentitySignedInEventShould extends UserEventTest<RemoteIdent
     protected RemoteIdentitySignInFinished createMessage() {
         return signInFinished();
     }
-
 }

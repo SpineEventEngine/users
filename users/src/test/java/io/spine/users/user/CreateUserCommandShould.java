@@ -55,5 +55,4 @@ public class CreateUserCommandShould extends UserCommandTest<CreateUser> {
     protected CreateUser createMessage() {
         return createUser();
     }
-
 }

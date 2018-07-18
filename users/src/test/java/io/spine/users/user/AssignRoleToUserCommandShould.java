@@ -41,5 +41,4 @@ public class AssignRoleToUserCommandShould extends UserCommandTest<AssignRoleToU
     protected AssignRoleToUser createMessage() {
         return assignRoleToUser();
     }
-
 }

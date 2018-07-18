@@ -43,5 +43,4 @@ public class MoveUserCommandShould extends UserCommandTest<MoveUser> {
     protected MoveUser createMessage() {
         return moveUser();
     }
-
 }

@@ -34,5 +34,4 @@ public class SignUserOutCommandShould extends UserCommandTest<SignUserOut> {
     protected SignUserOut createMessage() {
         return signUserOut();
     }
-
 }

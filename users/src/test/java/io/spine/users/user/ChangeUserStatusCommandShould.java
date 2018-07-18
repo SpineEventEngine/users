@@ -43,5 +43,4 @@ public class ChangeUserStatusCommandShould extends UserCommandTest<ChangeUserSta
     protected ChangeUserStatus createMessage() {
         return changeUserStatus();
     }
-
 }
