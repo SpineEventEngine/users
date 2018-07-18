@@ -30,7 +30,7 @@ public class SignInRemoteIdentityCommandTest
     @Test
     @DisplayName("initialize")
     void initialize() {
-        final RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
+        RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
         emptyProcMan.setUserRepository(emptyUserRepo());
 
         expectThat(emptyProcMan).hasState(state -> {
@@ -42,7 +42,7 @@ public class SignInRemoteIdentityCommandTest
     @Test
     @DisplayName("fetch user profile if the user doesn't exist")
     void createUser() {
-        final RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
+        RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
         emptyProcMan.setUserRepository(emptyUserRepo());
 
         expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
@@ -58,7 +58,7 @@ public class SignInRemoteIdentityCommandTest
     @Test
     @DisplayName("check user status if the user exists")
     void checkStatus() {
-        final RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
+        RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
 
         expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
