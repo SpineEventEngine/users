@@ -7,15 +7,15 @@
 package io.spine.users.signin;
 
 import com.google.protobuf.Empty;
-import io.spine.users.signin.identity.CheckUserStatus;
-import io.spine.users.signin.identity.FetchUserDetails;
-import io.spine.users.signin.identity.UserDetailsFetched;
-import io.spine.users.signin.identity.UserStatusChecked;
-import io.spine.users.RemoteIdentityProviderId;
 import io.spine.core.CommandContext;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.tuple.EitherOfTwo;
+import io.spine.users.RemoteIdentityProviderId;
+import io.spine.users.signin.identity.CheckUserStatus;
+import io.spine.users.signin.identity.FetchUserDetails;
+import io.spine.users.signin.identity.UserDetailsFetched;
+import io.spine.users.signin.identity.UserStatusChecked;
 
 /**
  * An abstract process manager to communicate with the remote identity provider.
@@ -49,7 +49,7 @@ import io.spine.server.tuple.EitherOfTwo;
  * }
  * </pre>
  *
- * @author Vladyslav LubenskyiModelVerifier
+ * @author Vladyslav Lubenskyi
  */
 abstract public class RemoteIdentityProviderProcMan
         extends ProcessManager<RemoteIdentityProviderId,
@@ -76,8 +76,8 @@ abstract public class RemoteIdentityProviderProcMan
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.
-    abstract protected EitherOfTwo<UserStatusChecked, Empty> checkStatus(CheckUserStatus command,
-                                                               CommandContext commandContext)
+    abstract protected EitherOfTwo<UserStatusChecked, Empty>
+    checkStatus(CheckUserStatus command, CommandContext commandContext)
             throws RemoteIdentityNotFound;
 
     /**
@@ -93,7 +93,7 @@ abstract public class RemoteIdentityProviderProcMan
      * requested identity.
      */
     @SuppressWarnings("unused") // A command handler is never used directly.
-    abstract protected EitherOfTwo<UserDetailsFetched, Empty> fetchUserDetails(FetchUserDetails command,
-                                                                     CommandContext context)
+    abstract protected EitherOfTwo<UserDetailsFetched, Empty>
+    fetchUserDetails(FetchUserDetails command, CommandContext context)
             throws RemoteIdentityNotFound;
 }

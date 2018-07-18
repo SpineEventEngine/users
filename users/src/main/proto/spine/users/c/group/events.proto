@@ -106,7 +106,6 @@ message RoleAssignedToGroup {
 
     // The ID of the assigned role.
     RoleId role_id = 2 [(required) = true];
-
 }
 
 // The event is emitted when a role is unassigned from the group.

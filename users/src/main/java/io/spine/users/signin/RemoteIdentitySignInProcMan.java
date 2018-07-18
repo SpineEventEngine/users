@@ -35,7 +35,6 @@ import static io.spine.users.signin.RemoteIdentitySignIn.Status.*;
 import static io.spine.users.User.Status.ACTIVE;
 import static io.spine.protobuf.AnyPacker.pack;
 
-// @formatter:off
 /**
  * The basic sign-in process.
  *
@@ -61,7 +60,6 @@ import static io.spine.protobuf.AnyPacker.pack;
  *
  * @author Vladyslav Lubenskyi
  */
-// @formatter:on
 public class RemoteIdentitySignInProcMan
         extends ProcessManager<UserId, RemoteIdentitySignIn, RemoteIdentitySignInVBuilder> {
 
