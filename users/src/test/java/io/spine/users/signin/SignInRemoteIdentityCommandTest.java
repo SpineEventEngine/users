@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoteIdentitySignInPM should, when SignInRemoteIdentity")
-public class SignInRemoteIdentityCommandShould
+public class SignInRemoteIdentityCommandTest
         extends RemoteIdentitySignInPmCommandTest<SignInRemoteIdentity> {
 
     @Test

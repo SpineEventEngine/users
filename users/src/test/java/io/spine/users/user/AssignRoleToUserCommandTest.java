@@ -10,35 +10,35 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestCommands.addAuthIdentity;
+import static io.spine.users.user.given.UserTestCommands.assignRoleToUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("AddAuthIdentity command should")
-public class AddAuthIdentityCommandShould extends UserCommandTest<AddAuthIdentity> {
+@DisplayName("AssignRoleToUser command should")
+public class AssignRoleToUserCommandTest extends UserCommandTest<AssignRoleToUser> {
 
     @Test
-    @DisplayName("generate AuthIdentityAdded event")
+    @DisplayName("generate RoleAssignedToUser event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(AuthIdentityAdded.class, event -> {
+        expectThat(aggregate).producesEvent(RoleAssignedToUser.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getIdentity(), event.getIdentity());
+            assertEquals(message().getRoleId(), event.getRoleId());
         });
     }
 
     @Test
-    @DisplayName("add a new identity")
+    @DisplayName("add a new role")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getAuthIdentity(1)));
+                state -> assertEquals(message().getRoleId(), state.getRole(1)));
     }
 
     @Override
-    protected AddAuthIdentity createMessage() {
-        return addAuthIdentity();
+    protected AssignRoleToUser createMessage() {
+        return assignRoleToUser();
     }
 }

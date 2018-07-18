@@ -10,35 +10,35 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestCommands.changePrimaryIdentity;
+import static io.spine.users.user.given.UserTestCommands.addAuthIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangePrimaryAuthIdentity command should")
-public class ChangePrimaryAuthIdentityCommandShould extends UserCommandTest<ChangePrimaryAuthIdentity> {
+@DisplayName("AddAuthIdentity command should")
+public class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity> {
 
     @Test
-    @DisplayName("generate PrimaryAuthIdentityChanged event")
+    @DisplayName("generate AuthIdentityAdded event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(PrimaryAuthIdentityChanged.class, event -> {
+        expectThat(aggregate).producesEvent(AuthIdentityAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getIdentity(), event.getIdentity());
         });
     }
 
     @Test
-    @DisplayName("change the primary googleIdentity")
+    @DisplayName("add a new identity")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getPrimaryAuthIdentity()));
+                state -> assertEquals(message().getIdentity(), state.getAuthIdentity(1)));
     }
 
     @Override
-    protected ChangePrimaryAuthIdentity createMessage() {
-        return changePrimaryIdentity();
+    protected AddAuthIdentity createMessage() {
+        return addAuthIdentity();
     }
 }

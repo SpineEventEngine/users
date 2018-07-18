@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoteIdentitySignInPM should, when user status is suspended")
-public class SuspendedUserStatusCheckedEventShould
+public class SuspendedUserStatusCheckedEventTest
         extends RemoteIdentitySignInPmEventTest<UserStatusChecked> {
 
     private static final boolean SUSPENDED = false;

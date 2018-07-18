@@ -10,37 +10,37 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestCommands.removeUserAttribute;
+import static io.spine.users.user.given.UserTestCommands.moveUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoveUserAttribute command should")
-public class RemoveUserAttributeCommandShould extends UserCommandTest<RemoveUserAttribute> {
+@DisplayName("MoveUser command should")
+public class MoveUserCommandTest extends UserCommandTest<MoveUser> {
 
     @Test
-    @DisplayName("generate UserAttributeRemoved event")
+    @DisplayName("generate UserMoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserAttributeRemoved.class, event -> {
+        expectThat(aggregate).producesEvent(UserMoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getAttributeName(), event.getAttribute()
-                    .getName());
+            assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
+            assertTrue(event.hasOldParentEntity());
         });
     }
 
     @Test
-    @DisplayName("remove an attribute")
+    @DisplayName("change parent entity of the user")
     void changeState() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getAttributeList()
-                .isEmpty()));
+        expectThat(aggregate).hasState(
+                state -> assertEquals(message().getNewParentEntity(), state.getParentEntity()));
     }
 
     @Override
-    protected RemoveUserAttribute createMessage() {
-        return removeUserAttribute();
+    protected MoveUser createMessage() {
+        return moveUser();
     }
 }

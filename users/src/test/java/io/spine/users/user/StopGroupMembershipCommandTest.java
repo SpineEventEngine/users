@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("StopGroupMembership command should")
-public class StopGroupMembershipCommandShould extends UserCommandTest<StopGroupMembership> {
+public class StopGroupMembershipCommandTest extends UserCommandTest<StopGroupMembership> {
 
     @Test
     @DisplayName("generate GroupMembershipStopped event")

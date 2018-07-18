@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoteIdentitySignInPM should, when UserDetailsFetched")
-public class UserDetailsFetchedEventShould
+public class UserDetailsFetchedEventTest
         extends RemoteIdentitySignInPmEventTest<UserDetailsFetched> {
 
     @Test

@@ -10,37 +10,37 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestCommands.moveUser;
+import static io.spine.users.user.given.UserTestCommands.updateUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("MoveUser command should")
-public class MoveUserCommandShould extends UserCommandTest<MoveUser> {
+@DisplayName("UpdateUserAttribute command should")
+public class UpdateUserAttributeCommandTest extends UserCommandTest<UpdateUserAttribute> {
 
     @Test
-    @DisplayName("generate UserMoved event")
+    @DisplayName("generate UserAttributeUpdated event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserMoved.class, event -> {
+        expectThat(aggregate).producesEvent(UserAttributeUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
-            assertTrue(event.hasOldParentEntity());
+            assertEquals(message().getAttribute(), event.getNewAttribute());
+            assertTrue(event.hasOldAttribute());
         });
     }
 
     @Test
-    @DisplayName("change parent entity of the user")
+    @DisplayName("update an attribute")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getNewParentEntity(), state.getParentEntity()));
+                state -> assertEquals(message().getAttribute(), state.getAttribute(0)));
     }
 
     @Override
-    protected MoveUser createMessage() {
-        return moveUser();
+    protected UpdateUserAttribute createMessage() {
+        return updateUserAttribute();
     }
 }

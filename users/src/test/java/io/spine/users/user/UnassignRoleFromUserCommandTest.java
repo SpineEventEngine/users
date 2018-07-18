@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("UnassignRoleFromUser command should")
-public class UnassignRoleFromUserCommandShould extends UserCommandTest<UnassignRoleFromUser> {
+public class UnassignRoleFromUserCommandTest extends UserCommandTest<UnassignRoleFromUser> {
 
     @Test
     @DisplayName("generate RoleUnassignedFromUser event")

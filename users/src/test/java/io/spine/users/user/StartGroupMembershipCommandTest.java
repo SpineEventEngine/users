@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("StartGroupMembership command should")
-public class StartGroupMembershipCommandShould extends UserCommandTest<StartGroupMembership> {
+public class StartGroupMembershipCommandTest extends UserCommandTest<StartGroupMembership> {
 
     @Test
     @DisplayName("generate GroupMembershipStarted event")

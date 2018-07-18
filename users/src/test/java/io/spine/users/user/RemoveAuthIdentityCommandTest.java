@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoveAuthIdentity command should")
-public class RemoveAuthIdentityCommandShould extends UserCommandTest<RemoveAuthIdentity> {
+public class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIdentity> {
 
     @Test
     @DisplayName("generate AuthIdentityRemoved event")

@@ -10,37 +10,37 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestCommands.updateUserAttribute;
+import static io.spine.users.user.given.UserTestCommands.removeUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("UpdateUserAttribute command should")
-public class UpdateUserAttributeCommandShould extends UserCommandTest<UpdateUserAttribute> {
+@DisplayName("RemoveUserAttribute command should")
+public class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAttribute> {
 
     @Test
-    @DisplayName("generate UserAttributeUpdated event")
+    @DisplayName("generate UserAttributeRemoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserAttributeUpdated.class, event -> {
+        expectThat(aggregate).producesEvent(UserAttributeRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getAttribute(), event.getNewAttribute());
-            assertTrue(event.hasOldAttribute());
+            assertEquals(message().getAttributeName(), event.getAttribute()
+                    .getName());
         });
     }
 
     @Test
-    @DisplayName("update an attribute")
+    @DisplayName("remove an attribute")
     void changeState() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getAttribute(), state.getAttribute(0)));
+        expectThat(aggregate).hasState(state -> assertTrue(state.getAttributeList()
+                .isEmpty()));
     }
 
     @Override
-    protected UpdateUserAttribute createMessage() {
-        return updateUserAttribute();
+    protected RemoveUserAttribute createMessage() {
+        return removeUserAttribute();
     }
 }

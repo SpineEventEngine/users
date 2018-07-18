@@ -6,34 +6,32 @@
 
 package io.spine.users.user;
 
-import io.spine.users.signin.RemoteIdentitySignInFinished;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestEvents.signInFinished;
+import static io.spine.users.user.given.UserTestCommands.signUserOut;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoteIdentitySignInFinished event should")
-public class RemoteIdentitySignedInEventShould extends UserEventTest<RemoteIdentitySignInFinished> {
+@DisplayName("SignUserOut command should")
+public class SignUserOutCommandTest extends UserCommandTest<SignUserOut> {
 
     @Test
-    @DisplayName("generate UserSignedIn event")
+    @DisplayName("generate UserSignedOut event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserSignedIn.class, event -> {
+        expectThat(aggregate).producesEvent(UserSignedOut.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertTrue(event.hasWhenSignedIn());
-            assertEquals(message().getIdentity(), event.getIdentity());
+            assertTrue(event.hasWhenSignedOut());
         });
     }
 
     @Override
-    protected RemoteIdentitySignInFinished createMessage() {
-        return signInFinished();
+    protected SignUserOut createMessage() {
+        return signUserOut();
     }
 }

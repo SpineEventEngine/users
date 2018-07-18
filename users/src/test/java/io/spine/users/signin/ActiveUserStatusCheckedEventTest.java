@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoteIdentitySignInPM should, when user status is active")
-public class ActiveUserStatusCheckedEventShould
+public class ActiveUserStatusCheckedEventTest
         extends RemoteIdentitySignInPmEventTest<UserStatusChecked> {
 
     private static final boolean ACTIVE = true;

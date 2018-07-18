@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("DeleteUser command should")
-public class DeleteUserCommandShould extends UserCommandTest<DeleteUser> {
+public class DeleteUserCommandTest extends UserCommandTest<DeleteUser> {
 
     @Test
     @DisplayName("generate UserDeleted event")
