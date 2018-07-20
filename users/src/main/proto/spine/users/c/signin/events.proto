@@ -16,7 +16,6 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
@@ -39,17 +38,4 @@ message RemoteIdentitySignInFailed {
 
     // The authentication identity used to sign-in.
     UserAuthIdentity identity = 2;
-}
-
-// The event is emitted when process manager command handler wants to send a command
-// from within a command handler.
-//
-// This event is a workaround direct delivery when running the application locally.
-//
-message CommandSent {
-
-    spine.core.UserId id = 1;
-
-    // A command to send.
-    google.protobuf.Any command = 2;
 }

@@ -9,31 +9,28 @@ package io.spine.users.signin;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Message;
-import io.spine.users.signin.CommandSentVBuilder;
-import io.spine.users.signin.RemoteIdentitySignInFailedVBuilder;
-import io.spine.users.signin.RemoteIdentitySignInFinishedVBuilder;
-import io.spine.users.signin.RemoteIdentitySignInVBuilder;
-import io.spine.users.signin.identity.*;
-import io.spine.users.User;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserProfile;
-import io.spine.users.user.*;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
 import io.spine.core.React;
 import io.spine.core.UserId;
-import io.spine.protobuf.AnyPacker;
 import io.spine.server.command.Assign;
+import io.spine.server.procman.CommandTransformed;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOfTwo;
+import io.spine.users.User;
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserProfile;
+import io.spine.users.signin.identity.*;
+import io.spine.users.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.*;
+import static io.spine.server.tuple.EitherOfTwo.withA;
+import static io.spine.server.tuple.EitherOfTwo.withB;
 import static io.spine.users.User.Status.ACTIVE;
-import static io.spine.protobuf.AnyPacker.pack;
+import static io.spine.users.signin.RemoteIdentitySignIn.Status.*;
 
 /**
  * The basic sign-in process.
@@ -78,9 +75,7 @@ public class RemoteIdentitySignInProcMan
     }
 
     @Assign
-    @SuppressWarnings("Guava")
-        // Spine Java 7 API.
-    CommandSent handle(SignInRemoteIdentity command, CommandContext context) {
+    CommandTransformed handle(SignInRemoteIdentity command, CommandContext context) {
         logCommand(command);
 
         UserId id = command.getId();
@@ -89,7 +84,7 @@ public class RemoteIdentitySignInProcMan
         getBuilder().setId(id)
                     .setIdentity(identity);
 
-        com.google.common.base.Optional<UserAggregate> user = userRepository.find(id);
+        Optional<UserAggregate> user = userRepository.find(id);
 
         if (user.isPresent()) {
             log().info("The user already exists. Proceeding to check the user status.");
@@ -98,33 +93,35 @@ public class RemoteIdentitySignInProcMan
                                  .getState();
             ensureIdentity(userState, identity);
             CheckUserStatus checkStatusCommand = checkStatusCommand(id, identity);
-            return commandSent(id, checkStatusCommand);
+            return transform(command, context).to(checkStatusCommand).post();
         } else {
             log().info("The user doesn't exist. Proceeding to create the user.");
             getBuilder().setStatus(USER_PROFILE_FETCHING);
             FetchUserDetails fetchUserDetails = fetchUserDetails(id, identity);
-            return commandSent(id, fetchUserDetails);
+            return transform(command, context).to(fetchUserDetails).post();
         }
     }
 
     @React
-    CommandSent on(UserDetailsFetched event) {
+    CommandTransformed on(UserDetailsFetched event, EventContext context) {
         logEvent(event);
         getBuilder().setStatus(USER_CREATING);
-        CreateUser command = createUserCommand(event);
-        return commandSent(event.getUserId(), command);
+        CreateUser createUserCommand = createUserCommand(event);
+        return transform(event, context.getCommandContext()).to(createUserCommand).post();
     }
 
     @React
-    EitherOfTwo<CommandSent, Empty> on(UserCreated event, EventContext context) {
+    EitherOfTwo<CommandTransformed, Empty> on(UserCreated event, EventContext context) {
         logEvent(event);
         UserId id = event.getId();
         if (getState().getStatus() == USER_CREATING) {
-            CheckUserStatus checkStatusCommand =
-                    checkStatusCommand(id, getState().getIdentity());
-            return EitherOfTwo.withA(commandSent(id, checkStatusCommand));
+            CheckUserStatus checkStatusCommand = checkStatusCommand(id, getState().getIdentity());
+            CommandTransformed result =
+                    transform(event, context.getCommandContext()).to(checkStatusCommand)
+                                                                 .post();
+            return withA(result);
         }
-        return EitherOfTwo.withB(Empty.getDefaultInstance());
+        return withB(Empty.getDefaultInstance());
     }
 
     @React
@@ -135,22 +132,13 @@ public class RemoteIdentitySignInProcMan
             getBuilder().setStatus(SIGNED_IN);
             RemoteIdentitySignInFinished signedIn = signInFinished(event.getUserId(),
                                                                    getState().getIdentity());
-            return EitherOfTwo.withA(signedIn);
+            return withA(signedIn);
         } else {
             getBuilder().setStatus(FAILED);
             RemoteIdentitySignInFailed signInFailed = signInFailed(event.getUserId(),
                                                                    getState().getIdentity());
-            return EitherOfTwo.withB(signInFailed);
+            return withB(signInFailed);
         }
-    }
-
-    @React
-    Empty on(CommandSent event, EventContext context) {
-        logEvent(event);
-        Message command = AnyPacker.unpack(event.getCommand());
-        newRouterFor(event, context.getCommandContext()).add(command)
-                                                        .routeAll();
-        return Empty.getDefaultInstance();
     }
 
     private static RemoteIdentitySignInFinished signInFinished(UserId id,
@@ -161,13 +149,6 @@ public class RemoteIdentitySignInProcMan
                                                     .setIdentity(identity)
                                                     .build();
         return result;
-    }
-
-    private static CommandSent commandSent(UserId id, Message command) {
-        return CommandSentVBuilder.newBuilder()
-                                  .setId(id)
-                                  .setCommand(pack(command))
-                                  .build();
     }
 
     private static CreateUser createUserCommand(UserDetailsFetched event) {

@@ -6,7 +6,6 @@
 
 package io.spine.users.signin;
 
-import io.spine.protobuf.AnyPacker;
 import io.spine.users.signin.identity.CheckUserStatus;
 import io.spine.users.signin.identity.FetchUserDetails;
 import org.junit.jupiter.api.DisplayName;
@@ -41,13 +40,11 @@ public class SignInRemoteIdentityCommandTest
 
     @Test
     @DisplayName("fetch user profile if the user doesn't exist")
-    void createUser() {
+    void fetchProfile() {
         RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
         emptyProcMan.setUserRepository(emptyUserRepo());
 
-        expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
-            FetchUserDetails command = AnyPacker.unpack(event.getCommand());
-
+        expectThat(emptyProcMan).routesCommand(FetchUserDetails.class, command -> {
             assertEquals(message().getId(), command.getUserId());
             assertEquals(message().getIdentity(), command.getIdentity());
             assertEquals(message().getIdentity()
@@ -61,9 +58,7 @@ public class SignInRemoteIdentityCommandTest
         RemoteIdentitySignInProcMan emptyProcMan = createEmptyProcMan();
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
 
-        expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
-            CheckUserStatus command = AnyPacker.unpack(event.getCommand());
-
+        expectThat(emptyProcMan).routesCommand(CheckUserStatus.class, command -> {
             assertEquals(message().getId(), command.getUserId());
             assertEquals(message().getIdentity(), command.getIdentity());
             assertEquals(message().getIdentity()

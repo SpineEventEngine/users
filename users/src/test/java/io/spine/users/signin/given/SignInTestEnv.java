@@ -6,7 +6,6 @@
 
 package io.spine.users.signin.given;
 
-import com.google.common.base.Optional;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
@@ -21,13 +20,17 @@ import io.spine.users.user.UserAggregate;
 import io.spine.users.user.UserAggregateRepository;
 import io.spine.users.user.UserAttribute;
 import io.spine.users.user.UserAttributeVBuilder;
-import org.mockito.Mockito;
+
+import java.util.Optional;
 
 import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.time.OffsetDateTimes.now;
 import static io.spine.time.ZoneOffsets.utc;
 import static io.spine.users.User.Status.NOT_READY;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -50,15 +53,15 @@ public class SignInTestEnv {
     }
 
     public static UserAggregateRepository emptyUserRepo() {
-        UserAggregateRepository mock = Mockito.mock(UserAggregateRepository.class);
-        Optional<UserAggregate> user = Optional.absent();
+        UserAggregateRepository mock = mock(UserAggregateRepository.class);
+        Optional<UserAggregate> user = empty();
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
 
     public static UserAggregateRepository nonEmptyUserRepo() {
-        UserAggregateRepository mock = Mockito.mock(UserAggregateRepository.class);
-        Optional<UserAggregate> user = Optional.of(userAggregateState());
+        UserAggregateRepository mock = mock(UserAggregateRepository.class);
+        Optional<UserAggregate> user = of(userAggregateState());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }

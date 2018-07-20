@@ -6,7 +6,6 @@
 
 package io.spine.users.signin;
 
-import io.spine.protobuf.AnyPacker;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.signin.identity.CheckUserStatus;
 import io.spine.users.user.UserCreated;
@@ -37,8 +36,7 @@ public class UserCreatedEventTest
     @DisplayName("send CheckUserStatus command")
     void checkStatus() {
         RemoteIdentitySignInProcMan emptyProcMan = nonEmptyProcMan(USER_CREATING);
-        expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
-            CheckUserStatus command = AnyPacker.unpack(event.getCommand());
+        expectThat(emptyProcMan).routesCommand(CheckUserStatus.class, command -> {
             assertEquals(message().getId(), command.getUserId());
             UserAuthIdentity identity = emptyProcMan.getState()
                     .getIdentity();

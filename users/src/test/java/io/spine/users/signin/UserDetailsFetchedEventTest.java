@@ -6,7 +6,6 @@
 
 package io.spine.users.signin;
 
-import io.spine.protobuf.AnyPacker;
 import io.spine.users.signin.identity.UserDetailsFetched;
 import io.spine.users.user.CreateUser;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +37,7 @@ public class UserDetailsFetchedEventTest
     void sendCommand() {
         RemoteIdentitySignInProcMan emptyProcMan = nonEmptyProcMan(USER_PROFILE_FETCHING);
 
-        expectThat(emptyProcMan).producesEvent(CommandSent.class, event -> {
-            CreateUser command = AnyPacker.unpack(event.getCommand());
+        expectThat(emptyProcMan).routesCommand(CreateUser.class, command -> {
             assertEquals(message().getUserId(), command.getId());
             assertEquals(message().getProfile(), command.getProfile());
             assertEquals(message().getAttribute(0), command.getAttribute(0));
