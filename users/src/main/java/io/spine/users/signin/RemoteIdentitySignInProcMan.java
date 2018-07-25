@@ -22,8 +22,6 @@ import io.spine.users.UserAuthIdentity;
 import io.spine.users.UserProfile;
 import io.spine.users.signin.identity.*;
 import io.spine.users.user.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -31,6 +29,7 @@ import static io.spine.server.tuple.EitherOfTwo.withA;
 import static io.spine.server.tuple.EitherOfTwo.withB;
 import static io.spine.users.User.Status.ACTIVE;
 import static io.spine.users.signin.RemoteIdentitySignIn.Status.*;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * The basic sign-in process.
@@ -76,8 +75,6 @@ public class RemoteIdentitySignInProcMan
 
     @Assign
     CommandTransformed handle(SignInRemoteIdentity command, CommandContext context) {
-        logCommand(command);
-
         UserId id = command.getId();
         UserAuthIdentity identity = command.getIdentity();
 
@@ -87,7 +84,6 @@ public class RemoteIdentitySignInProcMan
         Optional<UserAggregate> user = userRepository.find(id);
 
         if (user.isPresent()) {
-            log().info("The user already exists. Proceeding to check the user status.");
             getBuilder().setStatus(USER_STATUS_CHECK);
             User userState = user.get()
                                  .getState();
@@ -95,7 +91,6 @@ public class RemoteIdentitySignInProcMan
             CheckUserStatus checkStatusCommand = checkStatusCommand(id, identity);
             return transform(command, context).to(checkStatusCommand).post();
         } else {
-            log().info("The user doesn't exist. Proceeding to create the user.");
             getBuilder().setStatus(USER_PROFILE_FETCHING);
             FetchUserDetails fetchUserDetails = fetchUserDetails(id, identity);
             return transform(command, context).to(fetchUserDetails).post();
@@ -104,7 +99,6 @@ public class RemoteIdentitySignInProcMan
 
     @React
     CommandTransformed on(UserDetailsFetched event, EventContext context) {
-        logEvent(event);
         getBuilder().setStatus(USER_CREATING);
         CreateUser createUserCommand = createUserCommand(event);
         return transform(event, context.getCommandContext()).to(createUserCommand).post();
@@ -112,7 +106,6 @@ public class RemoteIdentitySignInProcMan
 
     @React
     EitherOfTwo<CommandTransformed, Empty> on(UserCreated event, EventContext context) {
-        logEvent(event);
         UserId id = event.getId();
         if (getState().getStatus() == USER_CREATING) {
             CheckUserStatus checkStatusCommand = checkStatusCommand(id, getState().getIdentity());
@@ -127,7 +120,6 @@ public class RemoteIdentitySignInProcMan
     @React
     EitherOfTwo<RemoteIdentitySignInFinished, RemoteIdentitySignInFailed>
     on(UserStatusChecked event) {
-        logEvent(event);
         if (event.getStatus() == ACTIVE) {
             getBuilder().setStatus(SIGNED_IN);
             RemoteIdentitySignInFinished signedIn = signInFinished(event.getUserId(),
@@ -184,7 +176,7 @@ public class RemoteIdentitySignInProcMan
                     .filter(identity -> identity.equals(identityToCheck))
                     .findFirst();
         if (!foundIdentity.isPresent()) {
-            throw new IllegalArgumentException("Unknown user identity");
+            throw newIllegalArgumentException("Unknown user identity");
         }
     }
 
@@ -202,26 +194,5 @@ public class RemoteIdentitySignInProcMan
                                       .setIdentity(identity)
                                       .setUserId(id)
                                       .build();
-    }
-
-    private void logEvent(Message event) {
-        log().info("'{}' event came to {}. For ID: {}.", event.getClass()
-                                                              .getSimpleName(),
-                   getClass().getSimpleName(), getId().getValue());
-    }
-
-    private void logCommand(Message event) {
-        log().info("Asked to '{}'. For ID: {}.", event.getClass()
-                                                      .getSimpleName(), getId().getValue());
-    }
-
-    private static Logger log() {
-        return LogSingleton.INSTANCE.value;
-    }
-
-    private enum LogSingleton {
-        INSTANCE;
-        @SuppressWarnings("NonSerializableFieldInSerializableClass")
-        private final Logger value = LoggerFactory.getLogger(RemoteIdentitySignInProcMan.class);
     }
 }
