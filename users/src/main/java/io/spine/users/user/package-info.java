@@ -22,6 +22,9 @@
  * This package contains {@link io.spine.users.user.UserAggregate User aggregate}.
  */
 @ParametersAreNonnullByDefault
+@CheckReturnValue
 package io.spine.users.user;
+
+import com.google.errorprone.annotations.CheckReturnValue;
 
 import javax.annotation.ParametersAreNonnullByDefault;

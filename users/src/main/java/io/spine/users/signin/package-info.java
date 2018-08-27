@@ -22,6 +22,9 @@
  * This package contains process managers for signing in with remote identity provider.
  */
 @ParametersAreNonnullByDefault
+@CheckReturnValue
 package io.spine.users.signin;
+
+import com.google.errorprone.annotations.CheckReturnValue;
 
 import javax.annotation.ParametersAreNonnullByDefault;
