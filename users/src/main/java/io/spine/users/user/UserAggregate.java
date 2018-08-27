@@ -155,7 +155,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Apply
     void on(UserCreated event) {
-        logEvent(event);
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setParentEntity(event.getParentEntity())
@@ -169,80 +168,67 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Apply
     void on(UserMoved event) {
-        logEvent(event);
         getBuilder().setParentEntity(event.getNewParentEntity());
     }
 
     @Apply
     void on(GroupMembershipStarted event) {
-        logEvent(event);
         getBuilder().addMembership(event.getGroupId());
 
     }
 
     @Apply
     void on(GroupMembershipStopped event) {
-        logEvent(event);
         removeGroupMembership(event.getGroupId());
     }
 
     @Apply
     void on(UserDeleted event) {
-        logEvent(event);
         setDeleted(true);
     }
 
     @Apply
     void on(RoleAssignedToUser event) {
-        logEvent(event);
         getBuilder().addRole(event.getRoleId());
     }
 
     @Apply
     void on(RoleUnassignedFromUser event) {
-        logEvent(event);
         removeRole(event.getRoleId());
     }
 
     @Apply
     void on(UserAttributeAdded event) {
-        logEvent(event);
         getBuilder().addAttribute(event.getAttribute());
     }
 
     @Apply
     void on(UserAttributeRemoved event) {
-        logEvent(event);
         removeAttribute(event.getAttribute());
     }
 
     @Apply
     void on(UserAttributeUpdated event) {
-        logEvent(event);
         removeAttribute(event.getOldAttribute());
         getBuilder().addAttribute(event.getNewAttribute());
     }
 
     @Apply
     void on(UserStatusChanged event) {
-        logEvent(event);
         getBuilder().setStatus(event.getNewStatus());
     }
 
     @React
     UserSignedIn on(RemoteIdentitySignInFinished event, EventContext context) {
-        logEvent(event);
         return events(context.getCommandContext()).signIn(event);
     }
 
     @Apply
     void on(UserSignedIn event) {
-        logEvent(event);
     }
 
     @Apply
     void on(UserSignedOut event) {
-        logEvent(event);
     }
 
     @Apply
@@ -263,12 +249,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     @SuppressWarnings("MethodMayBeStatic")
     private UserEventFactory events(CommandContext context) {
         return UserEventFactory.instance(context);
-    }
-
-    private void logEvent(Message event) {
-        log().info("'{}' event came to {}. For ID: {}.", event.getClass()
-                                                              .getSimpleName(),
-                   getClass().getSimpleName(), getId().getValue());
     }
 
     private Optional<UserAuthIdentity> findAuthIdentity(RemoveAuthIdentity command) {
