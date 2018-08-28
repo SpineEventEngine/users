@@ -22,9 +22,10 @@ import static io.spine.users.user.given.UserTestEnv.userId;
 abstract class UserCommandTest<C extends Message>
         extends AggregateCommandTest<UserId, C, User, UserAggregate> {
 
-    @Override
-    protected final UserId newId() {
-        return userId();
+    protected static final UserId USER_ID = userId();
+
+    protected UserCommandTest(C commandMessage) {
+        super(USER_ID, commandMessage);
     }
 
     @Override

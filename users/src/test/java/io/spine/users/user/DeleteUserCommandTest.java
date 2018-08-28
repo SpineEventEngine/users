@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("DeleteUser command should")
 public class DeleteUserCommandTest extends UserCommandTest<DeleteUser> {
 
+    protected DeleteUserCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserDeleted event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class DeleteUserCommandTest extends UserCommandTest<DeleteUser> {
                 .getDeleted()));
     }
 
-    @Override
-    protected DeleteUser createMessage() {
-        return deleteUser();
+    private static DeleteUser createMessage() {
+        return deleteUser(USER_ID);
     }
 }

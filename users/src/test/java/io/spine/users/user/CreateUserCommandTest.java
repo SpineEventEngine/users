@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("CreateUser command should")
 public class CreateUserCommandTest extends UserCommandTest<CreateUser> {
 
+    protected CreateUserCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserCreated event")
     void generateEvent() {
@@ -51,8 +55,7 @@ public class CreateUserCommandTest extends UserCommandTest<CreateUser> {
         });
     }
 
-    @Override
-    protected CreateUser createMessage() {
-        return createUser();
+    private static CreateUser createMessage() {
+        return createUser(USER_ID);
     }
 }

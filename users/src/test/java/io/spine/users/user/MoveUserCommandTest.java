@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("MoveUser command should")
 public class MoveUserCommandTest extends UserCommandTest<MoveUser> {
 
+    protected MoveUserCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserMoved event")
     void generateEvent() {
@@ -39,8 +43,7 @@ public class MoveUserCommandTest extends UserCommandTest<MoveUser> {
                 state -> assertEquals(message().getNewParentEntity(), state.getParentEntity()));
     }
 
-    @Override
-    protected MoveUser createMessage() {
-        return moveUser();
+    private static MoveUser createMessage() {
+        return moveUser(USER_ID);
     }
 }

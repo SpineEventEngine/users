@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("UnassignRoleFromUser command should")
 public class UnassignRoleFromUserCommandTest extends UserCommandTest<UnassignRoleFromUser> {
 
+    protected UnassignRoleFromUserCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate RoleUnassignedFromUser event")
     void generateEvent() {
@@ -38,8 +42,7 @@ public class UnassignRoleFromUserCommandTest extends UserCommandTest<UnassignRol
                 .isEmpty()));
     }
 
-    @Override
-    protected UnassignRoleFromUser createMessage() {
-        return unassignRoleFromUser();
+    private static UnassignRoleFromUser createMessage() {
+        return unassignRoleFromUser(USER_ID);
     }
 }

@@ -6,6 +6,7 @@
 
 package io.spine.users.signin.given;
 
+import com.google.protobuf.Int32Value;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
@@ -14,8 +15,24 @@ import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.time.OffsetDateTime;
-import io.spine.users.*;
-import io.spine.users.signin.RemoteIdentitySignInProcMan;
+import io.spine.users.OrganizationId;
+import io.spine.users.OrganizationIdVBuilder;
+import io.spine.users.ParentEntity;
+import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.RemoteIdentityProviderId;
+import io.spine.users.RemoteIdentityProviderIdVBuilder;
+import io.spine.users.RoleId;
+import io.spine.users.RoleIdVBuilder;
+import io.spine.users.User;
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserAuthIdentityVBuilder;
+import io.spine.users.UserDetails;
+import io.spine.users.UserDetailsVBuilder;
+import io.spine.users.UserProfile;
+import io.spine.users.UserProfileVBuilder;
+import io.spine.users.UserVBuilder;
+import io.spine.users.signin.RemoteIdentityProvider;
+import io.spine.users.signin.RemoteIdentitySignInPm;
 import io.spine.users.user.UserAggregate;
 import io.spine.users.user.UserAggregateRepository;
 import io.spine.users.user.UserAttribute;
@@ -26,7 +43,9 @@ import java.util.Optional;
 import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.time.OffsetDateTimes.now;
 import static io.spine.time.ZoneOffsets.utc;
+import static io.spine.users.User.Status.ACTIVE;
 import static io.spine.users.User.Status.NOT_READY;
+import static io.spine.users.User.Status.SUSPENDED;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +53,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * The environment for the {@link RemoteIdentitySignInProcMan} tests.
+ * The environment for the {@link RemoteIdentitySignInPm} tests.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -64,6 +83,42 @@ public class SignInTestEnv {
         Optional<UserAggregate> user = of(userAggregateState());
         when(mock.find(any())).thenReturn(user);
         return mock;
+    }
+
+    public static RemoteIdentityProvider mockActiveIdentityProvider() {
+        RemoteIdentityProvider mock = mock(RemoteIdentityProvider.class);
+        when(mock.fetchUserStatus(any())).thenReturn(ACTIVE);
+        when(mock.fetchUserDetails(any())).thenReturn(userDetails());
+        return mock;
+    }
+
+    public static RemoteIdentityProvider mockSuspendedIdentityProvider() {
+        RemoteIdentityProvider mock = mock(RemoteIdentityProvider.class);
+        when(mock.fetchUserStatus(any())).thenReturn(SUSPENDED);
+        when(mock.fetchUserDetails(any())).thenReturn(userDetails());
+        return mock;
+    }
+
+    private static UserDetails userDetails() {
+        PersonName name = PersonNameVBuilder.newBuilder()
+                                            .setGivenName("Bobby")
+                                            .setFamilyName("McGee")
+                                            .build();
+        EmailAddress emailAddress = EmailAddressVBuilder.newBuilder()
+                                                        .setValue("bobby@mcgee.com")
+                                                        .build();
+        UserProfile profile = UserProfileVBuilder.newBuilder()
+                                                 .setName(name)
+                                                 .setEmail(emailAddress)
+                                                 .build();
+        UserAttribute attribute = UserAttributeVBuilder.newBuilder()
+                                                       .setName("token")
+                                                       .setValue(pack(Int32Value.of(42)))
+                                                       .build();
+        return UserDetailsVBuilder.newBuilder()
+                                  .setProfile(profile)
+                                  .addAttribute(attribute)
+                                  .build();
     }
 
     private static UserAggregate userAggregateState() {
@@ -102,7 +157,7 @@ public class SignInTestEnv {
                                    .build();
     }
 
-    static UserAuthIdentity identity() {
+    public static UserAuthIdentity identity() {
         return UserAuthIdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@google.com")
                                        .setProviderId(googleProviderId())

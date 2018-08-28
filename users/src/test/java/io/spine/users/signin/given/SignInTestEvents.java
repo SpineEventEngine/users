@@ -6,21 +6,20 @@
 
 package io.spine.users.signin.given;
 
-import io.spine.users.signin.RemoteIdentitySignInProcMan;
-import io.spine.users.signin.identity.UserDetailsFetched;
-import io.spine.users.signin.identity.UserStatusChecked;
-import io.spine.users.signin.identity.UserStatusCheckedVBuilder;
+import io.spine.core.UserId;
+import io.spine.users.signin.RemoteIdentitySignInPm;
 import io.spine.users.user.UserCreated;
 import io.spine.users.user.UserCreatedVBuilder;
 
 import static io.spine.time.OffsetDateTimes.now;
 import static io.spine.time.ZoneOffsets.utc;
 import static io.spine.users.User.Status.ACTIVE;
-import static io.spine.users.User.Status.SUSPENDED;
-import static io.spine.users.signin.given.SignInTestEnv.*;
+import static io.spine.users.signin.given.SignInTestEnv.displayName;
+import static io.spine.users.signin.given.SignInTestEnv.identity;
+import static io.spine.users.signin.given.SignInTestEnv.profile;
 
 /**
- * Test events for {@link RemoteIdentitySignInProcMan}.
+ * Test events for {@link RemoteIdentitySignInPm}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -32,28 +31,9 @@ public class SignInTestEvents {
     private SignInTestEvents() {
     }
 
-    public static UserDetailsFetched userDetailsFetched() {
-        return UserDetailsFetched.newBuilder()
-                                 .setId(googleProviderId())
-                                 .setUserId(userId())
-                                 .setIdentity(identity())
-                                 .setProfile(profile())
-                                 .addAttribute(attribute())
-                                 .build();
-    }
-
-    public static UserStatusChecked userStatusChecked(boolean active) {
-        return UserStatusCheckedVBuilder.newBuilder()
-                                        .setId(googleProviderId())
-                                        .setUserId(userId())
-                                        .setIdentity(identity())
-                                        .setStatus(active ? ACTIVE : SUSPENDED)
-                                        .build();
-    }
-
-    public static UserCreated userCreated() {
+    public static UserCreated userCreated(UserId id) {
         return UserCreatedVBuilder.newBuilder()
-                                  .setId(userId())
+                                  .setId(id)
                                   .setProfile(profile())
                                   .setStatus(ACTIVE)
                                   .setDisplayName(displayName())

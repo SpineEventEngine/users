@@ -9,25 +9,27 @@ package io.spine.users.signin;
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.ProcessManagerCommandTest;
-
-import static io.spine.users.signin.given.SignInTestEnv.userId;
+import io.spine.testing.server.procman.PmCommandOnCommandTest;
+import io.spine.users.user.UserAggregateRepository;
 
 /**
- * An implementation base for the {@link RemoteIdentitySignInProcMan} command handler tests.
+ * An implementation base for the {@link RemoteIdentitySignInPm} command handler tests.
  *
  * @author Vladyslav Lubenskyi
  */
 abstract class RemoteIdentitySignInPmCommandTest<C extends Message>
-        extends ProcessManagerCommandTest<UserId, C, RemoteIdentitySignIn, RemoteIdentitySignInProcMan> {
+        extends PmCommandOnCommandTest<UserId, C, RemoteIdentitySignIn, RemoteIdentitySignInPm> {
 
-    @Override
-    protected final UserId newId() {
-        return userId();
+    protected RemoteIdentitySignInPmCommandTest(UserId processManagerId, C commandMessage) {
+        super(processManagerId, commandMessage);
     }
 
     @Override
-    protected Repository<UserId, RemoteIdentitySignInProcMan> createEntityRepository() {
-        return new RemoteIdentitySignInProcManRepository();
+    protected Repository<UserId, RemoteIdentitySignInPm> createEntityRepository() {
+        return new RemoteIdentitySignInProcManRepository(identityProvider(), userRepository());
     }
+
+    abstract RemoteIdentityProvider identityProvider();
+
+    abstract UserAggregateRepository userRepository();
 }

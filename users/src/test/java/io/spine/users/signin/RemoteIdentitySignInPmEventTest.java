@@ -7,36 +7,29 @@
 package io.spine.users.signin;
 
 import com.google.protobuf.Message;
-import io.spine.core.Enrichment;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.ProcessManagerEventReactionTest;
-
-import static io.spine.users.signin.given.SignInTestEnv.userId;
+import io.spine.testing.server.procman.PmCommandOnEventTest;
+import io.spine.users.user.UserAggregateRepository;
 
 /**
- * An implementation base for the {@link RemoteIdentitySignInProcMan} event reactors tests.
+ * An implementation base for the {@link RemoteIdentitySignInPm} event reactors tests.
  *
  * @author Vladyslav Lubenskyi
  */
 abstract class RemoteIdentitySignInPmEventTest<E extends Message>
-        extends ProcessManagerEventReactionTest<UserId,
-                                                E,
-                                                RemoteIdentitySignIn,
-                                                RemoteIdentitySignInProcMan> {
+        extends PmCommandOnEventTest<UserId, E, RemoteIdentitySignIn, RemoteIdentitySignInPm> {
 
-    @Override
-    protected final UserId newId() {
-        return userId();
+    protected RemoteIdentitySignInPmEventTest(UserId processManagerId, E eventMessage) {
+        super(processManagerId, eventMessage);
     }
 
     @Override
-    protected Repository<UserId, RemoteIdentitySignInProcMan> createEntityRepository() {
-        return new RemoteIdentitySignInProcManRepository();
+    protected Repository<UserId, RemoteIdentitySignInPm> createEntityRepository() {
+        return new RemoteIdentitySignInProcManRepository(identityProvider(), userRepository());
     }
 
-    @Override
-    protected Enrichment enrichment() {
-        return Enrichment.getDefaultInstance();
-    }
+    abstract RemoteIdentityProvider identityProvider();
+
+    abstract UserAggregateRepository userRepository();
 }

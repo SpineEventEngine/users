@@ -6,15 +6,14 @@
 
 package io.spine.users.signin.given;
 
-import io.spine.users.signin.RemoteIdentitySignInProcMan;
-import io.spine.users.signin.SignInRemoteIdentity;
-import io.spine.users.signin.SignInRemoteIdentityVBuilder;
-
-import static io.spine.users.signin.given.SignInTestEnv.identity;
-import static io.spine.users.signin.given.SignInTestEnv.userId;
+import io.spine.core.UserId;
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.signin.RemoteIdentitySignInPm;
+import io.spine.users.signin.SignIn;
+import io.spine.users.signin.SignInVBuilder;
 
 /**
- * Test commands for {@link RemoteIdentitySignInProcMan}.
+ * Test commands for {@link RemoteIdentitySignInPm}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -26,10 +25,10 @@ public class SignInTestCommands {
     private SignInTestCommands() {
     }
 
-    public static SignInRemoteIdentity signInRemoteIdentity() {
-        return SignInRemoteIdentityVBuilder.newBuilder()
-                .setId(userId())
-                .setIdentity(identity())
-                .build();
+    public static SignIn signInCommand(UserId id, UserAuthIdentity identity) {
+        return SignInVBuilder.newBuilder()
+                             .setId(id)
+                             .setIdentity(identity)
+                             .build();
     }
 }

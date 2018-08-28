@@ -21,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("RemoteIdentitySignInFinished event should")
 public class RemoteIdentitySignedInEventTest extends UserEventTest<RemoteIdentitySignInFinished> {
 
+    protected RemoteIdentitySignedInEventTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserSignedIn event")
     void generateEvent() {
@@ -32,8 +36,7 @@ public class RemoteIdentitySignedInEventTest extends UserEventTest<RemoteIdentit
         });
     }
 
-    @Override
-    protected RemoteIdentitySignInFinished createMessage() {
-        return signInFinished();
+    private static RemoteIdentitySignInFinished createMessage() {
+        return signInFinished(USER_ID);
     }
 }

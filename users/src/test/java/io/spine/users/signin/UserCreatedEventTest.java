@@ -6,17 +6,20 @@
 
 package io.spine.users.signin;
 
+import io.spine.core.UserId;
 import io.spine.users.UserAuthIdentity;
-import io.spine.users.signin.identity.CheckUserStatus;
+import io.spine.users.user.UserAggregateRepository;
 import io.spine.users.user.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.USER_CREATING;
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.USER_PROFILE_FETCHING;
+import static io.spine.users.signin.RemoteIdentitySignIn.Status.AWAITING_USER_CREATION;
+import static io.spine.users.signin.RemoteIdentitySignIn.Status.COMPLETED;
+import static io.spine.users.signin.given.SignInTestEnv.userId;
 import static io.spine.users.signin.given.SignInTestEvents.userCreated;
 import static io.spine.users.signin.given.TestProcManFactory.nonEmptyProcMan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -25,28 +28,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserCreatedEventTest
         extends RemoteIdentitySignInPmEventTest<UserCreated> {
 
+    protected UserCreatedEventTest() {
+        super(userId(), event());
+    }
+
     @Test
-    @DisplayName("do nothing in wrong status")
+    @DisplayName("do nothing in a wrong status")
     void ignoreMessage() {
-        RemoteIdentitySignInProcMan emptyProcMan = nonEmptyProcMan(USER_PROFILE_FETCHING);
+        RemoteIdentitySignInPm emptyProcMan = nonEmptyProcMan(COMPLETED);
         expectThat(emptyProcMan).ignoresMessage();
     }
 
     @Test
-    @DisplayName("send CheckUserStatus command")
+    @DisplayName("start SignIn again")
     void checkStatus() {
-        RemoteIdentitySignInProcMan emptyProcMan = nonEmptyProcMan(USER_CREATING);
-        expectThat(emptyProcMan).routesCommand(CheckUserStatus.class, command -> {
-            assertEquals(message().getId(), command.getUserId());
-            UserAuthIdentity identity = emptyProcMan.getState()
-                    .getIdentity();
-            assertEquals(identity.getProviderId(), command.getId());
-            assertEquals(identity, command.getIdentity());
+        RemoteIdentitySignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_CREATION);
+        expectThat(emptyProcMan).producesCommand(SignIn.class, command -> {
+            assertEquals(message().getId(), command.getId());
+            assertEquals(emptyProcMan.getState()
+                                     .getIdentity(), command.getIdentity());
         });
     }
 
+    private static UserCreated event() {
+        return userCreated(userId());
+    }
+
     @Override
-    protected UserCreated createMessage() {
-        return userCreated();
+    RemoteIdentityProvider identityProvider() {
+        return mock(RemoteIdentityProvider.class);
+    }
+
+    @Override
+    UserAggregateRepository userRepository() {
+        return mock(UserAggregateRepository.class);
     }
 }

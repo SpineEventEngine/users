@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("AssignRoleToUser command should")
 public class AssignRoleToUserCommandTest extends UserCommandTest<AssignRoleToUser> {
 
+    protected AssignRoleToUserCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate RoleAssignedToUser event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class AssignRoleToUserCommandTest extends UserCommandTest<AssignRoleToUse
                 state -> assertEquals(message().getRoleId(), state.getRole(1)));
     }
 
-    @Override
-    protected AssignRoleToUser createMessage() {
-        return assignRoleToUser();
+    private static AssignRoleToUser createMessage() {
+        return assignRoleToUser(USER_ID);
     }
 }

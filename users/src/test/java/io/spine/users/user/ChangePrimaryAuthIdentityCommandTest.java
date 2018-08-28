@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("ChangePrimaryAuthIdentity command should")
 public class ChangePrimaryAuthIdentityCommandTest extends UserCommandTest<ChangePrimaryAuthIdentity> {
 
+    protected ChangePrimaryAuthIdentityCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate PrimaryAuthIdentityChanged event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class ChangePrimaryAuthIdentityCommandTest extends UserCommandTest<Change
                 state -> assertEquals(message().getIdentity(), state.getPrimaryAuthIdentity()));
     }
 
-    @Override
-    protected ChangePrimaryAuthIdentity createMessage() {
-        return changePrimaryIdentity();
+    private static ChangePrimaryAuthIdentity createMessage() {
+        return changePrimaryIdentity(USER_ID);
     }
 }

@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("StartGroupMembership command should")
 public class StartGroupMembershipCommandTest extends UserCommandTest<StartGroupMembership> {
 
+    protected StartGroupMembershipCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate GroupMembershipStarted event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class StartGroupMembershipCommandTest extends UserCommandTest<StartGroupM
                 state -> assertEquals(message().getGroupId(), state.getMembership(0)));
     }
 
-    @Override
-    protected StartGroupMembership createMessage() {
-        return startGroupMembership();
+    private static StartGroupMembership createMessage() {
+        return startGroupMembership(USER_ID);
     }
 }

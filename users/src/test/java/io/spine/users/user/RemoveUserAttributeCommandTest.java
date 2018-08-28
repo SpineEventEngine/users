@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("RemoveUserAttribute command should")
 public class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAttribute> {
 
+    protected RemoveUserAttributeCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserAttributeRemoved event")
     void generateEvent() {
@@ -39,8 +43,7 @@ public class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAt
                 .isEmpty()));
     }
 
-    @Override
-    protected RemoveUserAttribute createMessage() {
-        return removeUserAttribute();
+    private static RemoveUserAttribute createMessage() {
+        return removeUserAttribute(USER_ID);
     }
 }

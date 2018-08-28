@@ -21,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("ChangeUserStatus command should")
 public class ChangeUserStatusCommandTest extends UserCommandTest<ChangeUserStatus> {
 
+    protected ChangeUserStatusCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserStatusChanged event")
     void generateEvent() {
@@ -39,8 +43,7 @@ public class ChangeUserStatusCommandTest extends UserCommandTest<ChangeUserStatu
         expectThat(aggregate).hasState(state -> assertEquals(SUSPENDED, state.getStatus()));
     }
 
-    @Override
-    protected ChangeUserStatus createMessage() {
-        return changeUserStatus();
+    private static ChangeUserStatus createMessage() {
+        return changeUserStatus(USER_ID);
     }
 }

@@ -21,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("RemoveAuthIdentity command should")
 public class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIdentity> {
 
+    protected RemoveAuthIdentityCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate AuthIdentityRemoved event")
     void generateEvent() {
@@ -41,8 +45,7 @@ public class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIde
                 .isEmpty()));
     }
 
-    @Override
-    protected RemoveAuthIdentity createMessage() {
-        return removeAuthIdentity();
+    private static RemoveAuthIdentity createMessage() {
+        return removeAuthIdentity(USER_ID);
     }
 }

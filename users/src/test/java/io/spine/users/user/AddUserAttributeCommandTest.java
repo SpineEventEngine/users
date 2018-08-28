@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("AddUserAttribute command should")
 public class AddUserAttributeCommandTest extends UserCommandTest<AddUserAttribute> {
 
+    protected AddUserAttributeCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserAttributeAdded event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class AddUserAttributeCommandTest extends UserCommandTest<AddUserAttribut
                 state -> assertEquals(message().getAttribute(), state.getAttribute(1)));
     }
 
-    @Override
-    protected AddUserAttribute createMessage() {
-        return addUserAttribute();
+    private static AddUserAttribute createMessage() {
+        return addUserAttribute(USER_ID);
     }
 }

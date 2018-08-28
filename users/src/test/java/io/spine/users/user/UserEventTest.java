@@ -22,9 +22,10 @@ import static io.spine.users.user.given.UserTestEnv.userId;
 abstract class UserEventTest<E extends Message>
         extends AggregateEventReactionTest<UserId, E, User, UserAggregate> {
 
-    @Override
-    protected final UserId newId() {
-        return userId();
+    protected static final UserId USER_ID = userId();
+
+    protected UserEventTest(E eventMessage) {
+        super(USER_ID, eventMessage);
     }
 
     @Override

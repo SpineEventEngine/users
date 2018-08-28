@@ -6,10 +6,11 @@
 
 package io.spine.users.signin.given;
 
+import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.signin.RemoteIdentitySignIn;
 import io.spine.users.signin.RemoteIdentitySignIn.Status;
-import io.spine.users.signin.RemoteIdentitySignInProcMan;
+import io.spine.users.signin.RemoteIdentitySignInPm;
 import io.spine.users.signin.RemoteIdentitySignInVBuilder;
 import io.spine.users.user.UserAggregate;
 
@@ -32,19 +33,19 @@ public class TestProcManFactory {
     /**
      * Creates a new instance of the process manager with the default state.
      */
-    public static RemoteIdentitySignInProcMan createEmptyProcMan() {
-        return new RemoteIdentitySignInProcMan(userId());
+    public static RemoteIdentitySignInPm createEmptyProcMan(UserId id) {
+        return new RemoteIdentitySignInPm(id);
     }
 
-    public static RemoteIdentitySignInProcMan nonEmptyProcMan(Status status) {
+    public static RemoteIdentitySignInPm nonEmptyProcMan(Status status) {
         RemoteIdentitySignIn state = RemoteIdentitySignInVBuilder.newBuilder()
                 .setId(userId())
                 .setIdentity(identity())
                 .setStatus(status)
                 .build();
-        return Given.processManagerOfClass(RemoteIdentitySignInProcMan.class)
-                .withId(userId())
-                .withState(state)
-                .build();
+        return Given.processManagerOfClass(RemoteIdentitySignInPm.class)
+                    .withId(userId())
+                    .withState(state)
+                    .build();
     }
 }

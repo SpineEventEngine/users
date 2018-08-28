@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("StopGroupMembership command should")
 public class StopGroupMembershipCommandTest extends UserCommandTest<StopGroupMembership> {
 
+    protected StopGroupMembershipCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate GroupMembershipStopped event")
     void generateEvent() {
@@ -38,8 +42,7 @@ public class StopGroupMembershipCommandTest extends UserCommandTest<StopGroupMem
                 .isEmpty()));
     }
 
-    @Override
-    protected StopGroupMembership createMessage() {
-        return stopGroupMembership();
+    private static StopGroupMembership createMessage() {
+        return stopGroupMembership(USER_ID);
     }
 }

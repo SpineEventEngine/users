@@ -6,6 +6,7 @@
 
 package io.spine.users.user.given;
 
+import io.spine.core.UserId;
 import io.spine.users.signin.RemoteIdentitySignInFinished;
 import io.spine.users.signin.RemoteIdentitySignInFinishedVBuilder;
 import io.spine.users.user.UserAggregate;
@@ -26,9 +27,9 @@ public class UserTestEvents {
     private UserTestEvents() {
     }
 
-    public static RemoteIdentitySignInFinished signInFinished() {
+    public static RemoteIdentitySignInFinished signInFinished(UserId id) {
         return RemoteIdentitySignInFinishedVBuilder.newBuilder()
-                .setId(userId())
+                .setId(id)
                 .setIdentity(googleIdentity())
                 .build();
     }

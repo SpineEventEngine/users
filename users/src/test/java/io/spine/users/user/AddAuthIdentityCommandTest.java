@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("AddAuthIdentity command should")
 public class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity> {
 
+    protected AddAuthIdentityCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate AuthIdentityAdded event")
     void generateEvent() {
@@ -37,8 +41,7 @@ public class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity>
                 state -> assertEquals(message().getIdentity(), state.getAuthIdentity(1)));
     }
 
-    @Override
-    protected AddAuthIdentity createMessage() {
-        return addAuthIdentity();
+    private static AddAuthIdentity createMessage() {
+        return addAuthIdentity(USER_ID);
     }
 }

@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("SignUserOut command should")
 public class SignUserOutCommandTest extends UserCommandTest<SignUserOut> {
 
+    protected SignUserOutCommandTest() {
+        super(createMessage());
+    }
+
     @Test
     @DisplayName("generate UserSignedOut event")
     void generateEvent() {
@@ -30,8 +34,7 @@ public class SignUserOutCommandTest extends UserCommandTest<SignUserOut> {
         });
     }
 
-    @Override
-    protected SignUserOut createMessage() {
-        return signUserOut();
+    private static SignUserOut createMessage() {
+        return signUserOut(USER_ID);
     }
 }
