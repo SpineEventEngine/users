@@ -18,14 +18,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.c.signin;
+
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserProfile;
+
 /**
- * This package contains a write-side of the Users bounded context.
+ * TODO: documentation
+ *
+ * @author Vladyslav Lubenskyi
  */
-@ParametersAreNonnullByDefault
-@CheckReturnValue
+public abstract class IdentityProvider {
 
-package io.spine.users;
+    public abstract boolean hasIdentity(UserAuthIdentity identity);
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    public abstract boolean signInAllowed(UserAuthIdentity identity);
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    public abstract UserProfile fetchUserProfile(UserAuthIdentity identity);
+}

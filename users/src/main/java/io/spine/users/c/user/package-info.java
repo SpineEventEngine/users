@@ -19,12 +19,11 @@
  */
 
 /**
- * This package contains a write-side of the Users bounded context.
+ * This package contains {@link io.spine.users.c.user.UserAggregate User aggregate}.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-
-package io.spine.users;
+package io.spine.users.c.user;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

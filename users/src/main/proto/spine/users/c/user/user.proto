@@ -11,7 +11,7 @@ package spine.users.c.user;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
+option java_package = "io.spine.users.c.user";
 option java_outer_classname = "UserProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
@@ -27,9 +27,9 @@ import "spine/users/user_auth_identity.proto";
 // A user of the application.
 //
 // A user interacts with the application by sending commands and making queries.
-//
+///
 // ## User Attributes
-//
+// // TODO: auth identities
 // To make `User` meet specific requirements of the application, it can be extended via
 // custom `UserAttribute`s.
 //

@@ -18,14 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.c.signin;
+
+import io.spine.users.IdentityProviderId;
+
 /**
- * This package contains a write-side of the Users bounded context.
+ * A factory for creating {@link IdentityProvider identity providers}.
+ *
+ * TODO: extend
+ *
+ * @author Vladyslav Lubenskyi
  */
-@ParametersAreNonnullByDefault
-@CheckReturnValue
+public abstract class IdentityProviderFactory {
 
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    public abstract IdentityProvider get(IdentityProviderId id);
+}

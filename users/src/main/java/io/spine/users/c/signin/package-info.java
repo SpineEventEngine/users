@@ -19,12 +19,11 @@
  */
 
 /**
- * This package contains a write-side of the Users bounded context.
+ * This package contains process managers implementing sign-in.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-
-package io.spine.users;
+package io.spine.users.c.signin;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 
