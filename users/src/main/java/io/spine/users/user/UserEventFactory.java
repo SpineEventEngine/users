@@ -71,21 +71,21 @@ final class UserEventFactory {
         return event;
     }
 
-    GroupMembershipStarted startGroupMembership(StartGroupMembership command) {
-        GroupMembershipStarted event =
-                GroupMembershipStartedVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setGroupId(command.getGroupId())
-                                              .build();
+    UserJoinedGroup joinGroup(JoinGroup command) {
+        UserJoinedGroup event =
+                UserJoinedGroupVBuilder.newBuilder()
+                                       .setId(command.getId())
+                                       .setGroupId(command.getGroupId())
+                                       .build();
         return event;
     }
 
-    GroupMembershipStopped stopGroupMembership(StopGroupMembership command) {
-        GroupMembershipStopped event =
-                GroupMembershipStoppedVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setGroupId(command.getGroupId())
-                                              .build();
+    UserLeftGroup leaveGroup(LeaveGroup command) {
+        UserLeftGroup event =
+                UserLeftGroupVBuilder.newBuilder()
+                                     .setId(command.getId())
+                                     .setGroupId(command.getGroupId())
+                                     .build();
         return event;
     }
 

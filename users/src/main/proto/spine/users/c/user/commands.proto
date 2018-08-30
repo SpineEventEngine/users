@@ -66,8 +66,8 @@ message MoveUser {
 
 // The command to start a group membership.
 //
-message StartGroupMembership {
-    option (events) = "GroupMembershipStarted";
+message JoinGroup {
+    option (events) = "UserJoinedGroup";
 
     spine.core.UserId id = 1;
 
@@ -77,8 +77,8 @@ message StartGroupMembership {
 
 // The command to stop a group membership.
 //
-message StopGroupMembership {
-    option (events) = "GroupMembershipStopped";
+message LeaveGroup {
+    option (events) = "UserLeftGroup";
 
     spine.core.UserId id = 1;
 

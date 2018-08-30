@@ -27,7 +27,7 @@ message SignUserIn {
     spine.core.UserId id = 1;
 
     // The authentication identity to sign-in with.
-    UserAuthIdentity identity = 2;
+    UserAuthIdentity identity = 2 [(required) = true];
 }
 
 // The command to finish the sign-in process.

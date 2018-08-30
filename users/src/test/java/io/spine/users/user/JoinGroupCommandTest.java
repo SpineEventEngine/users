@@ -16,18 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("StartGroupMembership command should")
-public class StartGroupMembershipCommandTest extends UserCommandTest<StartGroupMembership> {
+@DisplayName("JoinGroup command should")
+public class JoinGroupCommandTest extends UserCommandTest<JoinGroup> {
 
-    protected StartGroupMembershipCommandTest() {
+    protected JoinGroupCommandTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate GroupMembershipStarted event")
+    @DisplayName("generate UserJoinedGroup event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(GroupMembershipStarted.class, event -> {
+        expectThat(aggregate).producesEvent(UserJoinedGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getGroupId(), event.getGroupId());
         });
@@ -41,7 +41,7 @@ public class StartGroupMembershipCommandTest extends UserCommandTest<StartGroupM
                 state -> assertEquals(message().getGroupId(), state.getMembership(0)));
     }
 
-    private static StartGroupMembership createMessage() {
+    private static JoinGroup createMessage() {
         return startGroupMembership(USER_ID);
     }
 }

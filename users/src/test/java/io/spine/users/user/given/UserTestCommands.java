@@ -33,10 +33,10 @@ import io.spine.users.user.RemoveUserAttribute;
 import io.spine.users.user.RemoveUserAttributeVBuilder;
 import io.spine.users.user.SignUserOut;
 import io.spine.users.user.SignUserOutVBuilder;
-import io.spine.users.user.StartGroupMembership;
-import io.spine.users.user.StartGroupMembershipVBuilder;
-import io.spine.users.user.StopGroupMembership;
-import io.spine.users.user.StopGroupMembershipVBuilder;
+import io.spine.users.user.JoinGroup;
+import io.spine.users.user.JoinGroupVBuilder;
+import io.spine.users.user.LeaveGroup;
+import io.spine.users.user.LeaveGroupVBuilder;
 import io.spine.users.user.UnassignRoleFromUser;
 import io.spine.users.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.user.UpdateUserAttribute;
@@ -94,15 +94,15 @@ public class UserTestCommands {
                                .build();
     }
 
-    public static StartGroupMembership startGroupMembership(UserId id) {
-        return StartGroupMembershipVBuilder.newBuilder()
+    public static JoinGroup startGroupMembership(UserId id) {
+        return JoinGroupVBuilder.newBuilder()
                                            .setId(id)
                                            .setGroupId(firstGroupId())
                                            .build();
     }
 
-    public static StopGroupMembership stopGroupMembership(UserId id) {
-        return StopGroupMembershipVBuilder.newBuilder()
+    public static LeaveGroup stopGroupMembership(UserId id) {
+        return LeaveGroupVBuilder.newBuilder()
                                           .setId(id)
                                           .setGroupId(firstGroupId())
                                           .build();

@@ -17,18 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("StopGroupMembership command should")
-public class StopGroupMembershipCommandTest extends UserCommandTest<StopGroupMembership> {
+@DisplayName("LeaveGroup command should")
+public class LeaveGroupCommandTest extends UserCommandTest<LeaveGroup> {
 
-    protected StopGroupMembershipCommandTest() {
+    protected LeaveGroupCommandTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate GroupMembershipStopped event")
+    @DisplayName("generate UserLeftGroup event")
     void generateEvent() {
         UserAggregate aggregate = createAggregateWithGroup();
-        expectThat(aggregate).producesEvent(GroupMembershipStopped.class, event -> {
+        expectThat(aggregate).producesEvent(UserLeftGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getGroupId(), event.getGroupId());
         });
@@ -42,7 +42,7 @@ public class StopGroupMembershipCommandTest extends UserCommandTest<StopGroupMem
                 .isEmpty()));
     }
 
-    private static StopGroupMembership createMessage() {
+    private static LeaveGroup createMessage() {
         return stopGroupMembership(USER_ID);
     }
 }

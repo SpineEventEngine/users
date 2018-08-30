@@ -62,15 +62,15 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    GroupMembershipStarted handle(StartGroupMembership command, CommandContext context) {
+    UserJoinedGroup handle(JoinGroup command, CommandContext context) {
         logCommand(command);
-        return events(context).startGroupMembership(command);
+        return events(context).joinGroup(command);
     }
 
     @Assign
-    GroupMembershipStopped handle(StopGroupMembership command, CommandContext context) {
+    UserLeftGroup handle(LeaveGroup command, CommandContext context) {
         logCommand(command);
-        return events(context).stopGroupMembership(command);
+        return events(context).leaveGroup(command);
     }
 
     @Assign
@@ -174,13 +174,13 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Apply
-    void on(GroupMembershipStarted event) {
+    void on(UserJoinedGroup event) {
         getBuilder().addMembership(event.getGroupId());
 
     }
 
     @Apply
-    void on(GroupMembershipStopped event) {
+    void on(UserLeftGroup event) {
         removeGroupMembership(event.getGroupId());
     }
 

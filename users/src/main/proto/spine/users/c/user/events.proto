@@ -71,7 +71,7 @@ message UserMoved {
 
 // The event is emitted when a user became a member of the group.
 //
-message GroupMembershipStarted {
+message UserJoinedGroup {
 
     spine.core.UserId id = 1;
 
@@ -81,7 +81,7 @@ message GroupMembershipStarted {
 
 // The event is emitted when a user left the group.
 //
-message GroupMembershipStopped {
+message UserLeftGroup {
 
     spine.core.UserId id = 1;
 
