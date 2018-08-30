@@ -7,7 +7,7 @@
 package io.spine.users.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.signin.RemoteIdentitySignInPm;
+import io.spine.users.signin.SignInPm;
 import io.spine.users.user.UserCreated;
 import io.spine.users.user.UserCreatedVBuilder;
 
@@ -19,7 +19,7 @@ import static io.spine.users.signin.given.SignInTestEnv.identity;
 import static io.spine.users.signin.given.SignInTestEnv.profile;
 
 /**
- * Test events for {@link RemoteIdentitySignInPm}.
+ * Test events for {@link SignInPm}.
  *
  * @author Vladyslav Lubenskyi
  */

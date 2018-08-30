@@ -10,26 +10,37 @@ import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnEventTest;
+import io.spine.users.IdentityProviderId;
 import io.spine.users.user.UserAggregateRepository;
 
 /**
- * An implementation base for the {@link RemoteIdentitySignInPm} event reactors tests.
+ * An implementation base for the {@link SignInPm} event reactors tests.
  *
  * @author Vladyslav Lubenskyi
  */
-abstract class RemoteIdentitySignInPmEventTest<E extends Message>
-        extends PmCommandOnEventTest<UserId, E, RemoteIdentitySignIn, RemoteIdentitySignInPm> {
+abstract class SignInPmEventTest<E extends Message>
+        extends PmCommandOnEventTest<UserId, E, SignIn, SignInPm> {
 
-    protected RemoteIdentitySignInPmEventTest(UserId processManagerId, E eventMessage) {
+    protected SignInPmEventTest(UserId processManagerId, E eventMessage) {
         super(processManagerId, eventMessage);
     }
 
     @Override
-    protected Repository<UserId, RemoteIdentitySignInPm> createEntityRepository() {
-        return new RemoteIdentitySignInProcManRepository(identityProvider(), userRepository());
+    protected Repository<UserId, SignInPm> createEntityRepository() {
+        return new SignInPmRepository(identityProviderFactory(), userRepository());
     }
 
-    abstract RemoteIdentityProvider identityProvider();
+    protected IdentityProviderFactory identityProviderFactory() {
+        return new IdentityProviderFactory() {
+
+            @Override
+            public IdentityProvider get(IdentityProviderId id) {
+                return identityProvider();
+            }
+        };
+    }
+
+    abstract IdentityProvider identityProvider();
 
     abstract UserAggregateRepository userRepository();
 }

@@ -106,14 +106,14 @@ public class UserTestEnv {
                                     .build();
     }
 
-    private static RemoteIdentityProviderId googleProviderId() {
-        return RemoteIdentityProviderIdVBuilder.newBuilder()
+    private static IdentityProviderId googleProviderId() {
+        return IdentityProviderIdVBuilder.newBuilder()
                 .setValue("gmail.com")
                 .build();
     }
 
-    private static RemoteIdentityProviderId githubPoviderId() {
-        return RemoteIdentityProviderIdVBuilder.newBuilder()
+    private static IdentityProviderId githubPoviderId() {
+        return IdentityProviderIdVBuilder.newBuilder()
                 .setValue("github.com")
                 .build();
     }

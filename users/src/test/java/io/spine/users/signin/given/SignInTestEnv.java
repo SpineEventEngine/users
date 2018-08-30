@@ -49,7 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * The environment for the {@link RemoteIdentitySignInPm} tests.
+ * The environment for the {@link SignInPm} tests.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -81,40 +81,20 @@ public class SignInTestEnv {
         return mock;
     }
 
-    public static RemoteIdentityProvider mockActiveIdentityProvider() {
-        RemoteIdentityProvider mock = mock(RemoteIdentityProvider.class);
-        when(mock.fetchUserStatus(any())).thenReturn(ACTIVE);
-        when(mock.fetchUserDetails(any())).thenReturn(userDetails());
-        return mock;
+    public static IdentityProviderFactory mockActiveIdentityProvider() {
+        IdentityProvider mock = mock(IdentityProvider.class);
+        when(mock.hasIdentity(any())).thenReturn(true);
+        when(mock.signInAllowed(any())).thenReturn(true);
+        when(mock.fetchUserProfile(any())).thenReturn(profile());
+        return new TestIdentityProviderFactory(mock);
     }
 
-    public static RemoteIdentityProvider mockSuspendedIdentityProvider() {
-        RemoteIdentityProvider mock = mock(RemoteIdentityProvider.class);
-        when(mock.fetchUserStatus(any())).thenReturn(SUSPENDED);
-        when(mock.fetchUserDetails(any())).thenReturn(userDetails());
-        return mock;
-    }
-
-    private static UserDetails userDetails() {
-        PersonName name = PersonNameVBuilder.newBuilder()
-                                            .setGivenName("Bobby")
-                                            .setFamilyName("McGee")
-                                            .build();
-        EmailAddress emailAddress = EmailAddressVBuilder.newBuilder()
-                                                        .setValue("bobby@mcgee.com")
-                                                        .build();
-        UserProfile profile = UserProfileVBuilder.newBuilder()
-                                                 .setName(name)
-                                                 .setEmail(emailAddress)
-                                                 .build();
-        UserAttribute attribute = UserAttributeVBuilder.newBuilder()
-                                                       .setName("token")
-                                                       .setValue(pack(Int32Value.of(42)))
-                                                       .build();
-        return UserDetailsVBuilder.newBuilder()
-                                  .setProfile(profile)
-                                  .addAttribute(attribute)
-                                  .build();
+    public static IdentityProviderFactory mockSuspendedIdentityProvider() {
+        IdentityProvider mock = mock(IdentityProvider.class);
+        when(mock.hasIdentity(any())).thenReturn(true);
+        when(mock.signInAllowed(any())).thenReturn(false);
+        when(mock.fetchUserProfile(any())).thenReturn(profile());
+        return new TestIdentityProviderFactory(mock);
     }
 
     private static UserAggregate userAggregateState() {
@@ -175,8 +155,8 @@ public class SignInTestEnv {
                                     .build();
     }
 
-    static RemoteIdentityProviderId googleProviderId() {
-        return RemoteIdentityProviderIdVBuilder.newBuilder()
+    static IdentityProviderId googleProviderId() {
+        return IdentityProviderIdVBuilder.newBuilder()
                                                .setValue("gmail.com")
                                                .build();
     }
@@ -198,5 +178,22 @@ public class SignInTestEnv {
                                  .setGivenName("John")
                                  .setFamilyName("Smith")
                                  .build();
+    }
+
+    /**
+     * A factory that always returns a single identity provider.
+     */
+    static class TestIdentityProviderFactory extends IdentityProviderFactory {
+
+        private final IdentityProvider provider;
+
+        private TestIdentityProviderFactory(IdentityProvider provider) {
+            this.provider = provider;
+        }
+
+        @Override
+        public IdentityProvider get(IdentityProviderId id) {
+            return provider;
+        }
     }
 }

@@ -7,12 +7,11 @@
 package io.spine.users.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.signin.RemoteIdentitySignInFinished;
-import io.spine.users.signin.RemoteIdentitySignInFinishedVBuilder;
+import io.spine.users.signin.SignInCompleted;
+import io.spine.users.signin.SignInCompletedVBuilder;
 import io.spine.users.user.UserAggregate;
 
 import static io.spine.users.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.user.given.UserTestEnv.userId;
 
 /**
  * Test events for {@link UserAggregate}.
@@ -27,10 +26,10 @@ public class UserTestEvents {
     private UserTestEvents() {
     }
 
-    public static RemoteIdentitySignInFinished signInFinished(UserId id) {
-        return RemoteIdentitySignInFinishedVBuilder.newBuilder()
-                .setId(id)
-                .setIdentity(googleIdentity())
-                .build();
+    public static SignInCompleted signInCompleted(UserId id) {
+        return SignInCompletedVBuilder.newBuilder()
+                                      .setId(id)
+                                      .setIdentity(googleIdentity())
+                                      .build();
     }
 }

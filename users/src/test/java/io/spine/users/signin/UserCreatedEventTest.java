@@ -6,15 +6,13 @@
 
 package io.spine.users.signin;
 
-import io.spine.core.UserId;
-import io.spine.users.UserAuthIdentity;
 import io.spine.users.user.UserAggregateRepository;
 import io.spine.users.user.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.AWAITING_USER_CREATION;
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.COMPLETED;
+import static io.spine.users.signin.SignIn.Status.AWAITING_USER_CREATION;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.given.SignInTestEnv.userId;
 import static io.spine.users.signin.given.SignInTestEvents.userCreated;
 import static io.spine.users.signin.given.TestProcManFactory.nonEmptyProcMan;
@@ -24,9 +22,9 @@ import static org.mockito.Mockito.mock;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoteIdentitySignInPM should, when UserCreated")
+@DisplayName("SignInPM should, when UserCreated")
 public class UserCreatedEventTest
-        extends RemoteIdentitySignInPmEventTest<UserCreated> {
+        extends SignInPmEventTest<UserCreated> {
 
     protected UserCreatedEventTest() {
         super(userId(), event());
@@ -35,14 +33,14 @@ public class UserCreatedEventTest
     @Test
     @DisplayName("do nothing in a wrong status")
     void ignoreMessage() {
-        RemoteIdentitySignInPm emptyProcMan = nonEmptyProcMan(COMPLETED);
+        SignInPm emptyProcMan = nonEmptyProcMan(COMPLETED);
         expectThat(emptyProcMan).ignoresMessage();
     }
 
     @Test
     @DisplayName("start SignIn again")
     void checkStatus() {
-        RemoteIdentitySignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_CREATION);
+        SignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_CREATION);
         expectThat(emptyProcMan).producesCommand(SignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertEquals(emptyProcMan.getState()
@@ -55,8 +53,8 @@ public class UserCreatedEventTest
     }
 
     @Override
-    RemoteIdentityProvider identityProvider() {
-        return mock(RemoteIdentityProvider.class);
+    IdentityProvider identityProvider() {
+        return mock(IdentityProvider.class);
     }
 
     @Override

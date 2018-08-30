@@ -6,7 +6,7 @@
 
 package io.spine.users.user;
 
-import io.spine.users.signin.RemoteIdentitySignInFinished;
+import io.spine.users.signin.SignInCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoteIdentitySignInFinished event should")
-public class RemoteIdentitySignedInEventTest extends UserEventTest<RemoteIdentitySignInFinished> {
+@DisplayName("SignInFinished event should")
+public class SignedInCompletedEventTest extends UserEventTest<SignInCompleted> {
 
     protected SignedInCompletedEventTest() {
         super(createMessage());
@@ -36,7 +36,7 @@ public class RemoteIdentitySignedInEventTest extends UserEventTest<RemoteIdentit
         });
     }
 
-    private static RemoteIdentitySignInFinished createMessage() {
-        return signInFinished(USER_ID);
+    private static SignInCompleted createMessage() {
+        return signInCompleted(USER_ID);
     }
 }

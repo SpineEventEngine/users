@@ -11,8 +11,8 @@ import io.spine.users.user.UserAggregateRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.AWAITING_USER_CREATION;
-import static io.spine.users.signin.RemoteIdentitySignIn.Status.COMPLETED;
+import static io.spine.users.signin.SignIn.Status.AWAITING_USER_CREATION;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.given.SignInTestCommands.signInCommand;
 import static io.spine.users.signin.given.SignInTestEnv.emptyUserRepo;
 import static io.spine.users.signin.given.SignInTestEnv.identity;
@@ -27,17 +27,17 @@ import static org.mockito.Mockito.mock;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoteIdentitySignInPm should, when SignIn")
+@DisplayName("SignInPm should, when SignIn")
 public class SignInCommandTest
-        extends RemoteIdentitySignInPmCommandTest<SignIn> {
+        extends SignInPmCommandTest<SignIn> {
 
     protected SignInCommandTest() {
         super(userId(), command());
     }
 
     @Override
-    RemoteIdentityProvider identityProvider() {
-        return mock(RemoteIdentityProvider.class);
+    IdentityProvider identityProvider() {
+        return mock(IdentityProvider.class);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class SignInCommandTest
     @Test
     @DisplayName("initialize")
     void initialize() {
-        RemoteIdentitySignInPm emptyProcMan = createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(emptyUserRepo());
-        emptyProcMan.setIdentityProvider(mockActiveIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
         expectThat(emptyProcMan).hasState(state -> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getIdentity(), state.getIdentity());
@@ -61,9 +61,9 @@ public class SignInCommandTest
     @Test
     @DisplayName("create user if the user doesn't exist")
     void createUser() {
-        RemoteIdentitySignInPm emptyProcMan = createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(emptyUserRepo());
-        emptyProcMan.setIdentityProvider(mockActiveIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
         expectThat(emptyProcMan)
                 .producesCommand(CreateUser.class, command -> {
                     assertEquals(message().getId(), command.getId());
@@ -75,9 +75,9 @@ public class SignInCommandTest
     @Test
     @DisplayName("finish the process if the user exists and is active")
     void finishProcess() {
-        RemoteIdentitySignInPm emptyProcMan = createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setIdentityProvider(mockActiveIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
@@ -88,9 +88,9 @@ public class SignInCommandTest
     @Test
     @DisplayName("fail the process if the user exists and is NOT active")
     void failProcess() {
-        RemoteIdentitySignInPm emptyProcMan = createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setIdentityProvider(mockSuspendedIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockSuspendedIdentityProvider());
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());

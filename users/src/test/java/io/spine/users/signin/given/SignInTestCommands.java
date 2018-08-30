@@ -8,12 +8,12 @@ package io.spine.users.signin.given;
 
 import io.spine.core.UserId;
 import io.spine.users.UserAuthIdentity;
-import io.spine.users.signin.RemoteIdentitySignInPm;
+import io.spine.users.signin.SignInPm;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInVBuilder;
 
 /**
- * Test commands for {@link RemoteIdentitySignInPm}.
+ * Test commands for {@link SignInPm}.
  *
  * @author Vladyslav Lubenskyi
  */
