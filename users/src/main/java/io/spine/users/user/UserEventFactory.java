@@ -14,7 +14,7 @@ import io.spine.time.ZoneOffset;
 import io.spine.users.ParentEntity;
 import io.spine.users.User.Status;
 import io.spine.users.UserAuthIdentity;
-import io.spine.users.signin.RemoteIdentitySignInFinished;
+import io.spine.users.signin.SignInCompleted;
 
 /**
  * An event factory for the {@linkplain UserAggregate User aggregate}.
@@ -141,7 +141,7 @@ final class UserEventFactory {
         return event;
     }
 
-    UserSignedIn signIn(RemoteIdentitySignInFinished event) {
+    UserSignedIn signIn(SignInCompleted event) {
         UserSignedIn result = UserSignedInVBuilder.newBuilder()
                 .setId(event.getId())
                 .setIdentity(event.getIdentity())

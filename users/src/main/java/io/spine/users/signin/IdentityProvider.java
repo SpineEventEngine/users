@@ -18,9 +18,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-final def SPINE_VERSION = '0.10.81-SNAPSHOT'
+package io.spine.users.signin;
 
-ext {
-    spineVersion = SPINE_VERSION
-    spineBaseVersion = '0.10.67-SNAPSHOT'
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserProfile;
+
+/**
+ * TODO: documentation
+ *
+ * @author Vladyslav Lubenskyi
+ */
+public abstract class IdentityProvider {
+
+    public abstract boolean hasIdentity(UserAuthIdentity identity);
+
+    public abstract boolean signInAllowed(UserAuthIdentity identity);
+
+    public abstract UserProfile fetchUserProfile(UserAuthIdentity identity);
 }

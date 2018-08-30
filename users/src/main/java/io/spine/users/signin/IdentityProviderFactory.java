@@ -18,9 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-final def SPINE_VERSION = '0.10.81-SNAPSHOT'
+package io.spine.users.signin;
 
-ext {
-    spineVersion = SPINE_VERSION
-    spineBaseVersion = '0.10.67-SNAPSHOT'
+import io.spine.users.IdentityProviderId;
+
+/**
+ * A factory for creating {@link IdentityProvider identity providers}.
+ *
+ * TODO: extend
+ *
+ * @author Vladyslav Lubenskyi
+ */
+public abstract class IdentityProviderFactory {
+
+    public abstract IdentityProvider get(IdentityProviderId id);
 }

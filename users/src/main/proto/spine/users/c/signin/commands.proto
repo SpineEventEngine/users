@@ -18,13 +18,29 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/user_auth_identity.proto";
+import "spine/users/c/signin/values.proto";
 
 // The command to start the sign-in process.
 //
-message SignInRemoteIdentity {
+message SignUserIn {
 
     spine.core.UserId id = 1;
 
     // The authentication identity to sign-in with.
     UserAuthIdentity identity = 2;
+}
+
+// The command to finish the sign-in process.
+//
+// This command is used internally by the process manager and must not be used by the client.
+//
+message FinishSignIn {
+
+    spine.core.UserId id = 1;
+
+    // Indicates if the sign-in was successfull or not.
+    bool successfull = 2;
+
+    // Indicates why the sign-in failed, if applicable.
+    FailureReason failure_reason = 3;
 }

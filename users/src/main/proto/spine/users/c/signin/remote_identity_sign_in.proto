@@ -36,7 +36,7 @@ import "spine/users/user_auth_identity.proto";
 // IMPORTANT: This process manager delegates TPIP querying to the `IdentityProvider` process manager.
 // Please, make sure to have the `IdentityProvider` registered in the bounded context.
 //
-message RemoteIdentitySignIn {
+message SignIn {
     option (entity).kind = PROCESS_MANAGER;
 
     spine.core.UserId id = 1;
@@ -48,24 +48,18 @@ message RemoteIdentitySignIn {
     user.User.Status user_status = 3;
 
     // The authentication identity to sign in with.
-    UserAuthIdentity identity = 4;
+    UserAuthIdentity identity = 4 [(required) = true];
 
     // A status of the sign-in process.
     enum Status {
 
         SIS_UNKNOWN = 0;
 
-        // Indicates that the process manager is checking if user is active or not.
-        USER_STATUS_CHECK = 1;
-
-        // Indicate that the process manager is fetching the user profile.
-        USER_PROFILE_FETCHING = 2;
-
         // Indicates that the user doesn't exist and the process manager is creating it.
-        USER_CREATING = 3;
+        AWAITING_USER_CREATION = 3;
 
-        // A user is signed-in.
-        SIGNED_IN = 4;
+        // Indicates that the user was successfully signed-in.
+        COMPLETED = 4;
 
         // The sign-in process failed and should be repeated.
         FAILED = 5;

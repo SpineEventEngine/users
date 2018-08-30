@@ -47,7 +47,7 @@ message OrgUnitId {
 
 // A string-based identifer of an identity profile.
 //
-message RemoteIdentityProviderId {
+message IdentityProviderId {
 
     string value = 1;
 }

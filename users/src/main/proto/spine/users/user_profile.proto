@@ -29,7 +29,7 @@ import "spine/people/person_name.proto";
 message UserProfile {
 
     // The email address of the user in the specified provider, if available.
-    spine.net.EmailAddress email = 1;
+    spine.net.EmailAddress email = 1 [(required) = true];
 
     // The name of the person if applicable.
     spine.people.PersonName name = 2;

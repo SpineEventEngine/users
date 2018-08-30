@@ -18,11 +18,12 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/c/user/user.proto";
+import "spine/users/c/signin/values.proto";
 import "spine/users/user_auth_identity.proto";
 
-// The event is emitted when the sign-in process is successfully finished.
+// The event is emitted when the sign-in process is successfully completed.
 //
-message RemoteIdentitySignInFinished {
+message SignInCompleted {
 
     spine.core.UserId id = 1;
 
@@ -30,12 +31,15 @@ message RemoteIdentitySignInFinished {
     UserAuthIdentity identity = 2;
 }
 
-// The event is emitted when a sign-in attempt failed.
+// The event is emitted when the sign-in process failed.
 //
-message RemoteIdentitySignInFailed {
+message SignInFailed {
 
     spine.core.UserId id = 1;
 
     // The authentication identity used to sign-in.
     UserAuthIdentity identity = 2;
+
+    // Indicates why the sign-in failed.
+    FailureReason failure_reason = 3;
 }

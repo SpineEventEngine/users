@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.user.given.UserTestEvents.signInFinished;
+import static io.spine.users.user.given.UserTestEvents.signInCompleted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("RemoteIdentitySignInFinished event should")
 public class RemoteIdentitySignedInEventTest extends UserEventTest<RemoteIdentitySignInFinished> {
 
-    protected RemoteIdentitySignedInEventTest() {
+    protected SignedInCompletedEventTest() {
         super(createMessage());
     }
 

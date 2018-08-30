@@ -194,7 +194,7 @@ message RemoveAuthIdentity {
     string uid = 2 [(required) = true];
 
     // The unique identifier of the authentication provider.
-    RemoteIdentityProviderId provider_id = 3 [(required) = true];
+    IdentityProviderId provider_id = 3 [(required) = true];
 }
 
 // The command to change the primary authentication identity.

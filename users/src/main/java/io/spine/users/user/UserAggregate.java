@@ -8,11 +8,15 @@ package io.spine.users.user;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Message;
-import io.spine.users.signin.RemoteIdentitySignInFinished;
-import io.spine.users.*;
+import io.spine.server.event.React;
+import io.spine.users.GroupId;
+import io.spine.users.RoleId;
+import io.spine.users.User;
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserVBuilder;
+import io.spine.users.signin.SignInCompleted;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
-import io.spine.core.React;
 import io.spine.core.UserId;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
@@ -42,6 +46,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         super(id);
     }
 
+    // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
         logCommand(command);
@@ -219,7 +224,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @React
-    UserSignedIn on(RemoteIdentitySignInFinished event, EventContext context) {
+    UserSignedIn on(SignInCompleted event, EventContext context) {
         return events(context.getCommandContext()).signIn(event);
     }
 

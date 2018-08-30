@@ -28,7 +28,7 @@ message UserAuthIdentity {
     string uid = 1 [(required) = true];
 
     // The unique identifier of the authentication provider type that this instance corresponds to.
-    RemoteIdentityProviderId provider_id = 2 [(required) = true];
+    IdentityProviderId provider_id = 2 [(required) = true];
 
     // The user's display name, if available.
     string display_name = 3 [(required) = true];
