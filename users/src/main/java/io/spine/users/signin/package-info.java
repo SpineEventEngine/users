@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains process managers for signing in with remote identity provider.
+ * This package contains process managers implementing sign-in.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue

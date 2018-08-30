@@ -16,11 +16,11 @@ option java_outer_classname = "OrganizationalUnitProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/orgunit/orgunit_attribute.proto";
 
 // An organizational unit (aka orgunit).
 //
@@ -53,7 +53,7 @@ message OrgUnit {
     spine.net.InternetDomain domain = 4;
 
     // The attributes of the orgunit.
-    repeated OrgUnitAttribute attribute = 5;
+    map<string, google.protobuf.Any> attributes = 5;
 
     // The orgunit owner.
     spine.core.UserId owner = 6 [(required) = true];

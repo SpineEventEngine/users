@@ -21,7 +21,6 @@ import "spine/core/user_id.proto";
 import "spine/time/time.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/user/user_attribute.proto";
 import "spine/users/user_profile.proto";
 import "spine/users/user_auth_identity.proto";
 
@@ -65,7 +64,7 @@ message User {
     ParentEntity parent_entity = 5;
 
     // The attributes of the user.
-    repeated UserAttribute attribute = 6;
+    map<string, google.protobuf.Any> attributes = 6;
 
     // General profile information for a user.
     UserProfile profile = 7;

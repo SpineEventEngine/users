@@ -7,7 +7,14 @@
 package io.spine.users.user;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.protobuf.Any;
 import com.google.protobuf.Message;
+import io.spine.core.CommandContext;
+import io.spine.core.EventContext;
+import io.spine.core.UserId;
+import io.spine.server.aggregate.Aggregate;
+import io.spine.server.aggregate.Apply;
+import io.spine.server.command.Assign;
 import io.spine.server.event.React;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
@@ -15,16 +22,11 @@ import io.spine.users.User;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.UserVBuilder;
 import io.spine.users.signin.SignInCompleted;
-import io.spine.core.CommandContext;
-import io.spine.core.EventContext;
-import io.spine.core.UserId;
-import io.spine.server.aggregate.Aggregate;
-import io.spine.server.aggregate.Apply;
-import io.spine.server.command.Assign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -98,15 +100,11 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     @Assign
     UserAttributeRemoved handle(RemoveUserAttribute command, CommandContext context) {
         logCommand(command);
-        List<UserAttribute> attributes = getState().getAttributeList();
-        String attributeName = command.getAttributeName();
-        Optional<UserAttribute> attribute =
-                attributes.stream()
-                          .filter(userAttribute -> userAttribute.getName()
-                                                                .equals(attributeName))
-                          .findFirst();
-        if (attribute.isPresent()) {
-            return events(context).removeAttribute(command, attribute.get());
+        Map<String, Any> attributes = getState().getAttributesMap();
+        String attributeName = command.getName();
+        if (attributes.containsKey(attributeName)) {
+            return events(context).removeAttribute(command, attributeName,
+                                                   attributes.get(attributeName));
         } else {
             throw newIllegalStateException("Trying to remove an attribute that is not there");
         }
@@ -114,11 +112,10 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Assign
     UserAttributeUpdated handle(UpdateUserAttribute command, CommandContext context) {
-        String attributeName = command.getAttribute()
-                                      .getName();
-        Optional<UserAttribute> attributeToUpdate = findAttributeByName(attributeName);
-        if (attributeToUpdate.isPresent()) {
-            return events(context).updateAttribute(command, attributeToUpdate.get());
+        String attributeName = command.getName();
+        Map<String, Any> attributes = getState().getAttributes();
+        if (attributes.containsKey(attributeName)) {
+            return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
             throw newIllegalStateException("No attribute with the name {} found");
         }
@@ -165,7 +162,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
                     .setParentEntity(event.getParentEntity())
                     .setPrimaryAuthIdentity(event.getPrimaryIdentity())
                     .addAllRole(event.getRoleList())
-                    .addAllAttribute(event.getAttributeList())
+                    .putAllAttributes(event.getAttributesMap())
                     .setWhenCreated(event.getWhenCreated())
                     .setProfile(event.getProfile())
                     .setStatus(event.getStatus());
@@ -204,18 +201,18 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Apply
     void on(UserAttributeAdded event) {
-        getBuilder().addAttribute(event.getAttribute());
+        getBuilder().putAttributes(event.getName(), event.getValue());
     }
 
     @Apply
     void on(UserAttributeRemoved event) {
-        removeAttribute(event.getAttribute());
+        removeAttribute(event.getName());
     }
 
     @Apply
     void on(UserAttributeUpdated event) {
-        removeAttribute(event.getOldAttribute());
-        getBuilder().addAttribute(event.getNewAttribute());
+        removeAttribute(event.getName());
+        getBuilder().putAttributes(event.getName(), event.getNewValue());
     }
 
     @Apply
@@ -263,21 +260,11 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
                          .findFirst();
     }
 
-    private Optional<UserAttribute> findAttributeByName(String name) {
-        for (UserAttribute attribute : getState().getAttributeList()) {
-            if (attribute.getName()
-                         .equals(name)) {
-                return Optional.of(attribute);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private void removeAttribute(UserAttribute attribute) {
-        List<UserAttribute> attributes = getBuilder().getAttribute();
-        if (attributes.contains(attribute)) {
-            int index = attributes.indexOf(attribute);
-            getBuilder().removeAttribute(index);
+    private void removeAttribute(String attributeName) {
+        UserVBuilder builder = getBuilder();
+        Map<String, Any> attributes = builder.getAttributes();
+        if (attributes.containsKey(attributeName)) {
+            builder.removeAttributes(attributeName);
         }
     }
 

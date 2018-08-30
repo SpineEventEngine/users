@@ -30,8 +30,8 @@ public class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAt
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).producesEvent(UserAttributeRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getAttributeName(), event.getAttribute()
-                    .getName());
+            assertEquals(message().getName(), event.getName());
+            assertTrue(event.hasValue());
         });
     }
 
@@ -39,8 +39,10 @@ public class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAt
     @DisplayName("remove an attribute")
     void changeState() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getAttributeList()
-                .isEmpty()));
+        expectThat(aggregate).hasState(state -> {
+            assertTrue(state.getAttributesMap()
+                            .isEmpty());
+        });
     }
 
     private static RemoveUserAttribute createMessage() {

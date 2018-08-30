@@ -21,7 +21,6 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/group/group_attribute.proto";
 
 // A group allows to propagate roles to multiple members at once.
 //
@@ -60,7 +59,7 @@ message Group {
     repeated GroupId membership = 6;
 
     // The attributes of the group.
-    repeated GroupAttribute attribute = 7;
+    map<string, google.protobuf.Any> attributes = 7;
 
     // The roles assigned to the group directly (aka not propagated by a group membership).
     repeated RoleId role = 8;

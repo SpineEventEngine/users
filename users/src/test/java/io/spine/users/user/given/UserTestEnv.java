@@ -6,21 +6,33 @@
 
 package io.spine.users.user.given;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.StringValue;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
-import io.spine.time.OffsetDateTime;
-import io.spine.users.*;
+import io.spine.users.GroupId;
+import io.spine.users.GroupIdVBuilder;
+import io.spine.users.IdentityProviderId;
+import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.OrgUnitId;
+import io.spine.users.OrgUnitIdVBuilder;
+import io.spine.users.OrganizationId;
+import io.spine.users.OrganizationIdVBuilder;
+import io.spine.users.ParentEntity;
+import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.RoleId;
+import io.spine.users.RoleIdVBuilder;
+import io.spine.users.UserAuthIdentity;
+import io.spine.users.UserAuthIdentityVBuilder;
+import io.spine.users.UserProfile;
+import io.spine.users.UserProfileVBuilder;
 import io.spine.users.user.UserAggregate;
-import io.spine.users.user.UserAttribute;
-import io.spine.users.user.UserAttributeVBuilder;
 
 import static io.spine.protobuf.AnyPacker.pack;
-import static io.spine.time.OffsetDateTimes.now;
-import static io.spine.time.ZoneOffsets.utc;
 
 /**
  * The environment for the {@link UserAggregate} tests.
@@ -98,12 +110,12 @@ public class UserTestEnv {
                 .build();
     }
 
-    static UserAttribute attribute() {
-        OffsetDateTime time = now(utc());
-        return UserAttributeVBuilder.newBuilder()
-                                    .setName("when_registered")
-                                    .setValue(pack(time))
-                                    .build();
+    public static String attributeName() {
+        return "auth_token";
+    }
+
+    static Any attributeValue() {
+        return pack(StringValue.of("encrypted-auth-token-value"));
     }
 
     private static IdentityProviderId googleProviderId() {

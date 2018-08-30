@@ -42,13 +42,12 @@ import io.spine.users.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.user.UpdateUserAttribute;
 import io.spine.users.user.UpdateUserAttributeVBuilder;
 import io.spine.users.user.UserAggregate;
-import io.spine.users.user.UserAttribute;
-import io.spine.users.user.UserAttributeVBuilder;
 
 import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.users.User.Status.NOT_READY;
 import static io.spine.users.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.user.given.UserTestEnv.attribute;
+import static io.spine.users.user.given.UserTestEnv.attributeName;
+import static io.spine.users.user.given.UserTestEnv.attributeValue;
 import static io.spine.users.user.given.UserTestEnv.displayName;
 import static io.spine.users.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.user.given.UserTestEnv.firstGroupId;
@@ -83,7 +82,7 @@ public class UserTestCommands {
                                  .setPrimaryIdentity(googleIdentity())
                                  .setProfile(profile())
                                  .addRole(adminRoleId())
-                                 .addAttribute(attribute())
+                                 .putAttributes(attributeName(), attributeValue())
                                  .setStatus(NOT_READY)
                                  .build();
     }
@@ -148,26 +147,24 @@ public class UserTestCommands {
     public static AddUserAttribute addUserAttribute(UserId id) {
         return AddUserAttributeVBuilder.newBuilder()
                                        .setId(id)
-                                       .setAttribute(attribute())
+                                       .setName(attributeName())
+                                       .setValue(attributeValue())
                                        .build();
     }
 
     public static RemoveUserAttribute removeUserAttribute(UserId id) {
         return RemoveUserAttributeVBuilder.newBuilder()
                                           .setId(id)
-                                          .setAttributeName(attribute().getName())
+                                          .setName(attributeName())
                                           .build();
     }
 
     public static UpdateUserAttribute updateUserAttribute(UserId id) {
         Any newValue = pack(Empty.getDefaultInstance());
-        UserAttribute newAttribute = UserAttributeVBuilder.newBuilder()
-                .setName(attribute().getName())
-                .setValue(newValue)
-                .build();
         return UpdateUserAttributeVBuilder.newBuilder()
                                           .setId(id)
-                                          .setAttribute(newAttribute)
+                                          .setName(attributeName())
+                                          .setNewValue(newValue)
                                           .build();
     }
 

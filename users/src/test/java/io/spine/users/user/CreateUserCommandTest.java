@@ -35,7 +35,7 @@ public class CreateUserCommandTest extends UserCommandTest<CreateUser> {
             assertEquals(message().getParentEntity(), event.getParentEntity());
             assertEquals(message().getStatus(), event.getStatus());
             assertEquals(message().getRole(0), event.getRole(0));
-            assertEquals(message().getAttribute(0), event.getAttribute(0));
+            assertEquals(message().getAttributesMap(), event.getAttributesMap());
             assertTrue(event.hasWhenCreated());
         });
     }
@@ -51,7 +51,7 @@ public class CreateUserCommandTest extends UserCommandTest<CreateUser> {
             assertEquals(message().getParentEntity(), state.getParentEntity());
             assertEquals(message().getStatus(), state.getStatus());
             assertEquals(message().getRole(0), state.getRole(0));
-            assertEquals(message().getAttribute(0), state.getAttribute(0));
+            assertEquals(message().getAttributesMap(), state.getAttributesMap());
         });
     }
 

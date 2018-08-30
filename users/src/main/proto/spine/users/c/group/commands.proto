@@ -16,10 +16,10 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/group/group_attribute.proto";
 
 // The command to create a group.
 //
@@ -39,7 +39,7 @@ message CreateGroup {
     ParentEntity parent_entity = 4 [(required) = true];
 
     // The attributes of the group.
-    repeated GroupAttribute attribute = 5;
+    map<string, google.protobuf.Any> attributes = 5;
 
     // The owner of the group.
     spine.core.UserId owner = 6 [(required) = true];
@@ -129,8 +129,11 @@ message AddGroupAttribute {
 
     GroupId id = 1;
 
-    // An attribute to add.
-    GroupAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The command to remove an attribute from a group.
@@ -140,8 +143,8 @@ message RemoveGroupAttribute {
 
     GroupId id = 1;
 
-    // The name of the attribute to remove.
-    string attribute_name = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
 }
 
 // The command to update a group attribute.
@@ -152,6 +155,9 @@ message UpdateGroupAttribute {
 
     GroupId id = 1;
 
-    // The new value of an attribute.
-    GroupAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
 }

@@ -6,12 +6,16 @@
 
 package io.spine.users.user;
 
+import com.google.protobuf.Any;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
 import static io.spine.users.user.given.UserTestCommands.addUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -29,7 +33,8 @@ public class AddUserAttributeCommandTest extends UserCommandTest<AddUserAttribut
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).producesEvent(UserAttributeAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getAttribute(), event.getAttribute());
+            assertEquals(message().getName(), event.getName());
+            assertEquals(message().getValue(), event.getValue());
         });
     }
 
@@ -38,7 +43,13 @@ public class AddUserAttributeCommandTest extends UserCommandTest<AddUserAttribut
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getAttribute(), state.getAttribute(1)));
+                state -> {
+                    Map<String, Any> actualAttributes = state.getAttributesMap();
+                    String expectedName = message().getName();
+                    Any expectedValue = message().getValue();
+                    assertTrue(actualAttributes.containsKey(expectedName));
+                    assertEquals(expectedValue, actualAttributes.get(expectedName));
+                });
     }
 
     private static AddUserAttribute createMessage() {

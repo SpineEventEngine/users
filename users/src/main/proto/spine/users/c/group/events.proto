@@ -16,10 +16,10 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/group/group_attribute.proto";
 
 // The event is emitted when a new group is created.
 //
@@ -38,7 +38,7 @@ message GroupCreated {
     ParentEntity parent_entity = 4 [(required) = true];
 
     // The attributes of the group.
-    repeated GroupAttribute attribute = 5;
+    map<string, google.protobuf.Any> attributes = 5;
 
     // The owner of the group.
     spine.core.UserId owner = 6 [(required) = true];
@@ -124,8 +124,11 @@ message GroupAttributeAdded {
 
     GroupId id = 1;
 
-    // The added attribute.
-    GroupAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The event is emitted when an attribute of the group is removed.
@@ -134,8 +137,11 @@ message GroupAttributeRemoved {
 
     GroupId id = 1;
 
-    // The removed attribute.
-    GroupAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The event is emitted when an attribute of the group is updated.
@@ -144,9 +150,12 @@ message GroupAttributeUpdated {
 
     GroupId id = 1;
 
-    // The new value of an attribute.
-    GroupAttribute new_attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
 
-    // The previous value of an attribute.
-    GroupAttribute old_attribute = 3 [(required) = true];
+    // An old attribute value.
+    google.protobuf.Any old_value = 4 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 5 [(required) = true];
 }

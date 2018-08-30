@@ -21,7 +21,6 @@ import "spine/net/internet_domain.proto";
 import "spine/core/tenant_id.proto";
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/c/organization/org_attribute.proto";
 
 // An organization of a tenant.
 //
@@ -52,7 +51,7 @@ message Organization {
     spine.net.InternetDomain domain = 3;
 
     // The attributes of the organization.
-    repeated OrgAttribute attribute = 4;
+    map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
     spine.core.TenantId tenant = 5 [(required) = true];

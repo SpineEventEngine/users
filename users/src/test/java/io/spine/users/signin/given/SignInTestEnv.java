@@ -6,6 +6,8 @@
 
 package io.spine.users.signin.given;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.StringValue;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
@@ -13,7 +15,6 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.server.entity.given.Given;
-import io.spine.time.OffsetDateTime;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
 import io.spine.users.OrganizationId;
@@ -33,14 +34,10 @@ import io.spine.users.signin.IdentityProviderFactory;
 import io.spine.users.signin.SignInPm;
 import io.spine.users.user.UserAggregate;
 import io.spine.users.user.UserAggregateRepository;
-import io.spine.users.user.UserAttribute;
-import io.spine.users.user.UserAttributeVBuilder;
 
 import java.util.Optional;
 
 import static io.spine.protobuf.AnyPacker.pack;
-import static io.spine.time.OffsetDateTimes.now;
-import static io.spine.time.ZoneOffsets.utc;
 import static io.spine.users.User.Status.NOT_READY;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -106,15 +103,24 @@ public class SignInTestEnv {
                                  .setProfile(profile())
                                  .setStatus(NOT_READY)
                                  .addAuthIdentity(identity())
-                                 .addAttribute(attribute())
+                                 .putAttributes(attributeName(), attributeValue())
                                  .addRole(adminRoleId())
                                  .build();
         UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
-                .withState(state)
-                .withId(userId())
-                .build();
+                                       .withState(state)
+                                       .withId(userId())
+                                       .build();
         return aggregate;
     }
+
+    static String attributeName() {
+        return "auth_token";
+    }
+
+    static Any attributeValue() {
+        return pack(StringValue.of("encrypted-auth-token-value"));
+    }
+
 
     static String displayName() {
         return "John Smith";
@@ -145,14 +151,6 @@ public class SignInTestEnv {
         return RoleIdVBuilder.newBuilder()
                              .setValue("admin_role")
                              .build();
-    }
-
-    static UserAttribute attribute() {
-        OffsetDateTime time = now(utc());
-        return UserAttributeVBuilder.newBuilder()
-                                    .setName("when_registered")
-                                    .setValue(pack(time))
-                                    .build();
     }
 
     static IdentityProviderId googleProviderId() {

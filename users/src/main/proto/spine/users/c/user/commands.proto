@@ -16,12 +16,12 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
-import "spine/users/c/user/user_attribute.proto";
 import "spine/users/user_profile.proto";
 
 // The command to create a new user.
@@ -41,7 +41,7 @@ message CreateUser {
     ParentEntity parent_entity = 4;
 
     // The attributes of the user.
-    repeated UserAttribute attribute = 5;
+    map<string, google.protobuf.Any> attributes = 5;
 
     // Primary authentication identity of the user.
     UserAuthIdentity primary_identity = 6 [(required) = true];
@@ -125,8 +125,11 @@ message AddUserAttribute {
 
     spine.core.UserId id = 1;
 
-    // An attribute to add.
-    UserAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The command to remove an attribute from a user.
@@ -137,7 +140,7 @@ message RemoveUserAttribute {
     spine.core.UserId id = 1;
 
     // The name of the attribute to remove.
-    string attribute_name = 2 [(required) = true];
+    string name = 2 [(required) = true];
 }
 
 // The command to update a user attribute.
@@ -148,8 +151,11 @@ message UpdateUserAttribute {
 
     spine.core.UserId id = 1;
 
-    // The new value of an attribute.
-    UserAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
 }
 
 

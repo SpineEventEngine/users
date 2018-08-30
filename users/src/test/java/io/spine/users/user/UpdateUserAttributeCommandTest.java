@@ -6,8 +6,11 @@
 
 package io.spine.users.user;
 
+import com.google.protobuf.Any;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static io.spine.users.user.given.TestAggregateFactory.createAggregate;
 import static io.spine.users.user.given.UserTestCommands.updateUserAttribute;
@@ -30,8 +33,9 @@ public class UpdateUserAttributeCommandTest extends UserCommandTest<UpdateUserAt
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).producesEvent(UserAttributeUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getAttribute(), event.getNewAttribute());
-            assertTrue(event.hasOldAttribute());
+            assertEquals(message().getName(), event.getName());
+            assertEquals(message().getNewValue(), event.getNewValue());
+            assertTrue(event.hasOldValue());
         });
     }
 
@@ -40,7 +44,13 @@ public class UpdateUserAttributeCommandTest extends UserCommandTest<UpdateUserAt
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getAttribute(), state.getAttribute(0)));
+                state -> {
+                    Map<String, Any> attributes = state.getAttributesMap();
+                    String name = message().getName();
+                    assertTrue(attributes.containsKey(name));
+                    Any actualValue = attributes.get(name);
+                    assertEquals(message().getNewValue(), actualValue);
+                });
     }
 
     private static UpdateUserAttribute createMessage() {

@@ -16,11 +16,11 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/c/orgunit/orgunit_attribute.proto";
 
 // The command to create an organizational unit.
 //
@@ -40,7 +40,7 @@ message CreateOrgUnit {
     ParentEntity parent_entity = 4 [(required) = true];
 
     // The attributes of the orgunit.
-    repeated OrgUnitAttribute attributes = 5;
+    map<string, google.protobuf.Any> attributes = 5;
 
     // The orgunit owner.
     spine.core.UserId owner = 6 [(required) = true];
@@ -85,8 +85,11 @@ message AddOrgUnitAttribute {
 
     OrgUnitId id = 1;
 
-    // An attribute to add.
-    OrgUnitAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The command to remove an attribute from an orgunit.
@@ -97,7 +100,7 @@ message RemoveOrgUnitAttribute {
     OrgUnitId id = 1;
 
     // The name of the attribute to remove.
-    string attribute_name = 2 [(required) = true];
+    string name = 2 [(required) = true];
 }
 
 // The command to update an orgunit attribute.
@@ -108,6 +111,9 @@ message UpdateOrgUnitAttribute {
 
     OrgUnitId id = 1;
 
-    // The new value of an attribute.
-    OrgUnitAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
 }

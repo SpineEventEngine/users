@@ -16,11 +16,11 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/tenant_id.proto";
 import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/c/organization/org_attribute.proto";
 
 // The command to create an organization.
 //
@@ -36,7 +36,7 @@ message CreateOrganization {
     spine.net.InternetDomain domain = 3;
 
     // The attributes of the organization.
-    repeated OrgAttribute attributes = 4;
+    map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
     spine.core.TenantId tenant = 5 [(required) = true];
@@ -76,8 +76,11 @@ message AddOrganizationAttribute {
 
     OrganizationId id = 1;
 
-    // The attribute to add.
-    OrgAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The command to remove an attribute from an organization.
@@ -88,7 +91,7 @@ message RemoveOrganizationAttribute {
     OrganizationId id = 1;
 
     // The name of the attribute to remove.
-    string attribute_name = 2 [(required) = true];
+    string name = 2 [(required) = true];
 }
 
 // The command to update an organization attribute.
@@ -99,6 +102,9 @@ message UpdateOrganizationAttribute {
 
     OrganizationId id = 1;
 
-    // The new value of an attribute.
-    OrgAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
 }

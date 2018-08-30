@@ -16,11 +16,11 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/tenant_id.proto";
 import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/c/organization/org_attribute.proto";
 
 // The event is emitted when a new organization is created.
 //
@@ -35,7 +35,7 @@ message OrganizationCreated {
     spine.net.InternetDomain domain = 3;
 
     // The attributes of the organization.
-    repeated OrgAttribute attribute = 4;
+    map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
     spine.core.TenantId tenant = 5 [(required) = true];
@@ -67,8 +67,11 @@ message OrganizationAttributeAdded {
 
     OrganizationId id = 1;
 
-    // The added attribute.
-    OrgAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The event is emitted when an attribute of the organization is removed.
@@ -77,8 +80,11 @@ message OrganizationAttributeRemoved {
 
     OrganizationId id = 1;
 
-    // The removed attribute.
-    OrgAttribute attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
 }
 
 // The event is emitted when an attribute of the organization is updated.
@@ -87,9 +93,12 @@ message OrganizationAttributeUpdated {
 
     OrganizationId id = 1;
 
-    // The new value of an attribute.
-    OrgAttribute new_attribute = 2 [(required) = true];
+    // An attribute name.
+    string name = 2 [(required) = true];
 
-    // The previous value of an attribute.
-    OrgAttribute old_attribute = 3 [(required) = true];
+    // An old attribute value.
+    google.protobuf.Any old_value = 4 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 5 [(required) = true];
 }
