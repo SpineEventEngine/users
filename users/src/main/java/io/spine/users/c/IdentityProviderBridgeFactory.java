@@ -18,18 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.c;
 
 import io.spine.users.IdentityProviderId;
 
+import java.util.Optional;
+
 /**
- * A factory for creating {@link IdentityProvider identity providers}.
- *
- * TODO: extend
+ * A factory for creating {@link IdentityProviderBridge identity provider bridges}.
  *
  * @author Vladyslav Lubenskyi
  */
-public abstract class IdentityProviderFactory {
+public abstract class IdentityProviderBridgeFactory {
 
-    public abstract IdentityProvider get(IdentityProviderId id);
+    /**
+     * Obtains or creates a {@link IdentityProviderBridge bridge} to communicate with
+     * authentication identity provider.
+     *
+     * @param id a unique identifier of the identity provider
+     * @return {@link IdentityProviderBridge} if the requested identity provider is supported,
+     * {@code Optional.empty()} otherwise.
+     */
+    public abstract Optional<IdentityProviderBridge> get(IdentityProviderId id);
 }

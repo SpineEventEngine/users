@@ -10,6 +10,7 @@ import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnEventTest;
+import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.UserAggregateRepository;
 
 import static org.mockito.Mockito.mock;
@@ -28,7 +29,7 @@ abstract class SignInPmEventTest<E extends Message>
 
     @Override
     protected Repository<UserId, SignInPm> createEntityRepository() {
-        return new SignInPmRepository(mock(IdentityProviderFactory.class),
+        return new SignInPmRepository(mock(IdentityProviderBridgeFactory.class),
                                       mock(UserAggregateRepository.class));
     }
 }

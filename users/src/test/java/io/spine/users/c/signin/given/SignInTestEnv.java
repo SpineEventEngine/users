@@ -28,8 +28,8 @@ import io.spine.users.UserAuthIdentity;
 import io.spine.users.UserAuthIdentityVBuilder;
 import io.spine.users.UserProfile;
 import io.spine.users.UserProfileVBuilder;
-import io.spine.users.c.signin.IdentityProvider;
-import io.spine.users.c.signin.IdentityProviderFactory;
+import io.spine.users.c.IdentityProviderBridge;
+import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.user.UserAggregate;
 import io.spine.users.c.user.UserAggregateRepository;
@@ -78,16 +78,16 @@ public class SignInTestEnv {
         return mock;
     }
 
-    public static IdentityProviderFactory mockActiveIdentityProvider() {
-        IdentityProvider mock = mock(IdentityProvider.class);
+    public static IdentityProviderBridgeFactory mockActiveIdentityProvider() {
+        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.signInAllowed(any())).thenReturn(true);
         when(mock.fetchUserProfile(any())).thenReturn(profile());
         return new TestIdentityProviderFactory(mock);
     }
 
-    public static IdentityProviderFactory mockSuspendedIdentityProvider() {
-        IdentityProvider mock = mock(IdentityProvider.class);
+    public static IdentityProviderBridgeFactory mockSuspendedIdentityProvider() {
+        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.signInAllowed(any())).thenReturn(false);
         when(mock.fetchUserProfile(any())).thenReturn(profile());
@@ -181,16 +181,16 @@ public class SignInTestEnv {
     /**
      * A factory that always returns a single identity provider.
      */
-    static class TestIdentityProviderFactory extends IdentityProviderFactory {
+    static class TestIdentityProviderFactory extends IdentityProviderBridgeFactory {
 
-        private final IdentityProvider provider;
+        private final IdentityProviderBridge provider;
 
-        private TestIdentityProviderFactory(IdentityProvider provider) {
+        private TestIdentityProviderFactory(IdentityProviderBridge provider) {
             this.provider = provider;
         }
 
         @Override
-        public IdentityProvider get(IdentityProviderId id) {
+        public IdentityProviderBridge get(IdentityProviderId id) {
             return provider;
         }
     }

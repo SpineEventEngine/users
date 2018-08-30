@@ -16,6 +16,8 @@ import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOfTwo;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.UserProfile;
+import io.spine.users.c.IdentityProviderBridge;
+import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.CreateUserVBuilder;
 import io.spine.users.c.user.User;
@@ -29,6 +31,7 @@ import static io.spine.server.tuple.EitherOfTwo.withA;
 import static io.spine.server.tuple.EitherOfTwo.withB;
 import static io.spine.users.c.signin.FailureReason.SIGN_IN_NOT_ALLOWED;
 import static io.spine.users.c.signin.FailureReason.UNKNOWN_IDENTITY;
+import static io.spine.users.c.signin.FailureReason.UNSUPPORTED_IDENTITY;
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.user.User.Status.ACTIVE;
@@ -51,7 +54,7 @@ import static java.util.Optional.of;
  * <p>To sign a user in, the process manager should ensure the following:
  *
  * <ul>
- *     <li>an {@linkplain IdentityProvider identity provider} is aware of the given authentication
+ *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given authentication
  *         identity;
  *     <li>an identity provider allows the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
@@ -59,15 +62,15 @@ import static java.util.Optional.of;
  *          with the user.
  * </ul>
  *
- * <p>If one of the checks fails, the process is {@linkpla SignInFailed completed} immediately with
- * the corresponding error.
+ * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately
+ * with the corresponding error.
  *
  * @author Vladyslav Lubenskyi
  */
 public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     private UserAggregateRepository userRepository;
-    private IdentityProviderFactory identityProviders;
+    private IdentityProviderBridgeFactory identityProviders;
 
     /**
      * @see ProcessManager#ProcessManager(Object)
@@ -77,7 +80,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         super(id);
     }
 
-    void setIdentityProviderFactory(IdentityProviderFactory identityProviderFactory) {
+    void setIdentityProviderFactory(IdentityProviderBridgeFactory identityProviderFactory) {
         this.identityProviders = identityProviderFactory;
     }
 
@@ -89,11 +92,17 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     EitherOfTwo<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
         UserId id = command.getId();
         UserAuthIdentity identity = command.getIdentity();
-        IdentityProvider identityProvider = identityProviders.get(identity.getProviderId());
+        Optional<IdentityProviderBridge> identityProviderOptional =
+                identityProviders.get(identity.getProviderId());
+
+        if (!identityProviderOptional.isPresent()) {
+            return withA(finishWithError(UNSUPPORTED_IDENTITY));
+        }
 
         SignInVBuilder builder = getBuilder().setId(id)
                                              .setIdentity(identity);
 
+        IdentityProviderBridge identityProvider = identityProviderOptional.get();
         if (!identityProvider.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
         } else if (!identityProvider.signInAllowed(identity)) {
@@ -182,7 +191,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                                    .build();
     }
 
-    private CreateUser createUserCommand(IdentityProvider identityProvider) {
+    private CreateUser createUserCommand(IdentityProviderBridge identityProvider) {
         UserProfile profile = identityProvider.fetchUserProfile(getBuilder().getIdentity());
         String displayName = profile.getEmail()
                                     .getValue();
