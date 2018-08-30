@@ -6,11 +6,13 @@
 
 package io.spine.users.signin;
 
+import io.spine.users.c.signin.FailureReason;
 import io.spine.users.user.CreateUser;
 import io.spine.users.user.UserAggregateRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.c.signin.FailureReason.SIGN_IN_NOT_ALLOWED;
 import static io.spine.users.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.given.SignInTestCommands.signInCommand;
@@ -28,23 +30,11 @@ import static org.mockito.Mockito.mock;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("SignInPm should, when SignIn")
-public class SignInCommandTest
-        extends SignInPmCommandTest<SignIn> {
+class SignInCommandTest extends SignInPmCommandTest<SignUserIn> {
 
-    protected SignInCommandTest() {
+    SignInCommandTest() {
         super(userId(), command());
     }
-
-    @Override
-    IdentityProvider identityProvider() {
-        return mock(IdentityProvider.class);
-    }
-
-    @Override
-    UserAggregateRepository userRepository() {
-        return mock(UserAggregateRepository.class);
-    }
-
 
     @Test
     @DisplayName("initialize")
@@ -94,11 +84,11 @@ public class SignInCommandTest
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
-        })
-                                .hasState(state -> assertEquals(COMPLETED, state.getStatus()));
+            assertEquals(SIGN_IN_NOT_ALLOWED, command.getFailureReason());
+        });
     }
 
-    private static SignIn command() {
+    private static SignUserIn command() {
         return signInCommand(userId(), identity());
     }
 }

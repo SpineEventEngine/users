@@ -82,7 +82,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Command
-    EitherOfTwo<FinishSignIn, CreateUser> handle(SignIn command, CommandContext context) {
+    EitherOfTwo<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
         UserId id = command.getId();
         UserAuthIdentity identity = command.getIdentity();
         IdentityProvider identityProvider = identityProviders.get(identity.getProviderId());

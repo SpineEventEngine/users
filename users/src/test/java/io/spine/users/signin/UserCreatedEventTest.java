@@ -41,7 +41,7 @@ public class UserCreatedEventTest
     @DisplayName("start SignIn again")
     void checkStatus() {
         SignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_CREATION);
-        expectThat(emptyProcMan).producesCommand(SignIn.class, command -> {
+        expectThat(emptyProcMan).producesCommand(SignUserIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertEquals(emptyProcMan.getState()
                                      .getIdentity(), command.getIdentity());

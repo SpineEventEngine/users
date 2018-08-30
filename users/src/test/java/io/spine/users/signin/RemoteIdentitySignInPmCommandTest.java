@@ -13,6 +13,8 @@ import io.spine.testing.server.procman.PmCommandOnCommandTest;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.user.UserAggregateRepository;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * An implementation base for the {@link SignInPm} command handler tests.
  *
@@ -27,20 +29,7 @@ abstract class SignInPmCommandTest<C extends Message>
 
     @Override
     protected Repository<UserId, SignInPm> createEntityRepository() {
-        return new SignInPmRepository(identityProviderFactory(), userRepository());
+        return new SignInPmRepository(mock(IdentityProviderFactory.class),
+                                      mock(UserAggregateRepository.class));
     }
-
-    protected IdentityProviderFactory identityProviderFactory() {
-        return new IdentityProviderFactory() {
-
-            @Override
-            public IdentityProvider get(IdentityProviderId id) {
-                return identityProvider();
-            }
-        };
-    }
-
-    abstract IdentityProvider identityProvider();
-
-    abstract UserAggregateRepository userRepository();
 }

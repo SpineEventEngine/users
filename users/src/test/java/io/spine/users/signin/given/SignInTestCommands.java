@@ -9,8 +9,8 @@ package io.spine.users.signin.given;
 import io.spine.core.UserId;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.signin.SignInPm;
-import io.spine.users.signin.SignIn;
-import io.spine.users.signin.SignInVBuilder;
+import io.spine.users.signin.SignUserIn;
+import io.spine.users.signin.SignUserInVBuilder;
 
 /**
  * Test commands for {@link SignInPm}.
@@ -25,10 +25,10 @@ public class SignInTestCommands {
     private SignInTestCommands() {
     }
 
-    public static SignIn signInCommand(UserId id, UserAuthIdentity identity) {
-        return SignInVBuilder.newBuilder()
-                             .setId(id)
-                             .setIdentity(identity)
-                             .build();
+    public static SignUserIn signInCommand(UserId id, UserAuthIdentity identity) {
+        return SignUserInVBuilder.newBuilder()
+                                 .setId(id)
+                                 .setIdentity(identity)
+                                 .build();
     }
 }
