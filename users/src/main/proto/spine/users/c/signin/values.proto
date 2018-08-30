@@ -16,19 +16,17 @@ option java_outer_classname = "ValuesProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-// The set of reasons why the sign-in process may fail. // TODO:
+// The set of reasons why the sign-in process may fail.
 //
 enum FailureReason {
 
     // Default value.
     FSII_UNDEFINED = 0;
 
-    // Indicates that an identity provider is not aware of the given identity.
-    IDENTITY_NOT_FOUND = 1;
+    // Indicates that an identity provider is not aware of the given identity or the identity
+    // is not associated with the given `User`.
+    UNKNOWN_IDENTITY = 1;
 
     // Indicates that an identity provider doesn't allow this identity to sign-in.
     SIGN_IN_NOT_ALLOWED = 2;
-
-    // Indicates that the given identity doesn't belong to the given `User`.
-    USER_IDENTITY_MISMATCH = 3;
 }
