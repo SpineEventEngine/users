@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("SignInFinished event should")
+@DisplayName("SignInCompleted event should")
 class SignedInCompletedEventTest extends UserEventTest<SignInCompleted> {
 
     SignedInCompletedEventTest() {

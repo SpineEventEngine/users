@@ -15,6 +15,7 @@ import io.spine.time.ZoneOffset;
 import io.spine.users.ParentEntity;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.signin.SignInCompleted;
+import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.user.User.Status;
 
 /**
@@ -152,12 +153,12 @@ final class UserEventFactory {
         return result;
     }
 
-    UserSignedOut signOut(SignUserOut command) {
-        UserSignedOut event = UserSignedOutVBuilder.newBuilder()
-                                                   .setId(command.getId())
+    UserSignedOut signOut(SignOutCompleted event) {
+        UserSignedOut result = UserSignedOutVBuilder.newBuilder()
+                                                   .setId(event.getId())
                                                    .setWhenSignedOut(now())
                                                    .build();
-        return event;
+        return result;
     }
 
     SecondaryAuthIdentityAdded addIdentity(AddSecondaryAuthIdentity command) {

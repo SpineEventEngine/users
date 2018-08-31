@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("SignInPm should, when SignIn")
-class SignInCommandTest extends SignInPmCommandTest<SignUserIn> {
+@DisplayName("SignInPm should, when SignUserIn")
+class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
 
-    SignInCommandTest() {
+    SignUserInCommandTest() {
         super(SignInTestEnv.userId(), command());
     }
 

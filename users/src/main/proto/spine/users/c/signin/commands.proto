@@ -30,11 +30,20 @@ message SignUserIn {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
+// The command to sign a user out.
+//
+message SignUserOut {
+    option (events) = "SignOutCompleted";
+
+    spine.core.UserId id = 1;
+}
+
 // The command to finish the sign-in process.
 //
 // This command is used internally by the process manager and must not be used by the client.
 //
 message FinishSignIn {
+    option (events) = "SignInCompleted, SignInFailed";
 
     spine.core.UserId id = 1;
 

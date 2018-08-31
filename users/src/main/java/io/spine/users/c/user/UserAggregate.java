@@ -20,6 +20,7 @@ import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.signin.SignInCompleted;
+import io.spine.users.c.signin.SignOutCompleted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,12 +127,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    UserSignedOut handle(SignUserOut command, CommandContext context) {
-        logCommand(command);
-        return events(context).signOut(command);
-    }
-
-    @Assign
     SecondaryAuthIdentityAdded handle(AddSecondaryAuthIdentity command, CommandContext context) {
         logCommand(command);
         return events(context).addIdentity(command);
@@ -221,6 +216,11 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     @React
     UserSignedIn on(SignInCompleted event, EventContext context) {
         return events(context.getCommandContext()).signIn(event);
+    }
+
+    @React
+    UserSignedOut on(SignOutCompleted event, EventContext context) {
+        return events(context.getCommandContext()).signOut(event);
     }
 
     @Apply

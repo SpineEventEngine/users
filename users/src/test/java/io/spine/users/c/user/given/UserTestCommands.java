@@ -10,8 +10,8 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import io.spine.core.UserId;
 import io.spine.users.UserAuthIdentity;
-import io.spine.users.c.user.AddAuthIdentity;
-import io.spine.users.c.user.AddAuthIdentityVBuilder;
+import io.spine.users.c.user.AddSecondaryAuthIdentity;
+import io.spine.users.c.user.AddSecondaryAuthIdentityVBuilder;
 import io.spine.users.c.user.AddUserAttribute;
 import io.spine.users.c.user.AddUserAttributeVBuilder;
 import io.spine.users.c.user.AssignRoleToUser;
@@ -30,12 +30,10 @@ import io.spine.users.c.user.LeaveGroup;
 import io.spine.users.c.user.LeaveGroupVBuilder;
 import io.spine.users.c.user.MoveUser;
 import io.spine.users.c.user.MoveUserVBuilder;
-import io.spine.users.c.user.RemoveAuthIdentity;
-import io.spine.users.c.user.RemoveAuthIdentityVBuilder;
+import io.spine.users.c.user.RemoveSecondaryAuthIdentity;
+import io.spine.users.c.user.RemoveSecondaryAuthIdentityVBuilder;
 import io.spine.users.c.user.RemoveUserAttribute;
 import io.spine.users.c.user.RemoveUserAttributeVBuilder;
-import io.spine.users.c.user.SignUserOut;
-import io.spine.users.c.user.SignUserOutVBuilder;
 import io.spine.users.c.user.UnassignRoleFromUser;
 import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.c.user.UpdateUserAttribute;
@@ -128,20 +126,20 @@ public class UserTestCommands {
                                            .build();
     }
 
-    public static AddAuthIdentity addAuthIdentity(UserId id) {
-        return AddAuthIdentityVBuilder.newBuilder()
-                                      .setId(id)
-                                      .setIdentity(googleIdentity())
-                                      .build();
+    public static AddSecondaryAuthIdentity addAuthIdentity(UserId id) {
+        return AddSecondaryAuthIdentityVBuilder.newBuilder()
+                                               .setId(id)
+                                               .setIdentity(googleIdentity())
+                                               .build();
     }
 
-    public static RemoveAuthIdentity removeAuthIdentity(UserId id) {
+    public static RemoveSecondaryAuthIdentity removeAuthIdentity(UserId id) {
         UserAuthIdentity identity = googleIdentity();
-        return RemoveAuthIdentityVBuilder.newBuilder()
-                                         .setId(id)
-                                         .setProviderId(identity.getProviderId())
-                                         .setUid(identity.getUid())
-                                         .build();
+        return RemoveSecondaryAuthIdentityVBuilder.newBuilder()
+                                                  .setId(id)
+                                                  .setProviderId(identity.getProviderId())
+                                                  .setUid(identity.getUid())
+                                                  .build();
     }
 
     public static AddUserAttribute addUserAttribute(UserId id) {
@@ -173,12 +171,6 @@ public class UserTestCommands {
                                        .setId(id)
                                        .setStatus(Status.SUSPENDED)
                                        .build();
-    }
-
-    public static SignUserOut signUserOut(UserId id) {
-        return SignUserOutVBuilder.newBuilder()
-                                  .setId(id)
-                                  .build();
     }
 
     public static ChangePrimaryAuthIdentity changePrimaryIdentity(UserId id) {

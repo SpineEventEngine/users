@@ -58,8 +58,8 @@ import static java.util.Optional.of;
  *         identity;
  *     <li>an identity provider allows the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
- *     <li>the given authentication identity is {@linkplain io.spine.users.c.user.AuthIdentityAdded associated}
- *          with the user.
+ *     <li>the given authentication identity is
+ *         {@linkplain io.spine.users.c.user.SecondaryAuthIdentityAdded associated}] with the user.
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately
@@ -139,6 +139,11 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         }
     }
 
+    @Assign
+    SignOutCompleted handle(SignUserOut command) {
+        return signOutCompleted(command.getId());
+    }
+
     private boolean awaitsUserCreation() {
         return getBuilder().getStatus() == AWAITING_USER_CREATION;
     }
@@ -149,8 +154,14 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                      .equals(identity)) {
             return true;
         }
-        return userState.getAuthIdentityList()
+        return userState.getSecondaryAuthIdentityList()
                         .contains(identity);
+    }
+
+    private static SignOutCompleted signOutCompleted(UserId id) {
+        return SignOutCompletedVBuilder.newBuilder()
+                                       .setId(id)
+                                       .build();
     }
 
     private FinishSignIn finishSuccessfully() {

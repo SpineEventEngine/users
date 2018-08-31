@@ -170,14 +170,6 @@ message ChangeUserStatus {
     User.Status status = 2 [(required) = true];
 }
 
-// The command to sign a user out.
-//
-message SignUserOut {
-    option (events) = "UserSignedOut";
-
-    spine.core.UserId id = 1;
-}
-
 // The command to add a new secondary authentication identity to the user.
 //
 message AddSecondaryAuthIdentity {

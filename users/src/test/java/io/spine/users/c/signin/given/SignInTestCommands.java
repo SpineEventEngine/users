@@ -11,6 +11,8 @@ import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.signin.SignUserIn;
 import io.spine.users.c.signin.SignUserInVBuilder;
+import io.spine.users.c.signin.SignUserOut;
+import io.spine.users.c.signin.SignUserOutVBuilder;
 
 /**
  * Test commands for {@link SignInPm}.
@@ -30,5 +32,11 @@ public class SignInTestCommands {
                                  .setId(id)
                                  .setIdentity(identity)
                                  .build();
+    }
+
+    public static SignUserOut signOutCommand(UserId id) {
+        return SignUserOutVBuilder.newBuilder()
+                                  .setId(id)
+                                  .build();
     }
 }

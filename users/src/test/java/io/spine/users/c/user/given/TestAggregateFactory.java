@@ -73,7 +73,7 @@ public class TestAggregateFactory {
                            .setPrimaryAuthIdentity(googleIdentity())
                            .setProfile(profile())
                            .setStatus(NOT_READY)
-                           .addAuthIdentity(googleIdentity())
+                           .addSecondaryAuthIdentity(googleIdentity())
                            .putAttributes(attributeName(), attributeValue())
                            .addRole(adminRoleId());
     }

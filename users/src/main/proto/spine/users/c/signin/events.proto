@@ -43,3 +43,10 @@ message SignInFailed {
     // Indicates why the sign-in failed.
     FailureReason failure_reason = 3 [(required) = true];
 }
+
+// The event is emitted when the user sign-out completed.
+//
+message SignOutCompleted {
+
+    spine.core.UserId id = 1;
+}

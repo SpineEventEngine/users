@@ -7,7 +7,6 @@
 package io.spine.users.c.signin;
 
 import io.spine.users.c.signin.given.SignInTestEnv;
-import io.spine.users.c.user.UserAggregateRepository;
 import io.spine.users.c.user.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.given.SignInTestEvents.userCreated;
 import static io.spine.users.c.signin.given.TestProcManFactory.nonEmptyProcMan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 /**
  * @author Vladyslav Lubenskyi

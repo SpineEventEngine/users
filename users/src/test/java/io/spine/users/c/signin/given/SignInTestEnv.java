@@ -102,7 +102,7 @@ public class SignInTestEnv {
                                  .setPrimaryAuthIdentity(identity())
                                  .setProfile(profile())
                                  .setStatus(NOT_READY)
-                                 .addAuthIdentity(identity())
+                                 .addSecondaryAuthIdentity(identity())
                                  .putAttributes(attributeName(), attributeValue())
                                  .addRole(adminRoleId())
                                  .build();

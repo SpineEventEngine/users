@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("AddAuthIdentity command should")
-class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity> {
+class AddAuthIdentityCommandTest extends UserCommandTest<AddSecondaryAuthIdentity> {
 
     AddAuthIdentityCommandTest() {
         super(createMessage());
@@ -27,7 +27,7 @@ class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity> {
     @DisplayName("generate AuthIdentityAdded event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(AuthIdentityAdded.class, event -> {
+        expectThat(aggregate).producesEvent(SecondaryAuthIdentityAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getIdentity(), event.getIdentity());
         });
@@ -38,10 +38,10 @@ class AddAuthIdentityCommandTest extends UserCommandTest<AddAuthIdentity> {
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getAuthIdentity(1)));
+                state -> assertEquals(message().getIdentity(), state.getSecondaryAuthIdentity(1)));
     }
 
-    private static AddAuthIdentity createMessage() {
+    private static AddSecondaryAuthIdentity createMessage() {
         return addAuthIdentity(USER_ID);
     }
 }

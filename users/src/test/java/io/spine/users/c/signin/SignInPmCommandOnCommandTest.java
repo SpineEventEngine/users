@@ -9,7 +9,7 @@ package io.spine.users.c.signin;
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandTest;
+import io.spine.testing.server.procman.PmCommandOnCommandTest;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.UserAggregateRepository;
 
@@ -21,10 +21,10 @@ import static org.mockito.Mockito.mock;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class SignInPmCommandTest<C extends Message>
-        extends PmCommandTest<UserId, C, SignIn, SignInPm> {
+abstract class SignInPmCommandOnCommandTest<C extends Message>
+        extends PmCommandOnCommandTest<UserId, C, SignIn, SignInPm> {
 
-    SignInPmCommandTest(UserId processManagerId, C commandMessage) {
+    SignInPmCommandOnCommandTest(UserId processManagerId, C commandMessage) {
         super(processManagerId, commandMessage);
     }
 

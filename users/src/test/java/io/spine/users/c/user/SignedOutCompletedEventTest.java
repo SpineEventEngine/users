@@ -6,26 +6,27 @@
 
 package io.spine.users.c.user;
 
+import io.spine.users.c.signin.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.given.TestAggregateFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestCommands.signUserOut;
+import static io.spine.users.c.user.given.UserTestEvents.signOutCompleted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("SignUserOut command should")
-class SignUserOutCommandTest extends UserCommandTest<SignUserOut> {
+@DisplayName("SignOutCompleted event should")
+class SignedOutCompletedEventTest extends UserEventTest<SignOutCompleted> {
 
-    SignUserOutCommandTest() {
+    SignedOutCompletedEventTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate UserSignedOut event")
+    @DisplayName("generate UserSignedIn event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).producesEvent(UserSignedOut.class, event -> {
@@ -34,7 +35,7 @@ class SignUserOutCommandTest extends UserCommandTest<SignUserOut> {
         });
     }
 
-    private static SignUserOut createMessage() {
-        return signUserOut(USER_ID);
+    private static SignOutCompleted createMessage() {
+        return signOutCompleted(USER_ID);
     }
 }

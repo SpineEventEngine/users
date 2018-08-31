@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoveAuthIdentity command should")
-class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIdentity> {
+class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveSecondaryAuthIdentity> {
 
     RemoveAuthIdentityCommandTest() {
         super(createMessage());
@@ -29,7 +29,7 @@ class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIdentity> 
     @DisplayName("generate AuthIdentityRemoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(AuthIdentityRemoved.class, event -> {
+        expectThat(aggregate).producesEvent(SecondaryAuthIdentityRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             UserAuthIdentity eventIdentity = event.getIdentity();
             assertEquals(message().getProviderId(), eventIdentity.getProviderId());
@@ -41,11 +41,11 @@ class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveAuthIdentity> 
     @DisplayName("remove an identity")
     void changeState() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getAuthIdentityList()
-                .isEmpty()));
+        expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryAuthIdentityList()
+                                                                .isEmpty()));
     }
 
-    private static RemoveAuthIdentity createMessage() {
+    private static RemoveSecondaryAuthIdentity createMessage() {
         return removeAuthIdentity(USER_ID);
     }
 }
