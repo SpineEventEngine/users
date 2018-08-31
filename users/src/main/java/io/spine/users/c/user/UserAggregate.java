@@ -8,10 +8,10 @@ package io.spine.users.c.user;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Any;
-import com.google.protobuf.Message;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
 import io.spine.core.UserId;
+import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -39,6 +39,8 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
 public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
+    private final Logger logger = Logging.get(UserAggregate.class);
+
     /**
      * @see Aggregate#Aggregate(Object)
      */
@@ -50,55 +52,46 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        logCommand(command);
         return events(context).create(command);
     }
 
     @Assign
     UserMoved handle(MoveUser command, CommandContext context) {
-        logCommand(command);
         return events(context).changeParent(command, getState().getParentEntity());
     }
 
     @Assign
     UserJoinedGroup handle(JoinGroup command, CommandContext context) {
-        logCommand(command);
         return events(context).joinGroup(command);
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command, CommandContext context) {
-        logCommand(command);
         return events(context).leaveGroup(command);
     }
 
     @Assign
     UserDeleted handle(DeleteUser command, CommandContext context) {
-        logCommand(command);
         return events(context).deleteUser(command);
     }
 
     @Assign
     RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
-        logCommand(command);
         return events(context).assignRoleToUser(command);
     }
 
     @Assign
     RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context) {
-        logCommand(command);
         return events(context).unassignRoleFromUser(command);
     }
 
     @Assign
     UserAttributeAdded handle(AddUserAttribute command, CommandContext context) {
-        logCommand(command);
         return events(context).addAttribute(command);
     }
 
     @Assign
     UserAttributeRemoved handle(RemoveUserAttribute command, CommandContext context) {
-        logCommand(command);
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
@@ -122,13 +115,11 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Assign
     UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
-        logCommand(command);
         return events(context).changeStatus(command, getState().getStatus());
     }
 
     @Assign
     SecondaryAuthIdentityAdded handle(AddSecondaryAuthIdentity command, CommandContext context) {
-        logCommand(command);
         return events(context).addIdentity(command);
     }
 
@@ -299,15 +290,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
                                               .equals(command.getProviderId());
             return idMatches && providerMatches;
         };
-    }
-
-    private void logCommand(Message event) {
-        log().info("Asked to '{}'. For ID: {}.", event.getClass()
-                                                      .getSimpleName(), getId().getValue());
-    }
-
-    private static Logger log() {
-        return LogSingleton.INSTANCE.value;
     }
 
     private enum LogSingleton {
