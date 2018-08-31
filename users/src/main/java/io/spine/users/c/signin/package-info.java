@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains process managers implementing sign-in.
+ * This package contains process managers for user sign-in.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue

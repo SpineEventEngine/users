@@ -19,23 +19,51 @@ option java_generate_equals_and_hash = true;
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A group allows to propagate roles to multiple members at once.
+// A `Group` is the way to group users by their common functions and roles inside of an organization
+// or organizational unit.
 //
-// Both users and another groups can be members. The roles derived from the upper groups are
-// passed on to the member groups too.
+// The roles, assigned to a `Group` are automatically propagated to all members of the group,
+// including sub-groups.
 //
 // ## Group Attributes
 //
 // To make `Group` meet specific requirements of the application, it can be extended via
-// custom `GroupAttribute`s.
+// custom attributes.
 //
 // The following commands are available to work with the group attributes:
 //
-// * `AddGroupAttribute` to add a new attribute, or replace the existing one;
-// * `RemoveGroupAttribute` to remove an attribute;
+// * `AddGroupAttribute` to add a new attribute;
+// * `UpdateGroupAttribute` to update an existing attribute;
+// * `RemoveGroupAttribute` to remove an attribute.
+//
+// ## Usage Example
+//
+// For example, a software development department of a company may well have the following groups:
+//
+// * Developers
+//      ```
+//      {
+//          display_name: "Developers",
+//          email: "developers@department.company.com",
+//          role: ["github-contributor", "test-server-admin"],
+//          attributes: [{"responsible_manager": "Mark Twain"}],
+//          membership: ["staff_members"]
+//      }
+//      ```
+// * Support Engineers
+//      ```
+//      {
+//          display_name: "Support Team",
+//          email: "support@department.company.com",
+//          role: ["bugtracker-contributor"],
+//          attributes: [{"regional_supervisor": "Agatha Christie"}],
+//          membership: ["external_contractors"]
+//      }
+//      ```
 //
 message Group {
     option (entity).kind = AGGREGATE;
@@ -46,15 +74,16 @@ message Group {
     // The name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // An interent domain of the group.
-    spine.net.InternetDomain domain = 3;
+    // An email address of the group if applicable.
+    //
+    // The email address may be used to send messages to all the group members.
+    //
+    spine.net.EmailAddress email = 3;
 
-    // The parent entity in the organizational structure.
+    // An entity in the organizational structure the group belongs to.
     ParentEntity parent_entity = 4 [(required) = true];
 
-    // The nested group memberships of this group.
-    //
-    // Every group membership propagates its own roles to this group.
+    // Other groups this group is a member of.
     //
     repeated GroupId membership = 6;
 

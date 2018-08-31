@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains a write-side of the Users bounded context.
+ * This package contains the write-side of the {@code Users} bounded context.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue

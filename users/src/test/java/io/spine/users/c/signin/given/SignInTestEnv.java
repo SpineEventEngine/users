@@ -190,8 +190,8 @@ public class SignInTestEnv {
         }
 
         @Override
-        public IdentityProviderBridge get(IdentityProviderId id) {
-            return provider;
+        public Optional<IdentityProviderBridge> get(IdentityProviderId id) {
+            return Optional.of(provider);
         }
     }
 }
