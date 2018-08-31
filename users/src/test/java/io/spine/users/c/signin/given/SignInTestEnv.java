@@ -186,12 +186,13 @@ public class SignInTestEnv {
         private final IdentityProviderBridge provider;
 
         private TestIdentityProviderFactory(IdentityProviderBridge provider) {
+            super();
             this.provider = provider;
         }
 
         @Override
         public Optional<IdentityProviderBridge> get(IdentityProviderId id) {
-            return Optional.of(provider);
+            return of(provider);
         }
     }
 }

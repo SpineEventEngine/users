@@ -23,6 +23,7 @@ public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInP
 
     public SignInPmRepository(IdentityProviderBridgeFactory identityProviderFactory,
                               UserAggregateRepository userRepository) {
+        super();
         this.identityProviderFactory = identityProviderFactory;
         this.userRepository = userRepository;
     }
