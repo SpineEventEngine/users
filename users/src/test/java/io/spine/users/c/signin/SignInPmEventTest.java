@@ -9,22 +9,23 @@ package io.spine.users.c.signin;
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnCommandTest;
+import io.spine.testing.server.procman.PmCommandOnEventTest;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.UserAggregateRepository;
 
 import static org.mockito.Mockito.mock;
 
 /**
- * An implementation base for the {@link SignInPm} command handler tests.
+ * An implementation base for the {@link SignInPm} event reactors tests.
  *
+ * @param <E> the type of the event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class SignInPmCommandTest<C extends Message>
-        extends PmCommandOnCommandTest<UserId, C, SignIn, SignInPm> {
+abstract class SignInPmEventTest<E extends Message>
+        extends PmCommandOnEventTest<UserId, E, SignIn, SignInPm> {
 
-    SignInPmCommandTest(UserId processManagerId, C commandMessage) {
-        super(processManagerId, commandMessage);
+    SignInPmEventTest(UserId processManagerId, E eventMessage) {
+        super(processManagerId, eventMessage);
     }
 
     @Override

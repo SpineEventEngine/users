@@ -16,6 +16,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
 /**
  * An implementation base for the {@link User} aggregate event reactors tests.
  *
+ * @param <E> the type of the event being tested
  * @author Vladyslav Lubenskyi
  */
 abstract class UserEventTest<E extends Message>
@@ -23,7 +24,7 @@ abstract class UserEventTest<E extends Message>
 
     protected static final UserId USER_ID = userId();
 
-    protected UserEventTest(E eventMessage) {
+    UserEventTest(E eventMessage) {
         super(USER_ID, eventMessage);
     }
 

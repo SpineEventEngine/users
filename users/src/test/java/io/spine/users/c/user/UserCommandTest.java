@@ -16,6 +16,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
 /**
  * An implementation base for the {@link User} aggregate command handler tests.
  *
+ * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
 abstract class UserCommandTest<C extends Message>

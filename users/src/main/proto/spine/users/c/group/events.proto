@@ -31,10 +31,10 @@ message GroupCreated {
     // The name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to the user directly (aka not propagated by a group membership).
+    // The roles assigned to the group.
     repeated RoleId role = 3;
 
-    // The parent entity in the organizational structure.
+    // An entity in the organizational structure the group belongs to.
     ParentEntity parent_entity = 4 [(required) = true];
 
     // The attributes of the group.
@@ -78,10 +78,10 @@ message NestedGroupMembershipStarted {
     GroupId id = 1;
 
     // The ID of the upper group.
-    GroupId group_id = 2 [(required) = true];
+    GroupId upper_group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a group stopped being a member of another.
+// The event is emitted when a group stopped being a member of another group.
 //
 message GroupMembershipStopped {
 
