@@ -24,7 +24,7 @@ import "spine/users/values.proto";
 import "spine/users/user_profile.proto";
 import "spine/users/user_auth_identity.proto";
 
-// A user of the application.
+// A user of the application, either a person or machine.
 //
 // A user interacts with the application by sending commands and making queries.
 ///
@@ -51,16 +51,14 @@ message User {
     // The user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to the user directly (aka not propagated by a group membership).
+    // The roles assigned to the user directly (not obtained from a group membership).
     repeated RoleId role = 3;
 
     // The group memberships of the user.
     //
-    // Every group membership propagates its own roles to the user.
-    //
     repeated GroupId membership = 4;
 
-    // The parent entity in the organizational structure, if applicable.
+    // An entity in the organizational structure the user belongs to, if applicable.
     ParentEntity parent_entity = 5;
 
     // The attributes of the user.
@@ -72,14 +70,17 @@ message User {
     // The status of the user.
     Status status = 8 [(required) = true];
 
-    // The primary authentication identity of the user.
+    // The primary authentication identity of a user.
+    //
+    // The primary identity and its provider are used as a single source of truth about a user:
+    //  - to get a user profile;
+    //  - to check whether if a user account is active;
+    //  - etc.
+    //
     UserAuthIdentity primary_auth_identity = 9 [(required) = true];
 
-    // The authentication identities of a user.
-    //
-    // Doesn't include the primary authentication identity.
-    //
-    repeated UserAuthIdentity auth_identity = 10;
+    // The secondary authentication identities of a user, used solely for authentication.
+    repeated UserAuthIdentity secondary_auth_identity = 10;
 
     // The time and date when user signed in.
     spine.time.OffsetDateTime when_created = 11;

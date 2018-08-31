@@ -37,7 +37,7 @@ message CreateUser {
     // The roles to be assigned to the user.
     repeated RoleId role = 3;
 
-    // The parent entity in the organizational structure, if applicable.
+    // An entity in the organizational structure the user belongs to, if applicable.
     ParentEntity parent_entity = 4;
 
     // The attributes of the user.
@@ -178,10 +178,10 @@ message SignUserOut {
     spine.core.UserId id = 1;
 }
 
-// The command to add a new authentication identity to the user.
+// The command to add a new secondary authentication identity to the user.
 //
-message AddAuthIdentity {
-    option (events) = "AuthIdentityAdded";
+message AddSecondaryAuthIdentity {
+    option (events) = "SecondaryAuthIdentityAdded";
 
     spine.core.UserId id = 1;
 
@@ -189,10 +189,10 @@ message AddAuthIdentity {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The command to remove an authentication identity to the user.
+// The command to remove a secondary authentication identity to the user.
 //
-message RemoveAuthIdentity {
-    option (events) = "AuthIdentityRemoved";
+message RemoveSecondaryAuthIdentity {
+    option (events) = "SecondaryAuthIdentityRemoved";
 
     spine.core.UserId id = 1;
 

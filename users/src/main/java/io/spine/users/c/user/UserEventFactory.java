@@ -160,22 +160,22 @@ final class UserEventFactory {
         return event;
     }
 
-    AuthIdentityAdded addIdentity(AddAuthIdentity command) {
-        AuthIdentityAdded event =
-                AuthIdentityAddedVBuilder.newBuilder()
-                                         .setId(command.getId())
-                                         .setIdentity(command.getIdentity())
-                                         .build();
+    SecondaryAuthIdentityAdded addIdentity(AddSecondaryAuthIdentity command) {
+        SecondaryAuthIdentityAdded event =
+                SecondaryAuthIdentityAddedVBuilder.newBuilder()
+                                                  .setId(command.getId())
+                                                  .setIdentity(command.getIdentity())
+                                                  .build();
         return event;
     }
 
-    AuthIdentityRemoved removeIdentity(RemoveAuthIdentity command,
-                                       UserAuthIdentity identity) {
-        AuthIdentityRemoved event =
-                AuthIdentityRemovedVBuilder.newBuilder()
-                                           .setId(command.getId())
-                                           .setIdentity(identity)
-                                           .build();
+    SecondaryAuthIdentityRemoved removeIdentity(RemoveSecondaryAuthIdentity command,
+                                                UserAuthIdentity identity) {
+        SecondaryAuthIdentityRemoved event =
+                SecondaryAuthIdentityRemovedVBuilder.newBuilder()
+                                                    .setId(command.getId())
+                                                    .setIdentity(identity)
+                                                    .build();
         return event;
     }
 

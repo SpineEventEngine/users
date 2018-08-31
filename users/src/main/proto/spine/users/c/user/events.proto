@@ -37,7 +37,7 @@ message UserCreated {
     // The roles assigned to the user directly (aka not propagated by a group membership).
     repeated RoleId role = 3;
 
-    // The parent entity in the organizational structure, if applicable.
+    // An entity in the organizational structure the user belongs to, if applicable.
     ParentEntity parent_entity = 4;
 
     // The attributes of the user.
@@ -197,9 +197,9 @@ message UserSignedOut {
     spine.time.OffsetDateTime when_signed_out = 3;
 }
 
-// The event is emitted when a new authentication identity is added.
+// The event is emitted when a new secondary authentication identity is added.
 //
-message AuthIdentityAdded {
+message SecondaryAuthIdentityAdded {
 
     spine.core.UserId id = 1;
 
@@ -207,9 +207,9 @@ message AuthIdentityAdded {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The event is emitted when an authentication identity is removed.
+// The event is emitted when a secondary authentication identity is removed.
 //
-message AuthIdentityRemoved {
+message SecondaryAuthIdentityRemoved {
 
     spine.core.UserId id = 1;
 

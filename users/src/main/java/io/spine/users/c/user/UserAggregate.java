@@ -132,14 +132,14 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    AuthIdentityAdded handle(AddAuthIdentity command, CommandContext context) {
+    SecondaryAuthIdentityAdded handle(AddSecondaryAuthIdentity command, CommandContext context) {
         logCommand(command);
         return events(context).addIdentity(command);
     }
 
     @Assign
-    AuthIdentityRemoved handle(RemoveAuthIdentity command,
-                               CommandContext context) {
+    SecondaryAuthIdentityRemoved handle(RemoveSecondaryAuthIdentity command,
+                                        CommandContext context) {
         Optional<UserAuthIdentity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
             return events(context).removeIdentity(command, identityToRemove.get());
@@ -232,12 +232,12 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Apply
-    void on(AuthIdentityAdded event) {
-        getBuilder().addAuthIdentity(event.getIdentity());
+    void on(SecondaryAuthIdentityAdded event) {
+        getBuilder().addSecondaryAuthIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(AuthIdentityRemoved event) {
+    void on(SecondaryAuthIdentityRemoved event) {
         removeAuthIdentity(event.getIdentity());
     }
 
@@ -251,8 +251,8 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         return UserEventFactory.instance(context);
     }
 
-    private Optional<UserAuthIdentity> findAuthIdentity(RemoveAuthIdentity command) {
-        return getState().getAuthIdentityList()
+    private Optional<UserAuthIdentity> findAuthIdentity(RemoveSecondaryAuthIdentity command) {
+        return getState().getSecondaryAuthIdentityList()
                          .stream()
                          .filter(identityMatcher(command))
                          .findFirst();
@@ -283,15 +283,15 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     private void removeAuthIdentity(UserAuthIdentity identity) {
-        List<UserAuthIdentity> identities = getBuilder().getAuthIdentity();
+        List<UserAuthIdentity> identities = getBuilder().getSecondaryAuthIdentity();
         if (identities.contains(identity)) {
             int index = identities.indexOf(identity);
-            getBuilder().removeAuthIdentity(index);
+            getBuilder().removeSecondaryAuthIdentity(index);
         }
     }
 
     private static Predicate<UserAuthIdentity> identityMatcher(
-            RemoveAuthIdentity command) {
+            RemoveSecondaryAuthIdentity command) {
         return identity -> {
             boolean idMatches = identity.getUid()
                                         .equals(command.getUid());
