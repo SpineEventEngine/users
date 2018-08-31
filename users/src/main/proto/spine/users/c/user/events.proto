@@ -53,7 +53,7 @@ message UserCreated {
     User.Status status = 8 [(required) = true];
 
     // The date and time when user was created.
-    spine.time.OffsetDateTime when_created = 9 [(required) = true];
+    spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
 // The event is emitted when a user is moved to another organization or organizational unit.
@@ -96,7 +96,7 @@ message UserDeleted {
     spine.core.UserId id = 1;
 
     // The date and time when user was deleted.
-    spine.time.OffsetDateTime when_deleted = 2 [(required) = true];
+    spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
 }
 
 // The event is emitted when a role is assigned to user.
@@ -184,7 +184,7 @@ message UserSignedIn {
     UserAuthIdentity identity = 2;
 
     // The time and date when user signed in.
-    spine.time.OffsetDateTime when_signed_in = 3;
+    spine.time.ZonedDateTime when_signed_in = 3;
 }
 
 // The event is emitted when a user is signed out.
@@ -194,7 +194,7 @@ message UserSignedOut {
     spine.core.UserId id = 1;
 
     // The time and date when user signed out.
-    spine.time.OffsetDateTime when_signed_out = 3;
+    spine.time.ZonedDateTime when_signed_out = 3;
 }
 
 // The event is emitted when a new secondary authentication identity is added.

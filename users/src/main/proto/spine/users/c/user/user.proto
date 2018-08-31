@@ -48,26 +48,26 @@ message User {
 
     spine.core.UserId id = 1;
 
-    // The user name to be displayed on UI.
+    // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to the user directly (not obtained from a group membership).
+    // The roles assigned to a user directly (not obtained from a group membership).
     repeated RoleId role = 3;
 
-    // The group memberships of the user.
+    // The group memberships of a user.
     //
     repeated GroupId membership = 4;
 
-    // An entity in the organizational structure the user belongs to, if applicable.
+    // An entity in the organizational structure a user belongs to, if applicable.
     ParentEntity parent_entity = 5;
 
-    // The attributes of the user.
+    // The attributes of a user.
     map<string, google.protobuf.Any> attributes = 6;
 
     // General profile information for a user.
     UserProfile profile = 7;
 
-    // The status of the user.
+    // A status of a user.
     Status status = 8 [(required) = true];
 
     // The primary authentication identity of a user.
@@ -82,28 +82,25 @@ message User {
     // The secondary authentication identities of a user, used solely for authentication.
     repeated UserAuthIdentity secondary_auth_identity = 10;
 
-    // The time and date when user signed in.
-    spine.time.OffsetDateTime when_created = 11;
+    // The time and date when a user was created.
+    spine.time.ZonedDateTime when_created = 11;
 
-    // A status of the user.
+    // A status of a user.
+    //
     enum Status {
 
         US_UNKNOWN = 0;
 
         // A user is created but not yet ready to work.
         //
-        // For example, the hasn't accepted invitation yet, or hasn't finished the registration.
+        // For example, the hasn't accepted an invitation yet, or hasn't finished registration.
         //
         NOT_READY = 1;
 
-        // The user is active and ready to work.
+        // A user is active and ready to work.
         ACTIVE = 2;
 
-        // The user is suspended.
-        //
-        // A user could become suspended when:
-        //  * the corresponding user at third-party identity provider was suspended;
-        //  * an application admin suspended the user from within the application.
+        // A user is suspended by an identity provider.
         //
         SUSPENDED = 3;
     }

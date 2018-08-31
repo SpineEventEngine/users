@@ -11,8 +11,10 @@ import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.user.UserCreated;
 import io.spine.users.c.user.UserCreatedVBuilder;
 
-import static io.spine.time.OffsetDateTimes.now;
-import static io.spine.time.ZoneOffsets.utc;
+import static io.spine.time.ZonedDateTimes.now;
+import static io.spine.users.c.signin.given.SignInTestEnv.displayName;
+import static io.spine.users.c.signin.given.SignInTestEnv.identity;
+import static io.spine.users.c.signin.given.SignInTestEnv.profile;
 import static io.spine.users.c.user.User.Status.ACTIVE;
 
 /**
@@ -31,11 +33,11 @@ public class SignInTestEvents {
     public static UserCreated userCreated(UserId id) {
         return UserCreatedVBuilder.newBuilder()
                                   .setId(id)
-                                  .setProfile(SignInTestEnv.profile())
+                                  .setProfile(profile())
                                   .setStatus(ACTIVE)
-                                  .setDisplayName(SignInTestEnv.displayName())
-                                  .setPrimaryIdentity(SignInTestEnv.identity())
-                                  .setWhenCreated(now(utc()))
+                                  .setDisplayName(displayName())
+                                  .setPrimaryIdentity(identity())
+                                  .setWhenCreated(now())
                                   .build();
     }
 }

@@ -9,9 +9,10 @@ package io.spine.users.c.user;
 import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.time.OffsetDateTime;
-import io.spine.time.OffsetDateTimes;
-import io.spine.time.ZoneOffset;
+import io.spine.time.LocalDateTimes;
+import io.spine.time.ZoneId;
+import io.spine.time.ZonedDateTime;
+import io.spine.time.ZonedDateTimes;
 import io.spine.users.ParentEntity;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.signin.SignInCompleted;
@@ -200,9 +201,9 @@ final class UserEventFactory {
         return event;
     }
 
-    private OffsetDateTime now() {
-        final ZoneOffset zoneOffset = actorContext.getZoneOffset();
-        return OffsetDateTimes.now(zoneOffset);
+    private ZonedDateTime now() {
+        ZoneId zoneId = actorContext.getZoneId();
+        return ZonedDateTimes.of(LocalDateTimes.now(), zoneId);
     }
 }
 
