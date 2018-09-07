@@ -13,46 +13,47 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestCommands.addUserAttribute;
+import static io.spine.users.c.user.given.UserTestCommands.updateUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("AddUserAttribute command should")
-class AddUserAttributeCommandTest extends UserCommandTest<AddUserAttribute> {
+@DisplayName("UpdateUserAttribute command should")
+class UpdateUserAttributeTest extends UserCommandTest<UpdateUserAttribute> {
 
-    AddUserAttributeCommandTest() {
+    UpdateUserAttributeTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate UserAttributeAdded event")
+    @DisplayName("generate UserAttributeUpdated event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserAttributeAdded.class, event -> {
+        expectThat(aggregate).producesEvent(UserAttributeUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getName(), event.getName());
-            assertEquals(message().getValue(), event.getValue());
+            assertEquals(message().getNewValue(), event.getNewValue());
+            assertTrue(event.hasOldValue());
         });
     }
 
     @Test
-    @DisplayName("add a new attribute")
+    @DisplayName("update an attribute")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
                 state -> {
-                    Map<String, Any> actualAttributes = state.getAttributesMap();
-                    String expectedName = message().getName();
-                    Any expectedValue = message().getValue();
-                    assertTrue(actualAttributes.containsKey(expectedName));
-                    assertEquals(expectedValue, actualAttributes.get(expectedName));
+                    Map<String, Any> attributes = state.getAttributesMap();
+                    String name = message().getName();
+                    assertTrue(attributes.containsKey(name));
+                    Any actualValue = attributes.get(name);
+                    assertEquals(message().getNewValue(), actualValue);
                 });
     }
 
-    private static AddUserAttribute createMessage() {
-        return addUserAttribute(USER_ID);
+    private static UpdateUserAttribute createMessage() {
+        return updateUserAttribute(USER_ID);
     }
 }

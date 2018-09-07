@@ -6,22 +6,22 @@
 
 package io.spine.users.c.user;
 
-import io.spine.users.c.signin.SignOutCompleted;
+import io.spine.users.c.signin.SignInCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestEvents.signOutCompleted;
+import static io.spine.users.c.user.given.UserTestEvents.signInCompleted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("SignOutCompleted event should")
-class SignedOutCompletedEventTest extends UserEventTest<SignOutCompleted> {
+@DisplayName("SignInCompleted event should")
+class SignInCompletedTest extends UserEventTest<SignInCompleted> {
 
-    SignedOutCompletedEventTest() {
+    SignInCompletedTest() {
         super(createMessage());
     }
 
@@ -29,13 +29,14 @@ class SignedOutCompletedEventTest extends UserEventTest<SignOutCompleted> {
     @DisplayName("generate UserSignedIn event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserSignedOut.class, event -> {
+        expectThat(aggregate).producesEvent(UserSignedIn.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertTrue(event.hasWhenSignedOut());
+            assertTrue(event.hasWhenSignedIn());
+            assertEquals(message().getIdentity(), event.getIdentity());
         });
     }
 
-    private static SignOutCompleted createMessage() {
-        return signOutCompleted(USER_ID);
+    private static SignInCompleted createMessage() {
+        return signInCompleted(USER_ID);
     }
 }

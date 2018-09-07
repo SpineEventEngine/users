@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoveSecondaryAuthIdentity command should")
-class RemoveAuthIdentityCommandTest extends UserCommandTest<RemoveSecondaryAuthIdentity> {
+class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity> {
 
-    RemoveAuthIdentityCommandTest() {
+    RemoveAuthIdentityTest() {
         super(createMessage());
     }
 

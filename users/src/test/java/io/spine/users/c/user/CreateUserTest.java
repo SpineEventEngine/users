@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("CreateUser command should")
-class CreateUserCommandTest extends UserCommandTest<CreateUser> {
+class CreateUserTest extends UserCommandTest<CreateUser> {
 
-    CreateUserCommandTest() {
+    CreateUserTest() {
         super(createMessage());
     }
 

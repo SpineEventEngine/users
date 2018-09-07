@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("AddAuthIdentity command should")
-class AddAuthIdentityCommandTest extends UserCommandTest<AddSecondaryAuthIdentity> {
+class AddAuthIdentityTest extends UserCommandTest<AddSecondaryAuthIdentity> {
 
-    AddAuthIdentityCommandTest() {
+    AddAuthIdentityTest() {
         super(createMessage());
     }
 

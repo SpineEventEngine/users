@@ -10,40 +10,38 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestCommands.moveUser;
+import static io.spine.users.c.user.given.UserTestCommands.assignRoleToUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("MoveUser command should")
-class MoveUserCommandTest extends UserCommandTest<MoveUser> {
+@DisplayName("AssignRoleToUser command should")
+class AssignRoleToUserTest extends UserCommandTest<AssignRoleToUser> {
 
-    MoveUserCommandTest() {
+    AssignRoleToUserTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate UserMoved event")
+    @DisplayName("generate RoleAssignedToUser event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserMoved.class, event -> {
+        expectThat(aggregate).producesEvent(RoleAssignedToUser.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
-            assertTrue(event.hasOldParentEntity());
+            assertEquals(message().getRoleId(), event.getRoleId());
         });
     }
 
     @Test
-    @DisplayName("change parent entity of the user")
+    @DisplayName("add a new role")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getNewParentEntity(), state.getParentEntity()));
+                state -> assertEquals(message().getRoleId(), state.getRole(1)));
     }
 
-    private static MoveUser createMessage() {
-        return moveUser(USER_ID);
+    private static AssignRoleToUser createMessage() {
+        return assignRoleToUser(USER_ID);
     }
 }

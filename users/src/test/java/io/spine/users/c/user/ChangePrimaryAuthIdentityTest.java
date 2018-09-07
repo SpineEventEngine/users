@@ -10,38 +10,38 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestCommands.startGroupMembership;
+import static io.spine.users.c.user.given.UserTestCommands.changePrimaryIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("JoinGroup command should")
-class JoinGroupCommandTest extends UserCommandTest<JoinGroup> {
+@DisplayName("ChangePrimaryAuthIdentity command should")
+class ChangePrimaryAuthIdentityTest extends UserCommandTest<ChangePrimaryAuthIdentity> {
 
-    JoinGroupCommandTest() {
+    ChangePrimaryAuthIdentityTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate UserJoinedGroup event")
+    @DisplayName("generate PrimaryAuthIdentityChanged event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserJoinedGroup.class, event -> {
+        expectThat(aggregate).producesEvent(PrimaryAuthIdentityChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getGroupId(), event.getGroupId());
+            assertEquals(message().getIdentity(), event.getIdentity());
         });
     }
 
     @Test
-    @DisplayName("add a new group membership")
+    @DisplayName("change the primary googleIdentity")
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getGroupId(), state.getMembership(0)));
+                state -> assertEquals(message().getIdentity(), state.getPrimaryAuthIdentity()));
     }
 
-    private static JoinGroup createMessage() {
-        return startGroupMembership(USER_ID);
+    private static ChangePrimaryAuthIdentity createMessage() {
+        return changePrimaryIdentity(USER_ID);
     }
 }

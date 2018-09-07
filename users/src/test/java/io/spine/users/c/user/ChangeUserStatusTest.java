@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("ChangeUserStatus command should")
-class ChangeUserStatusCommandTest extends UserCommandTest<ChangeUserStatus> {
+class ChangeUserStatusTest extends UserCommandTest<ChangeUserStatus> {
 
-    ChangeUserStatusCommandTest() {
+    ChangeUserStatusTest() {
         super(createMessage());
     }
 

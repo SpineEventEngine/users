@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("LeaveGroup command should")
-class LeaveGroupCommandTest extends UserCommandTest<LeaveGroup> {
+class LeaveGroupTest extends UserCommandTest<LeaveGroup> {
 
-    LeaveGroupCommandTest() {
+    LeaveGroupTest() {
         super(createMessage());
     }
 

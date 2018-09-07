@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoveUserAttribute command should")
-class RemoveUserAttributeCommandTest extends UserCommandTest<RemoveUserAttribute> {
+class RemoveUserAttributeTest extends UserCommandTest<RemoveUserAttribute> {
 
-    RemoveUserAttributeCommandTest() {
+    RemoveUserAttributeTest() {
         super(createMessage());
     }
 
