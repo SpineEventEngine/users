@@ -33,7 +33,7 @@ public abstract class IdentityProviderBridgeFactory {
 
     /**
      * Obtains or creates a {@link IdentityProviderBridge bridge} to communicate with
-     * authentication identity provider.
+     * an authentication identity provider.
      *
      * @param id a unique identifier of the identity provider
      * @return {@link IdentityProviderBridge} if the requested identity provider is supported,

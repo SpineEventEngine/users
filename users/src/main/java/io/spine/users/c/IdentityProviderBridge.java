@@ -26,8 +26,20 @@ import io.spine.users.UserProfile;
 /**
  * A bridge to an authentication identity provider.
  *
- * <p>The {@code Users} bounded context uses identity providers as a data source and the single
+ * <p>The {@code Users} bounded context is a framework solution and thus relies upon the third-party
+ * authentication providers supplied by the particular application.
+ *
+ * <p>For {@code Users}, an authentication provider serves as a data source and the single
  * source of truth about {@linkplain UserAuthIdentity user authentication identities}.</p>
+ *
+ * <p>This interface may be used both for application's own and remote identity
+ * providers. For example:
+ *
+ * <ul>
+ *     <li>Spring Security;
+ *     <li>Google Directory API;
+ *     <li>Active Directory.
+ * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
@@ -46,7 +58,7 @@ public interface IdentityProviderBridge {
      * Checks whether the given identity is allowed to perform sign-in.
      *
      * <p>For example, the specific implementation may check if an associated user account is still
-     * active or has permission to sign-in.
+     * active or has a permission to sign-in.
      *
      * @param identity an authentication identity to check
      * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise.
