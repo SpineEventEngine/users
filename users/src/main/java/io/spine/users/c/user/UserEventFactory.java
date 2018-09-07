@@ -29,7 +29,7 @@ import io.spine.users.c.user.User.Status;
 final class UserEventFactory extends AggregateEventFactory {
 
     /**
-     * Prevents direct instantiation.
+     * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
      */
     private UserEventFactory(ActorContext actorContext) {
         super(actorContext);

@@ -43,7 +43,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("produce RoleUnassignedFromGroup event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
         expectThat(aggregate).producesEvent(RoleUnassignedFromGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getRoleId(), event.getRoleId());
@@ -53,7 +53,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("add a role assignment")
     void changeState() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
             RoleId expectedRole = message().getRoleId();

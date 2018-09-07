@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import com.google.protobuf.Any;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.addGroupAttribute;
+import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.addOrganizationAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,18 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("Duplicates") // The same assertions are made for other aggregates.
-@DisplayName("AddGroupAttribute command should")
-class AddGroupAttributeTest extends GroupCommandTest<AddGroupAttribute> {
+@DisplayName("AddOrganizationAttribute command should")
+class AddOrganizationAttributeTest extends OrgCommandTest<AddOrganizationAttribute> {
 
-    AddGroupAttributeTest() {
+    AddOrganizationAttributeTest() {
         super(createMessage());
     }
 
     @Test
     @DisplayName("generate GroupAttributeAdded event")
     void generateEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(GroupAttributeAdded.class, event -> {
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        expectThat(aggregate).producesEvent(OrganizationAttributeAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getName(), event.getName());
             assertEquals(message().getValue(), event.getValue());
@@ -42,7 +42,7 @@ class AddGroupAttributeTest extends GroupCommandTest<AddGroupAttribute> {
     @Test
     @DisplayName("add a new attribute")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
         expectThat(aggregate).hasState(
                 state -> {
                     Map<String, Any> actualAttributes = state.getAttributesMap();
@@ -53,7 +53,7 @@ class AddGroupAttributeTest extends GroupCommandTest<AddGroupAttribute> {
                 });
     }
 
-    private static AddGroupAttribute createMessage() {
-        return addGroupAttribute(GROUP_ID);
+    private static AddOrganizationAttribute createMessage() {
+        return addOrganizationAttribute(ORG_ID);
     }
 }

@@ -4,31 +4,31 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.removeGroupAttribute;
+import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.removeOrganizationAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoveGroupAttribute command should")
-class RemoveGroupAttributeTest extends GroupCommandTest<RemoveGroupAttribute> {
+@DisplayName("RemoveOrganizationAttribute command should")
+class RemoveOrganizationAttributeTest extends OrgCommandTest<RemoveOrganizationAttribute> {
 
-    RemoveGroupAttributeTest() {
+    RemoveOrganizationAttributeTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate GroupAttributeRemoved event")
+    @DisplayName("generate OrganizationAttributeRemoved event")
     void generateEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(GroupAttributeRemoved.class, event -> {
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        expectThat(aggregate).producesEvent(OrganizationAttributeRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getName(), event.getName());
             assertTrue(event.hasValue());
@@ -38,14 +38,14 @@ class RemoveGroupAttributeTest extends GroupCommandTest<RemoveGroupAttribute> {
     @Test
     @DisplayName("remove an attribute")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
         expectThat(aggregate).hasState(state -> {
             assertTrue(state.getAttributesMap()
                             .isEmpty());
         });
     }
 
-    private static RemoveGroupAttribute createMessage() {
-        return removeGroupAttribute(GROUP_ID);
+    private static RemoveOrganizationAttribute createMessage() {
+        return removeOrganizationAttribute(ORG_ID);
     }
 }

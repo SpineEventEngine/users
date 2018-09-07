@@ -44,7 +44,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup> {
     @Test
     @DisplayName("produce GroupMoved event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
         ParentEntity oldParent = aggregate.getState()
                                           .getParentEntity();
         expectThat(aggregate).producesEvent(GroupMoved.class, event -> {
@@ -57,7 +57,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup> {
     @Test
     @DisplayName("change the parent")
     void changeState() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
             assertEquals(state.getParentEntity(), message().getNewParentEntity());

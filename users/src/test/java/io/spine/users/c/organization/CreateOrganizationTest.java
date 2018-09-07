@@ -18,57 +18,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.c.organization.TestOrganizationFactory.createEmptyAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.createOrganization;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
-@DisplayName("CreateGroup command should")
-class CreateGroupTest extends GroupCommandTest<CreateGroup> {
+@DisplayName("CreateOrganization command should")
+class CreateOrganizationTest extends OrgCommandTest<CreateOrganization> {
 
-    CreateGroupTest() {
+    CreateOrganizationTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce GroupCreated event")
+    @DisplayName("produce OrganizationCreated event")
     void produceEvent() {
-        CreateGroup command = message();
-        expectThat(createEmptyAggregate(GROUP_ID)).producesEvent(GroupCreated.class, event -> {
+        CreateOrganization command = message();
+        expectThat(createEmptyAggregate(ORG_ID)).producesEvent(OrganizationCreated.class, event -> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getEmail(), event.getEmail());
+            assertEquals(command.getTenant(), event.getTenant());
             assertEquals(command.getAttributesMap(), event.getAttributesMap());
-            assertEquals(command.getRoleList(), event.getRoleList());
             assertEquals(command.getOwner(), event.getOwner());
-            assertEquals(command.getParentEntity(), event.getParentEntity());
+            assertEquals(command.getDomain(), event.getDomain());
         });
     }
 
     @Test
-    @DisplayName("create a group")
+    @DisplayName("create an organization")
     void changeState() {
-        CreateGroup command = message();
-        expectThat(createEmptyAggregate(GROUP_ID)).hasState(state -> {
+        CreateOrganization command = message();
+        expectThat(createEmptyAggregate(ORG_ID)).hasState(state -> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getEmail(), state.getEmail());
+            assertEquals(command.getTenant(), state.getTenant());
             assertEquals(command.getAttributesMap(), state.getAttributesMap());
-            assertEquals(command.getRoleList(), state.getRoleList());
             assertEquals(command.getOwner(), state.getOwner());
-            assertEquals(command.getParentEntity(), state.getParentEntity());
+            assertEquals(command.getDomain(), state.getDomain());
         });
     }
 
-    private static CreateGroup createMessage() {
-        return createGroup(GROUP_ID);
+    private static CreateOrganization createMessage() {
+        return createOrganization(ORG_ID);
     }
 }

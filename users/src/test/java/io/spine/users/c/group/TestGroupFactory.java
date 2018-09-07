@@ -21,13 +21,13 @@
 package io.spine.users.c.group;
 
 import io.spine.testing.server.entity.given.Given;
+import io.spine.users.GroupId;
 
 import static io.spine.users.c.group.given.GroupTestEnv.displayName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupId;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
 import static io.spine.users.c.group.given.GroupTestEnv.groupParentOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
@@ -48,15 +48,15 @@ public class TestGroupFactory {
     /**
      * Creates a new instance of the aggregate with the default state.
      */
-    static GroupAggregate createEmptyAggregate() {
-        return new GroupAggregate(newGroupId());
+    static GroupAggregate createEmptyAggregate(GroupId id) {
+        return new GroupAggregate(id);
     }
 
     /**
      * Creates a new instance of the aggregate with the filled state.
      */
-    static GroupAggregate createAggregate() {
-        return aggregate(state().build());
+    static GroupAggregate createAggregate(GroupId id) {
+        return aggregate(state(id).build());
     }
 
     private static GroupAggregate aggregate(Group state) {
@@ -66,9 +66,9 @@ public class TestGroupFactory {
                     .build();
     }
 
-    private static GroupVBuilder state() {
+    private static GroupVBuilder state(GroupId id) {
         return GroupVBuilder.newBuilder()
-                            .setId(newGroupId())
+                            .setId(id)
                             .setParentEntity(groupParentOrganization())
                             .setDisplayName(displayName())
                             .setEmail(groupEmail())

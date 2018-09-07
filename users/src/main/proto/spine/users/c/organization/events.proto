@@ -50,8 +50,11 @@ message OrganizationOwnerChanged {
 
     OrganizationId id = 1;
 
-    // The ID of the owner.
-    spine.core.UserId owner = 2 [(required) = true];
+    // The ID of the new owner.
+    spine.core.UserId new_owner = 2 [(required) = true];
+
+    // The ID of the old owner.
+    spine.core.UserId old_owner = 3 [(required) = true];
 }
 
 // The event is emitted when an organization is deleted.

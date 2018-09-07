@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import com.google.protobuf.Any;
 import org.junit.jupiter.api.DisplayName;
@@ -12,26 +12,26 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.updateGroupAttribute;
+import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.updateOrganizationAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("UpdateGroupAttribute command should")
-class UpdateGroupAttributeTest extends GroupCommandTest<UpdateGroupAttribute> {
+@DisplayName("UpdateOrganizationAttribute command should")
+class UpdateOrganizationAttributeTest extends OrgCommandTest<UpdateOrganizationAttribute> {
 
-    UpdateGroupAttributeTest() {
+    UpdateOrganizationAttributeTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate GroupAttributeUpdated event")
+    @DisplayName("generate OrganizationAttributeUpdated event")
     void generateEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(GroupAttributeUpdated.class, event -> {
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        expectThat(aggregate).producesEvent(OrganizationAttributeUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getName(), event.getName());
             assertEquals(message().getNewValue(), event.getNewValue());
@@ -42,7 +42,7 @@ class UpdateGroupAttributeTest extends GroupCommandTest<UpdateGroupAttribute> {
     @Test
     @DisplayName("update an attribute")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
         expectThat(aggregate).hasState(
                 state -> {
                     Map<String, Any> attributes = state.getAttributesMap();
@@ -53,7 +53,7 @@ class UpdateGroupAttributeTest extends GroupCommandTest<UpdateGroupAttribute> {
                 });
     }
 
-    private static UpdateGroupAttribute createMessage() {
-        return updateGroupAttribute(GROUP_ID);
+    private static UpdateOrganizationAttribute createMessage() {
+        return updateOrganizationAttribute(ORG_ID);
     }
 }

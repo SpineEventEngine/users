@@ -148,6 +148,7 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
                     .setEmail(event.getEmail())
                     .setOwner(event.getOwner())
                     .setParentEntity(event.getParentEntity())
+                    .putAllAttributes(event.getAttributesMap())
                     .addAllRole(event.getRoleList())
                     .build();
     }

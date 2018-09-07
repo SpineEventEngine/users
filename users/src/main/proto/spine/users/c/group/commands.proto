@@ -56,7 +56,7 @@ message ChangeGroupOwner {
     GroupId id = 1;
 
     // The ID of the owner.
-    spine.core.UserId owner = 2 [(required) = true];
+    spine.core.UserId new_owner = 2 [(required) = true];
 }
 
 // The command to move a group from one organization or orgunit to another.

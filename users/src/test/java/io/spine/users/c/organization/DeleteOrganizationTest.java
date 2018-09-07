@@ -18,45 +18,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.deleteGroup;
+import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.deleteOrganization;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("DeleteGroup command should")
-class DeleteGroupTest extends GroupCommandTest<DeleteGroup> {
+@DisplayName("DeleteOrganization command should")
+class DeleteOrganizationTest extends OrgCommandTest<DeleteOrganization> {
 
-    DeleteGroupTest() {
+    DeleteOrganizationTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce GroupDeleted event")
+    @DisplayName("produce OrganizationDeleted event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(GroupDeleted.class, event -> {
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        expectThat(aggregate).producesEvent(OrganizationDeleted.class, event -> {
             assertEquals(message().getId(), event.getId());
         });
     }
 
     @Test
-    @DisplayName("delete the group")
+    @DisplayName("delete the organization")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
                                                                     .getDeleted()));
     }
 
-    private static DeleteGroup createMessage() {
-        return deleteGroup(GROUP_ID);
+    private static DeleteOrganization createMessage() {
+        return deleteOrganization(ORG_ID);
     }
 }

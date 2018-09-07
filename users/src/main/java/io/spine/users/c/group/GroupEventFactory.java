@@ -60,13 +60,14 @@ class GroupEventFactory extends AggregateEventFactory {
                                    .setOwner(command.getOwner())
                                    .setParentEntity(command.getParentEntity())
                                    .addAllRole(command.getRoleList())
+                                   .putAllAttributes(command.getAttributesMap())
                                    .build();
     }
 
     GroupOwnerChanged changeOwner(ChangeGroupOwner command, UserId oldOwner) {
         return GroupOwnerChangedVBuilder.newBuilder()
                                         .setId(command.getId())
-                                        .setNewOwner(command.getOwner())
+                                        .setNewOwner(command.getNewOwner())
                                         .setOldOwner(oldOwner)
                                         .build();
     }

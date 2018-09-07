@@ -27,6 +27,7 @@ import io.spine.users.RoleId;
 import io.spine.users.c.group.AddGroupAttribute;
 import io.spine.users.c.group.AddGroupAttributeVBuilder;
 import io.spine.users.c.group.AddSuperGroup;
+import io.spine.users.c.group.AddSuperGroupVBuilder;
 import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.ChangeGroupOwner;
@@ -41,7 +42,6 @@ import io.spine.users.c.group.MoveGroupVBuilder;
 import io.spine.users.c.group.RemoveGroupAttribute;
 import io.spine.users.c.group.RemoveGroupAttributeVBuilder;
 import io.spine.users.c.group.RemoveSuperGroup;
-import io.spine.users.c.group.AddSuperGroupVBuilder;
 import io.spine.users.c.group.RemoveSuperGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
@@ -50,6 +50,7 @@ import io.spine.users.c.group.UpdateGroupAttributeVBuilder;
 
 import static io.spine.users.c.group.given.GroupTestEnv.displayName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
+import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
 import static io.spine.users.c.group.given.GroupTestEnv.groupParentOrganization;
@@ -78,13 +79,14 @@ public class GroupTestCommands {
                                   .setOwner(groupOwner())
                                   .setParentEntity(groupParentOrganization())
                                   .addRole(groupRole())
+                                  .putAttributes(groupAttributeName(), groupAttributeValue())
                                   .build();
     }
 
     public static ChangeGroupOwner changeOwner(GroupId id, UserId newOwner) {
         return ChangeGroupOwnerVBuilder.newBuilder()
                                        .setId(id)
-                                       .setOwner(newOwner)
+                                       .setNewOwner(newOwner)
                                        .build();
     }
 

@@ -45,7 +45,7 @@ class StartNestedMembershipTest extends GroupCommandTest<AddSuperGroup> {
     @Test
     @DisplayName("produce SuperGroupAdded event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
         expectThat(aggregate).producesEvent(SuperGroupAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getSuperGroupId(), event.getSuperGroupId());
@@ -55,7 +55,7 @@ class StartNestedMembershipTest extends GroupCommandTest<AddSuperGroup> {
     @Test
     @DisplayName("add a group membership")
     void changeState() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
             GroupId expectedGroup = message().getSuperGroupId();

@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.c.organization;
 
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
@@ -26,31 +26,31 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.changeOwner;
+import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationOwner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeGroupOwner command should")
-class ChangeGroupOwnerTest extends GroupCommandTest<ChangeGroupOwner> {
+@DisplayName("ChangeOrganizationOwner command should")
+class ChangeOrganizationOwnerTest extends OrgCommandTest<ChangeOrganizationOwner> {
 
     private static final UserId NEW_OWNER = UserIdVBuilder.newBuilder()
                                                           .setValue(newUuid())
                                                           .build();
 
-    ChangeGroupOwnerTest() {
+    ChangeOrganizationOwnerTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce GroupOwnerChanged event")
+    @DisplayName("produce OrganizationOwnerChanged event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
         UserId oldOwner = aggregate.getState()
                                    .getOwner();
-        expectThat(aggregate).producesEvent(GroupOwnerChanged.class, event -> {
+        expectThat(aggregate).producesEvent(OrganizationOwnerChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getNewOwner(), event.getNewOwner());
             assertEquals(oldOwner, event.getOldOwner());
@@ -60,14 +60,14 @@ class ChangeGroupOwnerTest extends GroupCommandTest<ChangeGroupOwner> {
     @Test
     @DisplayName("change the owner")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> {
             assertEquals(state.getOwner(), message().getNewOwner());
         });
     }
 
-    private static ChangeGroupOwner createMessage() {
-        return changeOwner(GROUP_ID, NEW_OWNER);
+    private static ChangeOrganizationOwner createMessage() {
+        return changeOrganizationOwner(ORG_ID);
     }
 }

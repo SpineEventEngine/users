@@ -43,7 +43,7 @@ class StopNestedMembershipTest extends GroupCommandTest<RemoveSuperGroup> {
     @Test
     @DisplayName("produce SuperGroupRemoved event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
         expectThat(aggregate).producesEvent(SuperGroupRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getSuperGroupId(), event.getSuperGroupId());
@@ -53,7 +53,7 @@ class StopNestedMembershipTest extends GroupCommandTest<RemoveSuperGroup> {
     @Test
     @DisplayName("remove a group membership")
     void changeState() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
             GroupId expectedGroup = message().getSuperGroupId();

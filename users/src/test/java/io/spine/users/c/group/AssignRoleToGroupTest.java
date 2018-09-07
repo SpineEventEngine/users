@@ -48,7 +48,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
     @Test
     @DisplayName("produce RoleAssignedToGroup event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
         expectThat(aggregate).producesEvent(RoleAssignedToGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getRoleId(), event.getRoleId());
@@ -58,7 +58,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
     @Test
     @DisplayName("add a role assignment")
     void changeState() {
-        GroupAggregate aggregate = createAggregate();
+        GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
             RoleId expectedRole = message().getRoleId();
