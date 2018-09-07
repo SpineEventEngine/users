@@ -29,7 +29,7 @@ import "spine/users/user_auth_identity.proto";
 // A user interacts with the application by sending commands and making queries.
 ///
 // ## User Attributes
-// // TODO: auth identities
+//
 // To make `User` meet specific requirements of the application, it can be extended via
 // custom `UserAttribute`s.
 //
@@ -74,7 +74,7 @@ message User {
     //
     // The primary identity and its provider are used as a single source of truth about a user:
     //  - to get a user profile;
-    //  - to check whether if a user account is active;
+    //  - to check whether a user account is active;
     //  - etc.
     //
     UserAuthIdentity primary_auth_identity = 9 [(required) = true];
@@ -101,7 +101,6 @@ message User {
         ACTIVE = 2;
 
         // A user is suspended by an identity provider.
-        //
         SUSPENDED = 3;
     }
 }

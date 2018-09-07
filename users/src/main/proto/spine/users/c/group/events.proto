@@ -18,6 +18,7 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
+import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
@@ -42,6 +43,9 @@ message GroupCreated {
 
     // The owner of the group.
     spine.core.UserId owner = 6 [(required) = true];
+
+    // An email address of the group if applicable.
+    spine.net.EmailAddress email = 7;
 }
 
 // The event is emitted when an owner of a group is changed.
@@ -83,7 +87,7 @@ message NestedGroupMembershipStarted {
 
 // The event is emitted when a group stopped being a member of another group.
 //
-message GroupMembershipStopped {
+message NestedGroupMembershipStopped {
 
     GroupId id = 1;
 

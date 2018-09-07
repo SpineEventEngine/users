@@ -18,6 +18,7 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
+import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
@@ -43,6 +44,9 @@ message CreateGroup {
 
     // The owner of the group.
     spine.core.UserId owner = 6 [(required) = true];
+
+    // An email address of the group if applicable.
+    spine.net.EmailAddress email = 7;
 }
 
 // The command to change the owner of a group.
@@ -150,7 +154,6 @@ message RemoveGroupAttribute {
 // The command to update a group attribute.
 //
 message UpdateGroupAttribute {
-
     option (events) = "GroupAttributeUpdated";
 
     GroupId id = 1;
