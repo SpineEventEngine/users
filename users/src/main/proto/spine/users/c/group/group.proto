@@ -67,7 +67,6 @@ import "spine/users/values.proto";
 //
 message Group {
     option (entity).kind = AGGREGATE;
-    option (required_field) = "unit|organization";
 
     GroupId id = 1;
 

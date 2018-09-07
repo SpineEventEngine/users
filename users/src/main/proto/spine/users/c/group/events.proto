@@ -25,7 +25,6 @@ import "spine/users/values.proto";
 // The event is emitted when a new group is created.
 //
 message GroupCreated {
-    option (required_field) = "unit|organization";
 
     GroupId id = 1;
 
@@ -64,7 +63,6 @@ message GroupOwnerChanged {
 // The event is emitted when a group is moved to another organization or orgunit.
 //
 message GroupMoved {
-    option (required_field) = "unit|organization";
 
     GroupId id = 1;
 
@@ -77,22 +75,22 @@ message GroupMoved {
 
 // The event is emitted when a group became a member of another group.
 //
-message NestedGroupMembershipStarted {
+message SuperGroupAdded {
 
     GroupId id = 1;
 
     // The ID of the upper group.
-    GroupId upper_group_id = 2 [(required) = true];
+    GroupId super_group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a group stopped being a member of another group.
 //
-message NestedGroupMembershipStopped {
+message SuperGroupRemoved {
 
     GroupId id = 1;
 
     // The ID of the upper group.
-    GroupId upper_group_id = 2 [(required) = true];
+    GroupId super_group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a new group is deleted.

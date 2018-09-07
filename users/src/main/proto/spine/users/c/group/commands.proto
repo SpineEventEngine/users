@@ -26,7 +26,6 @@ import "spine/users/values.proto";
 //
 message CreateGroup {
     option (events) = "GroupCreated";
-    option (required_field) = "unit|organization";
 
     GroupId id = 1;
 
@@ -63,7 +62,6 @@ message ChangeGroupOwner {
 // The command to move a group from one organization or orgunit to another.
 //
 message MoveGroup {
-    option (required_field) = "unit|organization";
     option (events) = "GroupMoved";
 
     GroupId id = 1;
@@ -80,26 +78,26 @@ message DeleteGroup {
     GroupId id = 1;
 }
 
-// The command to start a nested group membership.
+// The command for this group to join another group.
 //
-message StartNestedGroupMembership {
-    option (events) = "NestedGroupMembershipStarted";
+message AddSuperGroup {
+    option (events) = "SuperGroupAdded";
 
     GroupId id = 1;
 
     // The ID of the upper group.
-    GroupId upper_group_id = 2 [(required) = true];
+    GroupId super_group_id = 2 [(required) = true];
 }
 
-// The command to stop a nested group membership.
+// The command for this group to leave another group.
 //
-message StopNestedGroupMembership {
-    option (events) = "NestedGroupMembershipStopped";
+message RemoveSuperGroup {
+    option (events) = "SuperGroupRemoved";
 
     GroupId id = 1;
 
     // The ID of the upper group.
-    GroupId upper_group_id = 2 [(required) = true];
+    GroupId super_group_id = 2 [(required) = true];
 }
 
 // The command to assign a `Role` to the group.
