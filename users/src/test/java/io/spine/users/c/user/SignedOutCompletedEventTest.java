@@ -10,7 +10,7 @@ import io.spine.users.c.signin.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.TestAggregateFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestEvents.signOutCompleted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

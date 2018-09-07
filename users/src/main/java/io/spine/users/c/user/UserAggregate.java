@@ -6,7 +6,6 @@
 
 package io.spine.users.c.user;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
@@ -71,8 +70,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     /**
      * @see Aggregate#Aggregate(Object)
      */
-    @VisibleForTesting
-    public UserAggregate(UserId id) {
+    UserAggregate(UserId id) {
         super(id);
     }
 
@@ -132,7 +130,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     @Assign
     UserAttributeUpdated handle(UpdateUserAttribute command, CommandContext context) {
         String attributeName = command.getName();
-        Map<String, Any> attributes = getState().getAttributes();
+        Map<String, Any> attributes = getState().getAttributesMap();
         if (attributes.containsKey(attributeName)) {
             return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
@@ -222,8 +220,9 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Apply
     void on(UserAttributeUpdated event) {
-        removeAttribute(event.getName());
-        getBuilder().putAttributes(event.getName(), event.getNewValue());
+        String attributeName = event.getName();
+        removeAttribute(attributeName);
+        getBuilder().putAttributes(attributeName, event.getNewValue());
     }
 
     @Apply
@@ -306,8 +305,8 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     private static Predicate<UserAuthIdentity> identityMatcher(
             RemoveSecondaryAuthIdentity command) {
         return identity -> {
-            boolean idMatches = identity.getUid()
-                                        .equals(command.getUid());
+            boolean idMatches = identity.getUserId()
+                                        .equals(command.getUserId());
             boolean providerMatches = identity.getProviderId()
                                               .equals(command.getProviderId());
             return idMatches && providerMatches;

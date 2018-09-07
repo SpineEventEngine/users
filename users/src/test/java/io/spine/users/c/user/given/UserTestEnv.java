@@ -41,6 +41,7 @@ import static io.spine.protobuf.AnyPacker.pack;
  * @author Vladyslav Lubenskyi
  */
 public class UserTestEnv {
+    private static final String USER_UUID = newUuid();
 
     /**
      * Prevents direct instantiation.
@@ -54,24 +55,24 @@ public class UserTestEnv {
                              .build();
     }
 
-    static GroupId firstGroupId() {
+    public static GroupId firstGroupId() {
         return GroupIdVBuilder.newBuilder()
                               .setValue("fisrt_group@example.com")
                               .build();
     }
 
-    static String displayName() {
+    public static String displayName() {
         return "John Smith";
     }
 
-    static UserProfile profile() {
+    public static UserProfile profile() {
         return UserProfileVBuilder.newBuilder()
                                   .setName(name())
                                   .setEmail(email())
                                   .build();
     }
 
-    static ParentEntity parentEntity() {
+    public static ParentEntity parentEntity() {
         return ParentEntityVBuilder.newBuilder()
                                    .setOrganization(organizationId())
                                    .build();
@@ -83,11 +84,11 @@ public class UserTestEnv {
                                    .build();
     }
 
-    static UserAuthIdentity googleIdentity() {
+    public static UserAuthIdentity googleIdentity() {
         return UserAuthIdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@google.com")
                                        .setProviderId(googleProviderId())
-                                       .setUid(newUuid())
+                                       .setUserId(USER_UUID)
                                        .build();
     }
 
@@ -95,11 +96,11 @@ public class UserTestEnv {
         return UserAuthIdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@github.com")
                                        .setProviderId(githubPoviderId())
-                                       .setUid(newUuid())
+                                       .setUserId(USER_UUID)
                                        .build();
     }
 
-    static RoleId adminRoleId() {
+    public static RoleId adminRoleId() {
         return RoleIdVBuilder.newBuilder()
                              .setValue("admin_role")
                              .build();
@@ -115,7 +116,7 @@ public class UserTestEnv {
         return "auth_token";
     }
 
-    static Any attributeValue() {
+    public static Any attributeValue() {
         return pack(StringValue.of("encrypted-auth-token-value"));
     }
 

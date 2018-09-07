@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static io.spine.users.c.user.given.TestAggregateFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.updateUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

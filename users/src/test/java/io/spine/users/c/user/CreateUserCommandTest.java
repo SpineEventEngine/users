@@ -9,7 +9,7 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.TestAggregateFactory.createEmptyAggregate;
+import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.createUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,7 +26,7 @@ class CreateUserCommandTest extends UserCommandTest<CreateUser> {
 
     @Test
     @DisplayName("generate UserCreated event")
-    void generateEvent() {
+    void produceEvent() {
         UserAggregate emptyAggregate = createEmptyAggregate();
         expectThat(emptyAggregate).producesEvent(UserCreated.class, event -> {
             assertEquals(message().getId(), event.getId());

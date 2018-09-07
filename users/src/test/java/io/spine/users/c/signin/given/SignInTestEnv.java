@@ -143,7 +143,7 @@ public class SignInTestEnv {
         return UserAuthIdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@google.com")
                                        .setProviderId(googleProviderId())
-                                       .setUid("123543")
+                                       .setUserId("123543")
                                        .build();
     }
 

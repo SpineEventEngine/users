@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user.given;
+package io.spine.users.c.user;
 
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.c.user.User;
@@ -27,32 +27,32 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  *
  * @author Vladyslav Lubenskyi
  */
-public class TestAggregateFactory {
+public class TestUserFactory {
 
     /**
-     * Prevents direct instantiation.
+     * Prevents instantiation.
      */
-    private TestAggregateFactory() {
+    private TestUserFactory() {
     }
 
     /**
      * Creates a new instance of the aggregate with the default state.
      */
-    public static UserAggregate createEmptyAggregate() {
+    static UserAggregate createEmptyAggregate() {
         return new UserAggregate(userId());
     }
 
     /**
      * Creates a new instance of the aggregate with the filled state.
      */
-    public static UserAggregate createAggregate() {
+    static UserAggregate createAggregate() {
         return aggregate(state().build());
     }
 
     /**
      * Creates a new instance of the aggregate with the group membership.
      */
-    public static UserAggregate createAggregateWithGroup() {
+    static UserAggregate createAggregateWithGroup() {
         User state = state().addMembership(firstGroupId())
                             .build();
         return aggregate(state);

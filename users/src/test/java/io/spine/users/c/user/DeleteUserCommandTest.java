@@ -9,7 +9,7 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.TestAggregateFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.deleteUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

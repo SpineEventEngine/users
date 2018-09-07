@@ -25,7 +25,7 @@ import "spine/users/identifiers.proto";
 message UserAuthIdentity {
 
     // The user identifier as specified by the authentication provider.
-    string uid = 1 [(required) = true];
+    string user_id = 1 [(required) = true];
 
     // The unique identifier of the authentication provider type that this instance corresponds to.
     IdentityProviderId provider_id = 2 [(required) = true];

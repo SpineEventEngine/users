@@ -138,7 +138,7 @@ public class UserTestCommands {
         return RemoveSecondaryAuthIdentityVBuilder.newBuilder()
                                                   .setId(id)
                                                   .setProviderId(identity.getProviderId())
-                                                  .setUid(identity.getUid())
+                                                  .setUserId(identity.getUserId())
                                                   .build();
     }
 
