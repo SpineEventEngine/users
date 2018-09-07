@@ -45,13 +45,13 @@ import static java.util.Optional.of;
  *
  * <ol>
  *     <li>{@link SignUserIn} command initializes the sign-in process.
- *     <li>If a {@linkplain UserAggregate user} with the given {@linkplain UserId ID} already exists,
- *         {@link SignInCompleted} event is generated in response.
+ *     <li>If a {@linkplain UserAggregate user} with the given {@linkplain UserId ID} already exists
+ *         an all checks pass {@link SignInCompleted} event is generated in response.
  *     <li>Otherwise, the process manager creates a user and then attempts to
  *         {@linkplain SignUserIn sign user in} again.
  * </ol>
  *
- * <p>To sign a user in, the process manager should ensure the following:
+ * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
  *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given authentication
@@ -62,11 +62,11 @@ import static java.util.Optional.of;
  *         {@linkplain io.spine.users.c.user.SecondaryAuthIdentityAdded associated}] with the user.
  * </ul>
  *
- * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately
- * with the corresponding error.
+ * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.
  *
  * @author Vladyslav Lubenskyi
  */
+@SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     private UserAggregateRepository userRepository;

@@ -25,19 +25,19 @@ import "spine/users/c/signin/values.proto";
 // This process manager covers a straighforward sign-in scenario:
 //
 // 1. `SignUserIn` command initializes the sign-in process.
-// 2. If a user with the given ID already exists, the `SignInCompleted` event is generated in
-//    response.
+// 2. If a user with the given ID already exists all checks pass the `SignInCompleted` event is
+//    generated in response.
 // 3. Otherwise, the process manager creates a user and then attempts to `SignUserIn` again.
 //
-// To sign a user in, the process manager should ensure the following:
+// To sign a user in, the process manager ensures the following:
 //
 // 1. an identity provider is aware of the given authentication identity;
 // 2. an identity provider allows the user to sign in (e.g. the opposite would be if the user account
 //    was suspended);
-// 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`).
+// 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`
+//    command).
 //
-// If one of the checks fails, the process is completed immediately with the corresponding error.
-// Please, see `SignInFailed`.
+// If one of the checks fails, the process is completed immediately with `SignInFailed` event.
 //
 message SignIn {
     option (entity).kind = PROCESS_MANAGER;

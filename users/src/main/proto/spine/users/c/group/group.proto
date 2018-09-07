@@ -23,8 +23,8 @@ import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A `Group` is the way to group users by their common functions and roles inside of an organization
-// or organizational unit.
+// A `Group` is the way to group users by their common functions and functional roles inside of
+// an organization or organizational unit.
 //
 // The roles, assigned to a `Group` are implicitly inherited by all members of the group,
 // including sub-groups.

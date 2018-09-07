@@ -28,8 +28,8 @@ import "spine/users/user_auth_identity.proto";
 //
 // ## Group And Roles
 //
-// To reflect a user's functions and functional roles in the organization, the user can be assigned multiple
-// `Role`s (please, see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
+// To reflect a user's functions and functional roles in the organization, the user can be assigned
+// multiple `Role`s (please, see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
 //
 // However, if a `User` share its functions and purposes with a number of other users it can also
 // join one or more `Group`s (`JoinGroup`, `LeaveGroup`).
