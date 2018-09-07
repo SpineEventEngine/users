@@ -237,11 +237,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         getBuilder().setPrimaryAuthIdentity(event.getIdentity());
     }
 
-    @SuppressWarnings("MethodMayBeStatic")
-    private UserEventFactory events(CommandContext context) {
-        return UserEventFactory.instance(context);
-    }
-
     private Optional<UserAuthIdentity> findAuthIdentity(RemoveSecondaryAuthIdentity command) {
         return getState().getSecondaryAuthIdentityList()
                          .stream()
@@ -292,9 +287,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         };
     }
 
-    private enum LogSingleton {
-        INSTANCE;
-        @SuppressWarnings("NonSerializableFieldInSerializableClass")
-        private final Logger value = LoggerFactory.getLogger(UserAggregate.class);
+    private static UserEventFactory events(CommandContext context) {
+        return UserEventFactory.instance(context);
     }
 }

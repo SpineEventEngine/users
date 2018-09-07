@@ -15,6 +15,7 @@ import io.spine.time.ZonedDateTime;
 import io.spine.time.ZonedDateTimes;
 import io.spine.users.ParentEntity;
 import io.spine.users.UserAuthIdentity;
+import io.spine.users.c.AggregateEventFactory;
 import io.spine.users.c.signin.SignInCompleted;
 import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.user.User.Status;
@@ -25,15 +26,13 @@ import io.spine.users.c.user.User.Status;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It's OK for an event factory
-final class UserEventFactory {
-
-    private final ActorContext actorContext;
+final class UserEventFactory extends AggregateEventFactory {
 
     /**
      * Prevents direct instantiation.
      */
     private UserEventFactory(ActorContext actorContext) {
-        this.actorContext = actorContext;
+        super(actorContext);
     }
 
     /**
@@ -202,7 +201,7 @@ final class UserEventFactory {
     }
 
     private ZonedDateTime now() {
-        ZoneId zoneId = actorContext.getZoneId();
+        ZoneId zoneId = actorContext().getZoneId();
         return ZonedDateTimes.of(LocalDateTimes.now(), zoneId);
     }
 }
