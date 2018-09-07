@@ -26,22 +26,28 @@ import "spine/users/user_auth_identity.proto";
 
 // A user of the application, either a person or machine.
 //
-// A user interacts with the application by sending commands and making queries.
-///
+// ## Group And Roles
+//
+// To reflect a user's functions and functional roles in the organization, the user can be assigned multiple
+// `Role`s (please, see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
+//
+// However, if a `User` share its functions and purposes with a number of other users it can also
+// join one or more `Group`s (`JoinGroup`, `LeaveGroup`).
+//
+// ## Organizational Structure
+//
+// A user is a leaf in the hierarchical structure of the organization. It can have either
+// a single `Organization` or single `OrgUnit` as a parent organizational entity.
+//
 // ## User Attributes
 //
-// To make `User` meet specific requirements of the application, it can be extended via
-// custom `UserAttribute`s.
+// To make `User` meet specific requirements of the application, it can be extended by custom
+// attributes.
 //
 // The following commands are available to work with the user attributes:
 //
 // * `AddUserAttribute` to add a new attribute, or replace the existing one;
 // * `RemoveUserAttribute` to remove an attribute;
-//
-// ## Organizational Structure
-//
-// A user can be a leaf in the hierarchical structure of the organization. It can have either
-// a single `Organization` or single `OrgUnit` as a parent organizational entity.
 //
 message User {
     option (entity).kind = AGGREGATE;

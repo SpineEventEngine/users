@@ -11,7 +11,6 @@ import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
 import io.spine.core.UserId;
-import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -19,10 +18,12 @@ import io.spine.server.event.React;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.UserAuthIdentity;
+import io.spine.users.c.group.Group;
+import io.spine.users.c.organization.Organization;
+import io.spine.users.c.orgunit.OrgUnit;
+import io.spine.users.c.role.Role;
 import io.spine.users.c.signin.SignInCompleted;
 import io.spine.users.c.signin.SignOutCompleted;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -32,14 +33,40 @@ import java.util.function.Predicate;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A user of the application.
+ * An aggregate for user of the application, either a person or machine.
+ *
+ * <h3>Group And Roles
+ *
+ * <p>To reflect a user's functions and functional roles in the organization, the user can be
+ * assigned multiple {@link Role Roles} (please, see {@link AssignRoleToUser} and
+ * {@link UnassignRoleFromUser} commands).
+ *
+ * <p>However, if a user share its functions and functional roles with a number of other users it
+ * can also join one or more {@link Group groups} (please, see {@link JoinGroup} and
+ * {@link LeaveGroup} commands).
+ *
+ * <h3>Organizational Structure
+ *
+ * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
+ * a single {@link Organization or single {@link OrgUnit} as a parent organizational entity.
+ *
+ * <h3>User Attributes
+ *
+ * <p>To make {@link UserAggregate} meet specific requirements of the application, it can be
+ * extended by custom attributes.
+ *
+ * <p>The following commands are available to work with the user attributes:
+ *
+ * <ul>
+ *     <li>{@link AddUserAttribute} to add a new attribute, or replace the existing one;
+ *     <li>{@link RemoveUserAttribute} to remove an attribute;
+ *
+ * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
 public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
-
-    private final Logger logger = Logging.get(UserAggregate.class);
 
     /**
      * @see Aggregate#Aggregate(Object)
