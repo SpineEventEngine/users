@@ -60,7 +60,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * <ul>
  *     <li>{@link AddUserAttribute} to add a new attribute, or replace the existing one;
  *     <li>{@link RemoveUserAttribute} to remove an attribute;
- *
+ *     <li>{@link UpdateUserAttribute} to update an existing attribute.
  * </ul>
  *
  * @author Vladyslav Lubenskyi

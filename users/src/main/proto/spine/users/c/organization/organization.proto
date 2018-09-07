@@ -31,13 +31,14 @@ import "spine/users/identifiers.proto";
 //
 // ## Organization Attributes
 //
-// To make `Organization` meet specific requirements of the application, it can be extended via
-// custom `OrganizationAttribute`s.
+// To make `Organization` meet specific requirements of the application, it can be extended by
+// custom attributes.
 //
 // The following commands are available to work with the organization attributes:
 //
 // * `AddOrganizationAttribute` to add a new attribute, or replace the existing one;
 // * `RemoveOrganizationAttribute` to remove an attribute;
+// * `UpdateOrganizationAttribute` to update an existing attribute.
 //
 message Organization {
     option (entity).kind = AGGREGATE;

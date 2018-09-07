@@ -158,7 +158,6 @@ message UpdateUserAttribute {
     google.protobuf.Any new_value = 3 [(required) = true];
 }
 
-
 // The command to change the user status.
 //
 message ChangeUserStatus {

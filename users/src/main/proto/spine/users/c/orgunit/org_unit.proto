@@ -29,13 +29,14 @@ import "spine/users/values.proto";
 //
 // ## Orgunit Attributes
 //
-// To make `OrgUnit` meet specific requirements of the application, it can be extended via
-// custom `OrgUnitAttribute`s.
+// To make `OrgUnit` meet specific requirements of the application, it can be extended using custom
+// attributes.
 //
 // The following commands are available to work with the orgunit attributes:
 //
 // * `AddOrgUnitAttribute` to add a new attribute, or replace the existing one;
 // * `RemoveOrgUnitAttribute` to remove an attribute;
+// * `UpdateOrgUnitAttribute` to update an existing attribute.
 //
 message OrgUnit {
     option (entity).kind = AGGREGATE;

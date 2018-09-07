@@ -48,6 +48,7 @@ import "spine/users/user_auth_identity.proto";
 //
 // * `AddUserAttribute` to add a new attribute, or replace the existing one;
 // * `RemoveUserAttribute` to remove an attribute;
+// * `UpdateUserAttribute` to update an existing attribute.
 //
 message User {
     option (entity).kind = AGGREGATE;
