@@ -26,7 +26,6 @@ import "spine/users/values.proto";
 //
 message CreateOrgUnit {
     option (events) = "OrgUnitCreated";
-    option (required_field) = "unit|organization";
 
     OrgUnitId id = 1;
 
@@ -54,13 +53,12 @@ message ChangeOrgUnitOwner {
     OrgUnitId id = 1;
 
     // The ID of the owner.
-    spine.core.UserId owner = 2 [(required) = true];
+    spine.core.UserId new_owner = 2 [(required) = true];
 }
 
 // The command to move an orgunit from one organization or orgunit to another.
 //
 message MoveOrgUnit {
-    option (required_field) = "unit|organization";
     option (events) = "OrgUnitMoved";
 
     OrgUnitId id = 1;

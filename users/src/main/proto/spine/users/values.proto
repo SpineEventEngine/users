@@ -27,7 +27,7 @@ message ParentEntity {
     oneof parent_entity {
 
         // The parent orgunit.
-        spine.users.OrgUnitId orgunit = 1;
+        spine.users.OrgUnitId org_unit = 1;
 
         // The parent organization.
         spine.users.OrganizationId organization = 2;

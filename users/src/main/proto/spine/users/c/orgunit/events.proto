@@ -60,7 +60,6 @@ message OrgUnitOwnerChanged {
 // The event is emitted when an orgunit is moved to another organization or orgunit.
 //
 message OrgUnitMoved {
-    option (required_field) = "unit|organization";
 
     OrgUnitId id = 1;
 

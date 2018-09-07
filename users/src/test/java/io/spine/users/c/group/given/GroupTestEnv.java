@@ -90,7 +90,7 @@ public class GroupTestEnv {
 
     public static ParentEntity groupParentOrgUnit() {
         return ParentEntityVBuilder.newBuilder()
-                                   .setOrgunit(orgUnit())
+                                   .setOrgUnit(orgUnit())
                                    .build();
     }
 

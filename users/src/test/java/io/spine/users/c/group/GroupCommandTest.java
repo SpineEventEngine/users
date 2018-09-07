@@ -16,8 +16,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.newGroupId;
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
  *
- * @param <C>
- *         the type of the command being tested
+ * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
 abstract class GroupCommandTest<C extends Message>

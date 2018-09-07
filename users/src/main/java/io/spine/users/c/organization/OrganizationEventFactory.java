@@ -31,7 +31,7 @@ import io.spine.users.c.AggregateEventFactory;
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrganizationEventFactory extends AggregateEventFactory {
+class OrganizationEventFactory extends AggregateEventFactory {
 
     /**
      * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
@@ -52,7 +52,7 @@ public class OrganizationEventFactory extends AggregateEventFactory {
         return new OrganizationEventFactory(actorContext);
     }
 
-    public OrganizationCreated createOrganization(CreateOrganization command) {
+    OrganizationCreated createOrganization(CreateOrganization command) {
         return OrganizationCreatedVBuilder.newBuilder()
                                           .setId(command.getId())
                                           .setDisplayName(command.getDisplayName())
@@ -63,7 +63,7 @@ public class OrganizationEventFactory extends AggregateEventFactory {
                                           .build();
     }
 
-    public OrganizationOwnerChanged changeOwner(ChangeOrganizationOwner command, UserId oldOwner) {
+    OrganizationOwnerChanged changeOwner(ChangeOrganizationOwner command, UserId oldOwner) {
         return OrganizationOwnerChangedVBuilder.newBuilder()
                                                .setId(command.getId())
                                                .setNewOwner(command.getNewOwner())
@@ -71,13 +71,13 @@ public class OrganizationEventFactory extends AggregateEventFactory {
                                                .build();
     }
 
-    public OrganizationDeleted deleteOrganization(DeleteOrganization command) {
+    OrganizationDeleted deleteOrganization(DeleteOrganization command) {
         return OrganizationDeletedVBuilder.newBuilder()
                                           .setId(command.getId())
                                           .build();
     }
 
-    public OrganizationAttributeAdded addAttribute(AddOrganizationAttribute command) {
+    OrganizationAttributeAdded addAttribute(AddOrganizationAttribute command) {
         return OrganizationAttributeAddedVBuilder.newBuilder()
                                                  .setId(command.getId())
                                                  .setName(command.getName())
@@ -85,8 +85,8 @@ public class OrganizationEventFactory extends AggregateEventFactory {
                                                  .build();
     }
 
-    public OrganizationAttributeRemoved removeAttribute(RemoveOrganizationAttribute command,
-                                                        Any oldValue) {
+    OrganizationAttributeRemoved removeAttribute(RemoveOrganizationAttribute command,
+                                                 Any oldValue) {
         return OrganizationAttributeRemovedVBuilder.newBuilder()
                                                    .setId(command.getId())
                                                    .setName(command.getName())
@@ -94,8 +94,8 @@ public class OrganizationEventFactory extends AggregateEventFactory {
                                                    .build();
     }
 
-    public OrganizationAttributeUpdated updateAttribute(UpdateOrganizationAttribute command,
-                                                        Any oldValue) {
+    OrganizationAttributeUpdated updateAttribute(UpdateOrganizationAttribute command,
+                                                 Any oldValue) {
         return OrganizationAttributeUpdatedVBuilder.newBuilder()
                                                    .setId(command.getId())
                                                    .setName(command.getName())

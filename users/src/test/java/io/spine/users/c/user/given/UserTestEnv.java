@@ -80,7 +80,7 @@ public class UserTestEnv {
 
     static ParentEntity newParentEntity() {
         return ParentEntityVBuilder.newBuilder()
-                                   .setOrgunit(orgUnitId())
+                                   .setOrgUnit(orgUnitId())
                                    .build();
     }
 

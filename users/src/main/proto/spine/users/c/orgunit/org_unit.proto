@@ -40,7 +40,6 @@ import "spine/users/values.proto";
 //
 message OrgUnit {
     option (entity).kind = AGGREGATE;
-    option (required_field) = "unit|organization";
 
     OrgUnitId id = 1;
 

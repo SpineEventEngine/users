@@ -10,15 +10,13 @@ import com.google.protobuf.Message;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.OrganizationId;
-import io.spine.users.c.group.Group;
 
 import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrganizationId;
 
 /**
- * An implementation base for the {@link Group} aggregate command handler tests.
+ * An implementation base for the {@link Organization} aggregate command handler tests.
  *
- * @param <C>
- *         the type of the command being tested
+ * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
 abstract class OrgCommandTest<C extends Message>
