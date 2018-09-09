@@ -7,9 +7,6 @@
 package io.spine.users.c.user;
 
 import io.spine.testing.server.entity.given.Given;
-import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserVBuilder;
-import io.spine.users.c.user.UserAggregate;
 
 import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
@@ -27,7 +24,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  *
  * @author Vladyslav Lubenskyi
  */
-public class TestUserFactory {
+final class TestUserFactory {
 
     /**
      * Prevents instantiation.

@@ -19,10 +19,10 @@ import io.spine.users.c.signin.SignUserOutVBuilder;
  *
  * @author Vladyslav Lubenskyi
  */
-public class SignInTestCommands {
+public final class SignInTestCommands {
 
     /**
-     * Prevents direct instantiation.
+     * Prevents instantiation.
      */
     private SignInTestCommands() {
     }

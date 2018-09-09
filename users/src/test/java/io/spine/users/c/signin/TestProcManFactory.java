@@ -4,14 +4,12 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin.given;
+package io.spine.users.c.signin;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
-import io.spine.users.c.signin.SignIn;
 import io.spine.users.c.signin.SignIn.Status;
-import io.spine.users.c.signin.SignInPm;
-import io.spine.users.c.signin.SignInVBuilder;
+import io.spine.users.c.signin.given.SignInTestEnv;
 import io.spine.users.c.user.UserAggregate;
 
 /**
@@ -19,7 +17,7 @@ import io.spine.users.c.user.UserAggregate;
  *
  * @author Vladyslav Lubenskyi
  */
-public class TestProcManFactory {
+final class TestProcManFactory {
 
     /**
      * Prevents direct instantiation.

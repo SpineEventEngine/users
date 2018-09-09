@@ -18,59 +18,53 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.c.role;
 
 import io.spine.testing.server.entity.given.Given;
-import io.spine.users.OrgUnitId;
+import io.spine.users.RoleId;
 
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeValue;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitOwner;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
+import static io.spine.users.c.role.given.RoleTestEnv.roleName;
+import static io.spine.users.c.role.given.RoleTestEnv.roleParent;
 
 /**
- * A factory for creating test {@linkplain OrgUnitAggregate OrgUnit aggregates}.
+ * A factory for creating test {@linkplain RoleAggregate Role aggregates}.
  *
  * @author Vladyslav Lubenskyi
  */
-final class TestOrgUnitFactory {
+final class TestRoleFactory {
 
     /**
      * Prevents instantiation.
      */
-    private TestOrgUnitFactory() {
+    private TestRoleFactory() {
     }
 
     /**
      * Creates a new instance of the aggregate with the default state.
      */
-    static OrgUnitAggregate createEmptyAggregate(OrgUnitId id) {
-        return new OrgUnitAggregate(id);
+    static RoleAggregate createEmptyAggregate(RoleId id) {
+        return new RoleAggregate(id);
     }
 
     /**
      * Creates a new instance of the aggregate with the filled state.
      */
-    static OrgUnitAggregate createAggregate(OrgUnitId id) {
+    static RoleAggregate createAggregate(RoleId id) {
         return aggregate(state(id).build());
     }
 
-    private static OrgUnitAggregate aggregate(OrgUnit state) {
-        return Given.aggregateOfClass(OrgUnitAggregate.class)
+    private static RoleAggregate aggregate(Role state) {
+        return Given.aggregateOfClass(RoleAggregate.class)
                     .withState(state)
                     .withId(state.getId())
                     .build();
     }
 
-    private static OrgUnitVBuilder state(OrgUnitId id) {
-        return OrgUnitVBuilder.newBuilder()
-                              .setId(id)
-                              .setOwner(orgUnitOwner())
-                              .setParentEntity(orgUnitParentEntity())
-                              .setDomain(orgUnitDomain())
-                              .setDisplayName(orgUnitName())
-                              .putAttributes(orgUnitAttributeName(), orgUnitAttributeValue());
+    private static RoleVBuilder state(RoleId id) {
+        return RoleVBuilder.newBuilder()
+                           .setId(id)
+                           .setDisplayName(roleName())
+                           .setBelongsTo(roleParent());
     }
+
 }

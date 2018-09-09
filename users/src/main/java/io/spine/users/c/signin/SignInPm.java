@@ -75,8 +75,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     /**
      * @see ProcessManager#ProcessManager(Object)
      */
-    @VisibleForTesting
-    public SignInPm(UserId id) {
+    SignInPm(UserId id) {
         super(id);
     }
 

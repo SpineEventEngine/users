@@ -37,7 +37,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
  *
  * @author Vladyslav Lubenskyi
  */
-public class TestGroupFactory {
+final class TestGroupFactory {
 
     /**
      * Prevents instantiation.

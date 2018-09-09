@@ -17,24 +17,19 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
 
 // The event is emitted when a new role is created.
 //
 message RoleCreated {
-    option (required_field) = "organization|org_unit";
 
     RoleId id = 1;
 
     // The name of the role to display on UI.
     string display_name = 2 [(required) = true];
 
-    // A part of the organization this role belongs to.
-    oneof belongs_to {
-
-        OrganizationId organization = 3;
-
-        OrgUnitId org_unit = 4;
-    }
+    // An organization or organizational unit the this role belongs to.
+    ParentEntity belongs_to = 3;
 }
 
 // The event is emitted when a role is deleted.

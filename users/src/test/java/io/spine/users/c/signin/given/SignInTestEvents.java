@@ -22,10 +22,10 @@ import static io.spine.users.c.user.User.Status.ACTIVE;
  *
  * @author Vladyslav Lubenskyi
  */
-public class SignInTestEvents {
+public final class SignInTestEvents {
 
     /**
-     * Prevents direct instantiation.
+     * Prevents instantiation.
      */
     private SignInTestEvents() {
     }

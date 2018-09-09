@@ -33,12 +33,12 @@ import io.spine.users.c.AggregateEventFactory;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for event factory.
-class OrgUnitEventFactory extends AggregateEventFactory {
+final class OrgUnitEventFactory extends AggregateEventFactory {
 
     /**
      * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
      */
-    protected OrgUnitEventFactory(ActorContext actorContext) {
+    private OrgUnitEventFactory(ActorContext actorContext) {
         super(actorContext);
     }
 

@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.c.signin.FailureReason.SIGN_IN_NOT_ALLOWED;
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestCommands.signInCommand;
-import static io.spine.users.c.signin.given.TestProcManFactory.createEmptyProcMan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

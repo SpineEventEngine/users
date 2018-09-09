@@ -31,12 +31,12 @@ import io.spine.users.c.AggregateEventFactory;
  *
  * @author Vladyslav Lubenskyi
  */
-class OrganizationEventFactory extends AggregateEventFactory {
+final class OrganizationEventFactory extends AggregateEventFactory {
 
     /**
      * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
      */
-    protected OrganizationEventFactory(ActorContext actorContext) {
+    private OrganizationEventFactory(ActorContext actorContext) {
         super(actorContext);
     }
 

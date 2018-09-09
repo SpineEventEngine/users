@@ -50,10 +50,10 @@ import static org.mockito.Mockito.when;
  *
  * @author Vladyslav Lubenskyi
  */
-public class SignInTestEnv {
+public final class SignInTestEnv {
 
     /**
-     * Prevents direct instantiation.
+     * Prevents instantiation.
      */
     private SignInTestEnv() {
     }

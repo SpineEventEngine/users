@@ -53,7 +53,7 @@ import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrgUnitTestCommands {
+public final class OrgUnitTestCommands {
 
     /**
      * Prevents instantiation.

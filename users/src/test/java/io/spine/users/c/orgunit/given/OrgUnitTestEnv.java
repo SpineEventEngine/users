@@ -42,7 +42,7 @@ import static io.spine.protobuf.AnyPacker.pack;
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrgUnitTestEnv {
+public final class OrgUnitTestEnv {
 
     /**
      * Prevents instantiation.

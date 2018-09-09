@@ -18,16 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.c.role;
 
 import io.spine.server.aggregate.AggregateRepository;
-import io.spine.users.OrgUnitId;
+import io.spine.users.RoleId;
 
 /**
- * The repository for {@link OrgUnitAggregate organizational units}.
+ * The repository for {@linkplain RoleAggregate Roles}.
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrgUnitAggregateRepository
-        extends AggregateRepository<OrgUnitId, OrgUnitAggregate> {
+public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAggregate> {
+
 }

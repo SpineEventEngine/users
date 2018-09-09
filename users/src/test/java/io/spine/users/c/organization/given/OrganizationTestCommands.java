@@ -50,7 +50,7 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrganizationTestCommands {
+public final class OrganizationTestCommands {
 
     /**
      * Prevents instantiation.

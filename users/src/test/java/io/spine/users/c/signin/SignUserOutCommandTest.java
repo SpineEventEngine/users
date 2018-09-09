@@ -9,9 +9,9 @@ package io.spine.users.c.signin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestCommands.signOutCommand;
 import static io.spine.users.c.signin.given.SignInTestEnv.userId;
-import static io.spine.users.c.signin.given.TestProcManFactory.createEmptyProcMan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

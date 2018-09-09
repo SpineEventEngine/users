@@ -18,16 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.c.role;
 
-import io.spine.server.aggregate.AggregateRepository;
-import io.spine.users.OrgUnitId;
+import com.google.protobuf.Message;
+import io.spine.server.entity.Repository;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.users.RoleId;
+
+import static io.spine.users.c.role.given.RoleTestEnv.newRoleId;
 
 /**
- * The repository for {@link OrgUnitAggregate organizational units}.
+ * An implementation base for the {@link Role} aggregate command handler tests.
  *
+ * @param <C>
+ *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-public class OrgUnitAggregateRepository
-        extends AggregateRepository<OrgUnitId, OrgUnitAggregate> {
+public class RoleCommandTest<C extends Message>
+        extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
+
+    static final RoleId ROLE_ID = newRoleId();
+
+    RoleCommandTest(C commandMessage) {
+        super(ROLE_ID, commandMessage);
+    }
+
+    @Override
+    protected Repository<RoleId, RoleAggregate> createEntityRepository() {
+        return new RoleAggregateRepository();
+    }
 }

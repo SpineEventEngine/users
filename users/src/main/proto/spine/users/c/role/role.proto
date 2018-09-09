@@ -17,31 +17,26 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
 
-// A role that can be assigned to users and groups to perform role-based access control.
+// A role that can be assigned to users and groups for access control purposes.
 //
 // A `Role` reflects a particular function or a functional role of users or/and groups
 // inside of an organization or organizational unit.
 //
-// Please, see the `Role` usage examples:
+// Usage examples:
 //
 // * `Developers` group may have the following roles: ["github-contributor", "test-server-admin"];
-// * `John 'External Auditor' Smith` user may have the following role: "accouning-papers-reader".
+// * `John 'The External Auditor' Smith` user may have the following role: "account\ing-papers-reader".
 //
 message Role {
     option (entity).kind = AGGREGATE;
-    option (required_field) = "organization|org_unit";
 
     spine.users.RoleId id = 1;
 
     // The name of a role to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // A part of the organization this role belongs to.
-    oneof belongs_to {
-
-        spine.users.OrganizationId organization = 3;
-
-        spine.users.OrgUnitId org_unit = 4;
-    }
+    // An organization or organizational unit the this role belongs to.
+    ParentEntity belongs_to = 3;
 }

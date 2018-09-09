@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.c.signin.TestProcManFactory.nonEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestEvents.userCreated;
-import static io.spine.users.c.signin.given.TestProcManFactory.nonEmptyProcMan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

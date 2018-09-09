@@ -35,7 +35,7 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
  *
  * @author Vladyslav Lubenskyi
  */
-public class TestOrganizationFactory {
+final class TestOrganizationFactory {
 
     /**
      * Prevents instantiation.
