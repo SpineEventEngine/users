@@ -29,7 +29,7 @@ import "spine/users/user_profile.proto";
 message CreateUser {
     option (events) = "UserCreated";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The user name to be displayed on UI.
     string display_name = 2 [(required) = true];
@@ -58,7 +58,7 @@ message CreateUser {
 message MoveUser {
     option (events) = "UserMoved";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The new parent entity in the organizational structure.
     ParentEntity new_parent_entity = 2 [(required) = true];
@@ -69,7 +69,7 @@ message MoveUser {
 message JoinGroup {
     option (events) = "UserJoinedGroup";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of a group.
     GroupId group_id = 2 [(required) = true];
@@ -80,7 +80,7 @@ message JoinGroup {
 message LeaveGroup {
     option (events) = "UserLeftGroup";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of a group.
     GroupId group_id = 2 [(required) = true];
@@ -91,7 +91,7 @@ message LeaveGroup {
 message DeleteUser {
     option (events) = "UserDeleted";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 }
 
 // The command to assign a role to a user.
@@ -99,7 +99,7 @@ message DeleteUser {
 message AssignRoleToUser {
     option (events) = "RoleAssignedToUser";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of a role to assign.
     RoleId role_id = 2 [(required) = true];
@@ -110,7 +110,7 @@ message AssignRoleToUser {
 message UnassignRoleFromUser {
     option (events) = "RoleUnassignedFromUser";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of a role to unassign.
     RoleId role_id = 2 [(required) = true];
@@ -123,7 +123,7 @@ message UnassignRoleFromUser {
 message AddUserAttribute {
     option (events) = "UserAttributeAdded";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // An attribute name.
     string name = 2 [(required) = true];
@@ -137,7 +137,7 @@ message AddUserAttribute {
 message RemoveUserAttribute {
     option (events) = "UserAttributeRemoved";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The name of the attribute to remove.
     string name = 2 [(required) = true];
@@ -146,10 +146,9 @@ message RemoveUserAttribute {
 // The command to update a user attribute.
 //
 message UpdateUserAttribute {
-
     option (events) = "UserAttributeUpdated";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // An attribute name.
     string name = 2 [(required) = true];
@@ -163,7 +162,7 @@ message UpdateUserAttribute {
 message ChangeUserStatus {
     option (events) = "UserStatusChanged";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The new status.
     User.Status status = 2 [(required) = true];
@@ -174,7 +173,7 @@ message ChangeUserStatus {
 message AddSecondaryAuthIdentity {
     option (events) = "SecondaryAuthIdentityAdded";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The identity to add.
     UserAuthIdentity identity = 2 [(required) = true];
@@ -185,7 +184,7 @@ message AddSecondaryAuthIdentity {
 message RemoveSecondaryAuthIdentity {
     option (events) = "SecondaryAuthIdentityRemoved";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The user identifier as specified by the authentication provider.
     string user_id = 2 [(required) = true];
@@ -199,8 +198,41 @@ message RemoveSecondaryAuthIdentity {
 message ChangePrimaryAuthIdentity {
     option (events) = "PrimaryAuthIdentityChanged";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The new primary identity.
     UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The command to rename a user.
+//
+message RenameUser {
+    option (events) = "UserRenamed";
+
+    core.UserId id = 1;
+
+    // A new name of a user.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to update a user profile.
+//
+message UpdateUserProfile {
+    option (events) = "UserProfileUpdated";
+
+    core.UserId id = 1;
+
+    // An updated version of a profile.
+    UserProfile updated_profile = 2 [(required) = true];
+}
+
+// The command to update a user status.
+//
+message UpdateUserStatus {
+    option (events) = "UserStatusUpdated";
+
+    core.UserId id = 1;
+
+    // A new status of a user.
+    User.Status new_status = 2 [(required) = true];
 }

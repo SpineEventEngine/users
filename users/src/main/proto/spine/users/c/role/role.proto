@@ -32,7 +32,7 @@ import "spine/users/values.proto";
 message Role {
     option (entity).kind = AGGREGATE;
 
-    spine.users.RoleId id = 1;
+    users.RoleId id = 1;
 
     // The name of a role to be displayed on UI.
     string display_name = 2 [(required) = true];

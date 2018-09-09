@@ -33,7 +33,7 @@ message CreateOrgUnit {
     string display_name = 2 [(required) = true];
 
     // An interent domain of the orgunit.
-    spine.net.InternetDomain domain = 3;
+    net.InternetDomain domain = 3;
 
     // The parent entity in the organizational structure.
     ParentEntity parent_entity = 4 [(required) = true];
@@ -42,7 +42,7 @@ message CreateOrgUnit {
     map<string, google.protobuf.Any> attributes = 5;
 
     // The orgunit owner.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 }
 
 // The command to change the owner of an orgunit.
@@ -53,7 +53,7 @@ message ChangeOrgUnitOwner {
     OrgUnitId id = 1;
 
     // The ID of the owner.
-    spine.core.UserId new_owner = 2 [(required) = true];
+    core.UserId new_owner = 2 [(required) = true];
 }
 
 // The command to move an orgunit from one organization or orgunit to another.
@@ -104,7 +104,6 @@ message RemoveOrgUnitAttribute {
 // The command to update an orgunit attribute.
 //
 message UpdateOrgUnitAttribute {
-
     option (events) = "OrgUnitAttributeUpdated";
 
     OrgUnitId id = 1;
@@ -114,4 +113,26 @@ message UpdateOrgUnitAttribute {
 
     // A new attribute value.
     google.protobuf.Any new_value = 3 [(required) = true];
+}
+
+// The command to rename an orgunit.
+//
+message RenameOrgUnit {
+    option (events) = "OrgUnitRenamed";
+
+    OrgUnitId id = 1;
+
+    // A new name of the orgunit.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to change an orgunit domain.
+//
+message ChangeOrgUnitDomain {
+    option (events) = "OrgUnitDomainChanged";
+
+    OrgUnitId id = 1;
+
+    // A new domain of the orgunit.
+    net.InternetDomain new_domain = 2 [(required) = true];
 }

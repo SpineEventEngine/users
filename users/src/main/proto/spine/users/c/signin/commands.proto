@@ -24,7 +24,7 @@ import "spine/users/c/signin/values.proto";
 //
 message SignUserIn {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The authentication identity to sign-in with.
     UserAuthIdentity identity = 2 [(required) = true];
@@ -35,7 +35,7 @@ message SignUserIn {
 message SignUserOut {
     option (events) = "SignOutCompleted";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 }
 
 // The command to finish the sign-in process.
@@ -45,7 +45,7 @@ message SignUserOut {
 message FinishSignIn {
     option (events) = "SignInCompleted, SignInFailed";
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // Indicates if the sign-in was successfull or not.
     bool successfull = 2;

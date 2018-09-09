@@ -33,16 +33,16 @@ message CreateOrganization {
     string display_name = 2 [(required) = true];
 
     // The domain of the organization.
-    spine.net.InternetDomain domain = 3;
+    net.InternetDomain domain = 3;
 
     // The attributes of the organization.
     map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
-    spine.core.TenantId tenant = 5 [(required) = true];
+    core.TenantId tenant = 5 [(required) = true];
 
     // An organization owner.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 }
 
 // The command to change the owner of an organization.
@@ -53,7 +53,7 @@ message ChangeOrganizationOwner {
     OrganizationId id = 1;
 
     // The ID of the new owner.
-    spine.core.UserId new_owner = 2 [(required) = true];
+    core.UserId new_owner = 2 [(required) = true];
 }
 
 // The command to delete an organization.
@@ -94,7 +94,6 @@ message RemoveOrganizationAttribute {
 // The command to update an organization attribute.
 //
 message UpdateOrganizationAttribute {
-
     option (events) = "OrganizationAttributeUpdated";
 
     OrganizationId id = 1;
@@ -104,4 +103,37 @@ message UpdateOrganizationAttribute {
 
     // A new attribute value.
     google.protobuf.Any new_value = 3 [(required) = true];
+}
+
+// The command to rename an organization.
+//
+message RenameOrganization {
+    option (events) = "OrganizationRenamed";
+
+    OrganizationId id = 1;
+
+    // A new name of the organization.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to change an organization domain.
+//
+message ChangeOrganizationDomain {
+    option (events) = "OrganizationDomainChanged";
+
+    OrganizationId id = 1;
+
+    // A new domain of the organization.
+    net.InternetDomain new_domain = 2 [(required) = true];
+}
+
+// The command to change an organization tenant.
+//
+message ChangeOrganizationTenant {
+    option (events) = "OrganizationTenantChanged";
+
+    OrganizationId id = 1;
+
+    // A new tenant associated with the organization.
+    core.TenantId new_tenant = 2 [(required) = true];
 }

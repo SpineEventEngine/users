@@ -32,7 +32,7 @@ message OrgUnitCreated {
     string display_name = 2 [(required) = true];
 
     // An interent domain of the orgunit.
-    spine.net.InternetDomain domain = 3;
+    net.InternetDomain domain = 3;
 
     // The parent entity in the organizational structure.
     ParentEntity parent_entity = 4 [(required) = true];
@@ -41,7 +41,7 @@ message OrgUnitCreated {
     map<string, google.protobuf.Any> attributes = 5;
 
     // The orgunit owner.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 }
 
 // The event is emitted when an owner of an orgunit is changed.
@@ -51,10 +51,10 @@ message OrgUnitOwnerChanged {
     OrgUnitId id = 1;
 
     // The ID of the new owner.
-    spine.core.UserId new_owner = 2 [(required) = true];
+    core.UserId new_owner = 2 [(required) = true];
 
     // The ID of the old owner.
-    spine.core.UserId old_owner = 3 [(required) = true];
+    core.UserId old_owner = 3 [(required) = true];
 }
 
 // The event is emitted when an orgunit is moved to another organization or orgunit.
@@ -117,4 +117,30 @@ message OrgUnitAttributeUpdated {
 
     // A new attribute value.
     google.protobuf.Any new_value = 5 [(required) = true];
+}
+
+// The event is emitted when an orgunit is renamed.
+//
+message OrgUnitRenamed {
+
+    OrgUnitId id = 1;
+
+    // A new name of the orgunit.
+    string new_name = 2 [(required) = true];
+
+    // An old name of the orgunit.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when an orgunit domain is changed.
+//
+message OrgUnitDomainChanged {
+
+    OrgUnitId id = 1;
+
+    // A new domain of the orgunit.
+    net.InternetDomain new_domain = 2 [(required) = true];
+
+    // An old domain of the orgunit.
+    net.InternetDomain old_domain = 3 [(required) = true];
 }

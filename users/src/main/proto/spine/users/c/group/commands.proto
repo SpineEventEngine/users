@@ -42,10 +42,10 @@ message CreateGroup {
     map<string, google.protobuf.Any> attributes = 5;
 
     // The owner of the group.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 
     // An email address of the group if applicable.
-    spine.net.EmailAddress email = 7;
+    net.EmailAddress email = 7;
 }
 
 // The command to change the owner of a group.
@@ -56,7 +56,7 @@ message ChangeGroupOwner {
     GroupId id = 1;
 
     // The ID of the owner.
-    spine.core.UserId new_owner = 2 [(required) = true];
+    core.UserId new_owner = 2 [(required) = true];
 }
 
 // The command to move a group from one organization or orgunit to another.
@@ -161,4 +161,26 @@ message UpdateGroupAttribute {
 
     // A new attribute value.
     google.protobuf.Any new_value = 3 [(required) = true];
+}
+
+// The command to renamed a group.
+//
+message RenameGroup {
+    option (events) = "GroupRenamed";
+
+    GroupId id = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to change a group email address.
+//
+message ChangeGroupEmail {
+    option (events) = "GroupEmailChanged";
+
+    GroupId id = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
 }

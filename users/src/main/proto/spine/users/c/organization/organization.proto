@@ -49,14 +49,14 @@ message Organization {
     string display_name = 2 [(required) = true];
 
     // The domain of the organization.
-    spine.net.InternetDomain domain = 3;
+    net.InternetDomain domain = 3;
 
     // The attributes of the organization.
     map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
-    spine.core.TenantId tenant = 5 [(required) = true];
+    core.TenantId tenant = 5 [(required) = true];
 
     // The organization owner.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 }

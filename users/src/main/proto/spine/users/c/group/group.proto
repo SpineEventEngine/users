@@ -77,7 +77,7 @@ message Group {
     //
     // The email address may be used to send messages to all the group members.
     //
-    spine.net.EmailAddress email = 3;
+    net.EmailAddress email = 3;
 
     // An entity in the organizational structure the group belongs to.
     ParentEntity parent_entity = 4 [(required) = true];
@@ -92,5 +92,5 @@ message Group {
     repeated RoleId role = 8;
 
     // The group owner.
-    spine.core.UserId owner = 9 [(required) = true];
+    core.UserId owner = 9 [(required) = true];
 }

@@ -53,7 +53,7 @@ import "spine/users/user_auth_identity.proto";
 message User {
     option (entity).kind = AGGREGATE;
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];

@@ -29,7 +29,7 @@ import "spine/users/user_profile.proto";
 //
 message UserCreated {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The user name to be displayed on UI.
     string display_name = 2 [(required) = true];
@@ -60,7 +60,7 @@ message UserCreated {
 //
 message UserMoved {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The new parent entity in the organizational structure.
     ParentEntity new_parent_entity = 2 [(required) = true];
@@ -73,27 +73,27 @@ message UserMoved {
 //
 message UserJoinedGroup {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of the group.
-    spine.users.GroupId group_id = 2 [(required) = true];
+    users.GroupId group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a user left the group.
 //
 message UserLeftGroup {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of the group.
-    spine.users.GroupId group_id = 2 [(required) = true];
+    users.GroupId group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a user is deleted.
 //
 message UserDeleted {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The date and time when user was deleted.
     spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
@@ -103,27 +103,27 @@ message UserDeleted {
 //
 message RoleAssignedToUser {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of the assigned role.
-    spine.users.RoleId role_id = 2 [(required) = true];
+    users.RoleId role_id = 2 [(required) = true];
 }
 
 // The event is emitted when a role is unassigned from user.
 //
 message RoleUnassignedFromUser {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The ID of the unassigned role.
-    spine.users.RoleId role_id = 2 [(required) = true];
+    users.RoleId role_id = 2 [(required) = true];
 }
 
 // The event is emitted when an attribute of the user is added.
 //
 message UserAttributeAdded {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // An attribute name.
     string name = 2 [(required) = true];
@@ -136,7 +136,7 @@ message UserAttributeAdded {
 //
 message UserAttributeRemoved {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // An attribute name.
     string name = 2 [(required) = true];
@@ -149,7 +149,7 @@ message UserAttributeRemoved {
 //
 message UserAttributeUpdated {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // An attribute name.
     string name = 2 [(required) = true];
@@ -165,7 +165,7 @@ message UserAttributeUpdated {
 //
 message UserStatusChanged {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The old status.
     User.Status old_status = 2 [(required) = true];
@@ -178,7 +178,7 @@ message UserStatusChanged {
 //
 message UserSignedIn {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The identity used for sign-in.
     UserAuthIdentity identity = 2;
@@ -191,7 +191,7 @@ message UserSignedIn {
 //
 message UserSignedOut {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The time and date when user signed out.
     spine.time.ZonedDateTime when_signed_out = 3;
@@ -201,7 +201,7 @@ message UserSignedOut {
 //
 message SecondaryAuthIdentityAdded {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The added identity.
     UserAuthIdentity identity = 2 [(required) = true];
@@ -211,7 +211,7 @@ message SecondaryAuthIdentityAdded {
 //
 message SecondaryAuthIdentityRemoved {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The removed identity.
     UserAuthIdentity identity = 2 [(required) = true];
@@ -221,8 +221,44 @@ message SecondaryAuthIdentityRemoved {
 //
 message PrimaryAuthIdentityChanged {
 
-    spine.core.UserId id = 1;
+    core.UserId id = 1;
 
     // The new primary authentication identity.
     UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The event is emitted when a user is renamed.
+//
+message UserRenamed {
+
+    core.UserId id = 1;
+
+    // A new name of a user.
+    string new_name = 2 [(required) = true];
+
+    // An old name of a user.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when a user profile is updated.
+//
+message UserProfileUpdated {
+
+    core.UserId id = 1;
+
+    // An updated version of a profile.
+    UserProfile updated_profile = 2 [(required) = true];
+}
+
+// The event is emitted when a user status updated.
+//
+message UserStatusUpdated {
+
+    core.UserId id = 1;
+
+    // A new status of a user.
+    User.Status new_status = 2 [(required) = true];
+
+    // An old status of a user.
+    User.Status old_status = 3 [(required) = true];
 }

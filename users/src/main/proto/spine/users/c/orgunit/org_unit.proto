@@ -50,11 +50,11 @@ message OrgUnit {
     ParentEntity parent_entity = 3 [(required) = true];
 
     // An interent domain of the orgunit.
-    spine.net.InternetDomain domain = 4;
+    net.InternetDomain domain = 4;
 
     // The attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
 
     // The orgunit owner.
-    spine.core.UserId owner = 6 [(required) = true];
+    core.UserId owner = 6 [(required) = true];
 }
