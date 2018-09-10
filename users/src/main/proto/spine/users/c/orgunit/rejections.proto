@@ -23,6 +23,6 @@ message OrgUnitAttributeDoesNotExist {
 
     OrgUnitId id = 1;
 
-    // The name of the attribute.
+    // A name of the attribute.
     string attribute_name = 2 [(required) = true];
 }

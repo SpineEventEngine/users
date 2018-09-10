@@ -31,28 +31,28 @@ message UserCreated {
 
     core.UserId id = 1;
 
-    // The user name to be displayed on UI.
+    // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to the user directly (aka not propagated by a group membership).
+    // Roles assigned to the user directly (aka not propagated by a group membership).
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the user belongs to, if applicable.
     ParentEntity parent_entity = 4;
 
-    // The attributes of the user.
+    // Attributes of the user.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // Primary authentication identity of the user.
+    // The primary authentication identity of the user.
     UserAuthIdentity primary_identity = 6 [(required) = true];
 
-    // The user profile.
+    // A user profile.
     UserProfile profile = 7;
 
-    // The initial status of the user;
+    // The current status of the user.
     User.Status status = 8 [(required) = true];
 
-    // The date and time when user was created.
+    // A date and a time when user was created.
     spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
@@ -62,10 +62,10 @@ message UserMoved {
 
     core.UserId id = 1;
 
-    // The new parent entity in the organizational structure.
+    // A new parent entity in the organizational structure.
     ParentEntity new_parent_entity = 2 [(required) = true];
 
-    // The former parent entity in the organizational structure.
+    // A former parent entity in the organizational structure.
     ParentEntity old_parent_entity = 3 [(required) = true];
 }
 
@@ -75,7 +75,7 @@ message UserJoinedGroup {
 
     core.UserId id = 1;
 
-    // The ID of the group.
+    // An ID of the group.
     users.GroupId group_id = 2 [(required) = true];
 }
 
@@ -85,7 +85,7 @@ message UserLeftGroup {
 
     core.UserId id = 1;
 
-    // The ID of the group.
+    // An ID of the group.
     users.GroupId group_id = 2 [(required) = true];
 }
 
@@ -95,7 +95,7 @@ message UserDeleted {
 
     core.UserId id = 1;
 
-    // The date and time when user was deleted.
+    // A date and a time when user was deleted.
     spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
 }
 
@@ -105,7 +105,7 @@ message RoleAssignedToUser {
 
     core.UserId id = 1;
 
-    // The ID of the assigned role.
+    // An ID of the assigned role.
     users.RoleId role_id = 2 [(required) = true];
 }
 
@@ -115,7 +115,7 @@ message RoleUnassignedFromUser {
 
     core.UserId id = 1;
 
-    // The ID of the unassigned role.
+    // An ID of the unassigned role.
     users.RoleId role_id = 2 [(required) = true];
 }
 
@@ -167,10 +167,10 @@ message UserStatusChanged {
 
     core.UserId id = 1;
 
-    // The old status.
+    // An old status.
     User.Status old_status = 2 [(required) = true];
 
-    // The new status.
+    // A new status.
     User.Status new_status = 3 [(required) = true];
 }
 
@@ -180,10 +180,10 @@ message UserSignedIn {
 
     core.UserId id = 1;
 
-    // The identity used for sign-in.
+    // An identity used for sign-in.
     UserAuthIdentity identity = 2;
 
-    // The time and date when user signed in.
+    // A date and a time when the user signed in.
     spine.time.ZonedDateTime when_signed_in = 3;
 }
 
@@ -193,7 +193,7 @@ message UserSignedOut {
 
     core.UserId id = 1;
 
-    // The time and date when user signed out.
+    // A date and a time when the user signed out.
     spine.time.ZonedDateTime when_signed_out = 3;
 }
 
@@ -203,7 +203,7 @@ message SecondaryAuthIdentityAdded {
 
     core.UserId id = 1;
 
-    // The added identity.
+    // A new secondary authentication identity.
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
@@ -223,7 +223,7 @@ message PrimaryAuthIdentityChanged {
 
     core.UserId id = 1;
 
-    // The new primary authentication identity.
+    // A new primary authentication identity.
     UserAuthIdentity identity = 2 [(required) = true];
 }
 

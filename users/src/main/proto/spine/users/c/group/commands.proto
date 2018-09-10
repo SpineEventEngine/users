@@ -29,19 +29,19 @@ message CreateGroup {
 
     GroupId id = 1;
 
-    // The name of a group to display on UI.
+    // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles assigned to the group directly (aka not propagated by a group membership).
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
     ParentEntity parent_entity = 4 [(required) = true];
 
-    // The attributes of the group.
+    // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // The owner of the group.
+    // An owner of the group.
     core.UserId owner = 6 [(required) = true];
 
     // An email address of the group if applicable.
@@ -55,7 +55,7 @@ message ChangeGroupOwner {
 
     GroupId id = 1;
 
-    // The ID of the owner.
+    // An ID of the owner.
     core.UserId new_owner = 2 [(required) = true];
 }
 
@@ -66,7 +66,7 @@ message MoveGroup {
 
     GroupId id = 1;
 
-    // The new parent entity in the organizational structure.
+    // A new parent entity in the organizational structure.
     ParentEntity new_parent_entity = 2 [(required) = true];
 }
 
@@ -85,7 +85,7 @@ message AddSuperGroup {
 
     GroupId id = 1;
 
-    // The ID of the upper group.
+    // An ID of the super group.
     GroupId super_group_id = 2 [(required) = true];
 }
 
@@ -96,7 +96,7 @@ message RemoveSuperGroup {
 
     GroupId id = 1;
 
-    // The ID of the upper group.
+    // An ID of the super group.
     GroupId super_group_id = 2 [(required) = true];
 }
 
@@ -107,7 +107,7 @@ message AssignRoleToGroup {
 
     GroupId id = 1;
 
-    // The ID of a role to assign.
+    // An ID of the role to assign.
     RoleId role_id = 2 [(required) = true];
 }
 
@@ -119,13 +119,13 @@ message UnassignRoleFromGroup {
 
     GroupId id = 1;
 
-    // The ID of a role to unassign.
+    // An ID of the role to unassign.
     RoleId role_id = 2 [(required) = true];
 }
 
 // The command to add a new attribute to a group.
 //
-// If attribute with this name already exists it will be overwritten.
+// If an attribute with this name already exists it will be overwritten.
 //
 message AddGroupAttribute {
     option (events) = "GroupAttributeAdded";
@@ -166,7 +166,7 @@ message UpdateGroupAttribute {
     google.protobuf.Any new_value = 3 [(required) = true];
 }
 
-// The command to renamed a group.
+// The command to rename a group.
 //
 message RenameGroup {
     option (events) = "GroupRenamed";

@@ -24,7 +24,7 @@ message UserAttributeDoesNotExist {
 
     core.UserId id = 1;
 
-    // The name of the attribute.
+    // A name of the attribute.
     string attribute_name = 2 [(required) = true];
 }
 
@@ -34,10 +34,10 @@ message AuthIdentityDoesNotExist {
 
     core.UserId id = 1;
 
-    // The authentication identity which wasn't found.
+    // An authentication identity that wasn't found.
     IdentityProviderId provider_id = 2 [(required) = true];
 
-    // The unique identifier of the authentication provider.
+    // A unique identifier of the authentication provider.
     string user_id = 3 [(required) = true];
 }
 
@@ -47,6 +47,6 @@ message RoleIsNotAssignedToUser {
 
     core.UserId id = 1;
 
-    // The ID of a role.
+    // An ID of a role.
     RoleId role_id = 2 [(required) = true];
 }

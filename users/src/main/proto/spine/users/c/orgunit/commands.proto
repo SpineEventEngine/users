@@ -29,19 +29,19 @@ message CreateOrgUnit {
 
     OrgUnitId id = 1;
 
-    // The name of an orgunit to display on UI.
+    // A name of the orgunit to display on UI.
     string display_name = 2 [(required) = true];
 
     // An interent domain of the orgunit.
     net.InternetDomain domain = 3;
 
-    // The parent entity in the organizational structure.
+    // A parent entity in the organizational structure.
     ParentEntity parent_entity = 4 [(required) = true];
 
-    // The attributes of the orgunit.
+    // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // The orgunit owner.
+    // An orgunit owner.
     core.UserId owner = 6 [(required) = true];
 }
 
@@ -52,7 +52,7 @@ message ChangeOrgUnitOwner {
 
     OrgUnitId id = 1;
 
-    // The ID of the owner.
+    // An ID of the owner.
     core.UserId new_owner = 2 [(required) = true];
 }
 
@@ -63,6 +63,7 @@ message MoveOrgUnit {
 
     OrgUnitId id = 1;
 
+    // A new parent entity of the orgunit.
     ParentEntity new_parent_entity = 2 [(required) = true];
 }
 
@@ -76,7 +77,7 @@ message DeleteOrgUnit {
 
 // The command to add a new attribute to an orgunit.
 //
-// If attribute with this name already exists it will be overwritten.
+// If an attribute with this name already exists it will be overwritten.
 //
 message AddOrgUnitAttribute {
     option (events) = "OrgUnitAttributeAdded";
@@ -98,7 +99,7 @@ message RemoveOrgUnitAttribute {
 
     OrgUnitId id = 1;
 
-    // The name of the attribute to remove.
+    // A name of the attribute to remove.
     string name = 2 [(required) = true];
 }
 

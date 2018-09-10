@@ -19,7 +19,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A role that can be assigned to users and groups for access control purposes.
+// A role that can be assigned to users and groups, to peform access control.
 //
 // A `Role` reflects a particular function or a functional role of users or/and groups
 // inside of an organization or organizational unit.
@@ -34,9 +34,9 @@ message Role {
 
     users.RoleId id = 1;
 
-    // The name of a role to be displayed on UI.
+    // A name of the role to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // An organization or organizational unit the this role belongs to.
+    // An organization or organizational unit the role belongs to.
     ParentEntity belongs_to = 3;
 }

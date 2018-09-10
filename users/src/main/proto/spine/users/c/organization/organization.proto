@@ -24,9 +24,9 @@ import "spine/users/identifiers.proto";
 
 // An organization of a tenant.
 //
-// The topmost entity in an organizational structure.
+// The topmost entity in organizational structure.
 //
-// An organization aggregates users and groups directly or in hierarchy of organizational units
+// An organization aggregates users and groups directly or in the hierarchy of organizational units
 // (`OrgUnit`).
 //
 // ## Organization Attributes
@@ -45,18 +45,18 @@ message Organization {
 
     OrganizationId id = 1;
 
-    // The name of an organization to display on UI.
+    // A name of the organization to display on UI.
     string display_name = 2 [(required) = true];
 
-    // The domain of the organization.
+    // A domain of the organization.
     net.InternetDomain domain = 3;
 
-    // The attributes of the organization.
+    // Attributes of the organization.
     map<string, google.protobuf.Any> attributes = 4;
 
     // A tenant associated with the organization.
     core.TenantId tenant = 5 [(required) = true];
 
-    // The organization owner.
+    // An organization owner.
     core.UserId owner = 6 [(required) = true];
 }

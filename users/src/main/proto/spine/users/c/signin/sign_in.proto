@@ -47,10 +47,10 @@ message SignIn {
     // The current status of the process.
     Status status = 2;
 
-    // The authentication identity to sign in with.
+    // An authentication identity to sign in with.
     UserAuthIdentity identity = 3 [(required) = true];
 
-    // The reason why the process failed, if applicable.
+    // A reason why the process failed, if applicable.
     SignInFailureReason failure_reason = 4;
 
     // A status of the sign-in process.

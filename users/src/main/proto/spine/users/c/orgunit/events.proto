@@ -28,19 +28,19 @@ message OrgUnitCreated {
 
     OrgUnitId id = 1;
 
-    // The name of the orgunit to display on UI.
+    // A name of the orgunit to display on UI.
     string display_name = 2 [(required) = true];
 
     // An interent domain of the orgunit.
     net.InternetDomain domain = 3;
 
-    // The parent entity in the organizational structure.
+    // A parent entity in the organizational structure.
     ParentEntity parent_entity = 4 [(required) = true];
 
-    // The attributes of the orgunit.
+    // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // The orgunit owner.
+    // An orgunit owner.
     core.UserId owner = 6 [(required) = true];
 }
 
@@ -50,10 +50,10 @@ message OrgUnitOwnerChanged {
 
     OrgUnitId id = 1;
 
-    // The ID of the new owner.
+    // An ID of the new owner.
     core.UserId new_owner = 2 [(required) = true];
 
-    // The ID of the old owner.
+    // An ID of the old owner.
     core.UserId old_owner = 3 [(required) = true];
 }
 
@@ -63,7 +63,7 @@ message OrgUnitMoved {
 
     OrgUnitId id = 1;
 
-    // The new parent entity in the organizational structure.
+    // A new parent entity in the organizational structure.
     ParentEntity new_parent_entity = 2 [(required) = true];
 
     // The former parent entity in the organizational structure.

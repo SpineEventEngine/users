@@ -23,16 +23,16 @@ message GroupAttributeDoesNotExist {
 
     GroupId id = 1;
 
-    // The name of the attribute.
+    // A name of the attribute.
     string attribute_name = 2 [(required) = true];
 }
 
-// The rejection is generation when trying to remove a role that is't assigned to a group.
+// The rejection is generated when trying to remove a role that isn't assigned to a group.
 //
 message RoleIsNotAssignedToGroup {
 
     GroupId id = 1;
 
-    // The ID of a role.
+    // An ID of the role.
     RoleId role_id = 2 [(required) = true];
 }

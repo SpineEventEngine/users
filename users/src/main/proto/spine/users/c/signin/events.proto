@@ -26,7 +26,7 @@ message SignInCompleted {
 
     core.UserId id = 1;
 
-    // The authentication identity used to sign-in.
+    // An authentication identity used to sign-in.
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
@@ -36,7 +36,7 @@ message SignInFailed {
 
     core.UserId id = 1;
 
-    // The authentication identity used to sign-in.
+    // An authentication identity used to sign-in.
     UserAuthIdentity identity = 2 [(required) = true];
 
     // Indicates why the sign-in failed.

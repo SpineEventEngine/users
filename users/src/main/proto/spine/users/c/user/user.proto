@@ -58,23 +58,23 @@ message User {
     // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // The roles assigned to a user directly (not obtained from a group membership).
+    // Roles assigned to a user directly (not obtained from a group membership).
     repeated RoleId role = 3;
 
-    // The group memberships of a user.
+    // Group memberships of a user.
     //
     repeated GroupId membership = 4;
 
     // An entity in the organizational structure a user belongs to, if applicable.
     ParentEntity parent_entity = 5;
 
-    // The attributes of a user.
+    // Attributes of a user.
     map<string, google.protobuf.Any> attributes = 6;
 
     // General profile information for a user.
     UserProfile profile = 7;
 
-    // A status of a user.
+    // The current status of a user.
     Status status = 8 [(required) = true];
 
     // The primary authentication identity of a user.
@@ -86,10 +86,10 @@ message User {
     //
     UserAuthIdentity primary_auth_identity = 9 [(required) = true];
 
-    // The secondary authentication identities of a user, used solely for authentication.
+    // Secondary authentication identities of a user, used solely for authentication.
     repeated UserAuthIdentity secondary_auth_identity = 10;
 
-    // The time and date when a user was created.
+    // A date and a time when a user was created.
     spine.time.ZonedDateTime when_created = 11;
 
     // A status of a user.
@@ -100,7 +100,7 @@ message User {
 
         // A user is created but not yet ready to work.
         //
-        // For example, the hasn't accepted an invitation yet, or hasn't finished registration.
+        // For example, the user hasn't accepted an invitation yet, or hasn't finished registration.
         //
         NOT_READY = 1;
 

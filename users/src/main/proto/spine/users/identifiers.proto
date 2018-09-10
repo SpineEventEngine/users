@@ -45,7 +45,7 @@ message OrgUnitId {
     string value = 1;
 }
 
-// A string-based identifer of an identity profile.
+// A string-based identifer of an authentication identity provider.
 //
 message IdentityProviderId {
 

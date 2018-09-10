@@ -25,10 +25,10 @@ message RoleCreated {
 
     RoleId id = 1;
 
-    // The name of the role to display on UI.
+    // A name of the role to display on UI.
     string display_name = 2 [(required) = true];
 
-    // An organization or organizational unit the this role belongs to.
+    // An organization or organizational unit the role belongs to.
     ParentEntity belongs_to = 3;
 }
 
@@ -45,10 +45,10 @@ message RoleRenamed {
 
     RoleId id = 1;
 
-    // The new name of a role.
+    // A new name of the role.
     string new_name = 2 [(required) = true];
 
-    // The old name of a role.
+    // A old name of the role.
     string old_name = 3 [(required) = true];
 }
 
@@ -58,9 +58,9 @@ message RoleParentChanged {
 
     RoleId id = 1;
 
-    // The new parent entity of a role.
+    // A new parent entity of the role.
     ParentEntity new_parent = 2 [(required) = true];
 
-    // The old parent entity of a role.
+    // The former parent entity of the role.
     ParentEntity old_parent = 3 [(required) = true];
 }

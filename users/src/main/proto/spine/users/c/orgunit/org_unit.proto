@@ -43,18 +43,18 @@ message OrgUnit {
 
     OrgUnitId id = 1;
 
-    // The name of an orgunit to be displayed on UI.
+    // A name of an orgunit to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // The parent entity in the organizational structure.
+    // A parent entity in the organizational structure.
     ParentEntity parent_entity = 3 [(required) = true];
 
     // An interent domain of the orgunit.
     net.InternetDomain domain = 4;
 
-    // The attributes of the orgunit.
+    // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // The orgunit owner.
+    // An orgunit owner.
     core.UserId owner = 6 [(required) = true];
 }

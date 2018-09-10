@@ -69,7 +69,7 @@ message Group {
 
     GroupId id = 1;
 
-    // The name of a group to display on UI.
+    // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
     // An email address of the group if applicable.
@@ -84,12 +84,12 @@ message Group {
     // Other groups this group is a member of.
     repeated GroupId membership = 6;
 
-    // The attributes of the group.
+    // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 7;
 
-    // The roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles assigned to the group directly (aka not propagated by a group membership).
     repeated RoleId role = 8;
 
-    // The group owner.
+    // A group owner.
     core.UserId owner = 9 [(required) = true];
 }
