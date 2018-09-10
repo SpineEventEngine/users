@@ -38,7 +38,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>An orgunit is the part of the {@linkplain OrganizationAggregate organization} or a larger
  * {@linkplain OrgUnitAggregate organizational unit} that aggregates users and groups.
  *
- * <h3>Orgunit Attributes
+ * <h3>Orgunit Attributes</h3>
  *
  * <p>To make organizational unit meet specific requirements of the application, it can be extended
  * using custom attributes.

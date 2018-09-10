@@ -35,13 +35,13 @@ import io.spine.users.c.orgunit.OrgUnitAggregate;
  * groups inside of an {@linkplain OrganizationAggregate organization} or
  * {@linkplain OrgUnitAggregate organizational unit}.
  *
- * <h3>Usage examples
+ * <h3>Usage examples</h3>
  *
  * <ul>
- * <li>{@code Developers} group may have the following roles:
- * {@code github-contributor, test-server-admin};
- * <li>{@code John 'The External Auditor' Smith} user may have the following role:
- * {@code accounting-papers-reader}.
+ *     <li>{@code Developers} group may have the following roles:
+ *         {@code github-contributor, test-server-admin};
+ *     <li>{@code John 'The External Auditor' Smith} user may have the following role:
+ *         {@code accounting-papers-reader}.
  * </ul>
  *
  * @author Vladyslav Lubenskyi

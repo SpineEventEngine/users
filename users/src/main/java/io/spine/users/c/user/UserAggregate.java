@@ -34,7 +34,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * An aggregate for user of the application, either a person or machine.
  *
- * <h3>Group And Roles
+ * <h3>Group And Roles</h3>
  *
  * <p>To reflect a user's functions and functional roles in the organization, the user can be
  * assigned multiple {@link Role Roles} (please, see {@link AssignRoleToUser} and
@@ -44,12 +44,12 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * can also join one or more {@link Group groups} (please, see {@link JoinGroup} and
  * {@link LeaveGroup} commands).
  *
- * <h3>Organizational Structure
+ * <h3>Organizational Structure</h3>
  *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
- * a single {@link Organization or single {@link OrgUnit} as a parent organizational entity.
+ * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
  *
- * <h3>User Attributes
+ * <h3>User Attributes</h3>
  *
  * <p>To make {@link UserAggregate} meet specific requirements of the application, it can be
  * extended by custom attributes.

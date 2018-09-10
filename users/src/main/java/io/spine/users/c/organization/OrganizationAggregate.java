@@ -38,7 +38,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>An organization aggregates users and groups directly or in hierarchy of
  * {@linkplain OrgUnit organizational units}.
  *
- * <h3>Organization Attributes
+ * <h3>Organization Attributes</h3>
  *
  * <p>To make {@link OrganizationAggregate} meet specific requirements of the application,
  * it can be extended by custom attributes.
@@ -46,13 +46,14 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>The following commands are available to work with the organization attributes:
  *
  * <ul>
- * <li>{@link AddOrganizationAttribute} to add a new attribute, or replace the existing one;
- * <li>{@link RemoveOrganizationAttribute} to remove an attribute;
- * <li>{@link UpdateOrganizationAttribute} to update an existing attribute.
+ *     <li>{@link AddOrganizationAttribute} to add a new attribute, or replace the existing one;
+ *     <li>{@link RemoveOrganizationAttribute} to remove an attribute;
+ *     <li>{@link UpdateOrganizationAttribute} to update an existing attribute.
  * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
+@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, OrganizationVBuilder> {
 

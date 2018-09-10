@@ -29,6 +29,8 @@ import io.spine.time.ZonedDateTimes;
 /**
  * The implementation base for aggregate event factories.
  *
+ * <p>An event factory is used to extract boilerplate code for creating events out of aggregates.
+ *
  * @author Vladyslav Lubenskyi
  */
 public class AggregateEventFactory {
@@ -40,14 +42,21 @@ public class AggregateEventFactory {
     }
 
     /**
-     * Obtains the current {@linkplain ActorContext actor context}.
+     * Returns the current moment in time in the timezone obtain from
+     * {@link ActorContext the actor context}.
+     *
+     * @return the current time in the actor's timezone
      */
-    protected ActorContext actorContext() {
-        return actorContext;
-    }
-
     protected ZonedDateTime now() {
         ZoneId zoneId = actorContext().getZoneId();
         return ZonedDateTimes.of(LocalDateTimes.now(), zoneId);
     }
+
+    /**
+     * Obtains the current {@linkplain ActorContext actor context}.
+     */
+    private ActorContext actorContext() {
+        return actorContext;
+    }
+
 }

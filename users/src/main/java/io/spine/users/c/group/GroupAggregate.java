@@ -46,17 +46,17 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
  *
- * <h3>Group Attributes
+ * <h3>Group Attributes</h3>
  *
- * <p>To make {@link GroupAggregate} meet specific requirements of the application, it can be extended
- * using custom attributes.
+ * <p>To make {@link GroupAggregate} meet specific requirements of the application, it can be
+ * extended using custom attributes.
  *
  * <p>The following commands are available to work with the group attributes:
  *
  * <ul>
- * <li>{@link AddGroupAttribute} to add a new attribute;
- * <li>{@link UpdateGroupAttribute} to update an existing attribute;
- * <li>{@link RemoveGroupAttribute} to remove an attribute.
+ *     <li>{@link AddGroupAttribute} to add a new attribute;
+ *     <li>{@link UpdateGroupAttribute} to update an existing attribute;
+ *     <li>{@link RemoveGroupAttribute} to remove an attribute.
  * </ul>
  *
  * @author Vladyslav Lubenskyi
