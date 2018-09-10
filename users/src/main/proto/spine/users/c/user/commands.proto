@@ -225,14 +225,3 @@ message UpdateUserProfile {
     // An updated version of a profile.
     UserProfile updated_profile = 2 [(required) = true];
 }
-
-// The command to update a user status.
-//
-message UpdateUserStatus {
-    option (events) = "UserStatusUpdated";
-
-    core.UserId id = 1;
-
-    // A new status of a user.
-    User.Status new_status = 2 [(required) = true];
-}

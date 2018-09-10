@@ -249,16 +249,3 @@ message UserProfileUpdated {
     // An updated version of a profile.
     UserProfile updated_profile = 2 [(required) = true];
 }
-
-// The event is emitted when a user status updated.
-//
-message UserStatusUpdated {
-
-    core.UserId id = 1;
-
-    // A new status of a user.
-    User.Status new_status = 2 [(required) = true];
-
-    // An old status of a user.
-    User.Status old_status = 3 [(required) = true];
-}

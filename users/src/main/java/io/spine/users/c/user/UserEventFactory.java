@@ -203,14 +203,6 @@ final class UserEventFactory extends AggregateEventFactory {
                                          .build();
     }
 
-    UserStatusUpdated updateStatus(UpdateUserStatus command, Status newStatus) {
-        return UserStatusUpdatedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setNewStatus(command.getNewStatus())
-                                        .setOldStatus(newStatus)
-                                        .build();
-    }
-
     UserRenamed renameUser(RenameUser command, String oldName) {
         return UserRenamedVBuilder.newBuilder()
                                   .setId(command.getId())

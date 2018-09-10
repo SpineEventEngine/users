@@ -174,11 +174,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         return events(context).updateProfile(command);
     }
 
-    @Assign
-    UserStatusUpdated handle(UpdateUserStatus command, CommandContext context) {
-        return events(context).updateStatus(command, getState().getStatus());
-    }
-
     @Apply
     void on(UserCreated event) {
         getBuilder().setId(event.getId())
@@ -286,11 +281,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     @Apply
     void on(UserProfileUpdated event) {
         getBuilder().setProfile(event.getUpdatedProfile());
-    }
-
-    @Apply
-    void on(UserStatusUpdated event) {
-        getBuilder().setStatus(event.getNewStatus());
     }
 
     private Optional<UserAuthIdentity> findAuthIdentity(RemoveSecondaryAuthIdentity command) {
