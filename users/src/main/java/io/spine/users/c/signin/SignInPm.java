@@ -45,7 +45,7 @@ import static java.util.Optional.of;
  * <ol>
  *     <li>{@link SignUserIn} command initializes the sign-in process.
  *     <li>If a {@linkplain UserAggregate user} with the given {@linkplain UserId ID} already exists
- *         an all checks pass {@link SignInCompleted} event is generated in response.
+ *         and all checks pass {@link SignInCompleted} event is generated in response.
  *     <li>Otherwise, the process manager creates a user and then attempts to
  *         {@linkplain SignUserIn sign user in} again.
  * </ol>
@@ -57,8 +57,8 @@ import static java.util.Optional.of;
  *         authentication identity;
  *     <li>an identity provider allows the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
- *     <li>the given authentication identity is
- *         {@linkplain io.spine.users.c.user.SecondaryAuthIdentityAdded associated}] with the user.
+ *     <li>the given authentication identity is associated with the user (that is, serves as the
+ *         primary or a secondary authentication identity).
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.
@@ -99,7 +99,6 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
         SignInVBuilder builder = getBuilder().setId(id)
                                              .setIdentity(identity);
-
         IdentityProviderBridge identityProvider = identityProviderOptional.get();
         if (!identityProvider.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));

@@ -57,5 +57,4 @@ public class AggregateEventFactory {
     private ActorContext actorContext() {
         return actorContext;
     }
-
 }

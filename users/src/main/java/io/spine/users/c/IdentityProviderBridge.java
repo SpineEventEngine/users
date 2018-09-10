@@ -30,7 +30,7 @@ import io.spine.users.UserProfile;
  * authentication providers supplied by the particular application.
  *
  * <p>For {@code Users}, an authentication provider serves as a data source and the single
- * source of truth about {@linkplain UserAuthIdentity user authentication identities}.</p>
+ * source of truth about {@linkplain UserAuthIdentity user authentication identities}.
  *
  * <p>This interface may be used both for application's own and remote identity
  * providers. For example:
@@ -50,7 +50,7 @@ public interface IdentityProviderBridge {
      *
      * @param identity an authentication identity to check
      * @return {@code true} if the given identity is indeed provided by the provider,
-     * {@code false} otherwise.
+     * {@code false} otherwise
      */
     boolean hasIdentity(UserAuthIdentity identity);
 
@@ -61,7 +61,7 @@ public interface IdentityProviderBridge {
      * active or has a permission to sign-in.
      *
      * @param identity an authentication identity to check
-     * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise.
+     * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise
      */
     boolean signInAllowed(UserAuthIdentity identity);
 

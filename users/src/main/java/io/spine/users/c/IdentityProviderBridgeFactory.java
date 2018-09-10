@@ -37,7 +37,7 @@ public abstract class IdentityProviderBridgeFactory {
      *
      * @param id a unique identifier of the identity provider
      * @return {@link IdentityProviderBridge} if the requested identity provider is supported,
-     * {@code Optional.empty()} otherwise.
+     * {@code Optional.empty()} otherwise
      */
     public abstract Optional<IdentityProviderBridge> get(IdentityProviderId id);
 }
