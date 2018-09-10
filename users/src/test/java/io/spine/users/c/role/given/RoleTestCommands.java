@@ -21,6 +21,8 @@
 package io.spine.users.c.role.given;
 
 import io.spine.users.RoleId;
+import io.spine.users.c.role.ChangeRoleParent;
+import io.spine.users.c.role.ChangeRoleParentVBuilder;
 import io.spine.users.c.role.CreateRole;
 import io.spine.users.c.role.CreateRoleVBuilder;
 import io.spine.users.c.role.DeleteRole;
@@ -30,6 +32,7 @@ import io.spine.users.c.role.RenameRoleVBuilder;
 import io.spine.users.c.role.RoleAggregate;
 
 import static io.spine.users.c.role.given.RoleTestEnv.newRoleName;
+import static io.spine.users.c.role.given.RoleTestEnv.newRoleParent;
 import static io.spine.users.c.role.given.RoleTestEnv.roleName;
 import static io.spine.users.c.role.given.RoleTestEnv.roleParent;
 
@@ -67,4 +70,10 @@ public final class RoleTestCommands {
                                  .build();
     }
 
+    public static ChangeRoleParent changeRoleParent(RoleId id) {
+        return ChangeRoleParentVBuilder.newBuilder()
+                                       .setId(id)
+                                       .setNewParent(newRoleParent())
+                                       .build();
+    }
 }

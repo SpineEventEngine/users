@@ -51,3 +51,16 @@ message RoleRenamed {
     // The old name of a role.
     string old_name = 3 [(required) = true];
 }
+
+// The event is emitted when an entity the role belongs to is changed.
+//
+message RoleParentChanged {
+
+    RoleId id = 1;
+
+    // The new parent entity of a role.
+    ParentEntity new_parent = 2 [(required) = true];
+
+    // The old parent entity of a role.
+    ParentEntity old_parent = 3 [(required) = true];
+}

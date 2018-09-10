@@ -51,3 +51,14 @@ message RenameRole {
     // The new name of a role.
     string new_name = 2 [(required) = true];
 }
+
+// The command to change an entity the role belongs to.
+//
+message ChangeRoleParent {
+    option (events) = "RoleParentChanged";
+
+    RoleId id = 1;
+
+    // The new parent entity of a role.
+    ParentEntity new_parent = 2 [(required) = true];
+}

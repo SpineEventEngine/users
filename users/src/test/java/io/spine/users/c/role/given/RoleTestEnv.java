@@ -20,6 +20,8 @@
 
 package io.spine.users.c.role.given;
 
+import io.spine.users.OrgUnitId;
+import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.ParentEntity;
@@ -63,9 +65,21 @@ public final class RoleTestEnv {
                                    .build();
     }
 
+    public static ParentEntity newRoleParent() {
+        return ParentEntityVBuilder.newBuilder()
+                                   .setOrgUnit(orgUnit())
+                                   .build();
+    }
+
     private static OrganizationId organization() {
         return OrganizationIdVBuilder.newBuilder()
                                      .setValue(newUuid())
                                      .build();
+    }
+
+    private static OrgUnitId orgUnit() {
+        return OrgUnitIdVBuilder.newBuilder()
+                                .setValue(newUuid())
+                                .build();
     }
 }

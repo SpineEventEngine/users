@@ -22,6 +22,7 @@ package io.spine.users.c.role;
 
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
+import io.spine.users.ParentEntity;
 import io.spine.users.c.AggregateEventFactory;
 
 /**
@@ -67,5 +68,13 @@ final class RoleEventFactory extends AggregateEventFactory {
                                   .setNewName(command.getNewName())
                                   .setOldName(oldName)
                                   .build();
+    }
+
+    RoleParentChanged changeParent(ChangeRoleParent command, ParentEntity oldParent) {
+        return RoleParentChangedVBuilder.newBuilder()
+                                        .setId(command.getId())
+                                        .setNewParent(command.getNewParent())
+                                        .setOldParent(oldParent)
+                                        .build();
     }
 }

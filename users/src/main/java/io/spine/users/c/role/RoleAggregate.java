@@ -70,6 +70,11 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
         return events(context).renameRole(command, getState().getDisplayName());
     }
 
+    @Assign
+    RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
+        return events(context).changeParent(command, getState().getBelongsTo());
+    }
+
     @Apply
     void on(RoleCreated event) {
         getBuilder().setId(event.getId())
@@ -87,6 +92,11 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Apply
     void on(RoleRenamed event) {
         getBuilder().setDisplayName(event.getNewName());
+    }
+
+    @Apply
+    void on(RoleParentChanged event) {
+        getBuilder().setBelongsTo(event.getNewParent());
     }
 
     private static RoleEventFactory events(CommandContext context) {
