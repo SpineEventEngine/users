@@ -109,6 +109,21 @@ public class OrganizationAggregate
         }
     }
 
+    @Assign
+    OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
+        return events(context).renameOrganization(command, getState().getDisplayName());
+    }
+
+    @Assign
+    OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
+        return events(context).changeDomain(command, getState().getDomain());
+    }
+
+    @Assign
+    OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
+        return events(context).changeTenant(command, getState().getTenant());
+    }
+
     @Apply
     void on(OrganizationCreated event) {
         getBuilder().setId(event.getId())
@@ -143,6 +158,21 @@ public class OrganizationAggregate
     void on(OrganizationAttributeUpdated event) {
         removeAttribute(event.getName());
         getBuilder().putAttributes(event.getName(), event.getNewValue());
+    }
+
+    @Apply
+    void on(OrganizationRenamed event) {
+        getBuilder().setDisplayName(event.getNewName());
+    }
+
+    @Apply
+    void on(OrganizationDomainChanged event) {
+        getBuilder().setDomain(event.getNewDomain());
+    }
+
+    @Apply
+    void on(OrganizationTenantChanged event) {
+        getBuilder().setTenant(event.getNewTenant());
     }
 
     private void removeAttribute(String attributeName) {

@@ -23,8 +23,12 @@ package io.spine.users.c.organization.given;
 import io.spine.users.OrganizationId;
 import io.spine.users.c.organization.AddOrganizationAttribute;
 import io.spine.users.c.organization.AddOrganizationAttributeVBuilder;
+import io.spine.users.c.organization.ChangeOrganizationDomain;
+import io.spine.users.c.organization.ChangeOrganizationDomainVBuilder;
 import io.spine.users.c.organization.ChangeOrganizationOwner;
 import io.spine.users.c.organization.ChangeOrganizationOwnerVBuilder;
+import io.spine.users.c.organization.ChangeOrganizationTenant;
+import io.spine.users.c.organization.ChangeOrganizationTenantVBuilder;
 import io.spine.users.c.organization.CreateOrganization;
 import io.spine.users.c.organization.CreateOrganizationVBuilder;
 import io.spine.users.c.organization.DeleteOrganization;
@@ -32,6 +36,8 @@ import io.spine.users.c.organization.DeleteOrganizationVBuilder;
 import io.spine.users.c.organization.OrganizationAggregate;
 import io.spine.users.c.organization.RemoveOrganizationAttribute;
 import io.spine.users.c.organization.RemoveOrganizationAttributeVBuilder;
+import io.spine.users.c.organization.RenameOrganization;
+import io.spine.users.c.organization.RenameOrganizationVBuilder;
 import io.spine.users.c.organization.UpdateOrganizationAttribute;
 import io.spine.users.c.organization.UpdateOrganizationAttributeVBuilder;
 
@@ -41,7 +47,10 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttribu
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeValue;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewDomain;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewName;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewOwner;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewTenant;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgOwner;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
 
@@ -104,6 +113,27 @@ public final class OrganizationTestCommands {
                                                   .setName(orgAttributeName())
                                                   .setNewValue(newOrgAttributeValue())
                                                   .build();
+    }
+
+    public static ChangeOrganizationDomain changeOrganizationDomain(OrganizationId id) {
+        return ChangeOrganizationDomainVBuilder.newBuilder()
+                                               .setId(id)
+                                               .setNewDomain(orgNewDomain())
+                                               .build();
+    }
+
+    public static ChangeOrganizationTenant changeOrganizationTenant(OrganizationId id) {
+        return ChangeOrganizationTenantVBuilder.newBuilder()
+                                               .setId(id)
+                                               .setNewTenant(orgNewTenant())
+                                               .build();
+    }
+
+    public static RenameOrganization renameOrganization(OrganizationId id) {
+        return RenameOrganizationVBuilder.newBuilder()
+                                         .setId(id)
+                                         .setNewName(orgNewName())
+                                         .build();
     }
 
 }

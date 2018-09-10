@@ -20,48 +20,48 @@
 
 package io.spine.users.c.organization;
 
-import io.spine.core.UserId;
+import io.spine.core.TenantId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
-import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationOwner;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationTenant;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeOrganizationOwner command should")
-class ChangeOrganizationOwnerTest extends OrgCommandTest<ChangeOrganizationOwner> {
+@DisplayName("ChangeOrganizationTenant command should")
+class ChangeOrganizationTenantTest extends OrgCommandTest<ChangeOrganizationTenant> {
 
-    ChangeOrganizationOwnerTest() {
+    ChangeOrganizationTenantTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce OrganizationOwnerChanged event")
+    @DisplayName("produce OrganizationTenantChanged event")
     void produceEvent() {
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
-        UserId oldOwner = aggregate.getState()
-                                   .getOwner();
-        expectThat(aggregate).producesEvent(OrganizationOwnerChanged.class, event -> {
+        TenantId oldTenant = aggregate.getState()
+                                      .getTenant();
+        expectThat(aggregate).producesEvent(OrganizationTenantChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewOwner(), event.getNewOwner());
-            assertEquals(oldOwner, event.getOldOwner());
+            assertEquals(message().getNewTenant(), event.getNewTenant());
+            assertEquals(oldTenant, event.getOldTenant());
         });
     }
 
     @Test
-    @DisplayName("change the owner")
+    @DisplayName("change the tenant")
     void changeState() {
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getOwner(), message().getNewOwner());
+            assertEquals(state.getTenant(), message().getNewTenant());
         });
     }
 
-    private static ChangeOrganizationOwner createMessage() {
-        return changeOrganizationOwner(ORG_ID);
+    private static ChangeOrganizationTenant createMessage() {
+        return changeOrganizationTenant(ORG_ID);
     }
 }

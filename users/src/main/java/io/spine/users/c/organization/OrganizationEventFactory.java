@@ -23,7 +23,9 @@ package io.spine.users.c.organization;
 import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
+import io.spine.core.TenantId;
 import io.spine.core.UserId;
+import io.spine.net.InternetDomain;
 import io.spine.users.c.AggregateEventFactory;
 
 /**
@@ -102,5 +104,31 @@ final class OrganizationEventFactory extends AggregateEventFactory {
                                                    .setNewValue(command.getNewValue())
                                                    .setOldValue(oldValue)
                                                    .build();
+    }
+
+    OrganizationRenamed renameOrganization(RenameOrganization command, String oldName) {
+        return OrganizationRenamedVBuilder.newBuilder()
+                                          .setId(command.getId())
+                                          .setNewName(command.getNewName())
+                                          .setOldName(oldName)
+                                          .build();
+    }
+
+    OrganizationDomainChanged changeDomain(ChangeOrganizationDomain command,
+                                           InternetDomain oldDomain) {
+        return OrganizationDomainChangedVBuilder.newBuilder()
+                                                .setId(command.getId())
+                                                .setNewDomain(command.getNewDomain())
+                                                .setOldDomain(oldDomain)
+                                                .build();
+    }
+
+    OrganizationTenantChanged changeTenant(ChangeOrganizationTenant command,
+                                           TenantId oldTenant) {
+        return OrganizationTenantChangedVBuilder.newBuilder()
+                                                .setId(command.getId())
+                                                .setNewTenant(command.getNewTenant())
+                                                .setOldTenant(oldTenant)
+                                                .build();
     }
 }

@@ -72,13 +72,31 @@ public final class OrganizationTestEnv {
         return "Test Organization 1";
     }
 
+    public static String orgNewName() {
+        return "Test Organization 1 - Renamed";
+    }
+
     public static InternetDomain orgDomain() {
         return InternetDomainVBuilder.newBuilder()
                                      .setValue("organization.com")
                                      .build();
     }
 
+    public static InternetDomain orgNewDomain() {
+        return InternetDomainVBuilder.newBuilder()
+                                     .setValue("organization-renamed.com")
+                                     .build();
+    }
+
     public static TenantId orgTenant() {
+        return TenantIdVBuilder.newBuilder()
+                               .setDomain(orgDomain())
+                               .setEmail(email())
+                               .setValue(newUuid())
+                               .build();
+    }
+
+    public static TenantId orgNewTenant() {
         return TenantIdVBuilder.newBuilder()
                                .setDomain(orgDomain())
                                .setEmail(email())

@@ -21,6 +21,10 @@
 package io.spine.users.c;
 
 import io.spine.core.ActorContext;
+import io.spine.time.LocalDateTimes;
+import io.spine.time.ZoneId;
+import io.spine.time.ZonedDateTime;
+import io.spine.time.ZonedDateTimes;
 
 /**
  * The implementation base for aggregate event factories.
@@ -40,5 +44,10 @@ public class AggregateEventFactory {
      */
     protected ActorContext actorContext() {
         return actorContext;
+    }
+
+    protected ZonedDateTime now() {
+        ZoneId zoneId = actorContext().getZoneId();
+        return ZonedDateTimes.of(LocalDateTimes.now(), zoneId);
     }
 }

@@ -20,48 +20,48 @@
 
 package io.spine.users.c.organization;
 
-import io.spine.core.UserId;
+import io.spine.net.InternetDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
-import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationOwner;
+import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationDomain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeOrganizationOwner command should")
-class ChangeOrganizationOwnerTest extends OrgCommandTest<ChangeOrganizationOwner> {
+@DisplayName("ChangeOrganizationDomain command should")
+class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDomain> {
 
-    ChangeOrganizationOwnerTest() {
+    ChangeOrganizationDomainTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce OrganizationOwnerChanged event")
+    @DisplayName("produce OrganizationDomainChanged event")
     void produceEvent() {
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
-        UserId oldOwner = aggregate.getState()
-                                   .getOwner();
-        expectThat(aggregate).producesEvent(OrganizationOwnerChanged.class, event -> {
+        InternetDomain oldDomain = aggregate.getState()
+                                            .getDomain();
+        expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewOwner(), event.getNewOwner());
-            assertEquals(oldOwner, event.getOldOwner());
+            assertEquals(message().getNewDomain(), event.getNewDomain());
+            assertEquals(oldDomain, event.getOldDomain());
         });
     }
 
     @Test
-    @DisplayName("change the owner")
+    @DisplayName("change the domain")
     void changeState() {
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getOwner(), message().getNewOwner());
+            assertEquals(state.getDomain(), message().getNewDomain());
         });
     }
 
-    private static ChangeOrganizationOwner createMessage() {
-        return changeOrganizationOwner(ORG_ID);
+    private static ChangeOrganizationDomain createMessage() {
+        return changeOrganizationDomain(ORG_ID);
     }
 }
