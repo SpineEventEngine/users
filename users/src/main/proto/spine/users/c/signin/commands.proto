@@ -1,0 +1,55 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.signin";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/user_auth_identity.proto";
+import "spine/users/c/signin/values.proto";
+
+// The command to start the sign-in process.
+//
+message SignUserIn {
+
+    core.UserId id = 1;
+
+    // The authentication identity to sign-in with.
+    UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The command to sign a user out.
+//
+message SignUserOut {
+    option (events) = "SignOutCompleted";
+
+    core.UserId id = 1;
+}
+
+// The command to finish the sign-in process.
+//
+// This command is used internally by the process manager and must not be used by the client.
+//
+message FinishSignIn {
+    option (events) = "SignInCompleted, SignInFailed";
+
+    core.UserId id = 1;
+
+    // Indicates if the sign-in was successfull or not.
+    bool successfull = 2;
+
+    // Indicates why the sign-in failed, if applicable.
+    SignInFailureReason failure_reason = 3;
+}

@@ -1,0 +1,52 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.user";
+option java_multiple_files = false;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+
+// The rejection is generated when trying to access a user attribute that doesn't exist.
+//
+message UserAttributeDoesNotExist {
+
+    core.UserId id = 1;
+
+    // The name of the attribute.
+    string attribute_name = 2 [(required) = true];
+}
+
+// The rejection is generated when trying to access an authentication identity that doesn't exist.
+//
+message AuthIdentityDoesNotExist {
+
+    core.UserId id = 1;
+
+    // The authentication identity which wasn't found.
+    IdentityProviderId provider_id = 2 [(required) = true];
+
+    // The unique identifier of the authentication provider.
+    string user_id = 3 [(required) = true];
+}
+
+// The rejection is generation when trying to remove a role that is't assigned to a user.
+//
+message RoleIsNotAssignedToUser {
+
+    core.UserId id = 1;
+
+    // The ID of a role.
+    RoleId role_id = 2 [(required) = true];
+}

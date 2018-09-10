@@ -1,0 +1,141 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.organization;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.organization";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/tenant_id.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+
+// The command to create an organization.
+//
+message CreateOrganization {
+    option (events) = "OrganizationCreated";
+
+    OrganizationId id = 1;
+
+    // The name of an organization to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // The domain of the organization.
+    net.InternetDomain domain = 3;
+
+    // The attributes of the organization.
+    map<string, google.protobuf.Any> attributes = 4;
+
+    // A tenant associated with the organization.
+    core.TenantId tenant = 5 [(required) = true];
+
+    // An organization owner.
+    core.UserId owner = 6 [(required) = true];
+}
+
+// The command to change the owner of an organization.
+//
+message ChangeOrganizationOwner {
+    option (events) = "OrganizationOwnerChanged";
+
+    OrganizationId id = 1;
+
+    // The ID of the new owner.
+    core.UserId new_owner = 2 [(required) = true];
+}
+
+// The command to delete an organization.
+//
+message DeleteOrganization {
+    option (events) = "OrganizationDeleted";
+
+    OrganizationId id = 1;
+}
+
+// The command to add a new attribute to an organization.
+//
+// If attribute with this name already exists it will be overwritten.
+//
+message AddOrganizationAttribute {
+    option (events) = "OrganizationAttributeAdded";
+
+    OrganizationId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The command to remove an attribute from an organization.
+//
+message RemoveOrganizationAttribute {
+    option (events) = "OrganizationAttributeRemoved";
+    option (rejections) = "OrganizationAttributeDoesNotExist";
+
+    OrganizationId id = 1;
+
+    // The name of the attribute to remove.
+    string name = 2 [(required) = true];
+}
+
+// The command to update an organization attribute.
+//
+message UpdateOrganizationAttribute {
+    option (events) = "OrganizationAttributeUpdated";
+    option (rejections) = "OrganizationAttributeDoesNotExist";
+
+    OrganizationId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
+}
+
+// The command to rename an organization.
+//
+message RenameOrganization {
+    option (events) = "OrganizationRenamed";
+
+    OrganizationId id = 1;
+
+    // A new name of the organization.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to change an organization domain.
+//
+message ChangeOrganizationDomain {
+    option (events) = "OrganizationDomainChanged";
+
+    OrganizationId id = 1;
+
+    // A new domain of the organization.
+    net.InternetDomain new_domain = 2 [(required) = true];
+}
+
+// The command to change an organization tenant.
+//
+message ChangeOrganizationTenant {
+    option (events) = "OrganizationTenantChanged";
+
+    OrganizationId id = 1;
+
+    // A new tenant associated with the organization.
+    core.TenantId new_tenant = 2 [(required) = true];
+}
