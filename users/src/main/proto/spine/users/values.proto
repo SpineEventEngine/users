@@ -1,0 +1,35 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "ValuesProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/users/identifiers.proto";
+import "spine/people/person_name.proto";
+
+// A parent organizational entity of another organizational entity.
+//
+message ParentEntity {
+
+    // The parent entity in the organizational structure.
+    oneof parent_entity {
+
+        // The parent orgunit.
+        users.OrgUnitId org_unit = 1;
+
+        // The parent organization.
+        users.OrganizationId organization = 2;
+    }
+}

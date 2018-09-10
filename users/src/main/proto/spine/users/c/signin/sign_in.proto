@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.signin";
+option java_outer_classname = "BasicSignInProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/user_auth_identity.proto";
+import "spine/users/c/signin/values.proto";
+
+// The process of a sign-in using the given authentication identity.
+//
+// This process manager covers a straighforward sign-in scenario:
+//
+// 1. `SignUserIn` command initializes the sign-in process.
+// 2. If a user with the given ID already exists all checks pass the `SignInCompleted` event is
+//    generated in response.
+// 3. Otherwise, the process manager creates a user and then attempts to `SignUserIn` again.
+//
+// To sign a user in, the process manager ensures the following:
+//
+// 1. an identity provider is aware of the given authentication identity;
+// 2. an identity provider allows the user to sign in (e.g. the opposite would be if the user account
+//    was suspended);
+// 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`
+//    command).
+//
+// If one of the checks fails, the process is completed immediately with `SignInFailed` event.
+//
+message SignIn {
+    option (entity).kind = PROCESS_MANAGER;
+
+    core.UserId id = 1;
+
+    // The current status of the process.
+    Status status = 2;
+
+    // The authentication identity to sign in with.
+    UserAuthIdentity identity = 3 [(required) = true];
+
+    // The reason why the process failed, if applicable.
+    SignInFailureReason failure_reason = 4;
+
+    // A status of the sign-in process.
+    //
+    enum Status {
+
+        SIS_UNKNOWN = 0;
+
+        // Indicates that the user doesn't exist, the process manager posted a command to create it,
+        // and is waiting till it's created.
+        //
+        AWAITING_USER_CREATION = 1;
+
+        // Indicates that the user was successfully signed-in.
+        COMPLETED = 2;
+
+        // The sign-in process failed.
+        FAILED = 3;
+    }
+}

@@ -1,0 +1,60 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.orgunit;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.orgunit";
+option java_outer_classname = "OrganizationalUnitProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// An organizational unit (aka orgunit).
+//
+// An orgunit is the part of the `Organization` or a larger `OrgUnit` that
+// aggregates users and groups.
+//
+// ## Orgunit Attributes
+//
+// To make `OrgUnit` meet specific requirements of the application, it can be extended using custom
+// attributes.
+//
+// The following commands are available to work with the orgunit attributes:
+//
+// * `AddOrgUnitAttribute` to add a new attribute, or replace the existing one;
+// * `RemoveOrgUnitAttribute` to remove an attribute;
+// * `UpdateOrgUnitAttribute` to update an existing attribute.
+//
+message OrgUnit {
+    option (entity).kind = AGGREGATE;
+
+    OrgUnitId id = 1;
+
+    // The name of an orgunit to be displayed on UI.
+    string display_name = 2 [(required) = true];
+
+    // The parent entity in the organizational structure.
+    ParentEntity parent_entity = 3 [(required) = true];
+
+    // An interent domain of the orgunit.
+    net.InternetDomain domain = 4;
+
+    // The attributes of the orgunit.
+    map<string, google.protobuf.Any> attributes = 5;
+
+    // The orgunit owner.
+    core.UserId owner = 6 [(required) = true];
+}

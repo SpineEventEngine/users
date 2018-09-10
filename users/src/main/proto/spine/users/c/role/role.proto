@@ -1,0 +1,42 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.role;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.role";
+option java_outer_classname = "RoleProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// A role that can be assigned to users and groups for access control purposes.
+//
+// A `Role` reflects a particular function or a functional role of users or/and groups
+// inside of an organization or organizational unit.
+//
+// Usage examples:
+//
+// * `Developers` group may have the following roles: ["github-contributor", "test-server-admin"];
+// * `John 'The External Auditor' Smith` user may have the following role: "account\ing-papers-reader".
+//
+message Role {
+    option (entity).kind = AGGREGATE;
+
+    users.RoleId id = 1;
+
+    // The name of a role to be displayed on UI.
+    string display_name = 2 [(required) = true];
+
+    // An organization or organizational unit the this role belongs to.
+    ParentEntity belongs_to = 3;
+}
