@@ -66,5 +66,4 @@ final class TestRoleFactory {
                            .setDisplayName(roleName())
                            .setBelongsTo(roleParent());
     }
-
 }

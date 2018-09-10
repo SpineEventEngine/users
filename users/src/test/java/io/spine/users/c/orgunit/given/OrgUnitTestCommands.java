@@ -135,5 +135,4 @@ public final class OrgUnitTestCommands {
                                           .setNewDomain(orgUnitNewDomain())
                                           .build();
     }
-
 }

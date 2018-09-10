@@ -135,5 +135,4 @@ public final class OrganizationTestCommands {
                                          .setNewName(orgNewName())
                                          .build();
     }
-
 }
