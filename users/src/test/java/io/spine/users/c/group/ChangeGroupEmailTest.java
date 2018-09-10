@@ -20,51 +20,48 @@
 
 package io.spine.users.c.group;
 
-import io.spine.users.GroupId;
+import io.spine.net.EmailAddress;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.addSuperGroup;
-import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.c.group.given.GroupTestCommands.changeGroupEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("AddSuperGroup command should")
-class StartNestedMembershipTest extends GroupCommandTest<AddSuperGroup> {
+@DisplayName("ChangeGroupEmail command should")
+class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail> {
 
-    private static final GroupId SUPER_GROUP = createGroupId();
-
-    StartNestedMembershipTest() {
+    ChangeGroupEmailTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce SuperGroupAdded event")
+    @DisplayName("produce GroupEmailChanged event")
     void produceEvent() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(SuperGroupAdded.class, event -> {
+        EmailAddress oldEmail = aggregate.getState()
+                                         .getEmail();
+        expectThat(aggregate).producesEvent(GroupEmailChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getSuperGroupId(), event.getSuperGroupId());
+            assertEquals(message().getNewEmail(), event.getNewEmail());
+            assertEquals(oldEmail, event.getOldEmail());
         });
     }
 
     @Test
-    @DisplayName("add a group membership")
+    @DisplayName("change the email")
     void changeState() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            GroupId expectedGroup = message().getSuperGroupId();
-            assertTrue(state.getMembershipList()
-                            .contains(expectedGroup));
+            assertEquals(message().getNewEmail(), state.getEmail());
         });
     }
 
-    private static AddSuperGroup createMessage() {
-        return addSuperGroup(GROUP_ID, SUPER_GROUP);
+    private static ChangeGroupEmail createMessage() {
+        return changeGroupEmail(GROUP_ID);
     }
 }

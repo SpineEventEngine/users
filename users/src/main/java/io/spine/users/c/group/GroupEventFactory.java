@@ -24,6 +24,7 @@ import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
+import io.spine.net.EmailAddress;
 import io.spine.users.ParentEntity;
 import io.spine.users.c.AggregateEventFactory;
 
@@ -137,5 +138,21 @@ class GroupEventFactory extends AggregateEventFactory {
                                             .setNewValue(command.getNewValue())
                                             .setOldValue(oldValue)
                                             .build();
+    }
+
+    GroupRenamed rename(RenameGroup command, String oldName) {
+        return GroupRenamedVBuilder.newBuilder()
+                                   .setId(command.getId())
+                                   .setNewName(command.getNewName())
+                                   .setOldName(oldName)
+                                   .build();
+    }
+
+    GroupEmailChanged changeEmail(ChangeGroupEmail command, EmailAddress oldEmail) {
+        return GroupEmailChangedVBuilder.newBuilder()
+                                        .setId(command.getId())
+                                        .setNewEmail(command.getNewEmail())
+                                        .setOldEmail(oldEmail)
+                                        .build();
     }
 }

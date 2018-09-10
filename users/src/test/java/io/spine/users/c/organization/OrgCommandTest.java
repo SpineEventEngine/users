@@ -11,7 +11,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.OrganizationId;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrganizationId;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.createOrganizationId;
 
 /**
  * An implementation base for the {@link Organization} aggregate command handler tests.
@@ -22,7 +22,7 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrganiz
 abstract class OrgCommandTest<C extends Message>
         extends AggregateCommandTest<OrganizationId, C, Organization, OrganizationAggregate> {
 
-    static final OrganizationId ORG_ID = newOrganizationId();
+    static final OrganizationId ORG_ID = createOrganizationId();
 
     OrgCommandTest(C commandMessage) {
         super(ORG_ID, commandMessage);

@@ -50,7 +50,7 @@ public final class OrganizationTestEnv {
     private OrganizationTestEnv() {
     }
 
-    public static OrganizationId newOrganizationId() {
+    public static OrganizationId createOrganizationId() {
         return OrganizationIdVBuilder.newBuilder()
                                      .setValue(newUuid())
                                      .build();
@@ -62,7 +62,7 @@ public final class OrganizationTestEnv {
                              .build();
     }
 
-    public static UserId orgNewOwner() {
+    public static UserId newOrgOwner() {
         return UserIdVBuilder.newBuilder()
                              .setValue(newUuid())
                              .build();
@@ -82,7 +82,7 @@ public final class OrganizationTestEnv {
                                      .build();
     }
 
-    public static InternetDomain orgNewDomain() {
+    public static InternetDomain newOrgDomain() {
         return InternetDomainVBuilder.newBuilder()
                                      .setValue("organization-renamed.com")
                                      .build();
@@ -96,7 +96,7 @@ public final class OrganizationTestEnv {
                                .build();
     }
 
-    public static TenantId orgNewTenant() {
+    public static TenantId newOrgTenant() {
         return TenantIdVBuilder.newBuilder()
                                .setDomain(orgDomain())
                                .setEmail(email())

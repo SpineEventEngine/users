@@ -48,7 +48,7 @@ import static io.spine.protobuf.AnyPacker.pack;
  */
 public class GroupTestEnv {
 
-    private static final GroupId NESTED_GROUP_ID = newGroupId();
+    private static final GroupId NESTED_GROUP_ID = createGroupId();
 
     /**
      * Prevents instantiation.
@@ -56,7 +56,7 @@ public class GroupTestEnv {
     private GroupTestEnv() {
     }
 
-    public static GroupId newGroupId() {
+    public static GroupId createGroupId() {
         return GroupIdVBuilder.newBuilder()
                               .setValue(newUuid())
                               .build();
@@ -66,13 +66,23 @@ public class GroupTestEnv {
         return NESTED_GROUP_ID;
     }
 
-    public static String displayName() {
+    public static String groupName() {
         return "Developers";
+    }
+
+    public static String newGroupName() {
+        return "Developers-renamed";
     }
 
     public static EmailAddress groupEmail() {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers-list@gmail.com")
+                                   .build();
+    }
+
+    public static EmailAddress newGroupEmail() {
+        return EmailAddressVBuilder.newBuilder()
+                                   .setValue("developers-renamed-list@gmail.com")
                                    .build();
     }
 

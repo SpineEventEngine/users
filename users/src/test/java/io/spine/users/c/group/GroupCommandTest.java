@@ -11,7 +11,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.GroupId;
 
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupId;
+import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
@@ -22,7 +22,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.newGroupId;
 abstract class GroupCommandTest<C extends Message>
         extends AggregateCommandTest<GroupId, C, Group, GroupAggregate> {
 
-    static final GroupId GROUP_ID = newGroupId();
+    static final GroupId GROUP_ID = createGroupId();
 
     GroupCommandTest(C commandMessage) {
         super(GROUP_ID, commandMessage);

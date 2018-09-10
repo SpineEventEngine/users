@@ -47,10 +47,10 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttribu
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeValue;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewDomain;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewOwner;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewTenant;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgOwner;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgTenant;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgOwner;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
 
@@ -88,7 +88,7 @@ public final class OrganizationTestCommands {
     public static ChangeOrganizationOwner changeOrganizationOwner(OrganizationId id) {
         return ChangeOrganizationOwnerVBuilder.newBuilder()
                                               .setId(id)
-                                              .setNewOwner(orgNewOwner())
+                                              .setNewOwner(newOrgOwner())
                                               .build();
     }
 
@@ -118,14 +118,14 @@ public final class OrganizationTestCommands {
     public static ChangeOrganizationDomain changeOrganizationDomain(OrganizationId id) {
         return ChangeOrganizationDomainVBuilder.newBuilder()
                                                .setId(id)
-                                               .setNewDomain(orgNewDomain())
+                                               .setNewDomain(newOrgDomain())
                                                .build();
     }
 
     public static ChangeOrganizationTenant changeOrganizationTenant(OrganizationId id) {
         return ChangeOrganizationTenantVBuilder.newBuilder()
                                                .setId(id)
-                                               .setNewTenant(orgNewTenant())
+                                               .setNewTenant(newOrgTenant())
                                                .build();
     }
 

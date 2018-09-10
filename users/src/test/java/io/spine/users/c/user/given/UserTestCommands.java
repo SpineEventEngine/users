@@ -42,8 +42,6 @@ import io.spine.users.c.user.UpdateUserAttribute;
 import io.spine.users.c.user.UpdateUserAttributeVBuilder;
 import io.spine.users.c.user.UpdateUserProfile;
 import io.spine.users.c.user.UpdateUserProfileVBuilder;
-import io.spine.users.c.user.UpdateUserStatus;
-import io.spine.users.c.user.UpdateUserStatusVBuilder;
 import io.spine.users.c.user.User.Status;
 import io.spine.users.c.user.UserAggregate;
 
@@ -200,12 +198,5 @@ public class UserTestCommands {
                                         .setId(id)
                                         .setUpdatedProfile(newProfile())
                                         .build();
-    }
-
-    public static UpdateUserStatus updateUserStatus(UserId id) {
-        return UpdateUserStatusVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setNewStatus(Status.SUSPENDED)
-                                       .build();
     }
 }

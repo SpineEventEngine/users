@@ -25,7 +25,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.RoleId;
 
-import static io.spine.users.c.role.given.RoleTestEnv.newRoleId;
+import static io.spine.users.c.role.given.RoleTestEnv.createRoleId;
 
 /**
  * An implementation base for the {@link Role} aggregate command handler tests.
@@ -37,7 +37,7 @@ import static io.spine.users.c.role.given.RoleTestEnv.newRoleId;
 public class RoleCommandTest<C extends Message>
         extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
 
-    static final RoleId ROLE_ID = newRoleId();
+    static final RoleId ROLE_ID = createRoleId();
 
     RoleCommandTest(C commandMessage) {
         super(ROLE_ID, commandMessage);

@@ -20,51 +20,47 @@
 
 package io.spine.users.c.group;
 
-import io.spine.users.GroupId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.addSuperGroup;
-import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.c.group.given.GroupTestCommands.renameGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("AddSuperGroup command should")
-class StartNestedMembershipTest extends GroupCommandTest<AddSuperGroup> {
+@DisplayName("RenameGroup command should")
+class RenameGroupTest extends GroupCommandTest<RenameGroup> {
 
-    private static final GroupId SUPER_GROUP = createGroupId();
-
-    StartNestedMembershipTest() {
+    RenameGroupTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce SuperGroupAdded event")
+    @DisplayName("produce GroupRenamed event")
     void produceEvent() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(SuperGroupAdded.class, event -> {
+        String oldName = aggregate.getState()
+                                  .getDisplayName();
+        expectThat(aggregate).producesEvent(GroupRenamed.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getSuperGroupId(), event.getSuperGroupId());
+            assertEquals(message().getNewName(), event.getNewName());
+            assertEquals(oldName, event.getOldName());
         });
     }
 
     @Test
-    @DisplayName("add a group membership")
+    @DisplayName("change the display_name")
     void changeState() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            GroupId expectedGroup = message().getSuperGroupId();
-            assertTrue(state.getMembershipList()
-                            .contains(expectedGroup));
+            assertEquals(message().getNewName(), state.getDisplayName());
         });
     }
 
-    private static AddSuperGroup createMessage() {
-        return addSuperGroup(GROUP_ID, SUPER_GROUP);
+    private static RenameGroup createMessage() {
+        return renameGroup(GROUP_ID);
     }
 }

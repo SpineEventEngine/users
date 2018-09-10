@@ -23,7 +23,7 @@ package io.spine.users.c.group;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
-import static io.spine.users.c.group.given.GroupTestEnv.displayName;
+import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
@@ -70,7 +70,7 @@ final class TestGroupFactory {
         return GroupVBuilder.newBuilder()
                             .setId(id)
                             .setParentEntity(groupParentOrganization())
-                            .setDisplayName(displayName())
+                            .setDisplayName(groupName())
                             .setEmail(groupEmail())
                             .setOwner(groupOwner())
                             .putAttributes(groupAttributeName(), groupAttributeValue())

@@ -141,6 +141,16 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
         }
     }
 
+    @Assign
+    GroupRenamed handle(RenameGroup command, CommandContext context) {
+        return events(context).rename(command, getState().getDisplayName());
+    }
+
+    @Assign
+    GroupEmailChanged handle(ChangeGroupEmail command, CommandContext context) {
+        return events(context).changeEmail(command, getState().getEmail());
+    }
+
     @Apply
     void on(GroupCreated event) {
         getBuilder().setId(event.getId())
@@ -216,6 +226,16 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
         String attributeName = event.getName();
         removeAttribute(attributeName);
         getBuilder().putAttributes(attributeName, event.getNewValue());
+    }
+
+    @Apply
+    void on(GroupRenamed event) {
+        getBuilder().setDisplayName(event.getNewName());
+    }
+
+    @Apply
+    void on(GroupEmailChanged event) {
+        getBuilder().setEmail(event.getNewEmail());
     }
 
     private void removeAttribute(String attributeName) {

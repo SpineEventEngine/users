@@ -48,7 +48,7 @@ public final class OrgUnitTestEnv {
     private OrgUnitTestEnv() {
     }
 
-    public static OrgUnitId newOrgUnitId() {
+    public static OrgUnitId createOrgUnitId() {
         return OrgUnitId.newBuilder()
                         .setValue(newUuid())
                         .build();
@@ -102,7 +102,7 @@ public final class OrgUnitTestEnv {
 
     public static ParentEntity newOrgUnitParentEntity() {
         return ParentEntityVBuilder.newBuilder()
-                                   .setOrgUnit(newOrgUnitId())
+                                   .setOrgUnit(createOrgUnitId())
                                    .build();
     }
 

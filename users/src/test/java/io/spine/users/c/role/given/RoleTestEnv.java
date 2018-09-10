@@ -43,7 +43,7 @@ public final class RoleTestEnv {
     private RoleTestEnv() {
     }
 
-    public static RoleId newRoleId() {
+    public static RoleId createRoleId() {
         return RoleIdVBuilder.newBuilder()
                              .setValue(newUuid())
                              .build();

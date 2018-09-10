@@ -30,6 +30,8 @@ import io.spine.users.c.group.AddSuperGroup;
 import io.spine.users.c.group.AddSuperGroupVBuilder;
 import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
+import io.spine.users.c.group.ChangeGroupEmail;
+import io.spine.users.c.group.ChangeGroupEmailVBuilder;
 import io.spine.users.c.group.ChangeGroupOwner;
 import io.spine.users.c.group.ChangeGroupOwnerVBuilder;
 import io.spine.users.c.group.CreateGroup;
@@ -43,12 +45,14 @@ import io.spine.users.c.group.RemoveGroupAttribute;
 import io.spine.users.c.group.RemoveGroupAttributeVBuilder;
 import io.spine.users.c.group.RemoveSuperGroup;
 import io.spine.users.c.group.RemoveSuperGroupVBuilder;
+import io.spine.users.c.group.RenameGroup;
+import io.spine.users.c.group.RenameGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 import io.spine.users.c.group.UpdateGroupAttribute;
 import io.spine.users.c.group.UpdateGroupAttributeVBuilder;
 
-import static io.spine.users.c.group.given.GroupTestEnv.displayName;
+import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
@@ -57,6 +61,8 @@ import static io.spine.users.c.group.given.GroupTestEnv.groupParentOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeValue;
+import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
+import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
 
 /**
  * Test commands for {@link GroupAggregate}.
@@ -74,7 +80,7 @@ public class GroupTestCommands {
     public static CreateGroup createGroup(GroupId id) {
         return CreateGroupVBuilder.newBuilder()
                                   .setId(id)
-                                  .setDisplayName(displayName())
+                                  .setDisplayName(groupName())
                                   .setEmail(groupEmail())
                                   .setOwner(groupOwner())
                                   .setParentEntity(groupParentOrganization())
@@ -154,5 +160,19 @@ public class GroupTestCommands {
                                            .setName(groupAttributeName())
                                            .setNewValue(newGroupAttributeValue())
                                            .build();
+    }
+
+    public static RenameGroup renameGroup(GroupId id) {
+        return RenameGroupVBuilder.newBuilder()
+                                  .setId(id)
+                                  .setNewName(newGroupName())
+                                  .build();
+    }
+
+    public static ChangeGroupEmail changeGroupEmail(GroupId id) {
+        return ChangeGroupEmailVBuilder.newBuilder()
+                                       .setId(id)
+                                       .setNewEmail(newGroupEmail())
+                                       .build();
     }
 }
