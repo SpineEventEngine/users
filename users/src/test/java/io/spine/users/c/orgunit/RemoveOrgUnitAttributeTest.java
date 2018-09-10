@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.orgunit.TestOrgUnitFactory.createAggregate;
+import static io.spine.users.c.orgunit.TestOrgUnitFactory.createEmptyAggregate;
 import static io.spine.users.c.orgunit.given.OrgUnitTestCommands.removeOrgUnitAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,6 +44,13 @@ class RemoveOrgUnitAttributeTest extends OrgUnitCommandTest<RemoveOrgUnitAttribu
             assertTrue(state.getAttributesMap()
                             .isEmpty());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        OrgUnitAggregate aggregate = createEmptyAggregate(ORG_UNIT_ID);
+        expectThat(aggregate).throwsRejection(Rejections.OrgUnitAttributeDoesNotExist.class);
     }
 
     private static RemoveOrgUnitAttribute createMessage() {

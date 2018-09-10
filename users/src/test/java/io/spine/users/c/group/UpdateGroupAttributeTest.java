@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
+import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.updateGroupAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,6 +38,13 @@ class UpdateGroupAttributeTest extends GroupCommandTest<UpdateGroupAttribute> {
             assertEquals(message().getNewValue(), event.getNewValue());
             assertTrue(event.hasOldValue());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
+        expectThat(aggregate).throwsRejection(Rejections.GroupAttributeDoesNotExist.class);
     }
 
     @Test

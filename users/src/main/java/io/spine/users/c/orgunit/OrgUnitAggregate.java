@@ -30,8 +30,6 @@ import io.spine.users.c.organization.OrganizationAggregate;
 
 import java.util.Map;
 
-import static io.spine.util.Exceptions.newIllegalArgumentException;
-
 /**
  * An organizational unit (aka orgunit).
  *
@@ -53,10 +51,9 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  *
  * @author Vladyslav Lubenskyi
  */
+@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class OrgUnitAggregate
         extends Aggregate<OrgUnitId, OrgUnit, OrgUnitVBuilder> {
-
-    private static final String ATTRIBUTE_DOES_NOT_EXIST = "Attribute doesn't exist";
 
     /**
      * @see OrgUnitAggregate#OrgUnitAggregate(OrgUnitId)
@@ -87,25 +84,25 @@ public class OrgUnitAggregate
 
     @Assign
     OrgUnitAttributeRemoved handle(RemoveOrgUnitAttribute command,
-                                   CommandContext context) {
+                                   CommandContext context) throws OrgUnitAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).removeAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new OrgUnitAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
     @Assign
     OrgUnitAttributeUpdated handle(UpdateOrgUnitAttribute command,
-                                   CommandContext context) {
+                                   CommandContext context) throws OrgUnitAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new OrgUnitAttributeDoesNotExist(getId(), attributeName);
         }
     }
 

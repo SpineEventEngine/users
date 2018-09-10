@@ -30,8 +30,6 @@ import io.spine.users.c.orgunit.OrgUnit;
 
 import java.util.Map;
 
-import static io.spine.util.Exceptions.newIllegalArgumentException;
-
 /**
  * An organization of a tenant, the topmost entity in organizational structure.
  *
@@ -56,8 +54,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, OrganizationVBuilder> {
-
-    private static final String ATTRIBUTE_DOES_NOT_EXIST = "Attribute doesn't exist";
 
     /**
      * @see OrganizationAggregate#OrganizationAggregate(OrganizationId)
@@ -88,25 +84,27 @@ public class OrganizationAggregate
 
     @Assign
     OrganizationAttributeRemoved handle(RemoveOrganizationAttribute command,
-                                        CommandContext context) {
+                                        CommandContext context)
+            throws OrganizationAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).removeAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new OrganizationAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
     @Assign
     OrganizationAttributeUpdated handle(UpdateOrganizationAttribute command,
-                                        CommandContext context) {
+                                        CommandContext context)
+            throws OrganizationAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new OrganizationAttributeDoesNotExist(getId(), attributeName);
         }
     }
 

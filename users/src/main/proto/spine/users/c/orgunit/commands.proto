@@ -94,6 +94,7 @@ message AddOrgUnitAttribute {
 //
 message RemoveOrgUnitAttribute {
     option (events) = "OrgUnitAttributeRemoved";
+    option (rejections) = "OrgUnitAttributeDoesNotExist";
 
     OrgUnitId id = 1;
 
@@ -105,6 +106,7 @@ message RemoveOrgUnitAttribute {
 //
 message UpdateOrgUnitAttribute {
     option (events) = "OrgUnitAttributeUpdated";
+    option (rejections) = "OrgUnitAttributeDoesNotExist";
 
     OrgUnitId id = 1;
 

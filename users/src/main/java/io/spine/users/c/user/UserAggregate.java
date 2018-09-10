@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static io.spine.util.Exceptions.newIllegalStateException;
-
 /**
  * An aggregate for user of the application, either a person or machine.
  *
@@ -106,7 +104,13 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context) {
+    RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context)
+            throws RoleIsNotAssignedToUser {
+        List<RoleId> roles = getState().getRoleList();
+        RoleId roleId = command.getRoleId();
+        if (!roles.contains(roleId)) {
+            throw new RoleIsNotAssignedToUser(getId(), roleId);
+        }
         return events(context).unassignRoleFromUser(command);
     }
 
@@ -116,25 +120,27 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    UserAttributeRemoved handle(RemoveUserAttribute command, CommandContext context) {
+    UserAttributeRemoved handle(RemoveUserAttribute command, CommandContext context)
+            throws UserAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).removeAttribute(command, attributeName,
                                                    attributes.get(attributeName));
         } else {
-            throw newIllegalStateException("Trying to remove an attribute that is not there");
+            throw new UserAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
     @Assign
-    UserAttributeUpdated handle(UpdateUserAttribute command, CommandContext context) {
+    UserAttributeUpdated handle(UpdateUserAttribute command, CommandContext context)
+            throws UserAttributeDoesNotExist {
         String attributeName = command.getName();
         Map<String, Any> attributes = getState().getAttributesMap();
         if (attributes.containsKey(attributeName)) {
             return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalStateException("No attribute with the name {} found");
+            throw new UserAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
@@ -150,12 +156,12 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Assign
     SecondaryAuthIdentityRemoved handle(RemoveSecondaryAuthIdentity command,
-                                        CommandContext context) {
+                                        CommandContext context) throws AuthIdentityDoesNotExist {
         Optional<UserAuthIdentity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
             return events(context).removeIdentity(command, identityToRemove.get());
         } else {
-            throw newIllegalStateException("No such auth identity");
+            throw identityDoesNotExist(command);
         }
     }
 
@@ -331,6 +337,12 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
                                               .equals(command.getProviderId());
             return idMatches && providerMatches;
         };
+    }
+
+    private static AuthIdentityDoesNotExist identityDoesNotExist(
+            RemoveSecondaryAuthIdentity command) {
+        return new AuthIdentityDoesNotExist(command.getId(), command.getProviderId(),
+                                            command.getUserId());
     }
 
     private static UserEventFactory events(CommandContext context) {

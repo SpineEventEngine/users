@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.removeUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +34,13 @@ class RemoveUserAttributeTest extends UserCommandTest<RemoveUserAttribute> {
             assertEquals(message().getName(), event.getName());
             assertTrue(event.hasValue());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        UserAggregate aggregate = createEmptyAggregate();
+        expectThat(aggregate).throwsRejection(Rejections.UserAttributeDoesNotExist.class);
     }
 
     @Test

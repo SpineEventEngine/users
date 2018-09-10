@@ -109,6 +109,7 @@ message AssignRoleToUser {
 //
 message UnassignRoleFromUser {
     option (events) = "RoleUnassignedFromUser";
+    option (rejections) = "RoleIsNotAssignedToUser";
 
     core.UserId id = 1;
 
@@ -136,6 +137,7 @@ message AddUserAttribute {
 //
 message RemoveUserAttribute {
     option (events) = "UserAttributeRemoved";
+    option (rejections) = "UserAttributeDoesNotExist";
 
     core.UserId id = 1;
 
@@ -147,6 +149,7 @@ message RemoveUserAttribute {
 //
 message UpdateUserAttribute {
     option (events) = "UserAttributeUpdated";
+    option (rejections) = "UserAttributeDoesNotExist";
 
     core.UserId id = 1;
 
@@ -183,6 +186,7 @@ message AddSecondaryAuthIdentity {
 //
 message RemoveSecondaryAuthIdentity {
     option (events) = "SecondaryAuthIdentityRemoved";
+    option (rejections) = "AuthIdentityDoesNotExist";
 
     core.UserId id = 1;
 

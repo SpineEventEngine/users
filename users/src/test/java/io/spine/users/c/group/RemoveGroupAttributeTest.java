@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
+import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.removeGroupAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,6 +44,13 @@ class RemoveGroupAttributeTest extends GroupCommandTest<RemoveGroupAttribute> {
             assertTrue(state.getAttributesMap()
                             .isEmpty());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
+        expectThat(aggregate).throwsRejection(Rejections.GroupAttributeDoesNotExist.class);
     }
 
     private static RemoveGroupAttribute createMessage() {

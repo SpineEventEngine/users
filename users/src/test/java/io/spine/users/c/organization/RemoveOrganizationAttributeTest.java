@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.TestOrganizationFactory.createEmptyAggregate;
 import static io.spine.users.c.organization.given.OrganizationTestCommands.removeOrganizationAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +34,13 @@ class RemoveOrganizationAttributeTest extends OrgCommandTest<RemoveOrganizationA
             assertEquals(message().getName(), event.getName());
             assertTrue(event.hasValue());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        OrganizationAggregate aggregate = createEmptyAggregate(ORG_ID);
+        expectThat(aggregate).throwsRejection(Rejections.OrganizationAttributeDoesNotExist.class);
     }
 
     @Test

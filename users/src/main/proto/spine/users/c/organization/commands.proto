@@ -84,6 +84,7 @@ message AddOrganizationAttribute {
 //
 message RemoveOrganizationAttribute {
     option (events) = "OrganizationAttributeRemoved";
+    option (rejections) = "OrganizationAttributeDoesNotExist";
 
     OrganizationId id = 1;
 
@@ -95,6 +96,7 @@ message RemoveOrganizationAttribute {
 //
 message UpdateOrganizationAttribute {
     option (events) = "OrganizationAttributeUpdated";
+    option (rejections) = "OrganizationAttributeDoesNotExist";
 
     OrganizationId id = 1;
 

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.updateUserAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,6 +38,13 @@ class UpdateUserAttributeTest extends UserCommandTest<UpdateUserAttribute> {
             assertEquals(message().getNewValue(), event.getNewValue());
             assertTrue(event.hasOldValue());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        UserAggregate aggregate = createEmptyAggregate();
+        expectThat(aggregate).throwsRejection(Rejections.UserAttributeDoesNotExist.class);
     }
 
     @Test

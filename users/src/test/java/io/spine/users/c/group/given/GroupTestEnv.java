@@ -106,7 +106,7 @@ public class GroupTestEnv {
 
     public static RoleId groupRole() {
         return RoleIdVBuilder.newBuilder()
-                             .setValue(newUuid())
+                             .setValue("administrator")
                              .build();
     }
 

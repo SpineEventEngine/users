@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.c.organization.TestOrganizationFactory.createEmptyAggregate;
 import static io.spine.users.c.organization.given.OrganizationTestCommands.updateOrganizationAttribute;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,6 +38,13 @@ class UpdateOrganizationAttributeTest extends OrgCommandTest<UpdateOrganizationA
             assertEquals(message().getNewValue(), event.getNewValue());
             assertTrue(event.hasOldValue());
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if an attribute doesn't exist")
+    void generateRejection() {
+        OrganizationAggregate aggregate = createEmptyAggregate(ORG_ID);
+        expectThat(aggregate).throwsRejection(Rejections.OrganizationAttributeDoesNotExist.class);
     }
 
     @Test

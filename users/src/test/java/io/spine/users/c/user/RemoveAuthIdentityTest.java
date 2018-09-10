@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.removeAuthIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,6 +44,13 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryAuthIdentityList()
                                                                 .isEmpty()));
+    }
+
+    @Test
+    @DisplayName("throw rejection if auth identity doesn't exist")
+    void generateRejection() {
+        UserAggregate aggregate = createEmptyAggregate();
+        expectThat(aggregate).throwsRejection(Rejections.AuthIdentityDoesNotExist.class);
     }
 
     private static RemoveSecondaryAuthIdentity createMessage() {

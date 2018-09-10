@@ -34,8 +34,6 @@ import io.spine.users.c.user.UserAggregate;
 import java.util.List;
 import java.util.Map;
 
-import static io.spine.util.Exceptions.newIllegalArgumentException;
-
 /**
  * An aggregate for {@link Group}.
  *
@@ -63,8 +61,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
 public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
-
-    private static final String ATTRIBUTE_DOES_NOT_EXIST = "Attribute doesn't exist";
 
     /**
      * @see Aggregate#Aggregate(Object)
@@ -110,7 +106,13 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     }
 
     @Assign
-    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command, CommandContext context) {
+    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command, CommandContext context)
+            throws RoleIsNotAssignedToGroup {
+        List<RoleId> roles = getState().getRoleList();
+        RoleId roleId = command.getRoleId();
+        if (!roles.contains(roleId)) {
+            throw new RoleIsNotAssignedToGroup(getId(), roleId);
+        }
         return events(context).unassignRole(command);
     }
 
@@ -120,24 +122,26 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     }
 
     @Assign
-    GroupAttributeRemoved handle(RemoveGroupAttribute command, CommandContext context) {
+    GroupAttributeRemoved handle(RemoveGroupAttribute command, CommandContext context)
+            throws GroupAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).removeAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new GroupAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
     @Assign
-    GroupAttributeUpdated handle(UpdateGroupAttribute command, CommandContext context) {
+    GroupAttributeUpdated handle(UpdateGroupAttribute command, CommandContext context)
+            throws GroupAttributeDoesNotExist {
         Map<String, Any> attributes = getState().getAttributesMap();
         String attributeName = command.getName();
         if (attributes.containsKey(attributeName)) {
             return events(context).updateAttribute(command, attributes.get(attributeName));
         } else {
-            throw newIllegalArgumentException(ATTRIBUTE_DOES_NOT_EXIST);
+            throw new GroupAttributeDoesNotExist(getId(), attributeName);
         }
     }
 
@@ -206,7 +210,7 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
         List<RoleId> roles = builder.getRole();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
-            builder.removeMembership(index);
+            builder.removeRole(index);
         }
     }
 

@@ -19,12 +19,11 @@
  */
 
 /**
- * This package contains {@link io.spine.users.c.orgunit.OrgUnitAggregate OrgUnit} aggregate.
+ * This package contains {@link io.spine.users.c.role.RoleAggregate Role aggregate}.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-
-package io.spine.users.c.orgunit;
+package io.spine.users.c.role;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

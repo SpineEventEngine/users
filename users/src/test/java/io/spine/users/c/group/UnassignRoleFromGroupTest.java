@@ -25,6 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
+import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.unassignRoleFromGroup;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,7 +52,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     }
 
     @Test
-    @DisplayName("add a role assignment")
+    @DisplayName("remove a role")
     void changeState() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
@@ -60,6 +61,14 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
             assertFalse(state.getRoleList()
                              .contains(expectedRole));
         });
+    }
+
+    @Test
+    @DisplayName("throw rejection if role isn't assigned to a group")
+    void throwsRejection() {
+        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
+
+        expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToGroup.class);
     }
 
     private static UnassignRoleFromGroup createMessage() {

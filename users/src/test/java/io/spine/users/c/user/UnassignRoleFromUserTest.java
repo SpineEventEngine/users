@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
+import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.unassignRoleFromUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +41,13 @@ class UnassignRoleFromUserTest extends UserCommandTest<UnassignRoleFromUser> {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(state -> assertTrue(state.getRoleList()
                 .isEmpty()));
+    }
+
+    @Test
+    @DisplayName("throw rejection if role isn't assigned to a user")
+    void throwRejection() {
+        UserAggregate aggregate = createEmptyAggregate();
+        expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToUser.class);
     }
 
     private static UnassignRoleFromUser createMessage() {
