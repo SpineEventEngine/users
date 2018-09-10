@@ -42,10 +42,9 @@ public class AggregateEventFactory {
     }
 
     /**
-     * Returns the current moment in time in the timezone obtain from
-     * {@link ActorContext the actor context}.
+     * Returns the current date and time in the timezone of the actor.
      *
-     * @return the current time in the actor's timezone
+     * @return the current date and time in the actor's timezone
      */
     protected ZonedDateTime now() {
         ZoneId zoneId = actorContext().getZoneId();

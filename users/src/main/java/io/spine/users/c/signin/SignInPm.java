@@ -53,8 +53,8 @@ import static java.util.Optional.of;
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given authentication
- *         identity;
+ *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given
+ *         authentication identity;
  *     <li>an identity provider allows the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
  *     <li>the given authentication identity is
@@ -103,7 +103,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         IdentityProviderBridge identityProvider = identityProviderOptional.get();
         if (!identityProvider.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
-        } else if (!identityProvider.signInAllowed(identity)) {
+        }
+        if (!identityProvider.signInAllowed(identity)) {
             return withA(finishWithError(SIGN_IN_NOT_ALLOWED));
         }
 
