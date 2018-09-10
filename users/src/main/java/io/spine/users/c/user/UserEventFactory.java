@@ -200,6 +200,29 @@ final class UserEventFactory extends AggregateEventFactory {
         return event;
     }
 
+    UserProfileUpdated updateProfile(UpdateUserProfile command) {
+        return UserProfileUpdatedVBuilder.newBuilder()
+                                         .setId(command.getId())
+                                         .setUpdatedProfile(command.getUpdatedProfile())
+                                         .build();
+    }
+
+    UserStatusUpdated updateStatus(UpdateUserStatus command, Status newStatus) {
+        return UserStatusUpdatedVBuilder.newBuilder()
+                                        .setId(command.getId())
+                                        .setNewStatus(command.getNewStatus())
+                                        .setOldStatus(newStatus)
+                                        .build();
+    }
+
+    UserRenamed renameUser(RenameUser command, String oldName) {
+        return UserRenamedVBuilder.newBuilder()
+                                  .setId(command.getId())
+                                  .setNewName(command.getNewName())
+                                  .setOldName(oldName)
+                                  .build();
+    }
+
     private ZonedDateTime now() {
         ZoneId zoneId = actorContext().getZoneId();
         return ZonedDateTimes.of(LocalDateTimes.now(), zoneId);

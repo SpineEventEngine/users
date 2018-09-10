@@ -6,7 +6,6 @@
 
 package io.spine.users.c.signin;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
 import io.spine.core.UserId;

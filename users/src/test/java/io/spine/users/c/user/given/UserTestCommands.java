@@ -34,10 +34,16 @@ import io.spine.users.c.user.RemoveSecondaryAuthIdentity;
 import io.spine.users.c.user.RemoveSecondaryAuthIdentityVBuilder;
 import io.spine.users.c.user.RemoveUserAttribute;
 import io.spine.users.c.user.RemoveUserAttributeVBuilder;
+import io.spine.users.c.user.RenameUser;
+import io.spine.users.c.user.RenameUserVBuilder;
 import io.spine.users.c.user.UnassignRoleFromUser;
 import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.c.user.UpdateUserAttribute;
 import io.spine.users.c.user.UpdateUserAttributeVBuilder;
+import io.spine.users.c.user.UpdateUserProfile;
+import io.spine.users.c.user.UpdateUserProfileVBuilder;
+import io.spine.users.c.user.UpdateUserStatus;
+import io.spine.users.c.user.UpdateUserStatusVBuilder;
 import io.spine.users.c.user.User.Status;
 import io.spine.users.c.user.UserAggregate;
 
@@ -46,14 +52,16 @@ import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.attributeName;
 import static io.spine.users.c.user.given.UserTestEnv.attributeValue;
-import static io.spine.users.c.user.given.UserTestEnv.displayName;
 import static io.spine.users.c.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.githubIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.newParentEntity;
+import static io.spine.users.c.user.given.UserTestEnv.newProfile;
+import static io.spine.users.c.user.given.UserTestEnv.newUserDisplayName;
 import static io.spine.users.c.user.given.UserTestEnv.parentEntity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
+import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 
 /**
  * Test commands for {@link UserAggregate}.
@@ -75,7 +83,7 @@ public class UserTestCommands {
     public static CreateUser createUser(UserId id) {
         return CreateUserVBuilder.newBuilder()
                                  .setId(id)
-                                 .setDisplayName(displayName())
+                                 .setDisplayName(userDisplayName())
                                  .setParentEntity(parentEntity())
                                  .setPrimaryIdentity(googleIdentity())
                                  .setProfile(profile())
@@ -178,5 +186,26 @@ public class UserTestCommands {
                                                 .setId(id)
                                                 .setIdentity(githubIdentity())
                                                 .build();
+    }
+
+    public static RenameUser renameUser(UserId id) {
+        return RenameUserVBuilder.newBuilder()
+                                 .setId(id)
+                                 .setNewName(newUserDisplayName())
+                                 .build();
+    }
+
+    public static UpdateUserProfile updateUserProfile(UserId id) {
+        return UpdateUserProfileVBuilder.newBuilder()
+                                        .setId(id)
+                                        .setUpdatedProfile(newProfile())
+                                        .build();
+    }
+
+    public static UpdateUserStatus updateUserStatus(UserId id) {
+        return UpdateUserStatusVBuilder.newBuilder()
+                                       .setId(id)
+                                       .setNewStatus(Status.SUSPENDED)
+                                       .build();
     }
 }

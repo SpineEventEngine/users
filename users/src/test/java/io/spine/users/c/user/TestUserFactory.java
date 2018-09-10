@@ -12,7 +12,7 @@ import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.attributeName;
 import static io.spine.users.c.user.given.UserTestEnv.attributeValue;
-import static io.spine.users.c.user.given.UserTestEnv.displayName;
+import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.parentEntity;
@@ -66,7 +66,7 @@ final class TestUserFactory {
         return UserVBuilder.newBuilder()
                            .setId(userId())
                            .setParentEntity(parentEntity())
-                           .setDisplayName(displayName())
+                           .setDisplayName(userDisplayName())
                            .setPrimaryAuthIdentity(googleIdentity())
                            .setProfile(profile())
                            .setStatus(NOT_READY)

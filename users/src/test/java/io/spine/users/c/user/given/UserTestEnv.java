@@ -61,14 +61,25 @@ public class UserTestEnv {
                               .build();
     }
 
-    public static String displayName() {
+    public static String userDisplayName() {
         return "John Smith";
+    }
+
+    public static String newUserDisplayName() {
+        return "John Doe";
     }
 
     public static UserProfile profile() {
         return UserProfileVBuilder.newBuilder()
-                                  .setName(name())
+                                  .setName(personName())
                                   .setEmail(email())
+                                  .build();
+    }
+
+    public static UserProfile newProfile() {
+        return UserProfileVBuilder.newBuilder()
+                                  .setName(newPersonName())
+                                  .setEmail(newEmail())
                                   .build();
     }
 
@@ -92,23 +103,9 @@ public class UserTestEnv {
                                        .build();
     }
 
-    static UserAuthIdentity githubIdentity() {
-        return UserAuthIdentityVBuilder.newBuilder()
-                                       .setDisplayName("j.s@github.com")
-                                       .setProviderId(githubPoviderId())
-                                       .setUserId(USER_UUID)
-                                       .build();
-    }
-
     public static RoleId adminRoleId() {
         return RoleIdVBuilder.newBuilder()
                              .setValue("admin_role")
-                             .build();
-    }
-
-    static RoleId editorRoleId() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue("editor_role")
                              .build();
     }
 
@@ -118,6 +115,20 @@ public class UserTestEnv {
 
     public static Any attributeValue() {
         return pack(StringValue.of("encrypted-auth-token-value"));
+    }
+
+    static UserAuthIdentity githubIdentity() {
+        return UserAuthIdentityVBuilder.newBuilder()
+                                       .setDisplayName("j.s@github.com")
+                                       .setProviderId(githubPoviderId())
+                                       .setUserId(USER_UUID)
+                                       .build();
+    }
+
+    static RoleId editorRoleId() {
+        return RoleIdVBuilder.newBuilder()
+                             .setValue("editor_role")
+                             .build();
     }
 
     private static IdentityProviderId googleProviderId() {
@@ -150,9 +161,23 @@ public class UserTestEnv {
                                    .build();
     }
 
-    private static PersonName name() {
+    private static PersonName personName() {
         return PersonNameVBuilder.newBuilder()
                                  .setGivenName("John")
+                                 .setFamilyName("Smith")
+                                 .build();
+    }
+
+    private static EmailAddress newEmail() {
+        return EmailAddressVBuilder.newBuilder()
+                                   .setValue("john+alias@smith.com")
+                                   .build();
+    }
+
+    private static PersonName newPersonName() {
+        return PersonNameVBuilder.newBuilder()
+                                 .setGivenName("John")
+                                 .setMiddleName("The Person")
                                  .setFamilyName("Smith")
                                  .build();
     }

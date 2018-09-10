@@ -6,13 +6,13 @@
 
 package io.spine.users.c.user;
 
+import io.spine.users.ParentEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.moveUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -28,10 +28,12 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     @DisplayName("generate UserMoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
+        ParentEntity oldParent = aggregate.getState()
+                                          .getParentEntity();
         expectThat(aggregate).producesEvent(UserMoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
-            assertTrue(event.hasOldParentEntity());
+            assertEquals(oldParent, event.getOldParentEntity());
         });
     }
 
