@@ -57,7 +57,6 @@ class RenameRoleTest extends RoleCommandTest<RenameRole> {
         RenameRole command = message();
         RoleAggregate aggregate = createAggregate(ROLE_ID);
         expectThat(aggregate).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
             assertEquals(command.getNewName(), state.getDisplayName());
         });
     }

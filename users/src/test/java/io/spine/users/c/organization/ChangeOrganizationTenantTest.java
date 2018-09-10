@@ -57,7 +57,7 @@ class ChangeOrganizationTenantTest extends OrgCommandTest<ChangeOrganizationTena
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getTenant(), message().getNewTenant());
+            assertEquals(message().getNewTenant(), state.getTenant());
         });
     }
 

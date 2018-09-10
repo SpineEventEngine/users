@@ -24,6 +24,7 @@ import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
+import io.spine.net.InternetDomain;
 import io.spine.users.ParentEntity;
 import io.spine.users.c.AggregateEventFactory;
 
@@ -112,5 +113,21 @@ final class OrgUnitEventFactory extends AggregateEventFactory {
                                    .setNewParentEntity(command.getNewParentEntity())
                                    .setOldParentEntity(oldParent)
                                    .build();
+    }
+
+    OrgUnitRenamed rename(RenameOrgUnit command, String oldName) {
+        return OrgUnitRenamedVBuilder.newBuilder()
+                                     .setId(command.getId())
+                                     .setNewName(command.getNewName())
+                                     .setOldName(oldName)
+                                     .build();
+    }
+
+    OrgUnitDomainChanged changeDomain(ChangeOrgUnitDomain command, InternetDomain oldDomain) {
+        return OrgUnitDomainChangedVBuilder.newBuilder()
+                                           .setId(command.getId())
+                                           .setNewDomain(command.getNewDomain())
+                                           .setOldDomain(oldDomain)
+                                           .build();
     }
 }

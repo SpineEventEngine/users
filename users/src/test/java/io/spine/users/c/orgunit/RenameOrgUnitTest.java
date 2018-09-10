@@ -18,50 +18,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.c.orgunit;
 
-import io.spine.net.InternetDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
-import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationDomain;
+import static io.spine.users.c.orgunit.TestOrgUnitFactory.createAggregate;
+import static io.spine.users.c.orgunit.given.OrgUnitTestCommands.renameOrgUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeOrganizationDomain command should")
-class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDomain> {
+@DisplayName("RenameOrgUnit command should")
+class RenameOrgUnitTest extends OrgUnitCommandTest<RenameOrgUnit> {
 
-    ChangeOrganizationDomainTest() {
+    RenameOrgUnitTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce OrganizationDomainChanged event")
+    @DisplayName("produce OrgUnitRenamed event")
     void produceEvent() {
-        OrganizationAggregate aggregate = createAggregate(ORG_ID);
-        InternetDomain oldDomain = aggregate.getState()
-                                            .getDomain();
-        expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
+        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
+        String oldName = aggregate.getState()
+                                  .getDisplayName();
+        expectThat(aggregate).producesEvent(OrgUnitRenamed.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewDomain(), event.getNewDomain());
-            assertEquals(oldDomain, event.getOldDomain());
+            assertEquals(message().getNewName(), event.getNewName());
+            assertEquals(oldName, event.getOldName());
         });
     }
 
     @Test
-    @DisplayName("change the domain")
+    @DisplayName("rename orgunit")
     void changeState() {
-        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewDomain(), state.getDomain());
+            assertEquals(message().getNewName(), state.getDisplayName());
         });
     }
 
-    private static ChangeOrganizationDomain createMessage() {
-        return changeOrganizationDomain(ORG_ID);
+    private static RenameOrgUnit createMessage() {
+        return renameOrgUnit(ORG_UNIT_ID);
     }
 }

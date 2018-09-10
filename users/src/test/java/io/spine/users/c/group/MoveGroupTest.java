@@ -60,7 +60,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup> {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getParentEntity(), message().getNewParentEntity());
+            assertEquals(message().getNewParentEntity(), state.getParentEntity());
         });
     }
 

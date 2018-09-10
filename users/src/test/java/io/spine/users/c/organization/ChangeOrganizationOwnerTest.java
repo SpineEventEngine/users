@@ -57,7 +57,7 @@ class ChangeOrganizationOwnerTest extends OrgCommandTest<ChangeOrganizationOwner
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getOwner(), message().getNewOwner());
+            assertEquals(message().getNewOwner(), state.getOwner());
         });
     }
 

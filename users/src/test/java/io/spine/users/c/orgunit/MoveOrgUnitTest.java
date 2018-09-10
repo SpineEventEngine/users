@@ -57,7 +57,7 @@ class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit> {
         OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getParentEntity(), message().getNewParentEntity());
+            assertEquals(message().getNewParentEntity(), state.getParentEntity());
         });
     }
 

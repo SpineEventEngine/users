@@ -23,6 +23,8 @@ package io.spine.users.c.orgunit.given;
 import io.spine.users.OrgUnitId;
 import io.spine.users.c.orgunit.AddOrgUnitAttribute;
 import io.spine.users.c.orgunit.AddOrgUnitAttributeVBuilder;
+import io.spine.users.c.orgunit.ChangeOrgUnitDomain;
+import io.spine.users.c.orgunit.ChangeOrgUnitDomainVBuilder;
 import io.spine.users.c.orgunit.ChangeOrgUnitOwner;
 import io.spine.users.c.orgunit.ChangeOrgUnitOwnerVBuilder;
 import io.spine.users.c.orgunit.CreateOrgUnit;
@@ -34,6 +36,8 @@ import io.spine.users.c.orgunit.MoveOrgUnitVBuilder;
 import io.spine.users.c.orgunit.OrgUnitAggregate;
 import io.spine.users.c.orgunit.RemoveOrgUnitAttribute;
 import io.spine.users.c.orgunit.RemoveOrgUnitAttributeVBuilder;
+import io.spine.users.c.orgunit.RenameOrgUnit;
+import io.spine.users.c.orgunit.RenameOrgUnitVBuilder;
 import io.spine.users.c.orgunit.UpdateOrgUnitAttribute;
 import io.spine.users.c.orgunit.UpdateOrgUnitAttributeVBuilder;
 
@@ -44,6 +48,8 @@ import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeName
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeValue;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
+import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewDomain;
+import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewName;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewOwner;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitOwner;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
@@ -114,6 +120,20 @@ public final class OrgUnitTestCommands {
                                   .setId(id)
                                   .setNewParentEntity(newOrgUnitParentEntity())
                                   .build();
+    }
+
+    public static RenameOrgUnit renameOrgUnit(OrgUnitId id) {
+        return RenameOrgUnitVBuilder.newBuilder()
+                                    .setId(id)
+                                    .setNewName(orgUnitNewName())
+                                    .build();
+    }
+
+    public static ChangeOrgUnitDomain changeOrgUnitDomain(OrgUnitId id) {
+        return ChangeOrgUnitDomainVBuilder.newBuilder()
+                                          .setId(id)
+                                          .setNewDomain(orgUnitNewDomain())
+                                          .build();
     }
 
 }

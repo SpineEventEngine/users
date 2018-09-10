@@ -55,7 +55,7 @@ class RenameOrganizationTest extends OrgCommandTest<RenameOrganization> {
     void changeState() {
         OrganizationAggregate aggregate = createAggregate(ORG_ID);
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getDisplayName(), message().getNewName());
+            assertEquals(message().getNewName(), state.getDisplayName());
         });
     }
 

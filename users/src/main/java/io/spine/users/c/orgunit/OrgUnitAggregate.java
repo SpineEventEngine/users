@@ -114,6 +114,16 @@ public class OrgUnitAggregate
         return events(context).moveOrgUnit(command, getState().getParentEntity());
     }
 
+    @Assign
+    OrgUnitRenamed handle(RenameOrgUnit command, CommandContext context) {
+        return events(context).rename(command, getState().getDisplayName());
+    }
+
+    @Assign
+    OrgUnitDomainChanged handle(ChangeOrgUnitDomain command, CommandContext context) {
+        return events(context).changeDomain(command, getState().getDomain());
+    }
+
     @Apply
     void on(OrgUnitCreated event) {
         getBuilder().setId(event.getId())
@@ -153,6 +163,16 @@ public class OrgUnitAggregate
     @Apply
     void on(OrgUnitMoved event) {
         getBuilder().setParentEntity(event.getNewParentEntity());
+    }
+
+    @Apply
+    void on(OrgUnitRenamed event) {
+        getBuilder().setDisplayName(event.getNewName());
+    }
+
+    @Apply
+    void on(OrgUnitDomainChanged event) {
+        getBuilder().setDomain(event.getNewDomain());
     }
 
     private void removeAttribute(String attributeName) {

@@ -24,8 +24,6 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Int64Value;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
-import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
@@ -72,9 +70,19 @@ public final class OrgUnitTestEnv {
         return "Test OrgUnit 1";
     }
 
+    public static String orgUnitNewName() {
+        return "Test OrgUnit 1 Renamed";
+    }
+
     public static InternetDomain orgUnitDomain() {
         return InternetDomainVBuilder.newBuilder()
-                                     .setValue("organization.com")
+                                     .setValue("unit.organization.com")
+                                     .build();
+    }
+
+    public static InternetDomain orgUnitNewDomain() {
+        return InternetDomainVBuilder.newBuilder()
+                                     .setValue("unit-renamed.organization.com")
                                      .build();
     }
 
@@ -110,11 +118,5 @@ public final class OrgUnitTestEnv {
         return OrgUnitIdVBuilder.newBuilder()
                                      .setValue(newUuid())
                                      .build();
-    }
-
-    private static EmailAddress email() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("random@email.com")
-                                   .build();
     }
 }

@@ -63,7 +63,7 @@ class ChangeGroupOwnerTest extends GroupCommandTest<ChangeGroupOwner> {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(state.getOwner(), message().getNewOwner());
+            assertEquals(message().getNewOwner(), state.getOwner());
         });
     }
 

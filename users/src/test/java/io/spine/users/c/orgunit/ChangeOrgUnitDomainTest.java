@@ -18,33 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.c.orgunit;
 
 import io.spine.net.InternetDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
-import static io.spine.users.c.organization.given.OrganizationTestCommands.changeOrganizationDomain;
+import static io.spine.users.c.orgunit.TestOrgUnitFactory.createAggregate;
+import static io.spine.users.c.orgunit.given.OrgUnitTestCommands.changeOrgUnitDomain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeOrganizationDomain command should")
-class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDomain> {
+@DisplayName("ChangeOrgUnitDomain command should")
+class ChangeOrgUnitDomainTest extends OrgUnitCommandTest<ChangeOrgUnitDomain> {
 
-    ChangeOrganizationDomainTest() {
+    ChangeOrgUnitDomainTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce OrganizationDomainChanged event")
+    @DisplayName("produce OrgUnitDomainChanged event")
     void produceEvent() {
-        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
         InternetDomain oldDomain = aggregate.getState()
                                             .getDomain();
-        expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
+        expectThat(aggregate).producesEvent(OrgUnitDomainChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getNewDomain(), event.getNewDomain());
             assertEquals(oldDomain, event.getOldDomain());
@@ -52,16 +52,16 @@ class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDoma
     }
 
     @Test
-    @DisplayName("change the domain")
+    @DisplayName("change orgunit domain")
     void changeState() {
-        OrganizationAggregate aggregate = createAggregate(ORG_ID);
+        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
 
         expectThat(aggregate).hasState(state -> {
             assertEquals(message().getNewDomain(), state.getDomain());
         });
     }
 
-    private static ChangeOrganizationDomain createMessage() {
-        return changeOrganizationDomain(ORG_ID);
+    private static ChangeOrgUnitDomain createMessage() {
+        return changeOrgUnitDomain(ORG_UNIT_ID);
     }
 }
