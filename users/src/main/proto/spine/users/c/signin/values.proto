@@ -18,7 +18,7 @@ option java_generate_equals_and_hash = true;
 
 // The set of reasons why the sign-in process may fail.
 //
-enum FailureReason {
+enum SignInFailureReason {
 
     // Default value.
     FSII_UNDEFINED = 0;

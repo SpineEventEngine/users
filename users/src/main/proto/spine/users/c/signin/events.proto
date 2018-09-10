@@ -17,7 +17,6 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
-import "spine/users/c/user/user.proto";
 import "spine/users/c/signin/values.proto";
 import "spine/users/user_auth_identity.proto";
 
@@ -41,7 +40,7 @@ message SignInFailed {
     UserAuthIdentity identity = 2 [(required) = true];
 
     // Indicates why the sign-in failed.
-    FailureReason failure_reason = 3 [(required) = true];
+    SignInFailureReason failure_reason = 3 [(required) = true];
 }
 
 // The event is emitted when the user sign-out completed.

@@ -28,9 +28,9 @@ import java.util.Optional;
 
 import static io.spine.server.tuple.EitherOfTwo.withA;
 import static io.spine.server.tuple.EitherOfTwo.withB;
-import static io.spine.users.c.signin.FailureReason.SIGN_IN_NOT_ALLOWED;
-import static io.spine.users.c.signin.FailureReason.UNKNOWN_IDENTITY;
-import static io.spine.users.c.signin.FailureReason.UNSUPPORTED_IDENTITY;
+import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_ALLOWED;
+import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
+import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.user.User.Status.ACTIVE;
@@ -169,7 +169,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                                    .build();
     }
 
-    private FinishSignIn finishWithError(FailureReason failureReason) {
+    private FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignInVBuilder.newBuilder()
                                    .setId(getId())
                                    .setSuccessfull(false)
@@ -192,7 +192,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                                       .build();
     }
 
-    private SignInFailed signInFailed(FailureReason reason) {
+    private SignInFailed signInFailed(SignInFailureReason reason) {
         return SignInFailedVBuilder.newBuilder()
                                    .setId(getId())
                                    .setIdentity(getBuilder().getIdentity())

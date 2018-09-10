@@ -51,5 +51,5 @@ message FinishSignIn {
     bool successfull = 2;
 
     // Indicates why the sign-in failed, if applicable.
-    FailureReason failure_reason = 3;
+    SignInFailureReason failure_reason = 3;
 }

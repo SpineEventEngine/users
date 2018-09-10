@@ -51,7 +51,7 @@ message SignIn {
     UserAuthIdentity identity = 3 [(required) = true];
 
     // The reason why the process failed, if applicable.
-    FailureReason failure_reason = 4;
+    SignInFailureReason failure_reason = 4;
 
     // A status of the sign-in process.
     //
@@ -59,8 +59,8 @@ message SignIn {
 
         SIS_UNKNOWN = 0;
 
-        // Indicates that the `User` doesn't exist and the process manager is waiting till
-        // it's created.
+        // Indicates that the user doesn't exist, the process manager posted a command to create it,
+        // and is waiting till it's created.
         //
         AWAITING_USER_CREATION = 1;
 

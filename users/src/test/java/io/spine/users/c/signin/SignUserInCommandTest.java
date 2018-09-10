@@ -11,7 +11,7 @@ import io.spine.users.c.user.CreateUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.FailureReason.SIGN_IN_NOT_ALLOWED;
+import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_ALLOWED;
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
