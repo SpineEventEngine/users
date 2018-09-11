@@ -156,10 +156,10 @@ message GroupAttributeUpdated {
     string name = 2 [(required) = true];
 
     // An old attribute value.
-    google.protobuf.Any old_value = 4 [(required) = true];
+    google.protobuf.Any old_value = 3 [(required) = true];
 
     // A new attribute value.
-    google.protobuf.Any new_value = 5 [(required) = true];
+    google.protobuf.Any new_value = 4 [(required) = true];
 }
 
 // The event is emitted when a group is renamed.

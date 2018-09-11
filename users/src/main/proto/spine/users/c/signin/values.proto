@@ -21,7 +21,7 @@ option java_generate_equals_and_hash = true;
 enum SignInFailureReason {
 
     // Default value.
-    FSII_UNDEFINED = 0;
+    SIFR_UNDEFINED = 0;
 
     // Indicates that an identity provider is not aware of the given identity or the identity
     // is not associated with the given `User`.
