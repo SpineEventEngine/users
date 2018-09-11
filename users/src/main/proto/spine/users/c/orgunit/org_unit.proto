@@ -24,8 +24,11 @@ import "spine/users/values.proto";
 
 // An organizational unit (aka orgunit).
 //
-// An orgunit is the part of the `Organization` or a larger `OrgUnit` that
-// aggregates users and groups.
+// An orgunit is the part of the `Organization` or a larger `OrgUnit` that aggregates users
+// and groups.
+//
+// It is forbidden to include an organizational unit into itself directly or indirectly. In other
+// words, the organizational structure must always be an acyclic graph.
 //
 // ## Orgunit Attributes
 //

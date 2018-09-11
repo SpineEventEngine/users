@@ -26,3 +26,13 @@ message OrgUnitAttributeDoesNotExist {
     // A name of the attribute.
     string attribute_name = 2 [(required) = true];
 }
+
+// The rejection is generated when a change to an organizational structure forms a cycle.
+//
+message OrgUnitsCanNotFormCycles {
+
+    OrgUnitId id = 1;
+
+    // An orgunit that closes a cycle.
+    OrgUnitId closing_org_unit = 2 [(required) = true];
+}
