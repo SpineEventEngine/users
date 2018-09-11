@@ -24,7 +24,7 @@ import "spine/people/person_name.proto";
 message ParentEntity {
 
     // The parent entity in the organizational structure.
-    oneof parent_entity {
+    oneof kind {
 
         // The parent orgunit.
         users.OrgUnitId org_unit = 1;
