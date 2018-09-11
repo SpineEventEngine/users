@@ -36,3 +36,13 @@ message RoleIsNotAssignedToGroup {
     // An ID of the role.
     RoleId role_id = 2 [(required) = true];
 }
+
+// The rejection is generated when a trying to a group to another group forms a cycle.
+//
+message GroupsCanNotFormCycles {
+
+    GroupId id = 1;
+
+    // A group that closes a cycle.
+    GroupId closing_group = 2 [(required) = true];
+}

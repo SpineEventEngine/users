@@ -32,7 +32,7 @@ message CreateGroup {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles assigned to the group directly (aka not propagated from the super groups).
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
@@ -82,6 +82,7 @@ message DeleteGroup {
 //
 message AddSuperGroup {
     option (events) = "SuperGroupAdded";
+    option (rejections) = "GroupsCanNotFormCycles";
 
     GroupId id = 1;
 

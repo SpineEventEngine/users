@@ -28,6 +28,9 @@ import "spine/users/values.proto";
 // The roles, assigned to a `Group` are implicitly inherited by all members of the group,
 // including sub-groups.
 //
+// It is forbidden for groups to directly or indirectly join themselves; in other words,
+// all nested group memberships must always form an acyclic graph.
+//
 // ## Group Attributes
 //
 // To make `Group` meet specific requirements of the application, it can be extended using custom
