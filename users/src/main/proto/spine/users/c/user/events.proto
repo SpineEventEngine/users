@@ -34,7 +34,7 @@ message UserCreated {
     // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to the user directly (aka not propagated by a group membership).
+    // Roles explicitly assigned to the user.
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the user belongs to, if applicable.

@@ -58,7 +58,7 @@ message User {
     // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to a user directly (not obtained from a group membership).
+    // Roles explicitly assigned to the user.
     repeated RoleId role = 3;
 
     // Group memberships of a user.
