@@ -33,6 +33,6 @@ enum SignInFailureReason {
     //
     UNSUPPORTED_IDENTITY = 2;
 
-    // Indicates that this identity is not permitted to sign-in by the identity provider.
-    SIGN_IN_NOT_PERMITTED = 3;
+    // Indicates that this identity is not authorized to sign-in by the identity provider.
+    SIGN_IN_NOT_AUTHORIZED = 3;
 }
