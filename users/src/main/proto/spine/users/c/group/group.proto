@@ -82,7 +82,7 @@ message Group {
     net.EmailAddress email = 3;
 
     // An entity in the organizational structure the group belongs to.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity org_entity = 4 [(required) = true];
 
     // Other groups this group is a member of.
     repeated GroupId membership = 6;

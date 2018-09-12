@@ -75,5 +75,5 @@ message Role {
     string display_name = 2 [(required) = true];
 
     // An organization or organizational unit the role belongs to.
-    ParentEntity belongs_to = 3;
+    OrganizationalEntity org_entity = 3;
 }

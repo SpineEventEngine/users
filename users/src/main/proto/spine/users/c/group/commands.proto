@@ -36,7 +36,7 @@ message CreateGroup {
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity org_entity = 4 [(required) = true];
 
     // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 5;
@@ -67,7 +67,7 @@ message MoveGroup {
     GroupId id = 1;
 
     // A new parent entity in the organizational structure.
-    ParentEntity new_parent_entity = 2 [(required) = true];
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
 }
 
 // The command to delete a group.

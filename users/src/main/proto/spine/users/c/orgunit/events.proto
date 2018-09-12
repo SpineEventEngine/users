@@ -35,7 +35,7 @@ message OrgUnitCreated {
     net.InternetDomain domain = 3;
 
     // A parent entity in the organizational structure.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity parent_entity = 4 [(required) = true];
 
     // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
@@ -64,10 +64,10 @@ message OrgUnitMoved {
     OrgUnitId id = 1;
 
     // A new parent entity in the organizational structure.
-    ParentEntity new_parent_entity = 2 [(required) = true];
+    OrganizationalEntity new_parent_entity = 2 [(required) = true];
 
     // The former parent entity in the organizational structure.
-    ParentEntity old_parent_entity = 3 [(required) = true];
+    OrganizationalEntity old_parent_entity = 3 [(required) = true];
 }
 
 // The event is emitted when an orgunit is deleted.
