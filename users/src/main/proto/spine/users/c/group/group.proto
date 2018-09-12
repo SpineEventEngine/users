@@ -93,6 +93,6 @@ message Group {
     // Roles explicitly assigned to the group.
     repeated RoleId role = 8;
 
-    // A group owner.
-    core.UserId owner = 9 [(required) = true];
+    // Owners of the group, may not be group members.
+    repeated core.UserId owners = 9;
 }

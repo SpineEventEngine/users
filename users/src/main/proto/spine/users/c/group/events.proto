@@ -40,24 +40,31 @@ message GroupCreated {
     // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // An owner of the group.
-    core.UserId owner = 6 [(required) = true];
+    // Owners of the group, may not be group members.
+    repeated core.UserId owners = 6;
 
     // An email address of the group if applicable.
     net.EmailAddress email = 7;
 }
 
-// The event is emitted when an owner of a group is changed.
+// The event is emitter when a new owner is added to a group.
 //
-message GroupOwnerChanged {
+message GroupOwnerAdded {
 
     GroupId id = 1;
 
-    // An ID of the new owner.
+    // An ID of the owner.
     core.UserId new_owner = 2 [(required) = true];
+}
 
-    // An ID of the old owner.
-    core.UserId old_owner = 3 [(required) = true];
+// The event is emitted when a `User` is removed from a group owners list.
+//
+message GroupOwnerRemoved {
+
+    GroupId id = 1;
+
+    // An ID of the removed owner.
+    core.UserId removed_owner = 2 [(required) = true];
 }
 
 // The event is emitted when a group is moved to another organization or orgunit.
