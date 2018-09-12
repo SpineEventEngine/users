@@ -90,7 +90,7 @@ message Group {
     // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 7;
 
-    // Roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles explicitly assigned to the group.
     repeated RoleId role = 8;
 
     // A group owner.

@@ -31,7 +31,7 @@ message GroupCreated {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to the group.
+    // Roles explicitly assigned to the group.
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
@@ -75,22 +75,22 @@ message GroupMoved {
 
 // The event is emitted when a group becomes a member of another group.
 //
-message SuperGroupAdded {
+message ParentGroupJoined {
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a group stops being a member of another group.
 //
-message SuperGroupRemoved {
+message ParentGroupLeft {
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The event is emitted when a new group is deleted.

@@ -32,7 +32,7 @@ message CreateGroup {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to the group directly (aka not propagated from the super groups).
+    // Roles explicitly assigned to the group.
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
@@ -80,25 +80,25 @@ message DeleteGroup {
 
 // The command for this group to join another group.
 //
-message AddSuperGroup {
-    option (events) = "SuperGroupAdded";
+message JoinParentGroup {
+    option (events) = "ParentGroupJoined";
     option (rejections) = "GroupsCanNotFormCycles";
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The command for this group to leave another group.
 //
-message RemoveSuperGroup {
-    option (events) = "SuperGroupRemoved";
+message LeaveParentGroup {
+    option (events) = "ParentGroupLeft";
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The command to assign a `Role` to the group.
