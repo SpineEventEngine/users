@@ -73,7 +73,7 @@ message SignIn {
         // If there is no `User` aggregate for the given `core.UserId` the process manager
         // creates it in the first instance, and then attempt to sign the user in.
         //
-        AWAITING_USER_CREATION = 1;
+        AWAITING_USER_AGGREGATE_CREATION = 1;
 
         // Indicates that the user was successfully signed-in.
         COMPLETED = 2;
