@@ -19,15 +19,52 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A role that can be assigned to users and groups, to peform access control.
+// A role that can be assigned to `Users` and `Groups`, to peform access control.
 //
-// A `Role` reflects a particular function or a functional role of users or/and groups
-// inside of an organization or organizational unit.
+// Roles are assigned to `Users` and `Group` directly and explicitly (please, see `AssignRoleToUser`,
+// `AssignRoleToUser` commands). A `Role` exists in the scope of an organization or an orgunit,
+// therefore it can be assigned only to those `Users` and `Groups` that are in the same organization
+// and/or orgunit (or their child orgunits).
 //
-// Usage examples:
+// ## Access Control
 //
-// * `Developers` group may have the following roles: ["github-contributor", "test-server-admin"];
-// * `John 'The External Auditor' Smith` user may have the following role: "account\ing-papers-reader".
+// The roles assigned to a `Group` are recursively propagated to all members of a group.
+// This propagation is implicit and is not reflected in aggegate states.
+//
+// Therefore, when carrying out role-based access control, consider that a `User` or a `Group`
+// has not only the roles listed in the aggregate state, but effectively all the roles derived from
+// parent groups.
+//
+// ## Case Study
+//
+// Here is a simple case study to facilitate understanding of the roles.
+// Consider the following organizational structure:
+//
+// ```
+//          Chips & Cookies            <-- Organization
+//            /          \
+//      Accounting   Cookie Factory    <-- OrgUnit
+//          /   \         \
+//         /   John Doe  Jack Jackson  <-- User
+//        /
+//  external_auditors                  <-- Group
+//       |
+//   Jane Smith                        <-- User
+// ```
+//
+// Here are the statements about "Chips & Cookies" that will help you gain intuition on
+// how to apply roles in your application:
+//
+// 1. If `office-visitor` role belongs to "Chips & Cookies" organization it can be assigned to any
+//    user or group depicted above.
+// 2. If `color-printer-user` role belongs to "Accounting" orgunit it can be assigned only to
+//    John Doe, Jane Smith, and `external_audior` group.
+// 3. If `bank-account-reader` role is assigned to `external_auditors` group, Jane Smith as a member
+//    of the group implicitly has this role too.
+// 4. If `3rd-floor-visitor` role is assigned to Jane Smith, she effectively has both this role
+//    and all roles from `external_auditors` group.
+// 5. Jack Jackson can't be assigned `color-printer-user` role because it belongs to another
+//    organizational unit.
 //
 message Role {
     option (entity).kind = AGGREGATE;
@@ -38,5 +75,5 @@ message Role {
     string display_name = 2 [(required) = true];
 
     // An organization or organizational unit the role belongs to.
-    ParentEntity belongs_to = 3;
+    OrganizationalEntity org_entity = 3;
 }

@@ -26,6 +26,7 @@ import "spine/users/values.proto";
 //
 message CreateOrgUnit {
     option (events) = "OrgUnitCreated";
+    option (rejections) = "OrgUnitsCanNotFormCycles";
 
     OrgUnitId id = 1;
 
@@ -36,7 +37,7 @@ message CreateOrgUnit {
     net.InternetDomain domain = 3;
 
     // A parent entity in the organizational structure.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity parent_entity = 4 [(required) = true];
 
     // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
@@ -60,11 +61,12 @@ message ChangeOrgUnitOwner {
 //
 message MoveOrgUnit {
     option (events) = "OrgUnitMoved";
+    option (rejections) = "OrgUnitsCanNotFormCycles";
 
     OrgUnitId id = 1;
 
     // A new parent entity of the orgunit.
-    ParentEntity new_parent_entity = 2 [(required) = true];
+    OrganizationalEntity new_parent_entity = 2 [(required) = true];
 }
 
 // The command to delete an orgunit.

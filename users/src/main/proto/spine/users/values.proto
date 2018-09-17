@@ -19,17 +19,17 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/people/person_name.proto";
 
-// A parent organizational entity of another organizational entity.
+// An organizational entity, either `Organization` or `OrgUnit`.
 //
-message ParentEntity {
+message OrganizationalEntity {
 
-    // The parent entity in the organizational structure.
-    oneof parent_entity {
+    // A kind of an entity.
+    oneof kind {
 
-        // The parent orgunit.
+        // An orgunit.
         users.OrgUnitId org_unit = 1;
 
-        // The parent organization.
+        // An organization.
         users.OrganizationId organization = 2;
     }
 }

@@ -36,3 +36,20 @@ message RoleIsNotAssignedToGroup {
     // An ID of the role.
     RoleId role_id = 2 [(required) = true];
 }
+
+// The rejection is generated when joining a parent group forms a cycle.
+//
+message GroupsCanNotFormCycles {
+
+    GroupId id = 1;
+
+    // A group that closes a cycle.
+    GroupId closing_group = 2 [(required) = true];
+}
+
+// The rejection is generated when trying to remove the last owner of the group.
+//
+message GroupMustHaveAnOwner {
+
+    GroupId id = 1;
+}

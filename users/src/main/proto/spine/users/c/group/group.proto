@@ -28,6 +28,9 @@ import "spine/users/values.proto";
 // The roles, assigned to a `Group` are implicitly inherited by all members of the group,
 // including sub-groups.
 //
+// It is forbidden for groups to directly or indirectly join themselves; in other words,
+// all nested group memberships must always form an acyclic graph.
+//
 // ## Group Attributes
 //
 // To make `Group` meet specific requirements of the application, it can be extended using custom
@@ -79,7 +82,7 @@ message Group {
     net.EmailAddress email = 3;
 
     // An entity in the organizational structure the group belongs to.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity org_entity = 4 [(required) = true];
 
     // Other groups this group is a member of.
     repeated GroupId membership = 6;
@@ -87,9 +90,9 @@ message Group {
     // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 7;
 
-    // Roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles explicitly assigned to the group.
     repeated RoleId role = 8;
 
-    // A group owner.
-    core.UserId owner = 9 [(required) = true];
+    // Owners of the group, may not be group members.
+    repeated core.UserId owners = 9;
 }

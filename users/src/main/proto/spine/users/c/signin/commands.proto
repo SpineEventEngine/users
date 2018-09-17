@@ -16,6 +16,7 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/c/signin/values.proto";
@@ -28,6 +29,13 @@ message SignUserIn {
 
     // An authentication identity to sign-in with.
     UserAuthIdentity identity = 2 [(required) = true];
+
+    // Attributes to add to the user after a successful sign-in.
+    //
+    // For example:
+    //     "oauth_access_token" -> "abcdef1234"
+    //
+    map<string, google.protobuf.Any> attributes = 3;
 }
 
 // The command to sign a user out.
@@ -43,12 +51,12 @@ message SignUserOut {
 // This command is used internally by the process manager and must not be used by the client.
 //
 message FinishSignIn {
-    option (events) = "SignInCompleted, SignInFailed";
+    option (events) = "SignInSuccessful, SignInFailed";
 
     core.UserId id = 1;
 
-    // Indicates if the sign-in was successfull or not.
-    bool successfull = 2;
+    // Indicates if the sign-in was successful or not.
+    bool successful = 2;
 
     // Indicates why the sign-in failed, if applicable.
     SignInFailureReason failure_reason = 3;

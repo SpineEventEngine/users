@@ -34,11 +34,11 @@ message CreateUser {
     // A user name to be displayed on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles to be assigned to the user.
+    // Roles explicitly assigned to the user.
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the user belongs to, if applicable.
-    ParentEntity parent_entity = 4;
+    OrganizationalEntity org_entity = 4;
 
     // Attributes of the user.
     map<string, google.protobuf.Any> attributes = 5;
@@ -61,7 +61,7 @@ message MoveUser {
     core.UserId id = 1;
 
     // A new parent entity in the organizational structure.
-    ParentEntity new_parent_entity = 2 [(required) = true];
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
 }
 
 // The command to start a group membership.

@@ -22,7 +22,7 @@ import "spine/users/user_auth_identity.proto";
 
 // The event is emitted when the sign-in process is successfully completed.
 //
-message SignInCompleted {
+message SignInSuccessful {
 
     core.UserId id = 1;
 

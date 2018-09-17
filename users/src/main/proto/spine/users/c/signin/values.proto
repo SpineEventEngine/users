@@ -21,7 +21,7 @@ option java_generate_equals_and_hash = true;
 enum SignInFailureReason {
 
     // Default value.
-    FSII_UNDEFINED = 0;
+    SIFR_UNDEFINED = 0;
 
     // Indicates that an identity provider is not aware of the given identity or the identity
     // is not associated with the given `User`.
@@ -33,6 +33,6 @@ enum SignInFailureReason {
     //
     UNSUPPORTED_IDENTITY = 2;
 
-    // Indicates that an identity provider doesn't allow this identity to sign-in.
-    SIGN_IN_NOT_ALLOWED = 3;
+    // Indicates that this identity is not authorized to sign-in by the identity provider.
+    SIGN_IN_NOT_AUTHORIZED = 3;
 }

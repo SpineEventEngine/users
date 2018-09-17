@@ -17,28 +17,28 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-// A string-based identifier of a user group.
+// A UUID of a user group.
 //
 message GroupId {
 
     string value = 1;
 }
 
-// A string-based identifier of a role.
+// A UUID of a role.
 //
 message RoleId {
 
     string value = 1;
 }
 
-// A string-based identifier of an organization.
+// A UUID of an organization.
 //
 message OrganizationId {
 
     string value = 1;
 }
 
-// A string-based identifier of an organizational unit.
+// A UUID of an organizational unit.
 //
 message OrgUnitId {
 
@@ -46,6 +46,8 @@ message OrgUnitId {
 }
 
 // A string-based identifer of an authentication identity provider.
+//
+// For example, "google.com", "active-directory.mycompany.co.uk".
 //
 message IdentityProviderId {
 

@@ -36,5 +36,5 @@ message UserProfile {
     people.PersonName name = 2;
 
     // The URL to the user's profile picture, if applicable.
-    net.Url photo_url = 3;
+    net.Url avatar = 3;
 }

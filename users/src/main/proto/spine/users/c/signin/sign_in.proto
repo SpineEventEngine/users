@@ -16,24 +16,26 @@ option java_outer_classname = "BasicSignInProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/c/signin/values.proto";
 
-// The process of a sign-in using the given authentication identity.
+// The process of a sign-in by the given authentication identity.
 //
 // This process manager covers a straighforward sign-in scenario:
 //
 // 1. `SignUserIn` command initializes the sign-in process.
-// 2. If a user with the given ID already exists all checks pass the `SignInCompleted` event is
-//    generated in response.
-// 3. Otherwise, the process manager creates a user and then attempts to `SignUserIn` again.
+// 2. If a `User` aggregate with the given ID already exists all checks pass the `SignInSuccessful`
+//    event is generated in response.
+// 3. Otherwise, the process manager creates a `User` aggregate and then attempts to `SignUserIn`
+//    again.
 //
 // To sign a user in, the process manager ensures the following:
 //
 // 1. an identity provider is aware of the given authentication identity;
-// 2. an identity provider allows the user to sign in (e.g. the opposite would be if the user account
-//    was suspended);
+// 2. an identity provider authorize the user to sign in (e.g. the opposite would be if the user
+//    account was suspended);
 // 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`
 //    command).
 //
@@ -53,16 +55,25 @@ message SignIn {
     // A reason why the process failed, if applicable.
     SignInFailureReason failure_reason = 4;
 
+    // Attributes to are added to the user after a successful sign-in.
+    //
+    // For example:
+    //     "oauth_access_token" -> "abcdef1234"
+    //
+    map<string, google.protobuf.Any> attributes = 5;
+
     // A status of the sign-in process.
     //
     enum Status {
 
         SIS_UNKNOWN = 0;
 
-        // Indicates that the user doesn't exist, the process manager posted a command to create it,
-        // and is waiting till it's created.
+        // Indicates that the process manager is waiting till a `User` aggregate is created.
         //
-        AWAITING_USER_CREATION = 1;
+        // If there is no `User` aggregate for the given `core.UserId` the process manager
+        // creates it in the first instance, and then attempt to sign the user in.
+        //
+        AWAITING_USER_AGGREGATE_CREATION = 1;
 
         // Indicates that the user was successfully signed-in.
         COMPLETED = 2;

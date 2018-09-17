@@ -29,7 +29,7 @@ message RoleCreated {
     string display_name = 2 [(required) = true];
 
     // An organization or organizational unit the role belongs to.
-    ParentEntity belongs_to = 3;
+    OrganizationalEntity org_entity = 3;
 }
 
 // The event is emitted when a role is deleted.
@@ -59,8 +59,8 @@ message RoleParentChanged {
     RoleId id = 1;
 
     // A new parent entity of the role.
-    ParentEntity new_parent = 2 [(required) = true];
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
 
     // The former parent entity of the role.
-    ParentEntity old_parent = 3 [(required) = true];
+    OrganizationalEntity old_org_entity = 3 [(required) = true];
 }

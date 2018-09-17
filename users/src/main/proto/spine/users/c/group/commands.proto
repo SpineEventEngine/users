@@ -32,31 +32,43 @@ message CreateGroup {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles assigned to the group directly (aka not propagated by a group membership).
+    // Roles explicitly assigned to the group.
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
-    ParentEntity parent_entity = 4 [(required) = true];
+    OrganizationalEntity org_entity = 4 [(required) = true];
 
     // Attributes of the group.
     map<string, google.protobuf.Any> attributes = 5;
 
-    // An owner of the group.
-    core.UserId owner = 6 [(required) = true];
+    // Owners of the group.
+    repeated core.UserId owners = 6 [(required) = true];
 
     // An email address of the group if applicable.
     net.EmailAddress email = 7;
 }
 
-// The command to change the owner of a group.
+// The command to add a new owner of a group.
 //
-message ChangeGroupOwner {
-    option (events) = "GroupOwnerChanged";
+message AddGroupOwner {
+    option (events) = "GroupOwnerAdded";
 
     GroupId id = 1;
 
     // An ID of the owner.
     core.UserId new_owner = 2 [(required) = true];
+}
+
+// The command to remove an owner of a group owners list.
+//
+message RemoveGroupOwner {
+    option (events) = "GroupOwnerRemoved";
+    option (rejections) = "GroupMustHaveAnOwner";
+
+    GroupId id = 1;
+
+    // An ID of the owner to remove.
+    core.UserId owner = 2 [(required) = true];
 }
 
 // The command to move a group from one organization or orgunit to another.
@@ -67,7 +79,7 @@ message MoveGroup {
     GroupId id = 1;
 
     // A new parent entity in the organizational structure.
-    ParentEntity new_parent_entity = 2 [(required) = true];
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
 }
 
 // The command to delete a group.
@@ -80,24 +92,25 @@ message DeleteGroup {
 
 // The command for this group to join another group.
 //
-message AddSuperGroup {
-    option (events) = "SuperGroupAdded";
+message JoinParentGroup {
+    option (events) = "ParentGroupJoined";
+    option (rejections) = "GroupsCanNotFormCycles";
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The command for this group to leave another group.
 //
-message RemoveSuperGroup {
-    option (events) = "SuperGroupRemoved";
+message LeaveParentGroup {
+    option (events) = "ParentGroupLeft";
 
     GroupId id = 1;
 
-    // An ID of the super group.
-    GroupId super_group_id = 2 [(required) = true];
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // The command to assign a `Role` to the group.
