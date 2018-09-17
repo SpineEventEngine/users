@@ -33,11 +33,11 @@ import io.spine.time.ZonedDateTimes;
  *
  * @author Vladyslav Lubenskyi
  */
-public class AggregateEventFactory {
+public class EntityEventFactory {
 
     private final ActorContext actorContext;
 
-    protected AggregateEventFactory(ActorContext actorContext) {
+    protected EntityEventFactory(ActorContext actorContext) {
         this.actorContext = actorContext;
     }
 

@@ -18,7 +18,6 @@ import io.spine.users.UserProfile;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.CreateUser;
-import io.spine.users.c.user.CreateUserVBuilder;
 import io.spine.users.c.user.User;
 import io.spine.users.c.user.UserAggregate;
 import io.spine.users.c.user.UserAggregateRepository;
@@ -33,7 +32,6 @@ import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
 import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static io.spine.users.c.user.User.Status.ACTIVE;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -94,52 +92,61 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                 identityProviders.get(identity.getProviderId());
 
         if (!identityProviderOptional.isPresent()) {
-            return withA(finishWithError(UNSUPPORTED_IDENTITY));
+            return withA(commands().finishWithError(UNSUPPORTED_IDENTITY));
         }
 
         SignInVBuilder builder = getBuilder().setId(id)
                                              .setIdentity(identity);
         IdentityProviderBridge identityProvider = identityProviderOptional.get();
         if (!identityProvider.hasIdentity(identity)) {
-            return withA(finishWithError(UNKNOWN_IDENTITY));
+            return withA(commands().finishWithError(UNKNOWN_IDENTITY));
         }
         if (!identityProvider.signInAllowed(identity)) {
-            return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
+            return withA(commands().finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
         Optional<UserAggregate> user = userRepository.find(id);
         if (!user.isPresent()) {
             builder.setStatus(AWAITING_USER_AGGREGATE_CREATION);
-            return withB(createUserCommand(identityProvider));
+            return withB(createUser(identityProvider));
         }
         if (!identityBelongsToUser(user.get(), identity)) {
-            return withA(finishWithError(UNKNOWN_IDENTITY));
+            return withA(commands().finishWithError(UNKNOWN_IDENTITY));
         }
 
         builder.setStatus(COMPLETED);
-        return withA(finishSuccessfully());
+        return withA(commands().finishSuccessfully());
     }
 
     @Command
     Optional<SignUserIn> on(UserCreated event, EventContext context) {
         if (awaitsUserCreation()) {
-            return of(signInCommand());
+            return of(commands().signIn(getBuilder().getIdentity()));
         }
         return empty();
     }
 
     @Assign
-    EitherOfTwo<SignInSuccessful, SignInFailed> handle(FinishSignIn command) {
+    EitherOfTwo<SignInSuccessful, SignInFailed> handle(FinishSignIn command,
+                                                       CommandContext context) {
+        UserId id = command.getId();
+        UserAuthIdentity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
-            return withA(signInCompleted());
+            return withA(events(context).completeSignIn(id, identity));
         } else {
-            return withB(signInFailed(command.getFailureReason()));
+
+            return withB(events(context).failSignIn(id, identity, command.getFailureReason()));
         }
     }
 
     @Assign
-    SignOutCompleted handle(SignUserOut command) {
-        return signOutCompleted(command.getId());
+    SignOutCompleted handle(SignUserOut command, CommandContext context) {
+        return events(context).signOut(command.getId());
+    }
+
+    private CreateUser createUser(IdentityProviderBridge identityProvider) {
+        UserProfile profile = identityProvider.fetchUserProfile(getBuilder().getIdentity());
+        return commands().createUser(getBuilder().getIdentity(), profile);
     }
 
     private boolean awaitsUserCreation() {
@@ -156,60 +163,11 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                         .contains(identity);
     }
 
-    private static SignOutCompleted signOutCompleted(UserId id) {
-        return SignOutCompletedVBuilder.newBuilder()
-                                       .setId(id)
-                                       .build();
+    private static SignInEventFactory events(CommandContext context) {
+        return SignInEventFactory.instance(context);
     }
 
-    private FinishSignIn finishSuccessfully() {
-        return FinishSignInVBuilder.newBuilder()
-                                   .setId(getId())
-                                   .setSuccessful(true)
-                                   .build();
-    }
-
-    private FinishSignIn finishWithError(SignInFailureReason failureReason) {
-        return FinishSignInVBuilder.newBuilder()
-                                   .setId(getId())
-                                   .setSuccessful(false)
-                                   .setFailureReason(failureReason)
-                                   .build();
-    }
-
-    private SignUserIn signInCommand() {
-        SignInVBuilder builder = getBuilder();
-        return SignUserInVBuilder.newBuilder()
-                                 .setId(builder.getId())
-                                 .setIdentity(builder.getIdentity())
-                                 .build();
-    }
-
-    private SignInSuccessful signInCompleted() {
-        return SignInSuccessfulVBuilder.newBuilder()
-                                      .setId(getId())
-                                      .setIdentity(getBuilder().getIdentity())
-                                      .build();
-    }
-
-    private SignInFailed signInFailed(SignInFailureReason reason) {
-        return SignInFailedVBuilder.newBuilder()
-                                   .setId(getId())
-                                   .setIdentity(getBuilder().getIdentity())
-                                   .setFailureReason(reason)
-                                   .build();
-    }
-
-    private CreateUser createUserCommand(IdentityProviderBridge identityProvider) {
-        UserProfile profile = identityProvider.fetchUserProfile(getBuilder().getIdentity());
-        String displayName = profile.getEmail()
-                                    .getValue();
-        return CreateUserVBuilder.newBuilder()
-                                 .setId(getId())
-                                 .setDisplayName(displayName)
-                                 .setPrimaryIdentity(getBuilder().getIdentity())
-                                 .setProfile(profile)
-                                 .setStatus(ACTIVE)
-                                 .build();
+    private SignInCommandFactory commands() {
+        return SignInCommandFactory.instance(getId());
     }
 }

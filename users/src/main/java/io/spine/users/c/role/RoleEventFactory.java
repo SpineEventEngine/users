@@ -23,14 +23,14 @@ package io.spine.users.c.role;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.users.OrganizationalEntity;
-import io.spine.users.c.AggregateEventFactory;
+import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain RoleAggregate Role aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
-final class RoleEventFactory extends AggregateEventFactory {
+final class RoleEventFactory extends EntityEventFactory {
 
     private RoleEventFactory(ActorContext actorContext) {
         super(actorContext);

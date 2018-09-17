@@ -11,7 +11,7 @@ import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.users.OrganizationalEntity;
 import io.spine.users.UserAuthIdentity;
-import io.spine.users.c.AggregateEventFactory;
+import io.spine.users.c.EntityEventFactory;
 import io.spine.users.c.signin.SignInSuccessful;
 import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.user.User.Status;
@@ -22,10 +22,10 @@ import io.spine.users.c.user.User.Status;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It's OK for an event factory
-final class UserEventFactory extends AggregateEventFactory {
+final class UserEventFactory extends EntityEventFactory {
 
     /**
-     * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
+     * @see EntityEventFactory#EntityEventFactory(ActorContext)
      */
     private UserEventFactory(ActorContext actorContext) {
         super(actorContext);

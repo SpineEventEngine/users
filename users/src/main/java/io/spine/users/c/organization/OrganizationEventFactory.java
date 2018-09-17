@@ -26,17 +26,17 @@ import io.spine.core.CommandContext;
 import io.spine.core.TenantId;
 import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
-import io.spine.users.c.AggregateEventFactory;
+import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain Organization Organization aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
-final class OrganizationEventFactory extends AggregateEventFactory {
+final class OrganizationEventFactory extends EntityEventFactory {
 
     /**
-     * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
+     * @see EntityEventFactory#EntityEventFactory(ActorContext)
      */
     private OrganizationEventFactory(ActorContext actorContext) {
         super(actorContext);

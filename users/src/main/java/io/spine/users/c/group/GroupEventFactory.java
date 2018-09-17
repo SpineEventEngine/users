@@ -25,7 +25,7 @@ import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.net.EmailAddress;
 import io.spine.users.OrganizationalEntity;
-import io.spine.users.c.AggregateEventFactory;
+import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain GroupAggregate Group aggregate}.
@@ -34,7 +34,7 @@ import io.spine.users.c.AggregateEventFactory;
  */
 @SuppressWarnings("OverlyCoupledClass")
         // It is OK for an event factory.
-class GroupEventFactory extends AggregateEventFactory {
+class GroupEventFactory extends EntityEventFactory {
 
     /**
      * Prevents direct instantiation.

@@ -26,7 +26,7 @@ import io.spine.core.CommandContext;
 import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
 import io.spine.users.OrganizationalEntity;
-import io.spine.users.c.AggregateEventFactory;
+import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain OrgUnit OrgUnit aggregate}.
@@ -34,10 +34,10 @@ import io.spine.users.c.AggregateEventFactory;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for event factory.
-final class OrgUnitEventFactory extends AggregateEventFactory {
+final class OrgUnitEventFactory extends EntityEventFactory {
 
     /**
-     * @see AggregateEventFactory#AggregateEventFactory(ActorContext)
+     * @see EntityEventFactory#EntityEventFactory(ActorContext)
      */
     private OrgUnitEventFactory(ActorContext actorContext) {
         super(actorContext);
