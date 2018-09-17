@@ -6,7 +6,7 @@
 
 package io.spine.users.c.user;
 
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +28,12 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     @DisplayName("generate UserMoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        ParentEntity oldParent = aggregate.getState()
-                                          .getParentEntity();
+        OrganizationalEntity oldParent = aggregate.getState()
+                                                  .getOrgEntity();
         expectThat(aggregate).producesEvent(UserMoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
-            assertEquals(oldParent, event.getOldParentEntity());
+            assertEquals(message().getNewOrgEntity(), event.getNewOrgEntity());
+            assertEquals(oldParent, event.getOldOrgEntity());
         });
     }
 
@@ -42,7 +42,7 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getNewParentEntity(), state.getParentEntity()));
+                state -> assertEquals(message().getNewOrgEntity(), state.getOrgEntity()));
     }
 
     private static MoveUser createMessage() {

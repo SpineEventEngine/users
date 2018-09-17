@@ -54,10 +54,10 @@ import static io.spine.users.c.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.githubIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.newParentEntity;
+import static io.spine.users.c.user.given.UserTestEnv.newUserOrgEntity;
 import static io.spine.users.c.user.given.UserTestEnv.newProfile;
 import static io.spine.users.c.user.given.UserTestEnv.newUserDisplayName;
-import static io.spine.users.c.user.given.UserTestEnv.parentEntity;
+import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
 import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 
@@ -82,7 +82,7 @@ public class UserTestCommands {
         return CreateUserVBuilder.newBuilder()
                                  .setId(id)
                                  .setDisplayName(userDisplayName())
-                                 .setParentEntity(parentEntity())
+                                 .setOrgEntity(userOrgEntity())
                                  .setPrimaryIdentity(googleIdentity())
                                  .setProfile(profile())
                                  .addRole(adminRoleId())
@@ -94,7 +94,7 @@ public class UserTestCommands {
     public static MoveUser moveUser(UserId id) {
         return MoveUserVBuilder.newBuilder()
                                .setId(id)
-                               .setNewParentEntity(newParentEntity())
+                               .setNewOrgEntity(newUserOrgEntity())
                                .build();
     }
 

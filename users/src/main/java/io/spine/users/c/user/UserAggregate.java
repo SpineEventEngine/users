@@ -21,7 +21,7 @@ import io.spine.users.c.group.Group;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.role.Role;
-import io.spine.users.c.signin.SignInCompleted;
+import io.spine.users.c.signin.SignInSuccessful;
 import io.spine.users.c.signin.SignOutCompleted;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Assign
     UserMoved handle(MoveUser command, CommandContext context) {
-        return events(context).changeParent(command, getState().getParentEntity());
+        return events(context).changeParent(command, getState().getOrgEntity());
     }
 
     @Assign
@@ -184,7 +184,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     void on(UserCreated event) {
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
-                    .setParentEntity(event.getParentEntity())
+                    .setOrgEntity(event.getOrgEntity())
                     .setPrimaryAuthIdentity(event.getPrimaryIdentity())
                     .addAllRole(event.getRoleList())
                     .putAllAttributes(event.getAttributesMap())
@@ -195,7 +195,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
 
     @Apply
     void on(UserMoved event) {
-        getBuilder().setParentEntity(event.getNewParentEntity());
+        getBuilder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
@@ -247,7 +247,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @React
-    UserSignedIn on(SignInCompleted event, EventContext context) {
+    UserSignedIn on(SignInSuccessful event, EventContext context) {
         return events(context.getCommandContext()).signIn(event);
     }
 

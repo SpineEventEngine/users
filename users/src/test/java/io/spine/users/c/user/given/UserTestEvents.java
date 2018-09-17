@@ -7,8 +7,8 @@
 package io.spine.users.c.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.c.signin.SignInCompleted;
-import io.spine.users.c.signin.SignInCompletedVBuilder;
+import io.spine.users.c.signin.SignInSuccessful;
+import io.spine.users.c.signin.SignInSuccessfulVBuilder;
 import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.signin.SignOutCompletedVBuilder;
 import io.spine.users.c.user.UserAggregate;
@@ -28,11 +28,11 @@ public class UserTestEvents {
     private UserTestEvents() {
     }
 
-    public static SignInCompleted signInCompleted(UserId id) {
-        return SignInCompletedVBuilder.newBuilder()
-                                      .setId(id)
-                                      .setIdentity(googleIdentity())
-                                      .build();
+    public static SignInSuccessful signInSuccessful(UserId id) {
+        return SignInSuccessfulVBuilder.newBuilder()
+                                       .setId(id)
+                                       .setIdentity(googleIdentity())
+                                       .build();
     }
 
     public static SignOutCompleted signOutCompleted(UserId id) {

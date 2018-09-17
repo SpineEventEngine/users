@@ -9,10 +9,10 @@ package io.spine.users.c.user;
 import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.AggregateEventFactory;
-import io.spine.users.c.signin.SignInCompleted;
+import io.spine.users.c.signin.SignInSuccessful;
 import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.user.User.Status;
 
@@ -47,7 +47,7 @@ final class UserEventFactory extends AggregateEventFactory {
                 UserCreatedVBuilder.newBuilder()
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
-                                   .setParentEntity(command.getParentEntity())
+                                   .setOrgEntity(command.getOrgEntity())
                                    .setPrimaryIdentity(command.getPrimaryIdentity())
                                    .addAllRole(command.getRoleList())
                                    .putAllAttributes(command.getAttributesMap())
@@ -58,12 +58,12 @@ final class UserEventFactory extends AggregateEventFactory {
         return event;
     }
 
-    UserMoved changeParent(MoveUser command, ParentEntity oldParentEntity) {
+    UserMoved changeParent(MoveUser command, OrganizationalEntity oldOrgEntity) {
         UserMoved event =
                 UserMovedVBuilder.newBuilder()
                                  .setId(command.getId())
-                                 .setNewParentEntity(command.getNewParentEntity())
-                                 .setOldParentEntity(oldParentEntity)
+                                 .setNewOrgEntity(command.getNewOrgEntity())
+                                 .setOldOrgEntity(oldOrgEntity)
                                  .build();
         return event;
     }
@@ -140,7 +140,7 @@ final class UserEventFactory extends AggregateEventFactory {
         return event;
     }
 
-    UserSignedIn signIn(SignInCompleted event) {
+    UserSignedIn signIn(SignInSuccessful event) {
         UserSignedIn result = UserSignedInVBuilder.newBuilder()
                                                   .setId(event.getId())
                                                   .setIdentity(event.getIdentity())
@@ -211,4 +211,3 @@ final class UserEventFactory extends AggregateEventFactory {
                                   .build();
     }
 }
-

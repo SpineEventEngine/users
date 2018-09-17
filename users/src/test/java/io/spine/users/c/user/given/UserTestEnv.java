@@ -22,8 +22,8 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.ParentEntity;
-import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationalEntityVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.UserAuthIdentity;
@@ -83,14 +83,14 @@ public class UserTestEnv {
                                   .build();
     }
 
-    public static ParentEntity parentEntity() {
-        return ParentEntityVBuilder.newBuilder()
+    public static OrganizationalEntity userOrgEntity() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrganization(organizationId())
                                    .build();
     }
 
-    static ParentEntity newParentEntity() {
-        return ParentEntityVBuilder.newBuilder()
+    static OrganizationalEntity newUserOrgEntity() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrgUnit(orgUnitId())
                                    .build();
     }

@@ -12,12 +12,12 @@ import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.attributeName;
 import static io.spine.users.c.user.given.UserTestEnv.attributeValue;
-import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.parentEntity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
+import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.c.user.given.UserTestEnv.userId;
+import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 
 /**
  * A factory for creating test {@linkplain UserAggregate User aggregates}.
@@ -65,7 +65,7 @@ final class TestUserFactory {
     private static UserVBuilder state() {
         return UserVBuilder.newBuilder()
                            .setId(userId())
-                           .setParentEntity(parentEntity())
+                           .setOrgEntity(userOrgEntity())
                            .setDisplayName(userDisplayName())
                            .setPrimaryAuthIdentity(googleIdentity())
                            .setProfile(profile())

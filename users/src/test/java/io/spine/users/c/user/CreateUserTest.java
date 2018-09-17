@@ -32,7 +32,7 @@ class CreateUserTest extends UserCommandTest<CreateUser> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getDisplayName(), event.getDisplayName());
             assertEquals(message().getPrimaryIdentity(), event.getPrimaryIdentity());
-            assertEquals(message().getParentEntity(), event.getParentEntity());
+            assertEquals(message().getOrgEntity(), event.getOrgEntity());
             assertEquals(message().getStatus(), event.getStatus());
             assertEquals(message().getRole(0), event.getRole(0));
             assertEquals(message().getAttributesMap(), event.getAttributesMap());
@@ -48,7 +48,7 @@ class CreateUserTest extends UserCommandTest<CreateUser> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getDisplayName(), state.getDisplayName());
             assertEquals(message().getPrimaryIdentity(), state.getPrimaryAuthIdentity());
-            assertEquals(message().getParentEntity(), state.getParentEntity());
+            assertEquals(message().getOrgEntity(), state.getOrgEntity());
             assertEquals(message().getStatus(), state.getStatus());
             assertEquals(message().getRole(0), state.getRole(0));
             assertEquals(message().getAttributesMap(), state.getAttributesMap());
