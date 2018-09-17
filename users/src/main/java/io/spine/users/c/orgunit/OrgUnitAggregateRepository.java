@@ -28,6 +28,5 @@ import io.spine.users.OrgUnitId;
  *
  * @author Vladyslav Lubenskyi
  */
-public class OrgUnitAggregateRepository
-        extends AggregateRepository<OrgUnitId, OrgUnitAggregate> {
+public class OrgUnitAggregateRepository extends AggregateRepository<OrgUnitId, OrgUnitAggregate> {
 }

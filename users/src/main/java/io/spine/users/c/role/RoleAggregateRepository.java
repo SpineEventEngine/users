@@ -29,5 +29,4 @@ import io.spine.users.RoleId;
  * @author Vladyslav Lubenskyi
  */
 public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAggregate> {
-
 }
