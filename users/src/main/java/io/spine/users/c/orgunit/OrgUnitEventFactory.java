@@ -25,7 +25,7 @@ import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import io.spine.users.c.AggregateEventFactory;
 
 /**
@@ -107,7 +107,7 @@ final class OrgUnitEventFactory extends AggregateEventFactory {
                                               .build();
     }
 
-    OrgUnitMoved moveOrgUnit(MoveOrgUnit command, ParentEntity oldParent) {
+    OrgUnitMoved moveOrgUnit(MoveOrgUnit command, OrganizationalEntity oldParent) {
         return OrgUnitMovedVBuilder.newBuilder()
                                    .setId(command.getId())
                                    .setNewParentEntity(command.getNewParentEntity())

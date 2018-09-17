@@ -28,8 +28,8 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
-import io.spine.users.ParentEntity;
-import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationalEntityVBuilder;
 import io.spine.users.c.orgunit.OrgUnitAggregate;
 
 import static io.spine.base.Identifier.newUuid;
@@ -94,16 +94,16 @@ public final class OrgUnitTestEnv {
         return pack(Int64Value.of(271));
     }
 
-    public static ParentEntity orgUnitParentEntity() {
-        return ParentEntityVBuilder.newBuilder()
-                                   .setOrgUnit(organization())
-                                   .build();
+    public static OrganizationalEntity orgUnitParentEntity() {
+        return OrganizationalEntityVBuilder.newBuilder()
+                                           .setOrgUnit(organization())
+                                           .build();
     }
 
-    public static ParentEntity newOrgUnitParentEntity() {
-        return ParentEntityVBuilder.newBuilder()
-                                   .setOrgUnit(createOrgUnitId())
-                                   .build();
+    public static OrganizationalEntity newOrgUnitParentEntity() {
+        return OrganizationalEntityVBuilder.newBuilder()
+                                           .setOrgUnit(createOrgUnitId())
+                                           .build();
     }
 
     public static String newOrgUnitAttributeName() {

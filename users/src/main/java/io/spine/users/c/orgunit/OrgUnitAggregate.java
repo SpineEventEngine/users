@@ -34,7 +34,10 @@ import java.util.Map;
  * An organizational unit (aka orgunit).
  *
  * <p>An orgunit is the part of the {@linkplain OrganizationAggregate organization} or a larger
- * {@linkplain OrgUnitAggregate organizational unit} that aggregates users and groups.
+ * {@linkplain OrgUnitAggregate organizational unit} that aggregates users and groups.'
+ *
+ * <p>It is forbidden to include an organizational unit into itself directly or indirectly. In other
+ * words, the organizational structure must always be an acyclic graph.
  *
  * <h3>Orgunit Attributes</h3>
  *
