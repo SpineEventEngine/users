@@ -1,0 +1,55 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/core/user_id.proto";
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "IdentifiersProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+// A UUID of a user group.
+//
+message GroupId {
+
+    string value = 1;
+}
+
+// A UUID of a role.
+//
+message RoleId {
+
+    string value = 1;
+}
+
+// A UUID of an organization.
+//
+message OrganizationId {
+
+    string value = 1;
+}
+
+// A UUID of an organizational unit.
+//
+message OrgUnitId {
+
+    string value = 1;
+}
+
+// A string-based identifer of an authentication identity provider.
+//
+// For example, "google.com", "active-directory.mycompany.co.uk".
+//
+message IdentityProviderId {
+
+    string value = 1;
+}

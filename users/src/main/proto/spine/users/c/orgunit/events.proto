@@ -1,0 +1,146 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.orgunit;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.orgunit";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// The event is emitted when a new orgunit is created.
+//
+message OrgUnitCreated {
+
+    OrgUnitId id = 1;
+
+    // A name of the orgunit to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // An interent domain of the orgunit.
+    net.InternetDomain domain = 3;
+
+    // A parent entity in the organizational structure.
+    OrganizationalEntity parent_entity = 4 [(required) = true];
+
+    // Attributes of the orgunit.
+    map<string, google.protobuf.Any> attributes = 5;
+
+    // An orgunit owner.
+    core.UserId owner = 6 [(required) = true];
+}
+
+// The event is emitted when an owner of an orgunit is changed.
+//
+message OrgUnitOwnerChanged {
+
+    OrgUnitId id = 1;
+
+    // An ID of the new owner.
+    core.UserId new_owner = 2 [(required) = true];
+
+    // An ID of the old owner.
+    core.UserId old_owner = 3 [(required) = true];
+}
+
+// The event is emitted when an orgunit is moved to another organization or orgunit.
+//
+message OrgUnitMoved {
+
+    OrgUnitId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationalEntity new_parent_entity = 2 [(required) = true];
+
+    // The former parent entity in the organizational structure.
+    OrganizationalEntity old_parent_entity = 3 [(required) = true];
+}
+
+// The event is emitted when an orgunit is deleted.
+//
+message OrgUnitDeleted {
+
+    OrgUnitId id = 1;
+}
+
+// The event is emitted when an attribute of the orgunit is added.
+//
+message OrgUnitAttributeAdded {
+
+    OrgUnitId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the orgunit is removed.
+//
+message OrgUnitAttributeRemoved {
+
+    OrgUnitId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the orgunit is updated.
+//
+message OrgUnitAttributeUpdated {
+
+    OrgUnitId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An old attribute value.
+    google.protobuf.Any old_value = 4 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 5 [(required) = true];
+}
+
+// The event is emitted when an orgunit is renamed.
+//
+message OrgUnitRenamed {
+
+    OrgUnitId id = 1;
+
+    // A new name of the orgunit.
+    string new_name = 2 [(required) = true];
+
+    // An old name of the orgunit.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when an orgunit domain is changed.
+//
+message OrgUnitDomainChanged {
+
+    OrgUnitId id = 1;
+
+    // A new domain of the orgunit.
+    net.InternetDomain new_domain = 2 [(required) = true];
+
+    // An old domain of the orgunit.
+    net.InternetDomain old_domain = 3 [(required) = true];
+}

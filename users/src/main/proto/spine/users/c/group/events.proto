@@ -1,0 +1,196 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.group";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// The event is emitted when a new group is created.
+//
+message GroupCreated {
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // Roles explicitly assigned to the group.
+    repeated RoleId role = 3;
+
+    // An entity in the organizational structure the group belongs to.
+    OrganizationalEntity org_entity = 4 [(required) = true];
+
+    // Attributes of the group.
+    map<string, google.protobuf.Any> attributes = 5;
+
+    // Owners of the group, may not be group members.
+    repeated core.UserId owners = 6;
+
+    // An email address of the group if applicable.
+    net.EmailAddress email = 7;
+}
+
+// The event is emitter when a new owner is added to a group.
+//
+message GroupOwnerAdded {
+
+    GroupId id = 1;
+
+    // An ID of the owner.
+    core.UserId new_owner = 2 [(required) = true];
+}
+
+// The event is emitted when a `User` is removed from a group owners list.
+//
+message GroupOwnerRemoved {
+
+    GroupId id = 1;
+
+    // An ID of the removed owner.
+    core.UserId removed_owner = 2 [(required) = true];
+}
+
+// The event is emitted when a group is moved to another organization or orgunit.
+//
+message GroupMoved {
+
+    GroupId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
+
+    // The former parent entity in the organizational structure.
+    OrganizationalEntity old_org_entity = 3 [(required) = true];
+}
+
+// The event is emitted when a group becomes a member of another group.
+//
+message ParentGroupJoined {
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// The event is emitted when a group stops being a member of another group.
+//
+message ParentGroupLeft {
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// The event is emitted when a new group is deleted.
+//
+message GroupDeleted {
+
+    GroupId id = 1;
+}
+
+// The event is emitted when a role is assigned to the group.
+//
+message RoleAssignedToGroup {
+
+    GroupId id = 1;
+
+    // An ID of the assigned role.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The event is emitted when a role is unassigned from the group.
+//
+message RoleUnassignedFromGroup {
+
+    GroupId id = 1;
+
+    // An ID of the unassigned role.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The event is emitted when an attribute of the orgunit is added.
+//
+message GroupAttributeAdded {
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the group is removed.
+//
+message GroupAttributeRemoved {
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the group is updated.
+//
+message GroupAttributeUpdated {
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An old attribute value.
+    google.protobuf.Any old_value = 3 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 4 [(required) = true];
+}
+
+// The event is emitted when a group is renamed.
+//
+message GroupRenamed {
+
+    GroupId id = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+
+    // An old name.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when a group email address is changed.
+//
+message GroupEmailChanged {
+
+    GroupId id = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
+
+    // An old email address of the group.
+    net.EmailAddress old_email = 3 [(required) = true];
+}

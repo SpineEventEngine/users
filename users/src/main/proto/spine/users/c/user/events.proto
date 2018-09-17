@@ -1,0 +1,251 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.user";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/time/time.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+import "spine/users/c/user/user.proto";
+import "spine/users/user_auth_identity.proto";
+import "spine/users/user_profile.proto";
+
+// The event is emitted when a new user is created.
+//
+message UserCreated {
+
+    core.UserId id = 1;
+
+    // A user name to be displayed on UI.
+    string display_name = 2 [(required) = true];
+
+    // Roles explicitly assigned to the user.
+    repeated RoleId role = 3;
+
+    // An entity in the organizational structure the user belongs to, if applicable.
+    OrganizationalEntity org_entity = 4;
+
+    // Attributes of the user.
+    map<string, google.protobuf.Any> attributes = 5;
+
+    // The primary authentication identity of the user.
+    UserAuthIdentity primary_identity = 6 [(required) = true];
+
+    // A user profile.
+    UserProfile profile = 7;
+
+    // The current status of the user.
+    User.Status status = 8 [(required) = true];
+
+    // A date and a time when user was created.
+    spine.time.ZonedDateTime when_created = 9 [(required) = true];
+}
+
+// The event is emitted when a user is moved to another organization or organizational unit.
+//
+message UserMoved {
+
+    core.UserId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
+
+    // A former parent entity in the organizational structure.
+    OrganizationalEntity old_org_entity = 3 [(required) = true];
+}
+
+// The event is emitted when a user became a member of the group.
+//
+message UserJoinedGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
+}
+
+// The event is emitted when a user left the group.
+//
+message UserLeftGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
+}
+
+// The event is emitted when a user is deleted.
+//
+message UserDeleted {
+
+    core.UserId id = 1;
+
+    // A date and a time when user was deleted.
+    spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
+}
+
+// The event is emitted when a role is assigned to user.
+//
+message RoleAssignedToUser {
+
+    core.UserId id = 1;
+
+    // An ID of the assigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// The event is emitted when a role is unassigned from user.
+//
+message RoleUnassignedFromUser {
+
+    core.UserId id = 1;
+
+    // An ID of the unassigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// The event is emitted when an attribute of the user is added.
+//
+message UserAttributeAdded {
+
+    core.UserId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the user is removed.
+//
+message UserAttributeRemoved {
+
+    core.UserId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the user is updated.
+//
+message UserAttributeUpdated {
+
+    core.UserId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An old attribute value.
+    google.protobuf.Any old_value = 4 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 5 [(required) = true];
+}
+
+// The event is emitted when the status of the user is changed.
+//
+message UserStatusChanged {
+
+    core.UserId id = 1;
+
+    // An old status.
+    User.Status old_status = 2 [(required) = true];
+
+    // A new status.
+    User.Status new_status = 3 [(required) = true];
+}
+
+// The event is emitted when a user is signed in.
+//
+message UserSignedIn {
+
+    core.UserId id = 1;
+
+    // An identity used for sign-in.
+    UserAuthIdentity identity = 2;
+
+    // A date and a time when the user signed in.
+    spine.time.ZonedDateTime when_signed_in = 3;
+}
+
+// The event is emitted when a user is signed out.
+//
+message UserSignedOut {
+
+    core.UserId id = 1;
+
+    // A date and a time when the user signed out.
+    spine.time.ZonedDateTime when_signed_out = 3;
+}
+
+// The event is emitted when a new secondary authentication identity is added.
+//
+message SecondaryAuthIdentityAdded {
+
+    core.UserId id = 1;
+
+    // A new secondary authentication identity.
+    UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The event is emitted when a secondary authentication identity is removed.
+//
+message SecondaryAuthIdentityRemoved {
+
+    core.UserId id = 1;
+
+    // The removed identity.
+    UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The event is emitted when the primary authentication identity is changed.
+//
+message PrimaryAuthIdentityChanged {
+
+    core.UserId id = 1;
+
+    // A new primary authentication identity.
+    UserAuthIdentity identity = 2 [(required) = true];
+}
+
+// The event is emitted when a user is renamed.
+//
+message UserRenamed {
+
+    core.UserId id = 1;
+
+    // A new name of a user.
+    string new_name = 2 [(required) = true];
+
+    // An old name of a user.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when a user profile is updated.
+//
+message UserProfileUpdated {
+
+    core.UserId id = 1;
+
+    // An updated version of a profile.
+    UserProfile updated_profile = 2 [(required) = true];
+}

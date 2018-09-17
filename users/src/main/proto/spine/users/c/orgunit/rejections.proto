@@ -1,0 +1,38 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.orgunit;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.orgunit";
+option java_multiple_files = false;
+option java_generate_equals_and_hash = true;
+
+import "spine/users/identifiers.proto";
+
+// The rejection is generated when trying to access an orgunit attribute that doesn't exist.
+//
+message OrgUnitAttributeDoesNotExist {
+
+    OrgUnitId id = 1;
+
+    // A name of the attribute.
+    string attribute_name = 2 [(required) = true];
+}
+
+// The rejection is generated when a change to an organizational structure forms a cycle.
+//
+message OrgUnitsCanNotFormCycles {
+
+    OrgUnitId id = 1;
+
+    // An orgunit that closes a cycle.
+    OrgUnitId closing_org_unit = 2 [(required) = true];
+}

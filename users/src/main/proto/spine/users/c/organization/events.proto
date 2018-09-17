@@ -1,0 +1,146 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.organization;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.organization";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/tenant_id.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+
+// The event is emitted when a new organization is created.
+//
+message OrganizationCreated {
+
+    OrganizationId id = 1;
+
+    // A name of the organization to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // A domain of the organization.
+    net.InternetDomain domain = 3;
+
+    // Attributes of the organization.
+    map<string, google.protobuf.Any> attributes = 4;
+
+    // A tenant associated with the organization.
+    core.TenantId tenant = 5 [(required) = true];
+
+    // An ID of an owner.
+    core.UserId owner = 6 [(required) = true];
+}
+
+// The event is emitted when an owner of an organization is changed.
+//
+message OrganizationOwnerChanged {
+
+    OrganizationId id = 1;
+
+    // An ID of the new owner.
+    core.UserId new_owner = 2 [(required) = true];
+
+    // An ID of the old owner.
+    core.UserId old_owner = 3 [(required) = true];
+}
+
+// The event is emitted when an organization is deleted.
+//
+message OrganizationDeleted {
+
+    OrganizationId id = 1;
+}
+
+// The event is emitted when an attribute of the organization is added.
+//
+message OrganizationAttributeAdded {
+
+    OrganizationId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the organization is removed.
+//
+message OrganizationAttributeRemoved {
+
+    OrganizationId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The event is emitted when an attribute of the organization is updated.
+//
+message OrganizationAttributeUpdated {
+
+    OrganizationId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An old attribute value.
+    google.protobuf.Any old_value = 4 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 5 [(required) = true];
+}
+
+// The event is emitted when an organization is renamed.
+//
+message OrganizationRenamed {
+
+    OrganizationId id = 1;
+
+    // A new name of the organization.
+    string new_name = 2 [(required) = true];
+
+    // An old name of the organization.
+    string old_name = 3 [(required) = true];
+}
+
+// The event is emitted when an organization domain is changed.
+//
+message OrganizationDomainChanged {
+
+    OrganizationId id = 1;
+
+    // A new domain of the organization.
+    net.InternetDomain new_domain = 2 [(required) = true];
+
+    // An old domain of the organization.
+    net.InternetDomain old_domain = 3 [(required) = true];
+}
+
+// The event is emitted when an organization tenant changed.
+//
+message OrganizationTenantChanged {
+
+    OrganizationId id = 1;
+
+    // A new tenant associated with the organization.
+    core.TenantId new_tenant = 2 [(required) = true];
+
+    // The previous tenant associated with the organization.
+    core.TenantId old_tenant = 3 [(required) = true];
+}

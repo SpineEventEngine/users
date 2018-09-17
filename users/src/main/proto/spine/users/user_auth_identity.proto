@@ -1,0 +1,38 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "UserAuthIdentityProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+
+// The authentication identity of a user.
+//
+message UserAuthIdentity {
+
+    // A user identifier as specified by the authentication provider.
+    string user_id = 1 [(required) = true];
+
+    // A unique identifier of the authentication provider.
+    IdentityProviderId provider_id = 2 [(required) = true];
+
+    // A user's name to display on UI.
+    string display_name = 3 [(required) = true];
+
+    // A domain of the user, if applicable.
+    net.InternetDomain domain = 4;
+}

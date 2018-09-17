@@ -1,0 +1,202 @@
+//
+// Copyright (c) 2000-2018 TeamDev. All rights reserved.
+// TeamDev PROPRIETARY and CONFIDENTIAL.
+// Use is subject to license terms.
+//
+
+syntax = "proto3";
+
+package spine.users.c.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.c.group";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/core/user_id.proto";
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// The command to create a group.
+//
+message CreateGroup {
+    option (events) = "GroupCreated";
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // Roles explicitly assigned to the group.
+    repeated RoleId role = 3;
+
+    // An entity in the organizational structure the group belongs to.
+    OrganizationalEntity org_entity = 4 [(required) = true];
+
+    // Attributes of the group.
+    map<string, google.protobuf.Any> attributes = 5;
+
+    // Owners of the group.
+    repeated core.UserId owners = 6 [(required) = true];
+
+    // An email address of the group if applicable.
+    net.EmailAddress email = 7;
+}
+
+// The command to add a new owner of a group.
+//
+message AddGroupOwner {
+    option (events) = "GroupOwnerAdded";
+
+    GroupId id = 1;
+
+    // An ID of the owner.
+    core.UserId new_owner = 2 [(required) = true];
+}
+
+// The command to remove an owner of a group owners list.
+//
+message RemoveGroupOwner {
+    option (events) = "GroupOwnerRemoved";
+    option (rejections) = "GroupMustHaveAnOwner";
+
+    GroupId id = 1;
+
+    // An ID of the owner to remove.
+    core.UserId owner = 2 [(required) = true];
+}
+
+// The command to move a group from one organization or orgunit to another.
+//
+message MoveGroup {
+    option (events) = "GroupMoved";
+
+    GroupId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationalEntity new_org_entity = 2 [(required) = true];
+}
+
+// The command to delete a group.
+//
+message DeleteGroup {
+    option (events) = "GroupDeleted";
+
+    GroupId id = 1;
+}
+
+// The command for this group to join another group.
+//
+message JoinParentGroup {
+    option (events) = "ParentGroupJoined";
+    option (rejections) = "GroupsCanNotFormCycles";
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// The command for this group to leave another group.
+//
+message LeaveParentGroup {
+    option (events) = "ParentGroupLeft";
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// The command to assign a `Role` to the group.
+//
+message AssignRoleToGroup {
+    option (events) = "RoleAssignedToGroup";
+
+    GroupId id = 1;
+
+    // An ID of the role to assign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to assign a `Role` from the group.
+//
+message UnassignRoleFromGroup {
+    option (events) = "RoleUnassignedFromGroup";
+    option (rejections) = "RoleIsNotAssignedToGroup";
+
+    GroupId id = 1;
+
+    // An ID of the role to unassign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The command to add a new attribute to a group.
+//
+// If an attribute with this name already exists it will be overwritten.
+//
+message AddGroupAttribute {
+    option (events) = "GroupAttributeAdded";
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // An attribute value.
+    google.protobuf.Any value = 3 [(required) = true];
+}
+
+// The command to remove an attribute from a group.
+//
+message RemoveGroupAttribute {
+    option (events) = "GroupAttributeRemoved";
+    option (rejections) = "GroupAttributeDoesNotExist";
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+}
+
+// The command to update a group attribute.
+//
+message UpdateGroupAttribute {
+    option (events) = "GroupAttributeUpdated";
+    option (rejections) = "GroupAttributeDoesNotExist";
+
+    GroupId id = 1;
+
+    // An attribute name.
+    string name = 2 [(required) = true];
+
+    // A new attribute value.
+    google.protobuf.Any new_value = 3 [(required) = true];
+}
+
+// The command to rename a group.
+//
+message RenameGroup {
+    option (events) = "GroupRenamed";
+
+    GroupId id = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+}
+
+// The command to change a group email address.
+//
+message ChangeGroupEmail {
+    option (events) = "GroupEmailChanged";
+
+    GroupId id = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
+}
