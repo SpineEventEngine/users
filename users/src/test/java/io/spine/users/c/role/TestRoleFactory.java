@@ -64,6 +64,6 @@ final class TestRoleFactory {
         return RoleVBuilder.newBuilder()
                            .setId(id)
                            .setDisplayName(roleName())
-                           .setBelongsTo(roleParent());
+                           .setOrgEntity(roleParent());
     }
 }

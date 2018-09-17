@@ -52,7 +52,7 @@ public final class RoleTestCommands {
     public static CreateRole createRole(RoleId id) {
         return CreateRoleVBuilder.newBuilder()
                                  .setId(id)
-                                 .setBelongsTo(roleParent())
+                                 .setOrgEntity(roleParent())
                                  .setDisplayName(roleName())
                                  .build();
     }
@@ -73,7 +73,7 @@ public final class RoleTestCommands {
     public static ChangeRoleParent changeRoleParent(RoleId id) {
         return ChangeRoleParentVBuilder.newBuilder()
                                        .setId(id)
-                                       .setNewParent(newRoleParent())
+                                       .setNewOrgEntity(newRoleParent())
                                        .build();
     }
 }

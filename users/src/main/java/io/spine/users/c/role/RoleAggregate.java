@@ -25,31 +25,37 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
-import io.spine.users.c.organization.OrganizationAggregate;
-import io.spine.users.c.orgunit.OrgUnitAggregate;
+import io.spine.users.c.group.AssignRoleToGroup;
+import io.spine.users.c.group.GroupAggregate;
+import io.spine.users.c.user.AssignRoleToUser;
+import io.spine.users.c.user.UserAggregate;
 
 /**
- * A role that can be assigned to users and groups for access control purposes.
+ * A role that can be assigned to {@linkplain UserAggregate users} and
+ * {@linkplain GroupAggregate groups}, to perform access control.
  *
- * <p>A {@link RoleAggregate} reflects a particular function or a functional role of users or/and
- * groups inside of an {@linkplain OrganizationAggregate organization} or
- * {@linkplain OrgUnitAggregate organizational unit}.
+ * <p>Roles are assigned to {@link UserAggregate users} and {@link GroupAggregate groups} directly
+ * and explicitly (please, see {@link AssignRoleToUser} and {@link AssignRoleToGroup} commands).
  *
- * <h3>Usage examples</h3>
+ * <p>A role exists in the scope of an organization or an orgunit, therefore it can be assigned
+ * only to those users and groups that are in the same organization and/or orgunit
+ * (or their child orgunits).
  *
- * <ul>
- *     <li>{@code Developers} group may have the following roles:
- *         {@code github-contributor, test-server-admin};
- *     <li>{@code John 'The External Auditor' Smith} user may have the following role:
- *         {@code accounting-papers-reader}.
- * </ul>
+ * <h3>Access Control</h3>
+ *
+ * The roles assigned to a {@linkplain GroupAggregate group} are recursively propagated to all
+ * members of the group. This propagation is implicit and is not reflected in aggregate states.
+ *
+ * <p>Therefore, when carrying out role-based access control, consider that a
+ * {@link UserAggregate User} and {@link GroupAggregate Group} aggregates have not only the roles
+ * listed in their aggregate states, but effectively all the roles derived from parent groups.
  *
  * @author Vladyslav Lubenskyi
  */
 public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     /**
-     * @see Aggregate#Aggregate(Object) 1
+     * @see Aggregate#Aggregate(Object)
      */
     protected RoleAggregate(RoleId id) {
         super(id);
@@ -72,21 +78,20 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Assign
     RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
-        return events(context).changeParent(command, getState().getBelongsTo());
+        return events(context).changeParent(command, getState().getOrgEntity());
     }
 
     @Apply
     void on(RoleCreated event) {
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
-                    .setBelongsTo(event.getBelongsTo())
+                    .setOrgEntity(event.getOrgEntity())
                     .build();
     }
 
     @Apply
     void on(RoleDeleted event) {
         setDeleted(true);
-
     }
 
     @Apply
@@ -96,7 +101,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Apply
     void on(RoleParentChanged event) {
-        getBuilder().setBelongsTo(event.getNewParent());
+        getBuilder().setOrgEntity(event.getNewOrgEntity());
     }
 
     private static RoleEventFactory events(CommandContext context) {

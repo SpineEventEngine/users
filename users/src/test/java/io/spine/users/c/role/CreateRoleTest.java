@@ -44,7 +44,7 @@ class CreateRoleTest extends RoleCommandTest<CreateRole> {
         expectThat(createEmptyAggregate(ROLE_ID)).producesEvent(RoleCreated.class, event -> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getBelongsTo(), event.getBelongsTo());
+            assertEquals(command.getOrgEntity(), event.getOrgEntity());
         });
     }
 
@@ -55,7 +55,7 @@ class CreateRoleTest extends RoleCommandTest<CreateRole> {
         expectThat(createEmptyAggregate(ROLE_ID)).hasState(state -> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getBelongsTo(), state.getBelongsTo());
+            assertEquals(command.getOrgEntity(), state.getOrgEntity());
         });
     }
 

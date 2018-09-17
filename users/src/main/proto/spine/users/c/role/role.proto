@@ -19,7 +19,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A role that can be assigned to `Users` and `Groups`, to peform access control.
+// A role that can be assigned to `Users` and `Groups`, to perform access control.
 //
 // Roles are assigned to `Users` and `Group` directly and explicitly (please, see `AssignRoleToUser`,
 // `AssignRoleToUser` commands). A `Role` exists in the scope of an organization or an orgunit,
@@ -28,8 +28,8 @@ import "spine/users/values.proto";
 //
 // ## Access Control
 //
-// The roles assigned to a `Group` are recursively propagated to all members of a group.
-// This propagation is implicit and is not reflected in aggegate states.
+// The roles assigned to a `Group` are recursively propagated to all members of the group.
+// This propagation is implicit and is not reflected in aggregate states.
 //
 // Therefore, when carrying out role-based access control, consider that a `User` or a `Group`
 // has not only the roles listed in the aggregate state, but effectively all the roles derived from

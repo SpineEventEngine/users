@@ -24,8 +24,8 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.ParentEntity;
-import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationalEntityVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.role.RoleAggregate;
@@ -59,14 +59,14 @@ public final class RoleTestEnv {
         return "bitbucket-contributor";
     }
 
-    public static ParentEntity roleParent() {
-        return ParentEntityVBuilder.newBuilder()
+    public static OrganizationalEntity roleParent() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrganization(organization())
                                    .build();
     }
 
-    public static ParentEntity newRoleParent() {
-        return ParentEntityVBuilder.newBuilder()
+    public static OrganizationalEntity newRoleParent() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrgUnit(orgUnit())
                                    .build();
     }

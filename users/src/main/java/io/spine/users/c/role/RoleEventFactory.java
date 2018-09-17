@@ -22,7 +22,7 @@ package io.spine.users.c.role;
 
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import io.spine.users.c.AggregateEventFactory;
 
 /**
@@ -52,7 +52,7 @@ final class RoleEventFactory extends AggregateEventFactory {
         return RoleCreatedVBuilder.newBuilder()
                                   .setId(command.getId())
                                   .setDisplayName(command.getDisplayName())
-                                  .setBelongsTo(command.getBelongsTo())
+                                  .setOrgEntity(command.getOrgEntity())
                                   .build();
     }
 
@@ -70,11 +70,11 @@ final class RoleEventFactory extends AggregateEventFactory {
                                   .build();
     }
 
-    RoleParentChanged changeParent(ChangeRoleParent command, ParentEntity oldParent) {
+    RoleParentChanged changeParent(ChangeRoleParent command, OrganizationalEntity oldParent) {
         return RoleParentChangedVBuilder.newBuilder()
                                         .setId(command.getId())
-                                        .setNewParent(command.getNewParent())
-                                        .setOldParent(oldParent)
+                                        .setNewOrgEntity(command.getNewOrgEntity())
+                                        .setOldOrgEntity(oldParent)
                                         .build();
     }
 }
