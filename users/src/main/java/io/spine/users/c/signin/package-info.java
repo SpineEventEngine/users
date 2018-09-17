@@ -19,7 +19,8 @@
  */
 
 /**
- * This package contains process managers for user sign-in.
+ * This package contains classes and interfaces related to
+ * {@link io.spine.users.c.signin.SignIn SignIn} process manager.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue

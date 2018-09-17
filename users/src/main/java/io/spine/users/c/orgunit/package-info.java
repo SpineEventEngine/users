@@ -19,7 +19,8 @@
  */
 
 /**
- * This package contains {@link io.spine.users.c.orgunit.OrgUnitAggregate OrgUnit} aggregate.
+ * This package contains classes and interfaces related to
+ * {@link io.spine.users.c.orgunit.OrgUnitAggregate OrgUnit} aggregate.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue

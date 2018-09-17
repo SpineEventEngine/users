@@ -19,7 +19,8 @@
  */
 
 /**
- * This package contains {@link io.spine.users.c.user.UserAggregate User aggregate}.
+ * This package contains classes and interfaces related to
+ * {@link io.spine.users.c.user.UserAggregate User aggregate}.
  */
 @ParametersAreNonnullByDefault
 @CheckReturnValue
