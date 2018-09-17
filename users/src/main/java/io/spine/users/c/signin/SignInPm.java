@@ -28,11 +28,11 @@ import java.util.Optional;
 
 import static io.spine.server.tuple.EitherOfTwo.withA;
 import static io.spine.server.tuple.EitherOfTwo.withB;
-import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_ALLOWED;
+import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
+import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
 import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
-import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.user.User.Status.ACTIVE;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -45,8 +45,8 @@ import static java.util.Optional.of;
  * <ol>
  *     <li>{@link SignUserIn} command initializes the sign-in process.
  *     <li>If a {@linkplain UserAggregate user} with the given {@linkplain UserId ID} already exists
- *         and all checks pass {@link SignInCompleted} event is generated in response.
- *     <li>Otherwise, the process manager creates a user and then attempts to
+ *         and all checks pass {@link SignInSuccessful} event is generated in response.
+ *     <li>Otherwise, the process manager creates a {@link UserAggregate} and then attempts to
  *         {@linkplain SignUserIn sign user in} again.
  * </ol>
  *
@@ -55,7 +55,7 @@ import static java.util.Optional.of;
  * <ul>
  *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given
  *         authentication identity;
- *     <li>an identity provider allows the user to sign in (e.g. the opposite would be if the user
+ *     <li>an identity provider authorize the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
  *     <li>the given authentication identity is associated with the user (that is, serves as the
  *         primary or a secondary authentication identity).
@@ -104,12 +104,12 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withA(finishWithError(UNKNOWN_IDENTITY));
         }
         if (!identityProvider.signInAllowed(identity)) {
-            return withA(finishWithError(SIGN_IN_NOT_ALLOWED));
+            return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
         Optional<UserAggregate> user = userRepository.find(id);
         if (!user.isPresent()) {
-            builder.setStatus(AWAITING_USER_CREATION);
+            builder.setStatus(AWAITING_USER_AGGREGATE_CREATION);
             return withB(createUserCommand(identityProvider));
         }
         if (!identityBelongsToUser(user.get(), identity)) {
@@ -129,8 +129,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Assign
-    EitherOfTwo<SignInCompleted, SignInFailed> handle(FinishSignIn command) {
-        if (command.getSuccessfull()) {
+    EitherOfTwo<SignInSuccessful, SignInFailed> handle(FinishSignIn command) {
+        if (command.getSuccessful()) {
             return withA(signInCompleted());
         } else {
             return withB(signInFailed(command.getFailureReason()));
@@ -143,7 +143,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     private boolean awaitsUserCreation() {
-        return getBuilder().getStatus() == AWAITING_USER_CREATION;
+        return getBuilder().getStatus() == AWAITING_USER_AGGREGATE_CREATION;
     }
 
     private static boolean identityBelongsToUser(UserAggregate user, UserAuthIdentity identity) {
@@ -165,14 +165,14 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     private FinishSignIn finishSuccessfully() {
         return FinishSignInVBuilder.newBuilder()
                                    .setId(getId())
-                                   .setSuccessfull(true)
+                                   .setSuccessful(true)
                                    .build();
     }
 
     private FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignInVBuilder.newBuilder()
                                    .setId(getId())
-                                   .setSuccessfull(false)
+                                   .setSuccessful(false)
                                    .setFailureReason(failureReason)
                                    .build();
     }
@@ -185,8 +185,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                                  .build();
     }
 
-    private SignInCompleted signInCompleted() {
-        return SignInCompletedVBuilder.newBuilder()
+    private SignInSuccessful signInCompleted() {
+        return SignInSuccessfulVBuilder.newBuilder()
                                       .setId(getId())
                                       .setIdentity(getBuilder().getIdentity())
                                       .build();

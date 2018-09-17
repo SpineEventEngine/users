@@ -36,8 +36,8 @@ import "spine/users/c/signin/values.proto";
 // 1. an identity provider is aware of the given authentication identity;
 // 2. an identity provider authorize the user to sign in (e.g. the opposite would be if the user
 //    account was suspended);
-// 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`
-//    command).
+// 3. the given authentication identity is associated with the user (that is, serves as the
+//    primary or a secondary authentication identity).
 //
 // If one of the checks fails, the process is completed immediately with `SignInFailed` event.
 //

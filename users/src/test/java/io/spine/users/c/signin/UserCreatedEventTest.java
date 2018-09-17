@@ -11,7 +11,7 @@ import io.spine.users.c.user.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
+import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.TestProcManFactory.nonEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestEvents.userCreated;
@@ -38,7 +38,7 @@ public class UserCreatedEventTest
     @Test
     @DisplayName("start SignIn again")
     void checkStatus() {
-        SignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_CREATION);
+        SignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_AGGREGATE_CREATION);
         expectThat(emptyProcMan).producesCommand(SignUserIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertEquals(emptyProcMan.getState()

@@ -6,12 +6,12 @@
 
 package io.spine.users.c.user;
 
-import io.spine.users.c.signin.SignInCompleted;
+import io.spine.users.c.signin.SignInSuccessful;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestEvents.signInCompleted;
+import static io.spine.users.c.user.given.UserTestEvents.signInSuccessful;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("SignInCompleted event should")
-class SignInCompletedTest extends UserEventTest<SignInCompleted> {
+class SignInCompletedTest extends UserEventTest<SignInSuccessful> {
 
     SignInCompletedTest() {
         super(createMessage());
@@ -36,7 +36,7 @@ class SignInCompletedTest extends UserEventTest<SignInCompleted> {
         });
     }
 
-    private static SignInCompleted createMessage() {
-        return signInCompleted(USER_ID);
+    private static SignInSuccessful createMessage() {
+        return signInSuccessful(USER_ID);
     }
 }

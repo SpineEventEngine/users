@@ -11,9 +11,9 @@ import io.spine.users.c.user.CreateUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_ALLOWED;
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_CREATION;
+import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestCommands.signInCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,7 +51,8 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
                     assertEquals(message().getId(), command.getId());
                     assertEquals(message().getIdentity(), command.getPrimaryIdentity());
                 })
-                .hasState(state -> assertEquals(AWAITING_USER_CREATION, state.getStatus()));
+                .hasState(
+                        state -> assertEquals(AWAITING_USER_AGGREGATE_CREATION, state.getStatus()));
     }
 
     @Test
@@ -76,7 +77,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
-            assertEquals(SIGN_IN_NOT_ALLOWED, command.getFailureReason());
+            assertEquals(SIGN_IN_NOT_AUTHORIZED, command.getFailureReason());
         });
     }
 
