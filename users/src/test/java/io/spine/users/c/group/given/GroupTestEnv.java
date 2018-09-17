@@ -118,7 +118,7 @@ public class GroupTestEnv {
     }
 
     public static String groupAttributeName() {
-        return "grouo-attribute-1";
+        return "group-attribute-1";
     }
 
     public static Any groupAttributeValue() {
@@ -126,7 +126,7 @@ public class GroupTestEnv {
     }
 
     static String newGroupAttributeName() {
-        return "grouo-attribute-1";
+        return "grouo-attribute-2";
     }
 
     static Any newGroupAttributeValue() {

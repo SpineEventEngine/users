@@ -107,7 +107,7 @@ public final class OrgUnitTestEnv {
     }
 
     public static String newOrgUnitAttributeName() {
-        return "org-attribute-name-1";
+        return "org-attribute-name-2";
     }
 
     public static Any newOrgUnitAttributeValue() {

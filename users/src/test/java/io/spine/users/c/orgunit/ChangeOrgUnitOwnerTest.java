@@ -21,11 +21,9 @@
 package io.spine.users.c.orgunit;
 
 import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.c.orgunit.TestOrgUnitFactory.createAggregate;
 import static io.spine.users.c.orgunit.given.OrgUnitTestCommands.changeOrgUnitOwner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,10 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @DisplayName("ChangeOrgUnitOwner command should")
 class ChangeOrgUnitOwnerTest extends OrgUnitCommandTest<ChangeOrgUnitOwner> {
-
-    private static final UserId NEW_OWNER = UserIdVBuilder.newBuilder()
-                                                          .setValue(newUuid())
-                                                          .build();
 
     ChangeOrgUnitOwnerTest() {
         super(createMessage());

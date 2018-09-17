@@ -163,8 +163,8 @@ public class UserTestEnv {
 
     private static PersonName personName() {
         return PersonNameVBuilder.newBuilder()
-                                 .setGivenName("John")
-                                 .setFamilyName("Smith")
+                                 .setGivenName("Jane")
+                                 .setFamilyName("Jones")
                                  .build();
     }
 

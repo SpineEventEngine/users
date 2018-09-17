@@ -113,7 +113,7 @@ public final class OrganizationTestEnv {
     }
 
     public static String newOrgAttributeName() {
-        return "org-attribute-name-1";
+        return "org-attribute-name-2";
     }
 
     public static Any newOrgAttributeValue() {
