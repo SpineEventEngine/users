@@ -32,8 +32,8 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.ParentEntity;
-import io.spine.users.ParentEntityVBuilder;
+import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationalEntityVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.group.GroupAggregate;
@@ -49,6 +49,9 @@ import static io.spine.protobuf.AnyPacker.pack;
 public class GroupTestEnv {
 
     private static final GroupId NESTED_GROUP_ID = createGroupId();
+    private static final UserId GROUP_OWNER = UserIdVBuilder.newBuilder()
+                                                            .setValue(newUuid())
+                                                            .build();
 
     /**
      * Prevents instantiation.
@@ -87,19 +90,23 @@ public class GroupTestEnv {
     }
 
     public static UserId groupOwner() {
+        return GROUP_OWNER;
+    }
+
+    public static UserId newGroupOwner() {
         return UserIdVBuilder.newBuilder()
                              .setValue(newUuid())
                              .build();
     }
 
-    public static ParentEntity groupParentOrganization() {
-        return ParentEntityVBuilder.newBuilder()
+    public static OrganizationalEntity groupOrgEntityOrganization() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrganization(organization())
                                    .build();
     }
 
-    public static ParentEntity groupParentOrgUnit() {
-        return ParentEntityVBuilder.newBuilder()
+    public static OrganizationalEntity groupParentOrgUnit() {
+        return OrganizationalEntityVBuilder.newBuilder()
                                    .setOrgUnit(orgUnit())
                                    .build();
     }

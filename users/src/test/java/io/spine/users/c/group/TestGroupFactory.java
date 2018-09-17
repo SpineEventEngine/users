@@ -23,14 +23,15 @@ package io.spine.users.c.group;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
-import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
+import static io.spine.users.c.group.given.GroupTestEnv.groupName;
+import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
-import static io.spine.users.c.group.given.GroupTestEnv.groupParentOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.c.group.given.GroupTestEnv.newGroupOwner;
+import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
 
 /**
  * A factory for creating test {@linkplain GroupAggregate Group aggregates}.
@@ -59,6 +60,14 @@ final class TestGroupFactory {
         return aggregate(state(id).build());
     }
 
+    /**
+     * Creates a new instance of the aggregate with the filled state and multiple owners.
+     */
+    static GroupAggregate createAggregateWithOwners(GroupId id) {
+        GroupVBuilder state = state(id).addOwners(newGroupOwner());
+        return aggregate(state.build());
+    }
+
     private static GroupAggregate aggregate(Group state) {
         return Given.aggregateOfClass(GroupAggregate.class)
                     .withState(state)
@@ -69,10 +78,10 @@ final class TestGroupFactory {
     private static GroupVBuilder state(GroupId id) {
         return GroupVBuilder.newBuilder()
                             .setId(id)
-                            .setParentEntity(groupParentOrganization())
+                            .setOrgEntity(groupOrgEntityOrganization())
                             .setDisplayName(groupName())
                             .setEmail(groupEmail())
-                            .setOwner(groupOwner())
+                            .addOwners(groupOwner())
                             .putAttributes(groupAttributeName(), groupAttributeValue())
                             .addMembership(upperGroupId())
                             .addRole(groupRole());

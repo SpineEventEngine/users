@@ -20,54 +20,51 @@
 
 package io.spine.users.c.group;
 
-import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
+import io.spine.users.GroupId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.changeOwner;
+import static io.spine.users.c.group.given.GroupTestCommands.joinParentGroup;
+import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangeGroupOwner command should")
-class ChangeGroupOwnerTest extends GroupCommandTest<ChangeGroupOwner> {
+@DisplayName("JoinParentGroup command should")
+class JoinParentGroupTest extends GroupCommandTest<JoinParentGroup> {
 
-    private static final UserId NEW_OWNER = UserIdVBuilder.newBuilder()
-                                                          .setValue(newUuid())
-                                                          .build();
+    private static final GroupId SUPER_GROUP = createGroupId();
 
-    ChangeGroupOwnerTest() {
+    JoinParentGroupTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce GroupOwnerChanged event")
+    @DisplayName("produce ParentGroupJoined event")
     void produceEvent() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
-        UserId oldOwner = aggregate.getState()
-                                   .getOwner();
-        expectThat(aggregate).producesEvent(GroupOwnerChanged.class, event -> {
+        expectThat(aggregate).producesEvent(ParentGroupJoined.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewOwner(), event.getNewOwner());
-            assertEquals(oldOwner, event.getOldOwner());
+            assertEquals(message().getParentGroupId(), event.getParentGroupId());
         });
     }
 
     @Test
-    @DisplayName("change the owner")
+    @DisplayName("add a group membership")
     void changeState() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewOwner(), state.getOwner());
+            GroupId expectedGroup = message().getParentGroupId();
+            assertTrue(state.getMembershipList()
+                            .contains(expectedGroup));
         });
     }
 
-    private static ChangeGroupOwner createMessage() {
-        return changeOwner(GROUP_ID, NEW_OWNER);
+    private static JoinParentGroup createMessage() {
+        return joinParentGroup(GROUP_ID, SUPER_GROUP);
     }
 }

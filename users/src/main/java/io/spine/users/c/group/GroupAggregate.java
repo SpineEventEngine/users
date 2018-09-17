@@ -22,6 +22,7 @@ package io.spine.users.c.group;
 
 import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
+import io.spine.core.UserId;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -43,6 +44,9 @@ import java.util.Map;
  *
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
+ *
+ * <p>It is forbidden for groups to directly or indirectly join themselves; in other words,
+ * all nested group memberships must always form an acyclic graph.
  *
  * <h3>Group Attributes</h3>
  *
@@ -75,13 +79,27 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     }
 
     @Assign
-    GroupOwnerChanged handle(ChangeGroupOwner command, CommandContext context) {
-        return events(context).changeOwner(command, getState().getOwner());
+    GroupOwnerAdded handle(AddGroupOwner command, CommandContext context) {
+        return events(context).addOwner(command);
+    }
+
+    @Assign
+    GroupOwnerRemoved handle(RemoveGroupOwner command, CommandContext context)
+            throws NoSuchOwnerInGroup, GroupMustHaveAnOwner {
+        List<UserId> owners = getState().getOwnersList();
+        UserId ownerToRemove = command.getOwner();
+        if (!owners.contains(ownerToRemove)) {
+            throw new NoSuchOwnerInGroup(command.getId(), ownerToRemove);
+        }
+        if (owners.size() == 1) {
+            throw new GroupMustHaveAnOwner(command.getId());
+        }
+        return events(context).removeOwner(command);
     }
 
     @Assign
     GroupMoved handle(MoveGroup command, CommandContext context) {
-        return events(context).moveGroup(command, getState().getParentEntity());
+        return events(context).moveGroup(command, getState().getOrgEntity());
     }
 
     @Assign
@@ -90,14 +108,13 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     }
 
     @Assign
-    SuperGroupAdded handle(AddSuperGroup command,
-                           CommandContext context) {
-        return events(context).addSuperGroup(command);
+    ParentGroupJoined handle(JoinParentGroup command, CommandContext context) {
+        return events(context).joinGroup(command);
     }
 
     @Assign
-    SuperGroupRemoved handle(RemoveSuperGroup command, CommandContext context) {
-        return events(context).removeSuperGroup(command);
+    ParentGroupLeft handle(LeaveParentGroup command, CommandContext context) {
+        return events(context).leaveGroup(command);
     }
 
     @Assign
@@ -160,21 +177,31 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setEmail(event.getEmail())
-                    .setOwner(event.getOwner())
-                    .setParentEntity(event.getParentEntity())
+                    .addAllOwners(event.getOwnersList())
+                    .setOrgEntity(event.getOrgEntity())
                     .putAllAttributes(event.getAttributesMap())
                     .addAllRole(event.getRoleList())
                     .build();
     }
 
     @Apply
-    void on(GroupOwnerChanged event) {
-        getBuilder().setOwner(event.getNewOwner());
+    void on(GroupOwnerAdded event) {
+        getBuilder().addOwners(event.getNewOwner());
+    }
+
+    @Apply
+    void on(GroupOwnerRemoved event) {
+        List<UserId> owners = getBuilder().getOwners();
+        UserId ownerToRemove = event.getRemovedOwner();
+        if (owners.contains(ownerToRemove)) {
+            int ownerIndex = owners.indexOf(ownerToRemove);
+            getBuilder().removeOwners(ownerIndex);
+        }
     }
 
     @Apply
     void on(GroupMoved event) {
-        getBuilder().setParentEntity(event.getNewParentEntity());
+        getBuilder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
@@ -183,13 +210,13 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     }
 
     @Apply
-    void on(SuperGroupAdded event) {
-        getBuilder().addMembership(event.getSuperGroupId());
+    void on(ParentGroupJoined event) {
+        getBuilder().addMembership(event.getParentGroupId());
     }
 
     @Apply
-    void on(SuperGroupRemoved event) {
-        GroupId upperGroup = event.getSuperGroupId();
+    void on(ParentGroupLeft event) {
+        GroupId upperGroup = event.getParentGroupId();
         GroupVBuilder builder = getBuilder();
         List<GroupId> memberships = builder.getMembership();
         if (memberships.contains(upperGroup)) {
@@ -197,6 +224,9 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
             builder.removeMembership(index);
         }
     }
+
+//    GroupOwnerAdded
+//    GroupOwnerRemoved
 
     @Apply
     void on(RoleAssignedToGroup event) {

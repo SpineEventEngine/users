@@ -22,29 +22,28 @@ package io.spine.users.c.group.given;
 
 import io.spine.core.UserId;
 import io.spine.users.GroupId;
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import io.spine.users.RoleId;
 import io.spine.users.c.group.AddGroupAttribute;
 import io.spine.users.c.group.AddGroupAttributeVBuilder;
-import io.spine.users.c.group.AddSuperGroup;
-import io.spine.users.c.group.AddSuperGroupVBuilder;
+import io.spine.users.c.group.AddGroupOwner;
 import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.ChangeGroupEmailVBuilder;
-import io.spine.users.c.group.ChangeGroupOwner;
-import io.spine.users.c.group.ChangeGroupOwnerVBuilder;
 import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.CreateGroupVBuilder;
 import io.spine.users.c.group.DeleteGroup;
 import io.spine.users.c.group.DeleteGroupVBuilder;
 import io.spine.users.c.group.GroupAggregate;
+import io.spine.users.c.group.JoinParentGroup;
+import io.spine.users.c.group.LeaveParentGroup;
+import io.spine.users.c.group.LeaveParentGroupVBuilder;
 import io.spine.users.c.group.MoveGroup;
 import io.spine.users.c.group.MoveGroupVBuilder;
 import io.spine.users.c.group.RemoveGroupAttribute;
 import io.spine.users.c.group.RemoveGroupAttributeVBuilder;
-import io.spine.users.c.group.RemoveSuperGroup;
-import io.spine.users.c.group.RemoveSuperGroupVBuilder;
+import io.spine.users.c.group.RemoveGroupOwner;
 import io.spine.users.c.group.RenameGroup;
 import io.spine.users.c.group.RenameGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
@@ -52,12 +51,12 @@ import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 import io.spine.users.c.group.UpdateGroupAttribute;
 import io.spine.users.c.group.UpdateGroupAttributeVBuilder;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
-import static io.spine.users.c.group.given.GroupTestEnv.groupParentOrganization;
+import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeName;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeValue;
@@ -82,24 +81,31 @@ public class GroupTestCommands {
                                   .setId(id)
                                   .setDisplayName(groupName())
                                   .setEmail(groupEmail())
-                                  .setOwner(groupOwner())
-                                  .setParentEntity(groupParentOrganization())
+                                  .addOwners(groupOwner())
+                                  .setOrgEntity(groupOrgEntityOrganization())
                                   .addRole(groupRole())
                                   .putAttributes(groupAttributeName(), groupAttributeValue())
                                   .build();
     }
 
-    public static ChangeGroupOwner changeOwner(GroupId id, UserId newOwner) {
-        return ChangeGroupOwnerVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setNewOwner(newOwner)
-                                       .build();
+    public static AddGroupOwner addGroupOwner(GroupId id, UserId newOwner) {
+        return AddGroupOwner.newBuilder()
+                            .setId(id)
+                            .setNewOwner(newOwner)
+                            .build();
     }
 
-    public static MoveGroup moveGroup(GroupId groupId, ParentEntity newParent) {
+    public static RemoveGroupOwner removeGroupOwner(GroupId id) {
+        return RemoveGroupOwner.newBuilder()
+                               .setId(id)
+                               .setOwner(groupOwner())
+                               .build();
+    }
+
+    public static MoveGroup moveGroup(GroupId groupId, OrganizationalEntity newParent) {
         return MoveGroupVBuilder.newBuilder()
                                 .setId(groupId)
-                                .setNewParentEntity(newParent)
+                                .setNewOrgEntity(newParent)
                                 .build();
     }
 
@@ -109,19 +115,19 @@ public class GroupTestCommands {
                                   .build();
     }
 
-    public static AddSuperGroup addSuperGroup(GroupId groupId,
-                                              GroupId upperGroupId) {
-        return AddSuperGroupVBuilder.newBuilder()
-                                    .setId(groupId)
-                                    .setSuperGroupId(upperGroupId)
-                                    .build();
+    public static JoinParentGroup joinParentGroup(GroupId groupId,
+                                                  GroupId upperGroupId) {
+        return JoinParentGroup.newBuilder()
+                              .setId(groupId)
+                              .setParentGroupId(upperGroupId)
+                              .build();
     }
 
-    public static RemoveSuperGroup removeSuperGroup(GroupId groupId,
+    public static LeaveParentGroup leaveParentGroup(GroupId groupId,
                                                     GroupId upperGroupId) {
-        return RemoveSuperGroupVBuilder.newBuilder()
+        return LeaveParentGroupVBuilder.newBuilder()
                                        .setId(groupId)
-                                       .setSuperGroupId(upperGroupId)
+                                       .setParentGroupId(upperGroupId)
                                        .build();
     }
 

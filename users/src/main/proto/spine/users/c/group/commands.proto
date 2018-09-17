@@ -63,7 +63,7 @@ message AddGroupOwner {
 //
 message RemoveGroupOwner {
     option (events) = "GroupOwnerRemoved";
-    option (rejections) = "GroupMustHaveAnOwner";
+    option (rejections) = "GroupMustHaveAnOwner, NoSuchOwnerInGroup";
 
     GroupId id = 1;
 

@@ -20,49 +20,54 @@
 
 package io.spine.users.c.group;
 
-import io.spine.users.GroupId;
+import io.spine.core.UserId;
+import io.spine.core.UserIdVBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.removeSuperGroup;
-import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
-import static org.junit.Assert.assertFalse;
+import static io.spine.users.c.group.given.GroupTestCommands.addGroupOwner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoveSuperGroup command should")
-class StopNestedMembershipTest extends GroupCommandTest<RemoveSuperGroup> {
+@DisplayName("AddGroupOwner command should")
+class AddGroupOwnerTest extends GroupCommandTest<AddGroupOwner> {
 
-    StopNestedMembershipTest() {
+    private static final UserId NEW_OWNER = UserIdVBuilder.newBuilder()
+                                                          .setValue(newUuid())
+                                                          .build();
+
+    AddGroupOwnerTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce SuperGroupRemoved event")
+    @DisplayName("produce GroupOwnerAdded event")
     void produceEvent() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(SuperGroupRemoved.class, event -> {
+        expectThat(aggregate).producesEvent(GroupOwnerAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getSuperGroupId(), event.getSuperGroupId());
+            assertEquals(message().getNewOwner(), event.getNewOwner());
         });
     }
 
     @Test
-    @DisplayName("remove a group membership")
+    @DisplayName("add the owner")
     void changeState() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
         expectThat(aggregate).hasState(state -> {
-            GroupId expectedGroup = message().getSuperGroupId();
-            assertFalse(state.getMembershipList()
-                             .contains(expectedGroup));
+            UserId newOwner = message().getNewOwner();
+            assertTrue(state.getOwnersList()
+                            .contains(newOwner));
         });
     }
 
-    private static RemoveSuperGroup createMessage() {
-        return removeSuperGroup(GROUP_ID, upperGroupId());
+    private static AddGroupOwner createMessage() {
+        return addGroupOwner(GROUP_ID, NEW_OWNER);
     }
 }

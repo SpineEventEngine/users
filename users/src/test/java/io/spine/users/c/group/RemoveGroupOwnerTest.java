@@ -20,58 +20,63 @@
 
 package io.spine.users.c.group;
 
-import io.spine.users.RoleId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.group.TestGroupFactory.createAggregate;
+import static io.spine.users.c.group.TestGroupFactory.createAggregateWithOwners;
 import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
-import static io.spine.users.c.group.given.GroupTestCommands.unassignRoleFromGroup;
-import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.c.group.given.GroupTestCommands.removeGroupOwner;
+import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("UnassignRoleFromGroup command should")
-class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {
+@DisplayName("RemoveGroupOwner command should")
+class RemoveGroupOwnerTest extends GroupCommandTest<RemoveGroupOwner> {
 
-    UnassignRoleFromGroupTest() {
+    RemoveGroupOwnerTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("produce RoleUnassignedFromGroup event")
+    @DisplayName("produce GroupOwnerRemoved event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(RoleUnassignedFromGroup.class, event -> {
+        GroupAggregate aggregate = createAggregateWithOwners(GROUP_ID);
+        expectThat(aggregate).producesEvent(GroupOwnerRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
+            assertEquals(message().getOwner(), event.getRemovedOwner());
         });
     }
 
     @Test
-    @DisplayName("un-assign role from group")
+    @DisplayName("remove the owner")
     void changeState() {
+        GroupAggregate aggregate = createAggregateWithOwners(GROUP_ID);
+        expectThat(aggregate).hasState(state -> {
+            assertFalse(state.getOwnersList()
+                             .contains(groupOwner()));
+        });
+    }
+
+    @Test
+    @DisplayName("generates NoSuchOwnerInGroup")
+    void handleNoSuchOwner() {
+        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
+        expectThat(aggregate).throwsRejection(Rejections.NoSuchOwnerInGroup.class);
+    }
+
+    @Test
+    @DisplayName("generates GroupMustHaveAnOwner")
+    void handleNoOwners() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
 
-        expectThat(aggregate).hasState(state -> {
-            RoleId expectedRole = message().getRoleId();
-            assertFalse(state.getRoleList()
-                             .contains(expectedRole));
-        });
+        expectThat(aggregate).throwsRejection(Rejections.GroupMustHaveAnOwner.class);
     }
 
-    @Test
-    @DisplayName("throw rejection if role isn't assigned to a group")
-    void throwsRejection() {
-        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
-
-        expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToGroup.class);
-    }
-
-    private static UnassignRoleFromGroup createMessage() {
-        return unassignRoleFromGroup(GROUP_ID, groupRole());
+    private static RemoveGroupOwner createMessage() {
+        return removeGroupOwner(GROUP_ID);
     }
 }

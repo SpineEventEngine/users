@@ -23,9 +23,8 @@ package io.spine.users.c.group;
 import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
-import io.spine.users.ParentEntity;
+import io.spine.users.OrganizationalEntity;
 import io.spine.users.c.AggregateEventFactory;
 
 /**
@@ -58,26 +57,18 @@ class GroupEventFactory extends AggregateEventFactory {
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
                                    .setEmail(command.getEmail())
-                                   .setOwner(command.getOwner())
-                                   .setParentEntity(command.getParentEntity())
+                                   .addAllOwners(command.getOwnersList())
+                                   .setOrgEntity(command.getOrgEntity())
                                    .addAllRole(command.getRoleList())
                                    .putAllAttributes(command.getAttributesMap())
                                    .build();
     }
 
-    GroupOwnerChanged changeOwner(ChangeGroupOwner command, UserId oldOwner) {
-        return GroupOwnerChangedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setNewOwner(command.getNewOwner())
-                                        .setOldOwner(oldOwner)
-                                        .build();
-    }
-
-    GroupMoved moveGroup(MoveGroup command, ParentEntity oldParentEntity) {
+    GroupMoved moveGroup(MoveGroup command, OrganizationalEntity oldOrgEntity) {
         return GroupMovedVBuilder.newBuilder()
                                  .setId(command.getId())
-                                 .setNewParentEntity(command.getNewParentEntity())
-                                 .setOldParentEntity(oldParentEntity)
+                                 .setNewOrgEntity(command.getNewOrgEntity())
+                                 .setOldOrgEntity(oldOrgEntity)
                                  .build();
     }
 
@@ -87,18 +78,18 @@ class GroupEventFactory extends AggregateEventFactory {
                                    .build();
     }
 
-    SuperGroupAdded addSuperGroup(AddSuperGroup command) {
-        return SuperGroupAddedVBuilder.newBuilder()
-                                      .setId(command.getId())
-                                      .setSuperGroupId(command.getSuperGroupId())
-                                      .build();
+    ParentGroupJoined joinGroup(JoinParentGroup command) {
+        return ParentGroupJoinedVBuilder.newBuilder()
+                                        .setId(command.getId())
+                                        .setParentGroupId(command.getParentGroupId())
+                                        .build();
     }
 
-    SuperGroupRemoved removeSuperGroup(RemoveSuperGroup command) {
-        return SuperGroupRemovedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setSuperGroupId(command.getSuperGroupId())
-                                        .build();
+    ParentGroupLeft leaveGroup(LeaveParentGroup command) {
+        return ParentGroupLeftVBuilder.newBuilder()
+                                      .setId(command.getId())
+                                      .setParentGroupId(command.getParentGroupId())
+                                      .build();
     }
 
     RoleAssignedToGroup assignRole(AssignRoleToGroup command) {
@@ -153,6 +144,20 @@ class GroupEventFactory extends AggregateEventFactory {
                                         .setId(command.getId())
                                         .setNewEmail(command.getNewEmail())
                                         .setOldEmail(oldEmail)
+                                        .build();
+    }
+
+    GroupOwnerAdded addOwner(AddGroupOwner command) {
+        return GroupOwnerAddedVBuilder.newBuilder()
+                                      .setId(command.getId())
+                                      .setNewOwner(command.getNewOwner())
+                                      .build();
+    }
+
+    GroupOwnerRemoved removeOwner(RemoveGroupOwner command) {
+        return GroupOwnerRemovedVBuilder.newBuilder()
+                                        .setId(command.getId())
+                                        .setRemovedOwner(command.getOwner())
                                         .build();
     }
 }

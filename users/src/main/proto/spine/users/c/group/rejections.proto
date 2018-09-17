@@ -15,6 +15,7 @@ option java_package = "io.spine.users.c.group";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 
 // The rejection is generated when trying to access a group attribute that doesn't exist.
@@ -52,4 +53,14 @@ message GroupsCanNotFormCycles {
 message GroupMustHaveAnOwner {
 
     GroupId id = 1;
+}
+
+// The rejection is generatied when trying to refer to an unexisting owner of the group.
+//
+message NoSuchOwnerInGroup {
+
+    GroupId id = 1;
+
+    // The referenced owner.
+    core.UserId owner = 2 [(required) = true];
 }
