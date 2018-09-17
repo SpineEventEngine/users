@@ -121,7 +121,6 @@ public final class SignInTestEnv {
         return pack(StringValue.of("encrypted-auth-token-value"));
     }
 
-
     static String displayName() {
         return "John Smith";
     }
