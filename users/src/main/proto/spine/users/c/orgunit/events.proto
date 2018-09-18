@@ -22,7 +22,7 @@ import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The event is emitted when a new orgunit is created.
+// A new orgunit is created.
 //
 message OrgUnitCreated {
 
@@ -44,7 +44,7 @@ message OrgUnitCreated {
     core.UserId owner = 6 [(required) = true];
 }
 
-// The event is emitted when an owner of an orgunit is changed.
+// An owner of an orgunit is changed.
 //
 message OrgUnitOwnerChanged {
 
@@ -57,7 +57,7 @@ message OrgUnitOwnerChanged {
     core.UserId old_owner = 3 [(required) = true];
 }
 
-// The event is emitted when an orgunit is moved to another organization or orgunit.
+// An orgunit is moved to another organization or orgunit.
 //
 message OrgUnitMoved {
 
@@ -70,14 +70,14 @@ message OrgUnitMoved {
     OrganizationalEntity old_parent_entity = 3 [(required) = true];
 }
 
-// The event is emitted when an orgunit is deleted.
+// An orgunit is deleted.
 //
 message OrgUnitDeleted {
 
     OrgUnitId id = 1;
 }
 
-// The event is emitted when an attribute of the orgunit is added.
+// A new attribute is added to an orgunit.
 //
 message OrgUnitAttributeAdded {
 
@@ -90,7 +90,7 @@ message OrgUnitAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the orgunit is removed.
+// An orgunit attribute is removed.
 //
 message OrgUnitAttributeRemoved {
 
@@ -103,7 +103,7 @@ message OrgUnitAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the orgunit is updated.
+// An orgunit attribute is updated.
 //
 message OrgUnitAttributeUpdated {
 
@@ -119,7 +119,7 @@ message OrgUnitAttributeUpdated {
     google.protobuf.Any new_value = 5 [(required) = true];
 }
 
-// The event is emitted when an orgunit is renamed.
+// An orgunit is renamed.
 //
 message OrgUnitRenamed {
 
@@ -132,7 +132,7 @@ message OrgUnitRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// The event is emitted when an orgunit domain is changed.
+// An orgunit domain is changed.
 //
 message OrgUnitDomainChanged {
 

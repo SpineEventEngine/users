@@ -20,7 +20,7 @@ import "spine/core/user_id.proto";
 import "spine/users/c/signin/values.proto";
 import "spine/users/user_auth_identity.proto";
 
-// The event is emitted when the sign-in process is successfully completed.
+// The sign-in process is successfully completed.
 //
 message SignInSuccessful {
 
@@ -30,7 +30,7 @@ message SignInSuccessful {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The event is emitted when the sign-in process failed.
+// The sign-in process failed.
 //
 message SignInFailed {
 
@@ -43,7 +43,7 @@ message SignInFailed {
     SignInFailureReason failure_reason = 3 [(required) = true];
 }
 
-// The event is emitted when the user sign-out completed.
+// A user successfully signed out.
 //
 message SignOutCompleted {
 

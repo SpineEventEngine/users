@@ -25,7 +25,7 @@ import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/user_profile.proto";
 
-// The event is emitted when a new user is created.
+// A new user is created.
 //
 message UserCreated {
 
@@ -56,7 +56,7 @@ message UserCreated {
     spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
-// The event is emitted when a user is moved to another organization or organizational unit.
+// A user is moved to another organization or organizational unit.
 //
 message UserMoved {
 
@@ -69,7 +69,7 @@ message UserMoved {
     OrganizationalEntity old_org_entity = 3 [(required) = true];
 }
 
-// The event is emitted when a user became a member of the group.
+// A user joined a group.
 //
 message UserJoinedGroup {
 
@@ -79,7 +79,7 @@ message UserJoinedGroup {
     users.GroupId group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a user left the group.
+// A user left a group.
 //
 message UserLeftGroup {
 
@@ -89,7 +89,7 @@ message UserLeftGroup {
     users.GroupId group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a user is deleted.
+// A user is deleted.
 //
 message UserDeleted {
 
@@ -99,7 +99,7 @@ message UserDeleted {
     spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
 }
 
-// The event is emitted when a role is assigned to user.
+// A role is assigned to a user.
 //
 message RoleAssignedToUser {
 
@@ -109,7 +109,7 @@ message RoleAssignedToUser {
     users.RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when a role is unassigned from user.
+// A role assignment is removed from a user.
 //
 message RoleUnassignedFromUser {
 
@@ -119,7 +119,7 @@ message RoleUnassignedFromUser {
     users.RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when an attribute of the user is added.
+// An new attribute is added to a user.
 //
 message UserAttributeAdded {
 
@@ -132,7 +132,7 @@ message UserAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the user is removed.
+// A user attribute is removed.
 //
 message UserAttributeRemoved {
 
@@ -145,7 +145,7 @@ message UserAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the user is updated.
+// A user attribute is updated.
 //
 message UserAttributeUpdated {
 
@@ -161,7 +161,7 @@ message UserAttributeUpdated {
     google.protobuf.Any new_value = 5 [(required) = true];
 }
 
-// The event is emitted when the status of the user is changed.
+// The status of a user is changed.
 //
 message UserStatusChanged {
 
@@ -174,7 +174,7 @@ message UserStatusChanged {
     User.Status new_status = 3 [(required) = true];
 }
 
-// The event is emitted when a user is signed in.
+// A user signed in.
 //
 message UserSignedIn {
 
@@ -187,7 +187,7 @@ message UserSignedIn {
     spine.time.ZonedDateTime when_signed_in = 3;
 }
 
-// The event is emitted when a user is signed out.
+// A user signed out.
 //
 message UserSignedOut {
 
@@ -197,7 +197,7 @@ message UserSignedOut {
     spine.time.ZonedDateTime when_signed_out = 3;
 }
 
-// The event is emitted when a new secondary authentication identity is added.
+// A new secondary authentication identity is added.
 //
 message SecondaryAuthIdentityAdded {
 
@@ -207,7 +207,7 @@ message SecondaryAuthIdentityAdded {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The event is emitted when a secondary authentication identity is removed.
+// A secondary authentication identity is removed.
 //
 message SecondaryAuthIdentityRemoved {
 
@@ -217,7 +217,7 @@ message SecondaryAuthIdentityRemoved {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The event is emitted when the primary authentication identity is changed.
+// The primary authentication identity is changed.
 //
 message PrimaryAuthIdentityChanged {
 
@@ -227,7 +227,7 @@ message PrimaryAuthIdentityChanged {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The event is emitted when a user is renamed.
+// A user is renamed.
 //
 message UserRenamed {
 
@@ -240,7 +240,7 @@ message UserRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// The event is emitted when a user profile is updated.
+// A user profile is updated.
 //
 message UserProfileUpdated {
 

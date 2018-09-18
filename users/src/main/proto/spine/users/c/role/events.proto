@@ -19,7 +19,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The event is emitted when a new role is created.
+// A new role is created.
 //
 message RoleCreated {
 
@@ -32,14 +32,14 @@ message RoleCreated {
     OrganizationalEntity org_entity = 3;
 }
 
-// The event is emitted when a role is deleted.
+// A role is deleted.
 //
 message RoleDeleted {
 
     RoleId id = 1;
 }
 
-// The event is emitted when a role is renamed.
+// A role is renamed.
 //
 message RoleRenamed {
 
@@ -52,7 +52,7 @@ message RoleRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// The event is emitted when an entity the role belongs to is changed.
+// An entity the role belongs to is changed.
 //
 message RoleParentChanged {
 

@@ -32,7 +32,7 @@ message CreateOrganization {
     // A name of an organization to display on UI.
     string display_name = 2 [(required) = true];
 
-    // ThAe domain of the organization.
+    // The domain of the organization.
     net.InternetDomain domain = 3;
 
     // Attributes of the organization.

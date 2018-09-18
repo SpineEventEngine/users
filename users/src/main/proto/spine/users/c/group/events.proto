@@ -22,7 +22,7 @@ import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The event is emitted when a new group is created.
+// A new group is created.
 //
 message GroupCreated {
 
@@ -47,7 +47,7 @@ message GroupCreated {
     net.EmailAddress email = 7;
 }
 
-// The event is emitter when a new owner is added to a group.
+// A new owner is added to a group.
 //
 message GroupOwnerAdded {
 
@@ -57,7 +57,7 @@ message GroupOwnerAdded {
     core.UserId new_owner = 2 [(required) = true];
 }
 
-// The event is emitted when a `User` is removed from a group owners list.
+// A `User` is removed from a group owners list.
 //
 message GroupOwnerRemoved {
 
@@ -67,7 +67,7 @@ message GroupOwnerRemoved {
     core.UserId removed_owner = 2 [(required) = true];
 }
 
-// The event is emitted when a group is moved to another organization or orgunit.
+// A group is moved to another organization or orgunit.
 //
 message GroupMoved {
 
@@ -80,7 +80,7 @@ message GroupMoved {
     OrganizationalEntity old_org_entity = 3 [(required) = true];
 }
 
-// The event is emitted when a group becomes a member of another group.
+// A group joins a parent group, that is becomes a member of another group.
 //
 message ParentGroupJoined {
 
@@ -90,7 +90,7 @@ message ParentGroupJoined {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a group stops being a member of another group.
+// A group leaves a parent group.
 //
 message ParentGroupLeft {
 
@@ -100,14 +100,14 @@ message ParentGroupLeft {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a new group is deleted.
+// A new group is deleted.
 //
 message GroupDeleted {
 
     GroupId id = 1;
 }
 
-// The event is emitted when a role is assigned to the group.
+// A role is assigned to the group.
 //
 message RoleAssignedToGroup {
 
@@ -117,7 +117,7 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when a role is unassigned from the group.
+// A role assignment is removed from the group.
 //
 message RoleUnassignedFromGroup {
 
@@ -127,7 +127,7 @@ message RoleUnassignedFromGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when an attribute of the orgunit is added.
+// A new attribute is added to a group.
 //
 message GroupAttributeAdded {
 
@@ -140,7 +140,7 @@ message GroupAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the group is removed.
+// A group attribute is removed.
 //
 message GroupAttributeRemoved {
 
@@ -153,7 +153,7 @@ message GroupAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The event is emitted when an attribute of the group is updated.
+// A group attribute is updated.
 //
 message GroupAttributeUpdated {
 
@@ -169,7 +169,7 @@ message GroupAttributeUpdated {
     google.protobuf.Any new_value = 4 [(required) = true];
 }
 
-// The event is emitted when a group is renamed.
+// A group is renamed.
 //
 message GroupRenamed {
 
@@ -182,7 +182,7 @@ message GroupRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// The event is emitted when a group email address is changed.
+// A group email address is changed.
 //
 message GroupEmailChanged {
 
