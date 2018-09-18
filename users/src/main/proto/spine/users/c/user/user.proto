@@ -66,7 +66,7 @@ message User {
     repeated GroupId membership = 4;
 
     // An entity in the organizational structure a user belongs to, if applicable.
-    OrganizationalEntity org_entity = 5;
+    OrganizationOrUnit org_entity = 5;
 
     // Attributes of a user.
     map<string, google.protobuf.Any> attributes = 6;

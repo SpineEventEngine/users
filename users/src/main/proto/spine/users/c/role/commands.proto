@@ -30,7 +30,7 @@ message CreateRole {
     string display_name = 2 [(required) = true];
 
     // An organization or organizational unit the role belongs to.
-    OrganizationalEntity org_entity = 3;
+    OrganizationOrUnit org_entity = 3;
 }
 
 // Deletes a role.
@@ -60,5 +60,5 @@ message ChangeRoleParent {
     RoleId id = 1;
 
     // A new parent entity of the role.
-    OrganizationalEntity new_org_entity = 2 [(required) = true];
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }

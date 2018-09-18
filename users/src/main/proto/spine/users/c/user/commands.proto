@@ -38,7 +38,7 @@ message CreateUser {
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the user belongs to, if applicable.
-    OrganizationalEntity org_entity = 4;
+    OrganizationOrUnit org_entity = 4;
 
     // Attributes of the user.
     map<string, google.protobuf.Any> attributes = 5;
@@ -61,7 +61,7 @@ message MoveUser {
     core.UserId id = 1;
 
     // A new parent entity in the organizational structure.
-    OrganizationalEntity new_org_entity = 2 [(required) = true];
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
 // Joins the group.

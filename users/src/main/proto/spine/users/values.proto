@@ -21,7 +21,10 @@ import "spine/people/person_name.proto";
 
 // An organizational entity, either `Organization` or `OrgUnit`.
 //
-message OrganizationalEntity {
+// It is used as a field in the entities (as well as related commands and events) thay me belong to
+// either an organization or organizational unit.
+//
+message OrganizationOrUnit {
 
     // A kind of an entity.
     oneof kind {

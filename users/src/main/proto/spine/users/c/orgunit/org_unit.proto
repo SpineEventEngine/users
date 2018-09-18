@@ -50,7 +50,7 @@ message OrgUnit {
     string display_name = 2 [(required) = true];
 
     // A parent entity in the organizational structure.
-    OrganizationalEntity parent_entity = 3 [(required) = true];
+    OrganizationOrUnit parent_entity = 3 [(required) = true];
 
     // An interent domain of the orgunit.
     net.InternetDomain domain = 4;
