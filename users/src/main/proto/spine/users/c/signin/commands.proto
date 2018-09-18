@@ -65,6 +65,7 @@ message SignUserOut {
 // This command is used internally by the process manager and must not be used by the client.
 //
 message FinishSignIn {
+    option (internal_type) = true;
     option (events) = "SignInSuccessful, SignInFailed";
 
     core.UserId id = 1;
