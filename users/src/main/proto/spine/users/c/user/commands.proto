@@ -24,7 +24,7 @@ import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/user_profile.proto";
 
-// The command to create a new user.
+// Creates a new user.
 //
 message CreateUser {
     option (events) = "UserCreated";
@@ -53,7 +53,7 @@ message CreateUser {
     User.Status status = 8 [(required) = true];
 }
 
-// The command to move a user from one organization or organizational unit to another.
+// Moves a user from one organization or organizational unit to another.
 //
 message MoveUser {
     option (events) = "UserMoved";
@@ -64,7 +64,7 @@ message MoveUser {
     OrganizationalEntity new_org_entity = 2 [(required) = true];
 }
 
-// The command to start a group membership.
+// Joins the group.
 //
 message JoinGroup {
     option (events) = "UserJoinedGroup";
@@ -75,7 +75,7 @@ message JoinGroup {
     GroupId group_id = 2 [(required) = true];
 }
 
-// The command to stop a group membership.
+// Leaves the group.
 //
 message LeaveGroup {
     option (events) = "UserLeftGroup";
@@ -86,7 +86,7 @@ message LeaveGroup {
     GroupId group_id = 2 [(required) = true];
 }
 
-// The command to delete a user.
+// Deletes a user.
 //
 message DeleteUser {
     option (events) = "UserDeleted";
@@ -94,7 +94,7 @@ message DeleteUser {
     core.UserId id = 1;
 }
 
-// The command to assign a role to a user.
+// Assigns a role to a user.
 //
 message AssignRoleToUser {
     option (events) = "RoleAssignedToUser";
@@ -105,7 +105,7 @@ message AssignRoleToUser {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to unassign a role from a user.
+// Removes a role assignment from a user.
 //
 message UnassignRoleFromUser {
     option (events) = "RoleUnassignedFromUser";
@@ -117,7 +117,7 @@ message UnassignRoleFromUser {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to add a new attribute to a user.
+// Adds a new attribute to a user.
 //
 // If an attribute with this name already exists it will be overwritten.
 //
@@ -133,7 +133,7 @@ message AddUserAttribute {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The command to remove an attribute from a user.
+// Removes an attribute from a user.
 //
 message RemoveUserAttribute {
     option (events) = "UserAttributeRemoved";
@@ -145,7 +145,7 @@ message RemoveUserAttribute {
     string name = 2 [(required) = true];
 }
 
-// The command to update a user attribute.
+// Updates a user attribute.
 //
 message UpdateUserAttribute {
     option (events) = "UserAttributeUpdated";
@@ -160,7 +160,7 @@ message UpdateUserAttribute {
     google.protobuf.Any new_value = 3 [(required) = true];
 }
 
-// The command to change the user status.
+// Changes the user status.
 //
 message ChangeUserStatus {
     option (events) = "UserStatusChanged";
@@ -171,7 +171,7 @@ message ChangeUserStatus {
     User.Status status = 2 [(required) = true];
 }
 
-// The command to add a new secondary authentication identity to the user.
+// Adds a new secondary authentication identity to the user.
 //
 message AddSecondaryAuthIdentity {
     option (events) = "SecondaryAuthIdentityAdded";
@@ -182,7 +182,7 @@ message AddSecondaryAuthIdentity {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The command to remove a secondary authentication identity to the user.
+// Removes a secondary authentication identity of the user.
 //
 message RemoveSecondaryAuthIdentity {
     option (events) = "SecondaryAuthIdentityRemoved";
@@ -197,7 +197,7 @@ message RemoveSecondaryAuthIdentity {
     IdentityProviderId provider_id = 3 [(required) = true];
 }
 
-// The command to change the primary authentication identity.
+// Changes the primary authentication identity.
 //
 message ChangePrimaryAuthIdentity {
     option (events) = "PrimaryAuthIdentityChanged";
@@ -208,7 +208,7 @@ message ChangePrimaryAuthIdentity {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The command to rename a user.
+// Renames a user.
 //
 message RenameUser {
     option (events) = "UserRenamed";
@@ -219,7 +219,7 @@ message RenameUser {
     string new_name = 2 [(required) = true];
 }
 
-// The command to update a user profile.
+// Updates a user profile.
 //
 message UpdateUserProfile {
     option (events) = "UserProfileUpdated";

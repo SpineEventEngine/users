@@ -21,7 +21,7 @@ import "spine/core/user_id.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/c/signin/values.proto";
 
-// The command to start the sign-in process.
+// Starts the sign-in process.
 //
 message SignUserIn {
 
@@ -38,7 +38,7 @@ message SignUserIn {
     map<string, google.protobuf.Any> attributes = 3;
 }
 
-// The command to sign a user out.
+// Signs a user out.
 //
 message SignUserOut {
     option (events) = "SignOutCompleted";
@@ -46,7 +46,7 @@ message SignUserOut {
     core.UserId id = 1;
 }
 
-// The command to finish the sign-in process.
+// Finishes the sign-in process.
 //
 // This command is used internally by the process manager and must not be used by the client.
 //

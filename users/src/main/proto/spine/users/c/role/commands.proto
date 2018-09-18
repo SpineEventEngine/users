@@ -19,7 +19,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The command to create a role.
+// Creates a role.
 //
 message CreateRole {
     option (events) = "RoleCreated";
@@ -33,7 +33,7 @@ message CreateRole {
     OrganizationalEntity org_entity = 3;
 }
 
-// The command to delete a role.
+// Deletes a role.
 //
 message DeleteRole {
     option (events) = "RoleDeleted";
@@ -41,7 +41,7 @@ message DeleteRole {
     RoleId id = 1;
 }
 
-// The command to rename a role.
+// Renames a role.
 //
 message RenameRole {
     option (events) = "RoleRenamed";
@@ -52,7 +52,7 @@ message RenameRole {
     string new_name = 2 [(required) = true];
 }
 
-// The command to change an entity the role belongs to.
+// Changes an entity the role belongs to.
 //
 message ChangeRoleParent {
     option (events) = "RoleParentChanged";

@@ -22,7 +22,7 @@ import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The command to create an organizational unit.
+// Creates an organizational unit.
 //
 message CreateOrgUnit {
     option (events) = "OrgUnitCreated";
@@ -46,7 +46,7 @@ message CreateOrgUnit {
     core.UserId owner = 6 [(required) = true];
 }
 
-// The command to change the owner of an orgunit.
+// Changes the owner of an orgunit.
 //
 message ChangeOrgUnitOwner {
     option (events) = "OrgUnitOwnerChanged";
@@ -57,7 +57,7 @@ message ChangeOrgUnitOwner {
     core.UserId new_owner = 2 [(required) = true];
 }
 
-// The command to move an orgunit from one organization or orgunit to another.
+// Moves an orgunit from one organization or orgunit to another.
 //
 message MoveOrgUnit {
     option (events) = "OrgUnitMoved";
@@ -69,7 +69,7 @@ message MoveOrgUnit {
     OrganizationalEntity new_parent_entity = 2 [(required) = true];
 }
 
-// The command to delete an orgunit.
+// Deletes an orgunit.
 //
 message DeleteOrgUnit {
     option (events) = "OrgUnitDeleted";
@@ -77,7 +77,7 @@ message DeleteOrgUnit {
     OrgUnitId id = 1;
 }
 
-// The command to add a new attribute to an orgunit.
+// Adds a new attribute to an orgunit.
 //
 // If an attribute with this name already exists it will be overwritten.
 //
@@ -93,7 +93,7 @@ message AddOrgUnitAttribute {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// The command to remove an attribute from an orgunit.
+// Removes an attribute from an orgunit.
 //
 message RemoveOrgUnitAttribute {
     option (events) = "OrgUnitAttributeRemoved";
@@ -105,7 +105,7 @@ message RemoveOrgUnitAttribute {
     string name = 2 [(required) = true];
 }
 
-// The command to update an orgunit attribute.
+// Updates an orgunit attribute.
 //
 message UpdateOrgUnitAttribute {
     option (events) = "OrgUnitAttributeUpdated";
@@ -120,7 +120,7 @@ message UpdateOrgUnitAttribute {
     google.protobuf.Any new_value = 3 [(required) = true];
 }
 
-// The command to rename an orgunit.
+// Renames an orgunit.
 //
 message RenameOrgUnit {
     option (events) = "OrgUnitRenamed";
@@ -131,7 +131,7 @@ message RenameOrgUnit {
     string new_name = 2 [(required) = true];
 }
 
-// The command to change an orgunit domain.
+// Changes an orgunit domain.
 //
 message ChangeOrgUnitDomain {
     option (events) = "OrgUnitDomainChanged";
