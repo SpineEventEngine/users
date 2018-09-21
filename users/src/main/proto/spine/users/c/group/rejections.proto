@@ -60,10 +60,3 @@ message GroupsCanNotFormCycles {
     // A group that closes a cycle.
     GroupId closing_group = 2 [(required) = true];
 }
-
-// The rejection is generated when trying to remove the last owner of the group.
-//
-message GroupMustHaveAnOwner {
-
-    GroupId id = 1;
-}

@@ -106,7 +106,4 @@ message Group {
 
     // Roles explicitly assigned to the group.
     repeated RoleId role = 8;
-
-    // Owners of the group, may not be group members.
-    repeated core.UserId owners = 9;
 }
