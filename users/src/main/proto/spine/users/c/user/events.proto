@@ -32,7 +32,6 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
-import "spine/time/time.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
@@ -65,9 +64,6 @@ message UserCreated {
 
     // The current status of the user.
     User.Status status = 8 [(required) = true];
-
-    // A date and a time when user was created.
-    spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
 // A user was moved to another organization or organizational unit.
@@ -108,9 +104,6 @@ message UserLeftGroup {
 message UserDeleted {
 
     core.UserId id = 1;
-
-    // A date and a time when user was deleted.
-    spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
 }
 
 // A role was assigned to a user.

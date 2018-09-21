@@ -31,8 +31,8 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "spine/core/user_id.proto";
-import "spine/time/time.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/person_profile.proto";
@@ -92,8 +92,8 @@ message User {
     // Secondary authentication identities of a user, used solely for authentication.
     repeated UserAuthIdentity secondary_auth_identity = 10;
 
-    // A date and a time when a user was created.
-    spine.time.ZonedDateTime when_created = 11;
+    // A moment in time when a user was created.
+    google.protobuf.Timestamp when_created = 11;
 
     // A status of a user.
     //
