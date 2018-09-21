@@ -57,17 +57,14 @@ message CreateUser {
     // An entity in the organizational structure the user belongs to, if applicable.
     OrganizationOrUnit org_entity = 5;
 
-    // Attributes of the user.
-    map<string, google.protobuf.Any> attributes = 6;
-
     // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 7 [(required) = true];
+    UserAuthIdentity primary_identity = 6 [(required) = true];
 
-    // A user profile.
-    PersonProfile profile = 8;
+    // A user profile, if applicable.
+    PersonProfile profile = 7;
 
     // The current status of the user.
-    User.Status status = 9 [(required) = true];
+    User.Status status = 8 [(required) = true];
 }
 
 // Moves a user from one organization or organizational unit to another.
@@ -132,49 +129,6 @@ message UnassignRoleFromUser {
 
     // An ID of the role to unassign.
     RoleId role_id = 2 [(required) = true];
-}
-
-// Adds a new attribute to a user.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddUserAttribute {
-    option (events) = "UserAttributeAdded";
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// Removes an attribute from a user.
-//
-message RemoveUserAttribute {
-    option (events) = "UserAttributeRemoved";
-    option (rejections) = "UserAttributeDoesNotExist";
-
-    core.UserId id = 1;
-
-    // A name of the attribute to remove.
-    string name = 2 [(required) = true];
-}
-
-// Updates a user attribute.
-//
-message UpdateUserAttribute {
-    option (events) = "UserAttributeUpdated";
-    option (rejections) = "UserAttributeDoesNotExist";
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
 }
 
 // Changes the user status.

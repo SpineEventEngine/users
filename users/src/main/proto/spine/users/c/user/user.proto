@@ -53,17 +53,6 @@ import "spine/users/user_auth_identity.proto";
 // A user is a leaf in the hierarchical structure of the organization. It can have either
 // a single `Organization` or single `OrgUnit` as a parent organizational entity.
 //
-// ## User Attributes
-//
-// To make `User` meet specific requirements of the application, it can be extended by custom
-// attributes.
-//
-// The following commands are available to work with the user attributes:
-//
-// * `AddUserAttribute` to add a new attribute, or replace the existing one;
-// * `RemoveUserAttribute` to remove an attribute;
-// * `UpdateUserAttribute` to update an existing attribute.
-//
 message User {
     option (entity).kind = AGGREGATE;
 
@@ -85,14 +74,11 @@ message User {
     // An entity in the organizational structure a user belongs to, if applicable.
     OrganizationOrUnit org_entity = 6;
 
-    // Attributes of a user.
-    map<string, google.protobuf.Any> attributes = 7;
-
-    // General profile information for a user.
-    PersonProfile profile = 8;
+    // General profile information for a user, if applicable.
+    PersonProfile profile = 7;
 
     // The current status of a user.
-    Status status = 9 [(required) = true];
+    Status status = 8 [(required) = true];
 
     // The primary authentication identity of a user.
     //
@@ -101,13 +87,13 @@ message User {
     //  - to check whether a user account is active;
     //  - etc.
     //
-    UserAuthIdentity primary_auth_identity = 10 [(required) = true];
+    UserAuthIdentity primary_auth_identity = 9 [(required) = true];
 
     // Secondary authentication identities of a user, used solely for authentication.
-    repeated UserAuthIdentity secondary_auth_identity = 11;
+    repeated UserAuthIdentity secondary_auth_identity = 10;
 
     // A date and a time when a user was created.
-    spine.time.ZonedDateTime when_created = 12;
+    spine.time.ZonedDateTime when_created = 11;
 
     // A status of a user.
     //

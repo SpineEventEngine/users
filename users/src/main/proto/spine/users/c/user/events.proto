@@ -57,20 +57,17 @@ message UserCreated {
     // An entity in the organizational structure the user belongs to, if applicable.
     OrganizationOrUnit org_entity = 5;
 
-    // Attributes of the user.
-    map<string, google.protobuf.Any> attributes = 6;
-
     // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 7 [(required) = true];
+    UserAuthIdentity primary_identity = 6 [(required) = true];
 
-    // A user profile.
-    PersonProfile profile = 8;
+    // A user profile, if applicable.
+    PersonProfile profile = 7;
 
     // The current status of the user.
-    User.Status status = 9 [(required) = true];
+    User.Status status = 8 [(required) = true];
 
     // A date and a time when user was created.
-    spine.time.ZonedDateTime when_created = 10 [(required) = true];
+    spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
 // A user was moved to another organization or organizational unit.
@@ -134,48 +131,6 @@ message RoleUnassignedFromUser {
 
     // An ID of the unassigned role.
     users.RoleId role_id = 2 [(required) = true];
-}
-
-// An new attribute was added to a user.
-//
-message UserAttributeAdded {
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// A user attribute was removed.
-//
-message UserAttributeRemoved {
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// A user attribute was updated.
-//
-message UserAttributeUpdated {
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An old attribute value.
-    google.protobuf.Any old_value = 4 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 5 [(required) = true];
 }
 
 // The status of a user was changed.
