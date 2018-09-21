@@ -42,17 +42,6 @@ import "spine/users/identifiers.proto";
 // An organization aggregates users and groups directly or in the hierarchy of organizational units
 // (`OrgUnit`).
 //
-// ## Organization Attributes
-//
-// To make `Organization` meet specific requirements of the application, it can be extended by
-// custom attributes.
-//
-// The following commands are available to work with the organization attributes:
-//
-// * `AddOrganizationAttribute` to add a new attribute, or replace the existing one;
-// * `RemoveOrganizationAttribute` to remove an attribute;
-// * `UpdateOrganizationAttribute` to update an existing attribute.
-//
 message Organization {
     option (entity).kind = AGGREGATE;
 
@@ -64,9 +53,6 @@ message Organization {
     // A domain of the organization.
     net.InternetDomain domain = 3;
 
-    // Attributes of the organization.
-    map<string, google.protobuf.Any> attributes = 4;
-
     // A tenant associated with the organization.
-    core.TenantId tenant = 5 [(required) = true];
+    core.TenantId tenant = 4 [(required) = true];
 }

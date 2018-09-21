@@ -48,11 +48,8 @@ message CreateOrganization {
     // The domain of the organization.
     net.InternetDomain domain = 3;
 
-    // Attributes of the organization.
-    map<string, google.protobuf.Any> attributes = 4;
-
     // A tenant associated with the organization.
-    core.TenantId tenant = 5 [(required) = true];
+    core.TenantId tenant = 4 [(required) = true];
 }
 
 // Deletes an organization.
@@ -61,49 +58,6 @@ message DeleteOrganization {
     option (events) = "OrganizationDeleted";
 
     OrganizationId id = 1;
-}
-
-// Adds a new attribute to an organization.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddOrganizationAttribute {
-    option (events) = "OrganizationAttributeAdded";
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// Removes an attribute from an organization.
-//
-message RemoveOrganizationAttribute {
-    option (events) = "OrganizationAttributeRemoved";
-    option (rejections) = "OrganizationAttributeDoesNotExist";
-
-    OrganizationId id = 1;
-
-    // A name of the attribute to remove.
-    string name = 2 [(required) = true];
-}
-
-// Updates an organization attribute.
-//
-message UpdateOrganizationAttribute {
-    option (events) = "OrganizationAttributeUpdated";
-    option (rejections) = "OrganizationAttributeDoesNotExist";
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
 }
 
 // Renames an organization.

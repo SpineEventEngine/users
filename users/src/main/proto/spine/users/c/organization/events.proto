@@ -47,11 +47,8 @@ message OrganizationCreated {
     // A domain of the organization.
     net.InternetDomain domain = 3;
 
-    // Attributes of the organization.
-    map<string, google.protobuf.Any> attributes = 4;
-
     // A tenant associated with the organization.
-    core.TenantId tenant = 5 [(required) = true];
+    core.TenantId tenant = 4 [(required) = true];
 }
 
 // An organization was deleted.
@@ -59,48 +56,6 @@ message OrganizationCreated {
 message OrganizationDeleted {
 
     OrganizationId id = 1;
-}
-
-// A new attribute was added to an organization.
-//
-message OrganizationAttributeAdded {
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// An organization attribute was removed.
-//
-message OrganizationAttributeRemoved {
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// An organization attribute was updated.
-//
-message OrganizationAttributeUpdated {
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An old attribute value.
-    google.protobuf.Any old_value = 4 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 5 [(required) = true];
 }
 
 // An organization was renamed.
