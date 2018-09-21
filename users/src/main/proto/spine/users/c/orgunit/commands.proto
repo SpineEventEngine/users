@@ -31,7 +31,6 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
-import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
@@ -55,20 +54,6 @@ message CreateOrgUnit {
 
     // Attributes of the orgunit.
     map<string, google.protobuf.Any> attributes = 5;
-
-    // An orgunit owner.
-    core.UserId owner = 6 [(required) = true];
-}
-
-// Changes the owner of an orgunit.
-//
-message ChangeOrgUnitOwner {
-    option (events) = "OrgUnitOwnerChanged";
-
-    OrgUnitId id = 1;
-
-    // An ID of the owner.
-    core.UserId new_owner = 2 [(required) = true];
 }
 
 // Moves an orgunit from one organization or orgunit to another.
