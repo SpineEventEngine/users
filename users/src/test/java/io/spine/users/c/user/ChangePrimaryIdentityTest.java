@@ -16,18 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("ChangePrimaryAuthIdentity command should")
-class ChangePrimaryAuthIdentityTest extends UserCommandTest<ChangePrimaryAuthIdentity> {
+@DisplayName("ChangePrimaryIdentity command should")
+class ChangePrimaryIdentityTest extends UserCommandTest<ChangePrimaryIdentity> {
 
-    ChangePrimaryAuthIdentityTest() {
+    ChangePrimaryIdentityTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate PrimaryAuthIdentityChanged event")
+    @DisplayName("generate PrimaryIdentityChanged event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(PrimaryAuthIdentityChanged.class, event -> {
+        expectThat(aggregate).producesEvent(PrimaryIdentityChanged.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getIdentity(), event.getIdentity());
         });
@@ -38,10 +38,10 @@ class ChangePrimaryAuthIdentityTest extends UserCommandTest<ChangePrimaryAuthIde
     void changeState() {
         UserAggregate aggregate = createAggregate();
         expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getPrimaryAuthIdentity()));
+                state -> assertEquals(message().getIdentity(), state.getPrimaryIdentity()));
     }
 
-    private static ChangePrimaryAuthIdentity createMessage() {
+    private static ChangePrimaryIdentity createMessage() {
         return changePrimaryIdentity(USER_ID);
     }
 }

@@ -20,7 +20,6 @@
 
 package io.spine.users.c.organization;
 
-import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
@@ -28,26 +27,11 @@ import io.spine.server.command.Assign;
 import io.spine.users.OrganizationId;
 import io.spine.users.c.orgunit.OrgUnit;
 
-import java.util.Map;
-
 /**
  * An organization of a tenant, the topmost entity in organizational structure.
  *
  * <p>An organization aggregates users and groups directly or in hierarchy of
  * {@linkplain OrgUnit organizational units}.
- *
- * <h3>Organization Attributes</h3>
- *
- * <p>To make {@link OrganizationAggregate} meet specific requirements of the application,
- * it can be extended by custom attributes.
- *
- * <p>The following commands are available to work with the organization attributes:
- *
- * <ul>
- *     <li>{@link AddOrganizationAttribute} to add a new attribute, or replace the existing one;
- *     <li>{@link RemoveOrganizationAttribute} to remove an attribute;
- *     <li>{@link UpdateOrganizationAttribute} to update an existing attribute.
- * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
@@ -68,44 +52,8 @@ public class OrganizationAggregate
     }
 
     @Assign
-    OrganizationOwnerChanged handle(ChangeOrganizationOwner command, CommandContext context) {
-        return events(context).changeOwner(command, getState().getOwner());
-    }
-
-    @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
         return events(context).deleteOrganization(command);
-    }
-
-    @Assign
-    OrganizationAttributeAdded handle(AddOrganizationAttribute command, CommandContext context) {
-        return events(context).addAttribute(command);
-    }
-
-    @Assign
-    OrganizationAttributeRemoved handle(RemoveOrganizationAttribute command,
-                                        CommandContext context)
-            throws OrganizationAttributeDoesNotExist {
-        Map<String, Any> attributes = getState().getAttributesMap();
-        String attributeName = command.getName();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).removeAttribute(command, attributes.get(attributeName));
-        } else {
-            throw new OrganizationAttributeDoesNotExist(getId(), attributeName);
-        }
-    }
-
-    @Assign
-    OrganizationAttributeUpdated handle(UpdateOrganizationAttribute command,
-                                        CommandContext context)
-            throws OrganizationAttributeDoesNotExist {
-        Map<String, Any> attributes = getState().getAttributesMap();
-        String attributeName = command.getName();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).updateAttribute(command, attributes.get(attributeName));
-        } else {
-            throw new OrganizationAttributeDoesNotExist(getId(), attributeName);
-        }
     }
 
     @Assign
@@ -128,35 +76,12 @@ public class OrganizationAggregate
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
-                    .setOwner(event.getOwner())
-                    .setTenant(event.getTenant())
-                    .putAllAttributes(event.getAttributesMap());
-    }
-
-    @Apply
-    void on(OrganizationOwnerChanged event) {
-        getBuilder().setOwner(event.getNewOwner());
+                    .setTenant(event.getTenant());
     }
 
     @Apply
     void on(OrganizationDeleted event) {
         setDeleted(true);
-    }
-
-    @Apply
-    void on(OrganizationAttributeAdded event) {
-        getBuilder().putAttributes(event.getName(), event.getValue());
-    }
-
-    @Apply
-    void on(OrganizationAttributeRemoved event) {
-        removeAttribute(event.getName());
-    }
-
-    @Apply
-    void on(OrganizationAttributeUpdated event) {
-        removeAttribute(event.getName());
-        getBuilder().putAttributes(event.getName(), event.getNewValue());
     }
 
     @Apply
@@ -172,14 +97,6 @@ public class OrganizationAggregate
     @Apply
     void on(OrganizationTenantChanged event) {
         getBuilder().setTenant(event.getNewTenant());
-    }
-
-    private void removeAttribute(String attributeName) {
-        OrganizationVBuilder builder = getBuilder();
-        Map<String, Any> attributes = builder.getAttributes();
-        if (attributes.containsKey(attributeName)) {
-            builder.removeAttributes(attributeName);
-        }
     }
 
     private static OrganizationEventFactory events(CommandContext context) {

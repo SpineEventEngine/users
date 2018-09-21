@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.createUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -35,8 +34,7 @@ class CreateUserTest extends UserCommandTest<CreateUser> {
             assertEquals(message().getOrgEntity(), event.getOrgEntity());
             assertEquals(message().getStatus(), event.getStatus());
             assertEquals(message().getRole(0), event.getRole(0));
-            assertEquals(message().getAttributesMap(), event.getAttributesMap());
-            assertTrue(event.hasWhenCreated());
+            assertEquals(message().getKind(), event.getKind());
         });
     }
 
@@ -47,11 +45,11 @@ class CreateUserTest extends UserCommandTest<CreateUser> {
         expectThat(emptyAggregate).hasState(state -> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getDisplayName(), state.getDisplayName());
-            assertEquals(message().getPrimaryIdentity(), state.getPrimaryAuthIdentity());
+            assertEquals(message().getPrimaryIdentity(), state.getPrimaryIdentity());
             assertEquals(message().getOrgEntity(), state.getOrgEntity());
             assertEquals(message().getStatus(), state.getStatus());
             assertEquals(message().getRole(0), state.getRole(0));
-            assertEquals(message().getAttributesMap(), state.getAttributesMap());
+            assertEquals(message().getKind(), state.getKind());
         });
     }
 

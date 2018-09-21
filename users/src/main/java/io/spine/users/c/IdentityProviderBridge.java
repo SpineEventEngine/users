@@ -20,8 +20,8 @@
 
 package io.spine.users.c;
 
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserProfile;
+import io.spine.users.Identity;
+import io.spine.users.PersonProfile;
 
 /**
  * A bridge to an authentication identity provider.
@@ -30,7 +30,7 @@ import io.spine.users.UserProfile;
  * authentication providers supplied by the particular application.
  *
  * <p>For {@code Users}, an authentication provider serves as a data source and the single
- * source of truth about {@linkplain UserAuthIdentity user authentication identities}.
+ * source of truth about {@linkplain Identity user authentication identities}.
  *
  * <p>This interface may be used both for application's own and remote identity
  * providers. For example:
@@ -52,7 +52,7 @@ public interface IdentityProviderBridge {
      * @return {@code true} if the given identity is indeed provided by the provider,
      * {@code false} otherwise
      */
-    boolean hasIdentity(UserAuthIdentity identity);
+    boolean hasIdentity(Identity identity);
 
     /**
      * Checks whether the given identity is allowed to perform sign-in.
@@ -63,7 +63,7 @@ public interface IdentityProviderBridge {
      * @param identity an authentication identity to check
      * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise
      */
-    boolean signInAllowed(UserAuthIdentity identity);
+    boolean signInAllowed(Identity identity);
 
     /**
      * Fetches the profile of the user associated with the given identity.
@@ -71,5 +71,5 @@ public interface IdentityProviderBridge {
      * @param identity an identity of the user
      * @return a user profile
      */
-    UserProfile fetchUserProfile(UserAuthIdentity identity);
+    PersonProfile fetchPersonProfile(Identity identity);
 }

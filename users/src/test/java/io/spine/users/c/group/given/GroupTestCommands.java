@@ -20,13 +20,9 @@
 
 package io.spine.users.c.group.given;
 
-import io.spine.core.UserId;
 import io.spine.users.GroupId;
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.AddGroupAttribute;
-import io.spine.users.c.group.AddGroupAttributeVBuilder;
-import io.spine.users.c.group.AddGroupOwner;
 import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
@@ -41,25 +37,15 @@ import io.spine.users.c.group.LeaveParentGroup;
 import io.spine.users.c.group.LeaveParentGroupVBuilder;
 import io.spine.users.c.group.MoveGroup;
 import io.spine.users.c.group.MoveGroupVBuilder;
-import io.spine.users.c.group.RemoveGroupAttribute;
-import io.spine.users.c.group.RemoveGroupAttributeVBuilder;
-import io.spine.users.c.group.RemoveGroupOwner;
 import io.spine.users.c.group.RenameGroup;
 import io.spine.users.c.group.RenameGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
-import io.spine.users.c.group.UpdateGroupAttribute;
-import io.spine.users.c.group.UpdateGroupAttributeVBuilder;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeName;
-import static io.spine.users.c.group.given.GroupTestEnv.groupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
-import static io.spine.users.c.group.given.GroupTestEnv.groupOwner;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeName;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupAttributeValue;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
 
@@ -81,28 +67,12 @@ public class GroupTestCommands {
                                   .setId(id)
                                   .setDisplayName(groupName())
                                   .setEmail(groupEmail())
-                                  .addOwners(groupOwner())
                                   .setOrgEntity(groupOrgEntityOrganization())
                                   .addRole(groupRole())
-                                  .putAttributes(groupAttributeName(), groupAttributeValue())
                                   .build();
     }
 
-    public static AddGroupOwner addGroupOwner(GroupId id, UserId newOwner) {
-        return AddGroupOwner.newBuilder()
-                            .setId(id)
-                            .setNewOwner(newOwner)
-                            .build();
-    }
-
-    public static RemoveGroupOwner removeGroupOwner(GroupId id) {
-        return RemoveGroupOwner.newBuilder()
-                               .setId(id)
-                               .setOwner(groupOwner())
-                               .build();
-    }
-
-    public static MoveGroup moveGroup(GroupId groupId, OrganizationalEntity newParent) {
+    public static MoveGroup moveGroup(GroupId groupId, OrganizationOrUnit newParent) {
         return MoveGroupVBuilder.newBuilder()
                                 .setId(groupId)
                                 .setNewOrgEntity(newParent)
@@ -143,29 +113,6 @@ public class GroupTestCommands {
                                             .setId(groupId)
                                             .setRoleId(roleId)
                                             .build();
-    }
-
-    public static AddGroupAttribute addGroupAttribute(GroupId groupId) {
-        return AddGroupAttributeVBuilder.newBuilder()
-                                        .setId(groupId)
-                                        .setName(newGroupAttributeName())
-                                        .setValue(newGroupAttributeValue())
-                                        .build();
-    }
-
-    public static RemoveGroupAttribute removeGroupAttribute(GroupId groupId) {
-        return RemoveGroupAttributeVBuilder.newBuilder()
-                                           .setId(groupId)
-                                           .setName(groupAttributeName())
-                                           .build();
-    }
-
-    public static UpdateGroupAttribute updateGroupAttribute(GroupId groupId) {
-        return UpdateGroupAttributeVBuilder.newBuilder()
-                                           .setId(groupId)
-                                           .setName(groupAttributeName())
-                                           .setNewValue(newGroupAttributeValue())
-                                           .build();
     }
 
     public static RenameGroup renameGroup(GroupId id) {

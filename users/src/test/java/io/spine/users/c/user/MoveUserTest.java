@@ -6,7 +6,7 @@
 
 package io.spine.users.c.user;
 
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     @DisplayName("generate UserMoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        OrganizationalEntity oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.getState()
                                                   .getOrgEntity();
         expectThat(aggregate).producesEvent(UserMoved.class, event -> {
             assertEquals(message().getId(), event.getId());

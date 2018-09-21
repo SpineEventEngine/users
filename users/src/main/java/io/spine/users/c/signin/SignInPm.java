@@ -13,8 +13,8 @@ import io.spine.server.command.Assign;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOfTwo;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserProfile;
+import io.spine.users.Identity;
+import io.spine.users.PersonProfile;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.CreateUser;
@@ -36,7 +36,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 /**
- * The process of a sign-in using the given {@linkplain UserAuthIdentity authentication identity}.
+ * The process of a sign-in using the given {@linkplain Identity authentication identity}.
  *
  * <p>This process manager covers a straightforward sign-in scenario:
  *
@@ -87,7 +87,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     @Command
     EitherOfTwo<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
         UserId id = command.getId();
-        UserAuthIdentity identity = command.getIdentity();
+        Identity identity = command.getIdentity();
         Optional<IdentityProviderBridge> identityProviderOptional =
                 identityProviders.get(identity.getProviderId());
 
@@ -130,7 +130,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     EitherOfTwo<SignInSuccessful, SignInFailed> handle(FinishSignIn command,
                                                        CommandContext context) {
         UserId id = command.getId();
-        UserAuthIdentity identity = getBuilder().getIdentity();
+        Identity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
             return withA(events(context).completeSignIn(id, identity));
         } else {
@@ -145,7 +145,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     private CreateUser createUser(IdentityProviderBridge identityProvider) {
-        UserProfile profile = identityProvider.fetchUserProfile(getBuilder().getIdentity());
+        PersonProfile profile = identityProvider.fetchPersonProfile(getBuilder().getIdentity());
         return commands().createUser(getBuilder().getIdentity(), profile);
     }
 
@@ -153,13 +153,13 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         return getBuilder().getStatus() == AWAITING_USER_AGGREGATE_CREATION;
     }
 
-    private static boolean identityBelongsToUser(UserAggregate user, UserAuthIdentity identity) {
+    private static boolean identityBelongsToUser(UserAggregate user, Identity identity) {
         User userState = user.getState();
-        if (userState.getPrimaryAuthIdentity()
+        if (userState.getPrimaryIdentity()
                      .equals(identity)) {
             return true;
         }
-        return userState.getSecondaryAuthIdentityList()
+        return userState.getSecondaryIdentityList()
                         .contains(identity);
     }
 

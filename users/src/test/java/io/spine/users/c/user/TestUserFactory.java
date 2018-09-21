@@ -9,9 +9,8 @@ package io.spine.users.c.user;
 import io.spine.testing.server.entity.given.Given;
 
 import static io.spine.users.c.user.User.Status.NOT_READY;
+import static io.spine.users.c.user.UserKind.PERSON;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.attributeName;
-import static io.spine.users.c.user.given.UserTestEnv.attributeValue;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
@@ -67,11 +66,11 @@ final class TestUserFactory {
                            .setId(userId())
                            .setOrgEntity(userOrgEntity())
                            .setDisplayName(userDisplayName())
-                           .setPrimaryAuthIdentity(googleIdentity())
+                           .setPrimaryIdentity(googleIdentity())
                            .setProfile(profile())
                            .setStatus(NOT_READY)
-                           .addSecondaryAuthIdentity(googleIdentity())
-                           .putAttributes(attributeName(), attributeValue())
+                           .addSecondaryIdentity(googleIdentity())
+                           .setKind(PERSON)
                            .addRole(adminRoleId());
     }
 }

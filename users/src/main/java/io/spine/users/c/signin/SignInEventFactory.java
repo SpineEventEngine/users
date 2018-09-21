@@ -23,7 +23,7 @@ package io.spine.users.c.signin;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.users.UserAuthIdentity;
+import io.spine.users.Identity;
 import io.spine.users.c.EntityEventFactory;
 
 /**
@@ -48,14 +48,14 @@ class SignInEventFactory extends EntityEventFactory {
         return new SignInEventFactory(actorContext);
     }
 
-    SignInSuccessful completeSignIn(UserId id, UserAuthIdentity identity) {
+    SignInSuccessful completeSignIn(UserId id, Identity identity) {
         return SignInSuccessfulVBuilder.newBuilder()
                                        .setId(id)
                                        .setIdentity(identity)
                                        .build();
     }
 
-    SignInFailed failSignIn(UserId id, UserAuthIdentity identity,
+    SignInFailed failSignIn(UserId id, Identity identity,
                             SignInFailureReason reason) {
         return SignInFailedVBuilder.newBuilder()
                                    .setId(id)

@@ -6,18 +6,14 @@
 
 package io.spine.users.c.user.given;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Empty;
 import io.spine.core.UserId;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.c.user.AddSecondaryAuthIdentity;
-import io.spine.users.c.user.AddSecondaryAuthIdentityVBuilder;
-import io.spine.users.c.user.AddUserAttribute;
-import io.spine.users.c.user.AddUserAttributeVBuilder;
+import io.spine.users.Identity;
+import io.spine.users.c.user.AddSecondaryIdentity;
+import io.spine.users.c.user.AddSecondaryIdentityVBuilder;
 import io.spine.users.c.user.AssignRoleToUser;
 import io.spine.users.c.user.AssignRoleToUserVBuilder;
-import io.spine.users.c.user.ChangePrimaryAuthIdentity;
-import io.spine.users.c.user.ChangePrimaryAuthIdentityVBuilder;
+import io.spine.users.c.user.ChangePrimaryIdentity;
+import io.spine.users.c.user.ChangePrimaryIdentityVBuilder;
 import io.spine.users.c.user.ChangeUserStatus;
 import io.spine.users.c.user.ChangeUserStatusVBuilder;
 import io.spine.users.c.user.CreateUser;
@@ -30,36 +26,30 @@ import io.spine.users.c.user.LeaveGroup;
 import io.spine.users.c.user.LeaveGroupVBuilder;
 import io.spine.users.c.user.MoveUser;
 import io.spine.users.c.user.MoveUserVBuilder;
-import io.spine.users.c.user.RemoveSecondaryAuthIdentity;
-import io.spine.users.c.user.RemoveSecondaryAuthIdentityVBuilder;
-import io.spine.users.c.user.RemoveUserAttribute;
-import io.spine.users.c.user.RemoveUserAttributeVBuilder;
+import io.spine.users.c.user.RemoveSecondaryIdentity;
+import io.spine.users.c.user.RemoveSecondaryIdentityVBuilder;
 import io.spine.users.c.user.RenameUser;
 import io.spine.users.c.user.RenameUserVBuilder;
 import io.spine.users.c.user.UnassignRoleFromUser;
 import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
-import io.spine.users.c.user.UpdateUserAttribute;
-import io.spine.users.c.user.UpdateUserAttributeVBuilder;
-import io.spine.users.c.user.UpdateUserProfile;
-import io.spine.users.c.user.UpdateUserProfileVBuilder;
+import io.spine.users.c.user.UpdatePersonProfile;
+import io.spine.users.c.user.UpdatePersonProfileVBuilder;
 import io.spine.users.c.user.User.Status;
 import io.spine.users.c.user.UserAggregate;
 
-import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.users.c.user.User.Status.NOT_READY;
+import static io.spine.users.c.user.UserKind.PERSON;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.attributeName;
-import static io.spine.users.c.user.given.UserTestEnv.attributeValue;
 import static io.spine.users.c.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.githubIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.newUserOrgEntity;
 import static io.spine.users.c.user.given.UserTestEnv.newProfile;
 import static io.spine.users.c.user.given.UserTestEnv.newUserDisplayName;
-import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
+import static io.spine.users.c.user.given.UserTestEnv.newUserOrgEntity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
 import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
+import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 
 /**
  * Test commands for {@link UserAggregate}.
@@ -86,8 +76,8 @@ public class UserTestCommands {
                                  .setPrimaryIdentity(googleIdentity())
                                  .setProfile(profile())
                                  .addRole(adminRoleId())
-                                 .putAttributes(attributeName(), attributeValue())
                                  .setStatus(NOT_READY)
+                                 .setKind(PERSON)
                                  .build();
     }
 
@@ -132,44 +122,20 @@ public class UserTestCommands {
                                            .build();
     }
 
-    public static AddSecondaryAuthIdentity addAuthIdentity(UserId id) {
-        return AddSecondaryAuthIdentityVBuilder.newBuilder()
+    public static AddSecondaryIdentity addAuthIdentity(UserId id) {
+        return AddSecondaryIdentityVBuilder.newBuilder()
                                                .setId(id)
                                                .setIdentity(googleIdentity())
                                                .build();
     }
 
-    public static RemoveSecondaryAuthIdentity removeAuthIdentity(UserId id) {
-        UserAuthIdentity identity = googleIdentity();
-        return RemoveSecondaryAuthIdentityVBuilder.newBuilder()
+    public static RemoveSecondaryIdentity removeAuthIdentity(UserId id) {
+        Identity identity = googleIdentity();
+        return RemoveSecondaryIdentityVBuilder.newBuilder()
                                                   .setId(id)
                                                   .setProviderId(identity.getProviderId())
                                                   .setUserId(identity.getUserId())
                                                   .build();
-    }
-
-    public static AddUserAttribute addUserAttribute(UserId id) {
-        return AddUserAttributeVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setName(attributeName())
-                                       .setValue(attributeValue())
-                                       .build();
-    }
-
-    public static RemoveUserAttribute removeUserAttribute(UserId id) {
-        return RemoveUserAttributeVBuilder.newBuilder()
-                                          .setId(id)
-                                          .setName(attributeName())
-                                          .build();
-    }
-
-    public static UpdateUserAttribute updateUserAttribute(UserId id) {
-        Any newValue = pack(Empty.getDefaultInstance());
-        return UpdateUserAttributeVBuilder.newBuilder()
-                                          .setId(id)
-                                          .setName(attributeName())
-                                          .setNewValue(newValue)
-                                          .build();
     }
 
     public static ChangeUserStatus changeUserStatus(UserId id) {
@@ -179,8 +145,8 @@ public class UserTestCommands {
                                        .build();
     }
 
-    public static ChangePrimaryAuthIdentity changePrimaryIdentity(UserId id) {
-        return ChangePrimaryAuthIdentityVBuilder.newBuilder()
+    public static ChangePrimaryIdentity changePrimaryIdentity(UserId id) {
+        return ChangePrimaryIdentityVBuilder.newBuilder()
                                                 .setId(id)
                                                 .setIdentity(githubIdentity())
                                                 .build();
@@ -193,10 +159,10 @@ public class UserTestCommands {
                                  .build();
     }
 
-    public static UpdateUserProfile updateUserProfile(UserId id) {
-        return UpdateUserProfileVBuilder.newBuilder()
-                                        .setId(id)
-                                        .setUpdatedProfile(newProfile())
-                                        .build();
+    public static UpdatePersonProfile updatePersonProfile(UserId id) {
+        return UpdatePersonProfileVBuilder.newBuilder()
+                                          .setId(id)
+                                          .setUpdatedProfile(newProfile())
+                                          .build();
     }
 }

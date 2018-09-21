@@ -21,12 +21,13 @@
 package io.spine.users.c.signin;
 
 import io.spine.core.UserId;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserProfile;
+import io.spine.users.Identity;
+import io.spine.users.PersonProfile;
 import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.CreateUserVBuilder;
 
 import static io.spine.users.c.user.User.Status.ACTIVE;
+import static io.spine.users.c.user.UserKind.PERSON;
 
 /**
  * A command factory for the {@link SignIn} process manager.
@@ -70,14 +71,14 @@ class SignInCommandFactory {
                                    .build();
     }
 
-    SignUserIn signIn(UserAuthIdentity identity) {
+    SignUserIn signIn(Identity identity) {
         return SignUserInVBuilder.newBuilder()
                                  .setId(id)
                                  .setIdentity(identity)
                                  .build();
     }
 
-    CreateUser createUser(UserAuthIdentity identity, UserProfile profile) {
+    CreateUser createUser(Identity identity, PersonProfile profile) {
         String displayName = profile.getEmail()
                                     .getValue();
         return CreateUserVBuilder.newBuilder()
@@ -86,6 +87,7 @@ class SignInCommandFactory {
                                  .setPrimaryIdentity(identity)
                                  .setProfile(profile)
                                  .setStatus(ACTIVE)
+                                 .setKind(PERSON)
                                  .build();
     }
 }

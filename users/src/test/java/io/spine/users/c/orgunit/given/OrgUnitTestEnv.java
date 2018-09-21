@@ -28,8 +28,8 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
-import io.spine.users.OrganizationalEntity;
-import io.spine.users.OrganizationalEntityVBuilder;
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.c.orgunit.OrgUnitAggregate;
 
 import static io.spine.base.Identifier.newUuid;
@@ -55,12 +55,6 @@ public final class OrgUnitTestEnv {
     }
 
     public static UserId orgUnitOwner() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
-    }
-
-    public static UserId orgUnitNewOwner() {
         return UserIdVBuilder.newBuilder()
                              .setValue(newUuid())
                              .build();
@@ -94,24 +88,16 @@ public final class OrgUnitTestEnv {
         return pack(Int64Value.of(271));
     }
 
-    public static OrganizationalEntity orgUnitParentEntity() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    public static OrganizationOrUnit orgUnitParentEntity() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                            .setOrgUnit(organization())
                                            .build();
     }
 
-    public static OrganizationalEntity newOrgUnitParentEntity() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    public static OrganizationOrUnit newOrgUnitParentEntity() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                            .setOrgUnit(createOrgUnitId())
                                            .build();
-    }
-
-    public static String newOrgUnitAttributeName() {
-        return "org-attribute-name-2";
-    }
-
-    public static Any newOrgUnitAttributeValue() {
-        return pack(Int64Value.of(271));
     }
 
     private static OrgUnitId organization() {

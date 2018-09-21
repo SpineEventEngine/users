@@ -21,12 +21,8 @@
 package io.spine.users.c.orgunit.given;
 
 import io.spine.users.OrgUnitId;
-import io.spine.users.c.orgunit.AddOrgUnitAttribute;
-import io.spine.users.c.orgunit.AddOrgUnitAttributeVBuilder;
 import io.spine.users.c.orgunit.ChangeOrgUnitDomain;
 import io.spine.users.c.orgunit.ChangeOrgUnitDomainVBuilder;
-import io.spine.users.c.orgunit.ChangeOrgUnitOwner;
-import io.spine.users.c.orgunit.ChangeOrgUnitOwnerVBuilder;
 import io.spine.users.c.orgunit.CreateOrgUnit;
 import io.spine.users.c.orgunit.CreateOrgUnitVBuilder;
 import io.spine.users.c.orgunit.DeleteOrgUnit;
@@ -34,24 +30,14 @@ import io.spine.users.c.orgunit.DeleteOrgUnitVBuilder;
 import io.spine.users.c.orgunit.MoveOrgUnit;
 import io.spine.users.c.orgunit.MoveOrgUnitVBuilder;
 import io.spine.users.c.orgunit.OrgUnitAggregate;
-import io.spine.users.c.orgunit.RemoveOrgUnitAttribute;
-import io.spine.users.c.orgunit.RemoveOrgUnitAttributeVBuilder;
 import io.spine.users.c.orgunit.RenameOrgUnit;
 import io.spine.users.c.orgunit.RenameOrgUnitVBuilder;
-import io.spine.users.c.orgunit.UpdateOrgUnitAttribute;
-import io.spine.users.c.orgunit.UpdateOrgUnitAttributeVBuilder;
 
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.newOrgUnitAttributeName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.newOrgUnitAttributeValue;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.newOrgUnitParentEntity;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeValue;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewDomain;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewOwner;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitOwner;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
 
 /**
@@ -73,8 +59,6 @@ public final class OrgUnitTestCommands {
                                     .setDisplayName(orgUnitName())
                                     .setDomain(orgUnitDomain())
                                     .setParentEntity(orgUnitParentEntity())
-                                    .setOwner(orgUnitOwner())
-                                    .putAttributes(orgUnitAttributeName(), orgUnitAttributeValue())
                                     .build();
 
     }
@@ -83,36 +67,6 @@ public final class OrgUnitTestCommands {
         return DeleteOrgUnitVBuilder.newBuilder()
                                     .setId(id)
                                     .build();
-    }
-
-    public static ChangeOrgUnitOwner changeOrgUnitOwner(OrgUnitId id) {
-        return ChangeOrgUnitOwnerVBuilder.newBuilder()
-                                         .setId(id)
-                                         .setNewOwner(orgUnitNewOwner())
-                                         .build();
-    }
-
-    public static AddOrgUnitAttribute addOrgUnitAttribute(OrgUnitId id) {
-        return AddOrgUnitAttributeVBuilder.newBuilder()
-                                          .setId(id)
-                                          .setName(newOrgUnitAttributeName())
-                                          .setValue(newOrgUnitAttributeValue())
-                                          .build();
-    }
-
-    public static RemoveOrgUnitAttribute removeOrgUnitAttribute(OrgUnitId id) {
-        return RemoveOrgUnitAttributeVBuilder.newBuilder()
-                                             .setId(id)
-                                             .setName(orgUnitAttributeName())
-                                             .build();
-    }
-
-    public static UpdateOrgUnitAttribute updateOrgUnitAttribute(OrgUnitId id) {
-        return UpdateOrgUnitAttributeVBuilder.newBuilder()
-                                             .setId(id)
-                                             .setName(orgUnitAttributeName())
-                                             .setNewValue(newOrgUnitAttributeValue())
-                                             .build();
     }
 
     public static MoveOrgUnit moveOrgUnit(OrgUnitId id) {

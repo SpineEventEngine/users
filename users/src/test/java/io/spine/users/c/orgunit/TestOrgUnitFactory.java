@@ -23,11 +23,8 @@ package io.spine.users.c.orgunit;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.OrgUnitId;
 
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitAttributeValue;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitOwner;
 import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
 
 /**
@@ -67,10 +64,8 @@ final class TestOrgUnitFactory {
     private static OrgUnitVBuilder state(OrgUnitId id) {
         return OrgUnitVBuilder.newBuilder()
                               .setId(id)
-                              .setOwner(orgUnitOwner())
                               .setParentEntity(orgUnitParentEntity())
                               .setDomain(orgUnitDomain())
-                              .setDisplayName(orgUnitName())
-                              .putAttributes(orgUnitAttributeName(), orgUnitAttributeValue());
+                              .setDisplayName(orgUnitName());
     }
 }

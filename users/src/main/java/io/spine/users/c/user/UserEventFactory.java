@@ -6,14 +6,11 @@
 
 package io.spine.users.c.user;
 
-import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.users.OrganizationalEntity;
-import io.spine.users.UserAuthIdentity;
+import io.spine.users.Identity;
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
-import io.spine.users.c.signin.SignInSuccessful;
-import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.user.User.Status;
 
 /**
@@ -50,15 +47,14 @@ final class UserEventFactory extends EntityEventFactory {
                                    .setOrgEntity(command.getOrgEntity())
                                    .setPrimaryIdentity(command.getPrimaryIdentity())
                                    .addAllRole(command.getRoleList())
-                                   .putAllAttributes(command.getAttributesMap())
                                    .setStatus(command.getStatus())
-                                   .setWhenCreated(now())
                                    .setProfile(command.getProfile())
+                                   .setKind(command.getKind())
                                    .build();
         return event;
     }
 
-    UserMoved changeParent(MoveUser command, OrganizationalEntity oldOrgEntity) {
+    UserMoved changeParent(MoveUser command, OrganizationOrUnit oldOrgEntity) {
         UserMoved event =
                 UserMovedVBuilder.newBuilder()
                                  .setId(command.getId())
@@ -89,7 +85,6 @@ final class UserEventFactory extends EntityEventFactory {
     UserDeleted deleteUser(DeleteUser command) {
         UserDeleted event = UserDeletedVBuilder.newBuilder()
                                                .setId(command.getId())
-                                               .setWhenDeleted(now())
                                                .build();
         return event;
     }
@@ -111,26 +106,6 @@ final class UserEventFactory extends EntityEventFactory {
         return event;
     }
 
-    UserAttributeAdded addAttribute(AddUserAttribute command) {
-        UserAttributeAdded event =
-                UserAttributeAddedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setName(command.getName())
-                                          .setValue(command.getValue())
-                                          .build();
-        return event;
-    }
-
-    UserAttributeRemoved removeAttribute(RemoveUserAttribute command, String name, Any value) {
-        UserAttributeRemoved event =
-                UserAttributeRemovedVBuilder.newBuilder()
-                                            .setId(command.getId())
-                                            .setName(name)
-                                            .setValue(value)
-                                            .build();
-        return event;
-    }
-
     UserStatusChanged changeStatus(ChangeUserStatus command, Status oldStatus) {
         UserStatusChanged event = UserStatusChangedVBuilder.newBuilder()
                                                            .setId(command.getId())
@@ -140,64 +115,36 @@ final class UserEventFactory extends EntityEventFactory {
         return event;
     }
 
-    UserSignedIn signIn(SignInSuccessful event) {
-        UserSignedIn result = UserSignedInVBuilder.newBuilder()
-                                                  .setId(event.getId())
-                                                  .setIdentity(event.getIdentity())
-                                                  .setWhenSignedIn(now())
-                                                  .build();
-        return result;
-    }
-
-    UserSignedOut signOut(SignOutCompleted event) {
-        UserSignedOut result = UserSignedOutVBuilder.newBuilder()
-                                                   .setId(event.getId())
-                                                   .setWhenSignedOut(now())
-                                                   .build();
-        return result;
-    }
-
-    SecondaryAuthIdentityAdded addIdentity(AddSecondaryAuthIdentity command) {
-        SecondaryAuthIdentityAdded event =
-                SecondaryAuthIdentityAddedVBuilder.newBuilder()
-                                                  .setId(command.getId())
-                                                  .setIdentity(command.getIdentity())
-                                                  .build();
+    SecondaryIdentityAdded addIdentity(AddSecondaryIdentity command) {
+        SecondaryIdentityAdded event =
+                SecondaryIdentityAddedVBuilder.newBuilder()
+                                              .setId(command.getId())
+                                              .setIdentity(command.getIdentity())
+                                              .build();
         return event;
     }
 
-    SecondaryAuthIdentityRemoved removeIdentity(RemoveSecondaryAuthIdentity command,
-                                                UserAuthIdentity identity) {
-        SecondaryAuthIdentityRemoved event =
-                SecondaryAuthIdentityRemovedVBuilder.newBuilder()
-                                                    .setId(command.getId())
-                                                    .setIdentity(identity)
-                                                    .build();
+    SecondaryIdentityRemoved removeIdentity(RemoveSecondaryIdentity command,
+                                            Identity identity) {
+        SecondaryIdentityRemoved event =
+                SecondaryIdentityRemovedVBuilder.newBuilder()
+                                                .setId(command.getId())
+                                                .setIdentity(identity)
+                                                .build();
         return event;
     }
 
-    UserAttributeUpdated updateAttribute(UpdateUserAttribute command, Any oldValue) {
-        UserAttributeUpdated event =
-                UserAttributeUpdatedVBuilder.newBuilder()
-                                            .setId(command.getId())
-                                            .setName(command.getName())
-                                            .setOldValue(oldValue)
-                                            .setNewValue(command.getNewValue())
-                                            .build();
+    PrimaryIdentityChanged changePrimaryIdentity(ChangePrimaryIdentity command) {
+        PrimaryIdentityChanged event =
+                PrimaryIdentityChangedVBuilder.newBuilder()
+                                              .setId(command.getId())
+                                              .setIdentity(command.getIdentity())
+                                              .build();
         return event;
     }
 
-    PrimaryAuthIdentityChanged changePrimaryIdentity(ChangePrimaryAuthIdentity command) {
-        PrimaryAuthIdentityChanged event =
-                PrimaryAuthIdentityChangedVBuilder.newBuilder()
-                                                  .setId(command.getId())
-                                                  .setIdentity(command.getIdentity())
-                                                  .build();
-        return event;
-    }
-
-    UserProfileUpdated updateProfile(UpdateUserProfile command) {
-        return UserProfileUpdatedVBuilder.newBuilder()
+    PersonProfileUpdated updateProfile(UpdatePersonProfile command) {
+        return PersonProfileUpdatedVBuilder.newBuilder()
                                          .setId(command.getId())
                                          .setUpdatedProfile(command.getUpdatedProfile())
                                          .build();

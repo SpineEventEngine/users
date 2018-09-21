@@ -20,11 +20,10 @@
 
 package io.spine.users.c.group;
 
-import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.net.EmailAddress;
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
 
 /**
@@ -57,14 +56,12 @@ class GroupEventFactory extends EntityEventFactory {
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
                                    .setEmail(command.getEmail())
-                                   .addAllOwners(command.getOwnersList())
                                    .setOrgEntity(command.getOrgEntity())
                                    .addAllRole(command.getRoleList())
-                                   .putAllAttributes(command.getAttributesMap())
                                    .build();
     }
 
-    GroupMoved moveGroup(MoveGroup command, OrganizationalEntity oldOrgEntity) {
+    GroupMoved moveGroup(MoveGroup command, OrganizationOrUnit oldOrgEntity) {
         return GroupMovedVBuilder.newBuilder()
                                  .setId(command.getId())
                                  .setNewOrgEntity(command.getNewOrgEntity())
@@ -106,31 +103,6 @@ class GroupEventFactory extends EntityEventFactory {
                                               .build();
     }
 
-    GroupAttributeAdded addAttribute(AddGroupAttribute command) {
-        return GroupAttributeAddedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setName(command.getName())
-                                          .setValue(command.getValue())
-                                          .build();
-    }
-
-    GroupAttributeRemoved removeAttribute(RemoveGroupAttribute command, Any attributeValue) {
-        return GroupAttributeRemovedVBuilder.newBuilder()
-                                            .setId(command.getId())
-                                            .setName(command.getName())
-                                            .setValue(attributeValue)
-                                            .build();
-    }
-
-    GroupAttributeUpdated updateAttribute(UpdateGroupAttribute command, Any oldValue) {
-        return GroupAttributeUpdatedVBuilder.newBuilder()
-                                            .setId(command.getId())
-                                            .setName(command.getName())
-                                            .setNewValue(command.getNewValue())
-                                            .setOldValue(oldValue)
-                                            .build();
-    }
-
     GroupRenamed rename(RenameGroup command, String oldName) {
         return GroupRenamedVBuilder.newBuilder()
                                    .setId(command.getId())
@@ -144,20 +116,6 @@ class GroupEventFactory extends EntityEventFactory {
                                         .setId(command.getId())
                                         .setNewEmail(command.getNewEmail())
                                         .setOldEmail(oldEmail)
-                                        .build();
-    }
-
-    GroupOwnerAdded addOwner(AddGroupOwner command) {
-        return GroupOwnerAddedVBuilder.newBuilder()
-                                      .setId(command.getId())
-                                      .setNewOwner(command.getNewOwner())
-                                      .build();
-    }
-
-    GroupOwnerRemoved removeOwner(RemoveGroupOwner command) {
-        return GroupOwnerRemovedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setRemovedOwner(command.getOwner())
                                         .build();
     }
 }

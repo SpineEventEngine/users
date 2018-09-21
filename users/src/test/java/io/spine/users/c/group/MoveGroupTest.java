@@ -20,7 +20,7 @@
 
 package io.spine.users.c.group;
 
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("MoveGroup command should")
 class MoveGroupTest extends GroupCommandTest<MoveGroup> {
 
-    private static final OrganizationalEntity NEW_PARENT = groupParentOrgUnit();
+    private static final OrganizationOrUnit NEW_PARENT = groupParentOrgUnit();
 
     MoveGroupTest() {
         super(createMessage());
@@ -45,7 +45,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup> {
     @DisplayName("produce GroupMoved event")
     void produceEvent() {
         GroupAggregate aggregate = createAggregate(GROUP_ID);
-        OrganizationalEntity oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.getState()
                                                   .getOrgEntity();
         expectThat(aggregate).producesEvent(GroupMoved.class, event -> {
             assertEquals(message().getId(), event.getId());

@@ -6,8 +6,6 @@
 
 package io.spine.users.c.signin.given;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.StringValue;
 import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
@@ -15,18 +13,18 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.server.entity.given.Given;
+import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.IdentityVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.OrganizationalEntity;
-import io.spine.users.OrganizationalEntityVBuilder;
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrganizationOrUnitVBuilder;
+import io.spine.users.PersonProfile;
+import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserAuthIdentityVBuilder;
-import io.spine.users.UserProfile;
-import io.spine.users.UserProfileVBuilder;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.signin.SignInPm;
@@ -37,8 +35,8 @@ import io.spine.users.c.user.UserVBuilder;
 
 import java.util.Optional;
 
-import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.users.c.user.User.Status.NOT_READY;
+import static io.spine.users.c.user.UserKind.PERSON;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,7 +80,7 @@ public final class SignInTestEnv {
         IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.signInAllowed(any())).thenReturn(true);
-        when(mock.fetchUserProfile(any())).thenReturn(profile());
+        when(mock.fetchPersonProfile(any())).thenReturn(profile());
         return new TestIdentityProviderFactory(mock);
     }
 
@@ -90,7 +88,7 @@ public final class SignInTestEnv {
         IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.signInAllowed(any())).thenReturn(false);
-        when(mock.fetchUserProfile(any())).thenReturn(profile());
+        when(mock.fetchPersonProfile(any())).thenReturn(profile());
         return new TestIdentityProviderFactory(mock);
     }
 
@@ -99,12 +97,12 @@ public final class SignInTestEnv {
                                  .setId(userId())
                                  .setOrgEntity(orgEntity())
                                  .setDisplayName(displayName())
-                                 .setPrimaryAuthIdentity(identity())
+                                 .setPrimaryIdentity(identity())
                                  .setProfile(profile())
                                  .setStatus(NOT_READY)
-                                 .addSecondaryAuthIdentity(identity())
-                                 .putAttributes(attributeName(), attributeValue())
+                                 .addSecondaryIdentity(identity())
                                  .addRole(adminRoleId())
+                                 .setKind(PERSON)
                                  .build();
         UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
                                        .withState(state)
@@ -113,33 +111,25 @@ public final class SignInTestEnv {
         return aggregate;
     }
 
-    static String attributeName() {
-        return "auth_token";
-    }
-
-    static Any attributeValue() {
-        return pack(StringValue.of("encrypted-auth-token-value"));
-    }
-
     static String displayName() {
         return "John Smith";
     }
 
-    static UserProfile profile() {
-        return UserProfileVBuilder.newBuilder()
+    static PersonProfile profile() {
+        return PersonProfileVBuilder.newBuilder()
                                   .setName(name())
                                   .setEmail(email())
                                   .build();
     }
 
-    private static OrganizationalEntity orgEntity() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    private static OrganizationOrUnit orgEntity() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                    .setOrganization(organizationId())
                                    .build();
     }
 
-    public static UserAuthIdentity identity() {
-        return UserAuthIdentityVBuilder.newBuilder()
+    public static Identity identity() {
+        return IdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@google.com")
                                        .setProviderId(googleProviderId())
                                        .setUserId("123543")

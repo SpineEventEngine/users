@@ -22,7 +22,7 @@ package io.spine.users.c.role;
 
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
 
 /**
@@ -70,7 +70,7 @@ final class RoleEventFactory extends EntityEventFactory {
                                   .build();
     }
 
-    RoleParentChanged changeParent(ChangeRoleParent command, OrganizationalEntity oldParent) {
+    RoleParentChanged changeParent(ChangeRoleParent command, OrganizationOrUnit oldParent) {
         return RoleParentChangedVBuilder.newBuilder()
                                         .setId(command.getId())
                                         .setNewOrgEntity(command.getNewOrgEntity())

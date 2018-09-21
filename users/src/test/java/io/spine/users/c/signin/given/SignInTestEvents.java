@@ -11,11 +11,11 @@ import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.user.UserCreated;
 import io.spine.users.c.user.UserCreatedVBuilder;
 
-import static io.spine.time.ZonedDateTimes.now;
 import static io.spine.users.c.signin.given.SignInTestEnv.displayName;
 import static io.spine.users.c.signin.given.SignInTestEnv.identity;
 import static io.spine.users.c.signin.given.SignInTestEnv.profile;
 import static io.spine.users.c.user.User.Status.ACTIVE;
+import static io.spine.users.c.user.UserKind.PERSON;
 
 /**
  * Test events for {@link SignInPm}.
@@ -37,7 +37,7 @@ public final class SignInTestEvents {
                                   .setStatus(ACTIVE)
                                   .setDisplayName(displayName())
                                   .setPrimaryIdentity(identity())
-                                  .setWhenCreated(now())
+                                  .setKind(PERSON)
                                   .build();
     }
 }

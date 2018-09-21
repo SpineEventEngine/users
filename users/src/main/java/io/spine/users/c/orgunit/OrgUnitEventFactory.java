@@ -20,12 +20,10 @@
 
 package io.spine.users.c.orgunit;
 
-import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
-import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
 
 /**
@@ -60,18 +58,8 @@ final class OrgUnitEventFactory extends EntityEventFactory {
                                      .setId(command.getId())
                                      .setDisplayName(command.getDisplayName())
                                      .setDomain(command.getDomain())
-                                     .setOwner(command.getOwner())
                                      .setParentEntity(command.getParentEntity())
-                                     .putAllAttributes(command.getAttributesMap())
                                      .build();
-    }
-
-    OrgUnitOwnerChanged changeOwner(ChangeOrgUnitOwner command, UserId oldOwner) {
-        return OrgUnitOwnerChangedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setNewOwner(command.getNewOwner())
-                                          .setOldOwner(oldOwner)
-                                          .build();
     }
 
     OrgUnitDeleted deleteOrgUnit(DeleteOrgUnit command) {
@@ -80,34 +68,7 @@ final class OrgUnitEventFactory extends EntityEventFactory {
                                      .build();
     }
 
-    OrgUnitAttributeAdded addAttribute(AddOrgUnitAttribute command) {
-        return OrgUnitAttributeAddedVBuilder.newBuilder()
-                                            .setId(command.getId())
-                                            .setName(command.getName())
-                                            .setValue(command.getValue())
-                                            .build();
-    }
-
-    OrgUnitAttributeRemoved removeAttribute(RemoveOrgUnitAttribute command,
-                                            Any oldValue) {
-        return OrgUnitAttributeRemovedVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setName(command.getName())
-                                              .setValue(oldValue)
-                                              .build();
-    }
-
-    OrgUnitAttributeUpdated updateAttribute(UpdateOrgUnitAttribute command,
-                                            Any oldValue) {
-        return OrgUnitAttributeUpdatedVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setName(command.getName())
-                                              .setNewValue(command.getNewValue())
-                                              .setOldValue(oldValue)
-                                              .build();
-    }
-
-    OrgUnitMoved moveOrgUnit(MoveOrgUnit command, OrganizationalEntity oldParent) {
+    OrgUnitMoved moveOrgUnit(MoveOrgUnit command, OrganizationOrUnit oldParent) {
         return OrgUnitMovedVBuilder.newBuilder()
                                    .setId(command.getId())
                                    .setNewParentEntity(command.getNewParentEntity())

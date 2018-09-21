@@ -20,11 +20,9 @@
 
 package io.spine.users.c.organization;
 
-import com.google.protobuf.Any;
 import io.spine.core.ActorContext;
 import io.spine.core.CommandContext;
 import io.spine.core.TenantId;
-import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
 import io.spine.users.c.EntityEventFactory;
 
@@ -59,51 +57,14 @@ final class OrganizationEventFactory extends EntityEventFactory {
                                           .setId(command.getId())
                                           .setDisplayName(command.getDisplayName())
                                           .setDomain(command.getDomain())
-                                          .setOwner(command.getOwner())
                                           .setTenant(command.getTenant())
-                                          .putAllAttributes(command.getAttributesMap())
                                           .build();
-    }
-
-    OrganizationOwnerChanged changeOwner(ChangeOrganizationOwner command, UserId oldOwner) {
-        return OrganizationOwnerChangedVBuilder.newBuilder()
-                                               .setId(command.getId())
-                                               .setNewOwner(command.getNewOwner())
-                                               .setOldOwner(oldOwner)
-                                               .build();
     }
 
     OrganizationDeleted deleteOrganization(DeleteOrganization command) {
         return OrganizationDeletedVBuilder.newBuilder()
                                           .setId(command.getId())
                                           .build();
-    }
-
-    OrganizationAttributeAdded addAttribute(AddOrganizationAttribute command) {
-        return OrganizationAttributeAddedVBuilder.newBuilder()
-                                                 .setId(command.getId())
-                                                 .setName(command.getName())
-                                                 .setValue(command.getValue())
-                                                 .build();
-    }
-
-    OrganizationAttributeRemoved removeAttribute(RemoveOrganizationAttribute command,
-                                                 Any oldValue) {
-        return OrganizationAttributeRemovedVBuilder.newBuilder()
-                                                   .setId(command.getId())
-                                                   .setName(command.getName())
-                                                   .setValue(oldValue)
-                                                   .build();
-    }
-
-    OrganizationAttributeUpdated updateAttribute(UpdateOrganizationAttribute command,
-                                                 Any oldValue) {
-        return OrganizationAttributeUpdatedVBuilder.newBuilder()
-                                                   .setId(command.getId())
-                                                   .setName(command.getName())
-                                                   .setNewValue(command.getNewValue())
-                                                   .setOldValue(oldValue)
-                                                   .build();
     }
 
     OrganizationRenamed renameOrganization(RenameOrganization command, String oldName) {

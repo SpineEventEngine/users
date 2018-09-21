@@ -20,12 +20,8 @@
 
 package io.spine.users.c.organization.given;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Int64Value;
 import io.spine.core.TenantId;
 import io.spine.core.TenantIdVBuilder;
-import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
@@ -35,7 +31,6 @@ import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.c.organization.OrganizationAggregate;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.protobuf.AnyPacker.pack;
 
 /**
  * The environment for the {@link OrganizationAggregate} tests.
@@ -54,18 +49,6 @@ public final class OrganizationTestEnv {
         return OrganizationIdVBuilder.newBuilder()
                                      .setValue(newUuid())
                                      .build();
-    }
-
-    public static UserId orgOwner() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
-    }
-
-    public static UserId newOrgOwner() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
     }
 
     public static String orgName() {
@@ -102,22 +85,6 @@ public final class OrganizationTestEnv {
                                .setEmail(email())
                                .setValue(newUuid())
                                .build();
-    }
-
-    public static String orgAttributeName() {
-        return "org-attribute-name-1";
-    }
-
-    public static Any orgAttributeValue() {
-        return pack(Int64Value.of(271));
-    }
-
-    public static String newOrgAttributeName() {
-        return "org-attribute-name-2";
-    }
-
-    public static Any newOrgAttributeValue() {
-        return pack(Int64Value.of(271));
     }
 
     private static EmailAddress email() {

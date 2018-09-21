@@ -20,15 +20,12 @@
 
 package io.spine.users.c.orgunit;
 
-import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrgUnitId;
 import io.spine.users.c.organization.OrganizationAggregate;
-
-import java.util.Map;
 
 /**
  * An organizational unit (aka orgunit).
@@ -38,19 +35,6 @@ import java.util.Map;
  *
  * <p>It is forbidden to include an organizational unit into itself directly or indirectly. In other
  * words, the organizational structure must always be an acyclic graph.
- *
- * <h3>Orgunit Attributes</h3>
- *
- * <p>To make organizational unit meet specific requirements of the application, it can be extended
- * using custom attributes.
- *
- * <p>The following commands are available to work with the orgunit attributes:
- *
- * <ul>
- *   <li>{@link AddOrgUnitAttribute} to add a new attribute, or replace the existing one;
- *   <li>{@link RemoveOrgUnitAttribute} to remove an attribute;
- *   <li>{@link UpdateOrgUnitAttribute} to update an existing attribute.
- * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
@@ -71,42 +55,8 @@ public class OrgUnitAggregate
     }
 
     @Assign
-    OrgUnitOwnerChanged handle(ChangeOrgUnitOwner command, CommandContext context) {
-        return events(context).changeOwner(command, getState().getOwner());
-    }
-
-    @Assign
     OrgUnitDeleted handle(DeleteOrgUnit command, CommandContext context) {
         return events(context).deleteOrgUnit(command);
-    }
-
-    @Assign
-    OrgUnitAttributeAdded handle(AddOrgUnitAttribute command, CommandContext context) {
-        return events(context).addAttribute(command);
-    }
-
-    @Assign
-    OrgUnitAttributeRemoved handle(RemoveOrgUnitAttribute command,
-                                   CommandContext context) throws OrgUnitAttributeDoesNotExist {
-        Map<String, Any> attributes = getState().getAttributesMap();
-        String attributeName = command.getName();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).removeAttribute(command, attributes.get(attributeName));
-        } else {
-            throw new OrgUnitAttributeDoesNotExist(getId(), attributeName);
-        }
-    }
-
-    @Assign
-    OrgUnitAttributeUpdated handle(UpdateOrgUnitAttribute command,
-                                   CommandContext context) throws OrgUnitAttributeDoesNotExist {
-        Map<String, Any> attributes = getState().getAttributesMap();
-        String attributeName = command.getName();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).updateAttribute(command, attributes.get(attributeName));
-        } else {
-            throw new OrgUnitAttributeDoesNotExist(getId(), attributeName);
-        }
     }
 
     @Assign
@@ -129,35 +79,12 @@ public class OrgUnitAggregate
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
-                    .setOwner(event.getOwner())
-                    .setParentEntity(event.getParentEntity())
-                    .putAllAttributes(event.getAttributesMap());
-    }
-
-    @Apply
-    void on(OrgUnitOwnerChanged event) {
-        getBuilder().setOwner(event.getNewOwner());
+                    .setParentEntity(event.getParentEntity());
     }
 
     @Apply
     void on(OrgUnitDeleted event) {
         setDeleted(true);
-    }
-
-    @Apply
-    void on(OrgUnitAttributeAdded event) {
-        getBuilder().putAttributes(event.getName(), event.getValue());
-    }
-
-    @Apply
-    void on(OrgUnitAttributeRemoved event) {
-        removeAttribute(event.getName());
-    }
-
-    @Apply
-    void on(OrgUnitAttributeUpdated event) {
-        removeAttribute(event.getName());
-        getBuilder().putAttributes(event.getName(), event.getNewValue());
     }
 
     @Apply
@@ -173,14 +100,6 @@ public class OrgUnitAggregate
     @Apply
     void on(OrgUnitDomainChanged event) {
         getBuilder().setDomain(event.getNewDomain());
-    }
-
-    private void removeAttribute(String attributeName) {
-        OrgUnitVBuilder builder = getBuilder();
-        Map<String, Any> attributes = builder.getAttributes();
-        if (attributes.containsKey(attributeName)) {
-            builder.removeAttributes(attributeName);
-        }
     }
 
     private static OrgUnitEventFactory events(CommandContext context) {

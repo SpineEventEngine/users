@@ -16,6 +16,9 @@ import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
 import static io.spine.users.c.signin.given.SignInTestCommands.signInCommand;
+import static io.spine.users.c.signin.given.SignInTestEnv.mockActiveIdentityProvider;
+import static io.spine.users.c.signin.given.SignInTestEnv.mockSuspendedIdentityProvider;
+import static io.spine.users.c.signin.given.SignInTestEnv.nonEmptyUserRepo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -33,7 +36,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void initialize() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(SignInTestEnv.mockActiveIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
         expectThat(emptyProcMan).hasState(state -> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getIdentity(), state.getIdentity());
@@ -45,7 +48,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void createUser() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(SignInTestEnv.mockActiveIdentityProvider());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
         expectThat(emptyProcMan)
                 .producesCommand(CreateUser.class, command -> {
                     assertEquals(message().getId(), command.getId());
@@ -59,8 +62,8 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     @DisplayName("finish the process if the user exists and is active")
     void finishProcess() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(SignInTestEnv.nonEmptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(SignInTestEnv.mockActiveIdentityProvider());
+        emptyProcMan.setUserRepository(nonEmptyUserRepo());
+        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
@@ -72,8 +75,8 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     @DisplayName("fail the process if the user exists and is NOT active")
     void failProcess() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(SignInTestEnv.nonEmptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(SignInTestEnv.mockSuspendedIdentityProvider());
+        emptyProcMan.setUserRepository(nonEmptyUserRepo());
+        emptyProcMan.setIdentityProviderFactory(mockSuspendedIdentityProvider());
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());

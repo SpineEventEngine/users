@@ -46,8 +46,6 @@ class CreateOrganizationTest extends OrgCommandTest<CreateOrganization> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
             assertEquals(command.getTenant(), event.getTenant());
-            assertEquals(command.getAttributesMap(), event.getAttributesMap());
-            assertEquals(command.getOwner(), event.getOwner());
             assertEquals(command.getDomain(), event.getDomain());
         });
     }
@@ -60,8 +58,6 @@ class CreateOrganizationTest extends OrgCommandTest<CreateOrganization> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
             assertEquals(command.getTenant(), state.getTenant());
-            assertEquals(command.getAttributesMap(), state.getAttributesMap());
-            assertEquals(command.getOwner(), state.getOwner());
             assertEquals(command.getDomain(), state.getDomain());
         });
     }

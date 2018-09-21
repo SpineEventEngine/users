@@ -16,20 +16,20 @@ import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
+import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.IdentityVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.OrganizationalEntity;
-import io.spine.users.OrganizationalEntityVBuilder;
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrganizationOrUnitVBuilder;
+import io.spine.users.PersonProfile;
+import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
-import io.spine.users.UserAuthIdentity;
-import io.spine.users.UserAuthIdentityVBuilder;
-import io.spine.users.UserProfile;
-import io.spine.users.UserProfileVBuilder;
 import io.spine.users.c.user.UserAggregate;
 
 import static io.spine.base.Identifier.newUuid;
@@ -69,34 +69,34 @@ public class UserTestEnv {
         return "John Doe";
     }
 
-    public static UserProfile profile() {
-        return UserProfileVBuilder.newBuilder()
+    public static PersonProfile profile() {
+        return PersonProfileVBuilder.newBuilder()
                                   .setName(personName())
                                   .setEmail(email())
                                   .build();
     }
 
-    public static UserProfile newProfile() {
-        return UserProfileVBuilder.newBuilder()
+    public static PersonProfile newProfile() {
+        return PersonProfileVBuilder.newBuilder()
                                   .setName(newPersonName())
                                   .setEmail(newEmail())
                                   .build();
     }
 
-    public static OrganizationalEntity userOrgEntity() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    public static OrganizationOrUnit userOrgEntity() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                    .setOrganization(organizationId())
                                    .build();
     }
 
-    static OrganizationalEntity newUserOrgEntity() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    static OrganizationOrUnit newUserOrgEntity() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                    .setOrgUnit(orgUnitId())
                                    .build();
     }
 
-    public static UserAuthIdentity googleIdentity() {
-        return UserAuthIdentityVBuilder.newBuilder()
+    public static Identity googleIdentity() {
+        return IdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@google.com")
                                        .setProviderId(googleProviderId())
                                        .setUserId(USER_UUID)
@@ -117,8 +117,8 @@ public class UserTestEnv {
         return pack(StringValue.of("encrypted-auth-token-value"));
     }
 
-    static UserAuthIdentity githubIdentity() {
-        return UserAuthIdentityVBuilder.newBuilder()
+    static Identity githubIdentity() {
+        return IdentityVBuilder.newBuilder()
                                        .setDisplayName("j.s@github.com")
                                        .setProviderId(githubPoviderId())
                                        .setUserId(USER_UUID)

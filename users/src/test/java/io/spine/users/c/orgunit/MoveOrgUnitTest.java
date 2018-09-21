@@ -20,7 +20,7 @@
 
 package io.spine.users.c.orgunit;
 
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +42,7 @@ class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit> {
     @DisplayName("produce OrgUnitMoved event")
     void produceEvent() {
         OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
-        OrganizationalEntity oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.getState()
                                                   .getParentEntity();
         expectThat(aggregate).producesEvent(OrgUnitMoved.class, event -> {
             assertEquals(message().getId(), event.getId());

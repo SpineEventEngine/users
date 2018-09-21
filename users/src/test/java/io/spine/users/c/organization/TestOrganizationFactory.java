@@ -23,11 +23,8 @@ package io.spine.users.c.organization;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.OrganizationId;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeValue;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgOwner;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
 
 /**
@@ -67,10 +64,8 @@ final class TestOrganizationFactory {
     private static OrganizationVBuilder state(OrganizationId id) {
         return OrganizationVBuilder.newBuilder()
                                    .setId(id)
-                                   .setOwner(orgOwner())
                                    .setTenant(orgTenant())
                                    .setDomain(orgDomain())
-                                   .setDisplayName(orgName())
-                                   .putAttributes(orgAttributeName(), orgAttributeValue());
+                                   .setDisplayName(orgName());
     }
 }

@@ -6,26 +6,20 @@
 
 package io.spine.users.c.user;
 
-import com.google.protobuf.Any;
 import io.spine.core.CommandContext;
-import io.spine.core.EventContext;
 import io.spine.core.UserId;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.server.event.React;
 import io.spine.users.GroupId;
+import io.spine.users.Identity;
 import io.spine.users.RoleId;
-import io.spine.users.UserAuthIdentity;
 import io.spine.users.c.group.Group;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.role.Role;
-import io.spine.users.c.signin.SignInSuccessful;
-import io.spine.users.c.signin.SignOutCompleted;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -46,19 +40,6 @@ import java.util.function.Predicate;
  *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
  * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
- *
- * <h3>User Attributes</h3>
- *
- * <p>To make {@link UserAggregate} meet specific requirements of the application, it can be
- * extended by custom attributes.
- *
- * <p>The following commands are available to work with the user attributes:
- *
- * <ul>
- *     <li>{@link AddUserAttribute} to add a new attribute, or replace the existing one;
- *     <li>{@link RemoveUserAttribute} to remove an attribute;
- *     <li>{@link UpdateUserAttribute} to update an existing attribute.
- * </ul>
  *
  * @author Vladyslav Lubenskyi
  */
@@ -115,49 +96,19 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    UserAttributeAdded handle(AddUserAttribute command, CommandContext context) {
-        return events(context).addAttribute(command);
-    }
-
-    @Assign
-    UserAttributeRemoved handle(RemoveUserAttribute command, CommandContext context)
-            throws UserAttributeDoesNotExist {
-        Map<String, Any> attributes = getState().getAttributesMap();
-        String attributeName = command.getName();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).removeAttribute(command, attributeName,
-                                                   attributes.get(attributeName));
-        } else {
-            throw new UserAttributeDoesNotExist(getId(), attributeName);
-        }
-    }
-
-    @Assign
-    UserAttributeUpdated handle(UpdateUserAttribute command, CommandContext context)
-            throws UserAttributeDoesNotExist {
-        String attributeName = command.getName();
-        Map<String, Any> attributes = getState().getAttributesMap();
-        if (attributes.containsKey(attributeName)) {
-            return events(context).updateAttribute(command, attributes.get(attributeName));
-        } else {
-            throw new UserAttributeDoesNotExist(getId(), attributeName);
-        }
-    }
-
-    @Assign
     UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
         return events(context).changeStatus(command, getState().getStatus());
     }
 
     @Assign
-    SecondaryAuthIdentityAdded handle(AddSecondaryAuthIdentity command, CommandContext context) {
+    SecondaryIdentityAdded handle(AddSecondaryIdentity command, CommandContext context) {
         return events(context).addIdentity(command);
     }
 
     @Assign
-    SecondaryAuthIdentityRemoved handle(RemoveSecondaryAuthIdentity command,
-                                        CommandContext context) throws AuthIdentityDoesNotExist {
-        Optional<UserAuthIdentity> identityToRemove = findAuthIdentity(command);
+    SecondaryIdentityRemoved handle(RemoveSecondaryIdentity command,
+                                    CommandContext context) throws IdentityDoesNotExist {
+        Optional<Identity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
             return events(context).removeIdentity(command, identityToRemove.get());
         } else {
@@ -166,7 +117,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    PrimaryAuthIdentityChanged handle(ChangePrimaryAuthIdentity command, CommandContext context) {
+    PrimaryIdentityChanged handle(ChangePrimaryIdentity command, CommandContext context) {
         return events(context).changePrimaryIdentity(command);
     }
 
@@ -176,7 +127,7 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Assign
-    UserProfileUpdated handle(UpdateUserProfile command, CommandContext context) {
+    PersonProfileUpdated handle(UpdatePersonProfile command, CommandContext context) {
         return events(context).updateProfile(command);
     }
 
@@ -185,11 +136,10 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         getBuilder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setOrgEntity(event.getOrgEntity())
-                    .setPrimaryAuthIdentity(event.getPrimaryIdentity())
+                    .setPrimaryIdentity(event.getPrimaryIdentity())
                     .addAllRole(event.getRoleList())
-                    .putAllAttributes(event.getAttributesMap())
-                    .setWhenCreated(event.getWhenCreated())
                     .setProfile(event.getProfile())
+                    .setKind(event.getKind())
                     .setStatus(event.getStatus());
     }
 
@@ -225,58 +175,23 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Apply
-    void on(UserAttributeAdded event) {
-        getBuilder().putAttributes(event.getName(), event.getValue());
-    }
-
-    @Apply
-    void on(UserAttributeRemoved event) {
-        removeAttribute(event.getName());
-    }
-
-    @Apply
-    void on(UserAttributeUpdated event) {
-        String attributeName = event.getName();
-        removeAttribute(attributeName);
-        getBuilder().putAttributes(attributeName, event.getNewValue());
-    }
-
-    @Apply
     void on(UserStatusChanged event) {
         getBuilder().setStatus(event.getNewStatus());
     }
 
-    @React
-    UserSignedIn on(SignInSuccessful event, EventContext context) {
-        return events(context.getCommandContext()).signIn(event);
-    }
-
-    @React
-    UserSignedOut on(SignOutCompleted event, EventContext context) {
-        return events(context.getCommandContext()).signOut(event);
+    @Apply
+    void on(SecondaryIdentityAdded event) {
+        getBuilder().addSecondaryIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(UserSignedIn event) {
+    void on(SecondaryIdentityRemoved event) {
+        removeIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(UserSignedOut event) {
-    }
-
-    @Apply
-    void on(SecondaryAuthIdentityAdded event) {
-        getBuilder().addSecondaryAuthIdentity(event.getIdentity());
-    }
-
-    @Apply
-    void on(SecondaryAuthIdentityRemoved event) {
-        removeAuthIdentity(event.getIdentity());
-    }
-
-    @Apply
-    void on(PrimaryAuthIdentityChanged event) {
-        getBuilder().setPrimaryAuthIdentity(event.getIdentity());
+    void on(PrimaryIdentityChanged event) {
+        getBuilder().setPrimaryIdentity(event.getIdentity());
     }
 
     @Apply
@@ -285,23 +200,15 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
     }
 
     @Apply
-    void on(UserProfileUpdated event) {
+    void on(PersonProfileUpdated event) {
         getBuilder().setProfile(event.getUpdatedProfile());
     }
 
-    private Optional<UserAuthIdentity> findAuthIdentity(RemoveSecondaryAuthIdentity command) {
-        return getState().getSecondaryAuthIdentityList()
+    private Optional<Identity> findAuthIdentity(RemoveSecondaryIdentity command) {
+        return getState().getSecondaryIdentityList()
                          .stream()
                          .filter(identityMatcher(command))
                          .findFirst();
-    }
-
-    private void removeAttribute(String attributeName) {
-        UserVBuilder builder = getBuilder();
-        Map<String, Any> attributes = builder.getAttributes();
-        if (attributes.containsKey(attributeName)) {
-            builder.removeAttributes(attributeName);
-        }
     }
 
     private void removeRole(RoleId roleId) {
@@ -320,16 +227,15 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         }
     }
 
-    private void removeAuthIdentity(UserAuthIdentity identity) {
-        List<UserAuthIdentity> identities = getBuilder().getSecondaryAuthIdentity();
+    private void removeIdentity(Identity identity) {
+        List<Identity> identities = getBuilder().getSecondaryIdentity();
         if (identities.contains(identity)) {
             int index = identities.indexOf(identity);
-            getBuilder().removeSecondaryAuthIdentity(index);
+            getBuilder().removeSecondaryIdentity(index);
         }
     }
 
-    private static Predicate<UserAuthIdentity> identityMatcher(
-            RemoveSecondaryAuthIdentity command) {
+    private static Predicate<Identity> identityMatcher(RemoveSecondaryIdentity command) {
         return identity -> {
             boolean idMatches = identity.getUserId()
                                         .equals(command.getUserId());
@@ -339,10 +245,10 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         };
     }
 
-    private static AuthIdentityDoesNotExist identityDoesNotExist(
-            RemoveSecondaryAuthIdentity command) {
-        return new AuthIdentityDoesNotExist(command.getId(), command.getProviderId(),
-                                            command.getUserId());
+    private static IdentityDoesNotExist identityDoesNotExist(
+            RemoveSecondaryIdentity command) {
+        return new IdentityDoesNotExist(command.getId(), command.getProviderId(),
+                                        command.getUserId());
     }
 
     private static UserEventFactory events(CommandContext context) {

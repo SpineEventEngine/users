@@ -7,7 +7,7 @@
 package io.spine.users.c.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.UserAuthIdentity;
+import io.spine.users.Identity;
 import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.signin.SignUserIn;
 import io.spine.users.c.signin.SignUserInVBuilder;
@@ -27,7 +27,7 @@ public final class SignInTestCommands {
     private SignInTestCommands() {
     }
 
-    public static SignUserIn signInCommand(UserId id, UserAuthIdentity identity) {
+    public static SignUserIn signInCommand(UserId id, Identity identity) {
         return SignUserInVBuilder.newBuilder()
                                  .setId(id)
                                  .setIdentity(identity)

@@ -6,7 +6,7 @@
 
 package io.spine.users.c.user;
 
-import io.spine.users.UserAuthIdentity;
+import io.spine.users.Identity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("RemoveSecondaryAuthIdentity command should")
-class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity> {
+@DisplayName("RemoveSecondaryIdentity command should")
+class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryIdentity> {
 
     RemoveAuthIdentityTest() {
         super(createMessage());
@@ -30,9 +30,9 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity
     @DisplayName("generate AuthIdentityRemoved event")
     void generateEvent() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(SecondaryAuthIdentityRemoved.class, event -> {
+        expectThat(aggregate).producesEvent(SecondaryIdentityRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
-            UserAuthIdentity eventIdentity = event.getIdentity();
+            Identity eventIdentity = event.getIdentity();
             assertEquals(message().getProviderId(), eventIdentity.getProviderId());
             assertEquals(message().getUserId(), eventIdentity.getUserId());
         });
@@ -42,7 +42,7 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity
     @DisplayName("remove an identity")
     void changeState() {
         UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryAuthIdentityList()
+        expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryIdentityList()
                                                                 .isEmpty()));
     }
 
@@ -50,10 +50,10 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryAuthIdentity
     @DisplayName("throw rejection if auth identity doesn't exist")
     void generateRejection() {
         UserAggregate aggregate = createEmptyAggregate();
-        expectThat(aggregate).throwsRejection(Rejections.AuthIdentityDoesNotExist.class);
+        expectThat(aggregate).throwsRejection(Rejections.IdentityDoesNotExist.class);
     }
 
-    private static RemoveSecondaryAuthIdentity createMessage() {
+    private static RemoveSecondaryIdentity createMessage() {
         return removeAuthIdentity(USER_ID);
     }
 }

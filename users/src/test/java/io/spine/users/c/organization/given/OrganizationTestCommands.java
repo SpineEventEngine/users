@@ -21,12 +21,8 @@
 package io.spine.users.c.organization.given;
 
 import io.spine.users.OrganizationId;
-import io.spine.users.c.organization.AddOrganizationAttribute;
-import io.spine.users.c.organization.AddOrganizationAttributeVBuilder;
 import io.spine.users.c.organization.ChangeOrganizationDomain;
 import io.spine.users.c.organization.ChangeOrganizationDomainVBuilder;
-import io.spine.users.c.organization.ChangeOrganizationOwner;
-import io.spine.users.c.organization.ChangeOrganizationOwnerVBuilder;
 import io.spine.users.c.organization.ChangeOrganizationTenant;
 import io.spine.users.c.organization.ChangeOrganizationTenantVBuilder;
 import io.spine.users.c.organization.CreateOrganization;
@@ -34,24 +30,14 @@ import io.spine.users.c.organization.CreateOrganizationVBuilder;
 import io.spine.users.c.organization.DeleteOrganization;
 import io.spine.users.c.organization.DeleteOrganizationVBuilder;
 import io.spine.users.c.organization.OrganizationAggregate;
-import io.spine.users.c.organization.RemoveOrganizationAttribute;
-import io.spine.users.c.organization.RemoveOrganizationAttributeVBuilder;
 import io.spine.users.c.organization.RenameOrganization;
 import io.spine.users.c.organization.RenameOrganizationVBuilder;
-import io.spine.users.c.organization.UpdateOrganizationAttribute;
-import io.spine.users.c.organization.UpdateOrganizationAttributeVBuilder;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgAttributeName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgAttributeValue;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgAttributeValue;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgDomain;
+import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgTenant;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgDomain;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgOwner;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgTenant;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgOwner;
 import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
 
 /**
@@ -73,8 +59,6 @@ public final class OrganizationTestCommands {
                                          .setDisplayName(orgName())
                                          .setDomain(orgDomain())
                                          .setTenant(orgTenant())
-                                         .setOwner(orgOwner())
-                                         .putAttributes(orgAttributeName(), orgAttributeValue())
                                          .build();
 
     }
@@ -83,36 +67,6 @@ public final class OrganizationTestCommands {
         return DeleteOrganizationVBuilder.newBuilder()
                                          .setId(id)
                                          .build();
-    }
-
-    public static ChangeOrganizationOwner changeOrganizationOwner(OrganizationId id) {
-        return ChangeOrganizationOwnerVBuilder.newBuilder()
-                                              .setId(id)
-                                              .setNewOwner(newOrgOwner())
-                                              .build();
-    }
-
-    public static AddOrganizationAttribute addOrganizationAttribute(OrganizationId id) {
-        return AddOrganizationAttributeVBuilder.newBuilder()
-                                               .setId(id)
-                                               .setName(newOrgAttributeName())
-                                               .setValue(newOrgAttributeValue())
-                                               .build();
-    }
-
-    public static RemoveOrganizationAttribute removeOrganizationAttribute(OrganizationId id) {
-        return RemoveOrganizationAttributeVBuilder.newBuilder()
-                                                  .setId(id)
-                                                  .setName(orgAttributeName())
-                                                  .build();
-    }
-
-    public static UpdateOrganizationAttribute updateOrganizationAttribute(OrganizationId id) {
-        return UpdateOrganizationAttributeVBuilder.newBuilder()
-                                                  .setId(id)
-                                                  .setName(orgAttributeName())
-                                                  .setNewValue(newOrgAttributeValue())
-                                                  .build();
     }
 
     public static ChangeOrganizationDomain changeOrganizationDomain(OrganizationId id) {

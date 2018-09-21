@@ -20,10 +20,6 @@
 
 package io.spine.users.c.group.given;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Int32Value;
-import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.users.GroupId;
@@ -32,14 +28,13 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.OrganizationalEntity;
-import io.spine.users.OrganizationalEntityVBuilder;
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.group.GroupAggregate;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.protobuf.AnyPacker.pack;
 
 /**
  * The environment for the {@link GroupAggregate} tests.
@@ -49,9 +44,6 @@ import static io.spine.protobuf.AnyPacker.pack;
 public class GroupTestEnv {
 
     private static final GroupId NESTED_GROUP_ID = createGroupId();
-    private static final UserId GROUP_OWNER = UserIdVBuilder.newBuilder()
-                                                            .setValue(newUuid())
-                                                            .build();
 
     /**
      * Prevents instantiation.
@@ -89,24 +81,14 @@ public class GroupTestEnv {
                                    .build();
     }
 
-    public static UserId groupOwner() {
-        return GROUP_OWNER;
-    }
-
-    public static UserId newGroupOwner() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
-    }
-
-    public static OrganizationalEntity groupOrgEntityOrganization() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    public static OrganizationOrUnit groupOrgEntityOrganization() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                    .setOrganization(organization())
                                    .build();
     }
 
-    public static OrganizationalEntity groupParentOrgUnit() {
-        return OrganizationalEntityVBuilder.newBuilder()
+    public static OrganizationOrUnit groupParentOrgUnit() {
+        return OrganizationOrUnitVBuilder.newBuilder()
                                    .setOrgUnit(orgUnit())
                                    .build();
     }
@@ -115,22 +97,6 @@ public class GroupTestEnv {
         return RoleIdVBuilder.newBuilder()
                              .setValue("administrator")
                              .build();
-    }
-
-    public static String groupAttributeName() {
-        return "group-attribute-1";
-    }
-
-    public static Any groupAttributeValue() {
-        return pack(Int32Value.of(42));
-    }
-
-    static String newGroupAttributeName() {
-        return "grouo-attribute-2";
-    }
-
-    static Any newGroupAttributeValue() {
-        return pack(Int32Value.of(31415));
     }
 
     private static OrgUnitId orgUnit() {

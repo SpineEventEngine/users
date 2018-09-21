@@ -10,23 +10,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.given.UserTestCommands.updateUserProfile;
+import static io.spine.users.c.user.given.UserTestCommands.updatePersonProfile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("UpdateUserProfile command should")
-class UpdateUserProfileTest extends UserCommandTest<UpdateUserProfile> {
+@DisplayName("UpdatePersonProfile command should")
+class UpdatePersonProfileTest extends UserCommandTest<UpdatePersonProfile> {
 
-    UpdateUserProfileTest() {
+    UpdatePersonProfileTest() {
         super(createMessage());
     }
 
     @Test
-    @DisplayName("generate UserProfileUpdated event")
+    @DisplayName("generate PersonProfileUpdated event")
     void generateEvent() {
-        expectThat(createAggregate()).producesEvent(UserProfileUpdated.class, event -> {
+        expectThat(createAggregate()).producesEvent(PersonProfileUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getUpdatedProfile(), event.getUpdatedProfile());
         });
@@ -39,7 +39,7 @@ class UpdateUserProfileTest extends UserCommandTest<UpdateUserProfile> {
                 state -> assertEquals(message().getUpdatedProfile(), state.getProfile()));
     }
 
-    private static UpdateUserProfile createMessage() {
-        return updateUserProfile(USER_ID);
+    private static UpdatePersonProfile createMessage() {
+        return updatePersonProfile(USER_ID);
     }
 }

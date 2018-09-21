@@ -20,7 +20,7 @@
 
 package io.spine.users.c.role;
 
-import io.spine.users.OrganizationalEntity;
+import io.spine.users.OrganizationOrUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ class ChangeRoleParentTest extends RoleCommandTest<ChangeRoleParent> {
     void produceEvent() {
         ChangeRoleParent command = message();
         RoleAggregate aggregate = createAggregate(ROLE_ID);
-        OrganizationalEntity oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.getState()
                                                   .getOrgEntity();
         expectThat(aggregate).producesEvent(RoleParentChanged.class, event -> {
             assertEquals(command.getId(), event.getId());
