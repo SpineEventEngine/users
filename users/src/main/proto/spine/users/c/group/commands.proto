@@ -77,7 +77,7 @@ message DeleteGroup {
 // Joins a parent group.
 //
 message JoinParentGroup {
-    option (events) = "ParentGroupJoined";
+    option (events) = "JoinedParentGroup";
     option (rejections) = "GroupsCanNotFormCycles";
 
     GroupId id = 1;
@@ -89,7 +89,7 @@ message JoinParentGroup {
 // Leaves a parent group.
 //
 message LeaveParentGroup {
-    option (events) = "ParentGroupLeft";
+    option (events) = "LeftParentGroup";
 
     GroupId id = 1;
 
