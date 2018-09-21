@@ -36,7 +36,7 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// A new organization is created.
+// A new organization was created.
 //
 message OrganizationCreated {
 
@@ -58,7 +58,7 @@ message OrganizationCreated {
     core.UserId owner = 6 [(required) = true];
 }
 
-// An owner of an organization is changed.
+// An owner of an organization was changed.
 //
 message OrganizationOwnerChanged {
 
@@ -71,14 +71,14 @@ message OrganizationOwnerChanged {
     core.UserId old_owner = 3 [(required) = true];
 }
 
-// An organization is deleted.
+// An organization was deleted.
 //
 message OrganizationDeleted {
 
     OrganizationId id = 1;
 }
 
-// A new attribute is added to an organization.
+// A new attribute was added to an organization.
 //
 message OrganizationAttributeAdded {
 
@@ -91,7 +91,7 @@ message OrganizationAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// An organization attribute is removed.
+// An organization attribute was removed.
 //
 message OrganizationAttributeRemoved {
 
@@ -104,7 +104,7 @@ message OrganizationAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// An organization attribute is updated.
+// An organization attribute was updated.
 //
 message OrganizationAttributeUpdated {
 
@@ -120,7 +120,7 @@ message OrganizationAttributeUpdated {
     google.protobuf.Any new_value = 5 [(required) = true];
 }
 
-// An organization is renamed.
+// An organization was renamed.
 //
 message OrganizationRenamed {
 
@@ -133,7 +133,7 @@ message OrganizationRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// An organization domain is changed.
+// An organization domain was changed.
 //
 message OrganizationDomainChanged {
 
@@ -146,7 +146,7 @@ message OrganizationDomainChanged {
     net.InternetDomain old_domain = 3 [(required) = true];
 }
 
-// An organization tenant changed.
+// An organization tenant was changed.
 //
 message OrganizationTenantChanged {
 

@@ -36,7 +36,7 @@ import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A new orgunit is created.
+// A new orgunit was created.
 //
 message OrgUnitCreated {
 
@@ -58,7 +58,7 @@ message OrgUnitCreated {
     core.UserId owner = 6 [(required) = true];
 }
 
-// An owner of an orgunit is changed.
+// An owner of an orgunit was changed.
 //
 message OrgUnitOwnerChanged {
 
@@ -71,7 +71,7 @@ message OrgUnitOwnerChanged {
     core.UserId old_owner = 3 [(required) = true];
 }
 
-// An orgunit is moved to another organization or orgunit.
+// An orgunit was moved to another organization or orgunit.
 //
 message OrgUnitMoved {
 
@@ -91,7 +91,7 @@ message OrgUnitDeleted {
     OrgUnitId id = 1;
 }
 
-// A new attribute is added to an orgunit.
+// A new attribute was added to an orgunit.
 //
 message OrgUnitAttributeAdded {
 
@@ -104,7 +104,7 @@ message OrgUnitAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// An orgunit attribute is removed.
+// An orgunit attribute was removed.
 //
 message OrgUnitAttributeRemoved {
 
@@ -117,7 +117,7 @@ message OrgUnitAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// An orgunit attribute is updated.
+// An orgunit attribute was updated.
 //
 message OrgUnitAttributeUpdated {
 
@@ -133,7 +133,7 @@ message OrgUnitAttributeUpdated {
     google.protobuf.Any new_value = 5 [(required) = true];
 }
 
-// An orgunit is renamed.
+// An orgunit was renamed.
 //
 message OrgUnitRenamed {
 
@@ -146,7 +146,7 @@ message OrgUnitRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// An orgunit domain is changed.
+// An orgunit domain was changed.
 //
 message OrgUnitDomainChanged {
 

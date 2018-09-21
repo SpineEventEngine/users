@@ -39,7 +39,7 @@ import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
 import "spine/users/user_profile.proto";
 
-// A new user is created.
+// A new user was created.
 //
 message UserCreated {
 
@@ -70,7 +70,7 @@ message UserCreated {
     spine.time.ZonedDateTime when_created = 9 [(required) = true];
 }
 
-// A user is moved to another organization or organizational unit.
+// A user was moved to another organization or organizational unit.
 //
 message UserMoved {
 
@@ -103,7 +103,7 @@ message UserLeftGroup {
     users.GroupId group_id = 2 [(required) = true];
 }
 
-// A user is deleted.
+// A user was deleted.
 //
 message UserDeleted {
 
@@ -113,7 +113,7 @@ message UserDeleted {
     spine.time.ZonedDateTime when_deleted = 2 [(required) = true];
 }
 
-// A role is assigned to a user.
+// A role was assigned to a user.
 //
 message RoleAssignedToUser {
 
@@ -123,7 +123,7 @@ message RoleAssignedToUser {
     users.RoleId role_id = 2 [(required) = true];
 }
 
-// A role assignment is removed from a user.
+// A role assignment was removed from a user.
 //
 message RoleUnassignedFromUser {
 
@@ -133,7 +133,7 @@ message RoleUnassignedFromUser {
     users.RoleId role_id = 2 [(required) = true];
 }
 
-// An new attribute is added to a user.
+// An new attribute was added to a user.
 //
 message UserAttributeAdded {
 
@@ -146,7 +146,7 @@ message UserAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// A user attribute is removed.
+// A user attribute was removed.
 //
 message UserAttributeRemoved {
 
@@ -159,7 +159,7 @@ message UserAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// A user attribute is updated.
+// A user attribute was updated.
 //
 message UserAttributeUpdated {
 
@@ -175,7 +175,7 @@ message UserAttributeUpdated {
     google.protobuf.Any new_value = 5 [(required) = true];
 }
 
-// The status of a user is changed.
+// The status of a user was changed.
 //
 message UserStatusChanged {
 
@@ -188,7 +188,7 @@ message UserStatusChanged {
     User.Status new_status = 3 [(required) = true];
 }
 
-// A new secondary authentication identity is added.
+// A new secondary authentication identity was added.
 //
 message SecondaryAuthIdentityAdded {
 
@@ -198,7 +198,7 @@ message SecondaryAuthIdentityAdded {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// A secondary authentication identity is removed.
+// A secondary authentication identity was removed.
 //
 message SecondaryAuthIdentityRemoved {
 
@@ -208,7 +208,7 @@ message SecondaryAuthIdentityRemoved {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// The primary authentication identity is changed.
+// The primary authentication identity was changed.
 //
 message PrimaryAuthIdentityChanged {
 
@@ -218,7 +218,7 @@ message PrimaryAuthIdentityChanged {
     UserAuthIdentity identity = 2 [(required) = true];
 }
 
-// A user is renamed.
+// A user was renamed.
 //
 message UserRenamed {
 
@@ -231,7 +231,7 @@ message UserRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// A user profile is updated.
+// A user profile was updated.
 //
 message UserProfileUpdated {
 

@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A new role is created.
+// A new role was created.
 //
 message RoleCreated {
 
@@ -46,14 +46,14 @@ message RoleCreated {
     OrganizationOrUnit org_entity = 3;
 }
 
-// A role is deleted.
+// A role was deleted.
 //
 message RoleDeleted {
 
     RoleId id = 1;
 }
 
-// A role is renamed.
+// A role was renamed.
 //
 message RoleRenamed {
 
@@ -66,7 +66,7 @@ message RoleRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// An entity the role belongs to is changed.
+// An entity the role belongs to was changed.
 //
 message RoleParentChanged {
 

@@ -36,7 +36,7 @@ import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A new group is created.
+// A new group was created.
 //
 message GroupCreated {
 
@@ -61,7 +61,7 @@ message GroupCreated {
     net.EmailAddress email = 7;
 }
 
-// A new owner is added to a group.
+// A new owner was added to a group.
 //
 message GroupOwnerAdded {
 
@@ -71,7 +71,7 @@ message GroupOwnerAdded {
     core.UserId new_owner = 2 [(required) = true];
 }
 
-// A `User` is removed from a group owners list.
+// A `User` was removed from a group owners list.
 //
 message GroupOwnerRemoved {
 
@@ -81,7 +81,7 @@ message GroupOwnerRemoved {
     core.UserId removed_owner = 2 [(required) = true];
 }
 
-// A group is moved to another organization or orgunit.
+// A group was moved to another organization or orgunit.
 //
 message GroupMoved {
 
@@ -94,7 +94,7 @@ message GroupMoved {
     OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }
 
-// A group joins a parent group, that is becomes a member of another group.
+// A group joined a parent group, that is became a member of another group.
 //
 message ParentGroupJoined {
 
@@ -104,7 +104,7 @@ message ParentGroupJoined {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// A group leaves a parent group.
+// A group left a parent group.
 //
 message ParentGroupLeft {
 
@@ -114,14 +114,14 @@ message ParentGroupLeft {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// A new group is deleted.
+// A new group was deleted.
 //
 message GroupDeleted {
 
     GroupId id = 1;
 }
 
-// A role is assigned to the group.
+// A role was assigned to the group.
 //
 message RoleAssignedToGroup {
 
@@ -131,7 +131,7 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// A role assignment is removed from the group.
+// A role assignment was removed from the group.
 //
 message RoleUnassignedFromGroup {
 
@@ -141,7 +141,7 @@ message RoleUnassignedFromGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// A new attribute is added to a group.
+// A new attribute was added to a group.
 //
 message GroupAttributeAdded {
 
@@ -154,7 +154,7 @@ message GroupAttributeAdded {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// A group attribute is removed.
+// A group attribute was removed.
 //
 message GroupAttributeRemoved {
 
@@ -167,7 +167,7 @@ message GroupAttributeRemoved {
     google.protobuf.Any value = 3 [(required) = true];
 }
 
-// A group attribute is updated.
+// A group attribute was updated.
 //
 message GroupAttributeUpdated {
 
@@ -183,7 +183,7 @@ message GroupAttributeUpdated {
     google.protobuf.Any new_value = 4 [(required) = true];
 }
 
-// A group is renamed.
+// A group was renamed.
 //
 message GroupRenamed {
 
@@ -196,7 +196,7 @@ message GroupRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// A group email address is changed.
+// A group email address was changed.
 //
 message GroupEmailChanged {
 

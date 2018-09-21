@@ -35,7 +35,7 @@ import "spine/time/time.proto";
 import "spine/users/c/signin/values.proto";
 import "spine/users/user_auth_identity.proto";
 
-// The sign-in process is successfully completed.
+// The sign-in process was successfully completed.
 //
 message SignInSuccessful {
 
