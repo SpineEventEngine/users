@@ -69,13 +69,6 @@ message SignIn {
     // A reason why the process failed, if applicable.
     SignInFailureReason failure_reason = 4;
 
-    // Attributes to are added to the user after a successful sign-in.
-    //
-    // For example:
-    //     "oauth_access_token" -> "abcdef1234"
-    //
-    map<string, google.protobuf.Any> attributes = 5;
-
     // A status of the sign-in process.
     //
     enum Status {

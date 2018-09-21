@@ -43,13 +43,6 @@ message SignUserIn {
 
     // An authentication identity to sign-in with.
     UserAuthIdentity identity = 2 [(required) = true];
-
-    // Attributes to add to the user after a successful sign-in.
-    //
-    // For example:
-    //     "oauth_access_token" -> "abcdef1234"
-    //
-    map<string, google.protobuf.Any> attributes = 3;
 }
 
 // Signs a user out.

@@ -32,16 +32,6 @@ option java_generate_equals_and_hash = true;
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when trying to access a user attribute that doesn't exist.
-//
-message UserAttributeDoesNotExist {
-
-    core.UserId id = 1;
-
-    // A name of the attribute.
-    string attribute_name = 2 [(required) = true];
-}
-
 // The rejection is generated when trying to access an authentication identity that doesn't exist.
 //
 message AuthIdentityDoesNotExist {
