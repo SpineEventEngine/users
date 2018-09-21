@@ -35,8 +35,8 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
-import "spine/users/user_auth_identity.proto";
 import "spine/users/person_profile.proto";
+import "spine/users/c/user/identity.proto";
 
 // Creates a new user.
 //
@@ -57,8 +57,8 @@ message CreateUser {
     // An entity in the organizational structure the user belongs to, if applicable.
     OrganizationOrUnit org_entity = 5;
 
-    // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 6 [(required) = true];
+    // The primary identity of the user.
+    Identity primary_identity = 6 [(required) = true];
 
     // A user profile, if applicable.
     PersonProfile profile = 7;
@@ -142,22 +142,22 @@ message ChangeUserStatus {
     User.Status status = 2 [(required) = true];
 }
 
-// Adds a new secondary authentication identity to the user.
+// Adds a new secondary identity to the user.
 //
-message AddSecondaryAuthIdentity {
-    option (events) = "SecondaryAuthIdentityAdded";
+message AddSecondaryIdentity {
+    option (events) = "SecondaryIdentityAdded";
 
     core.UserId id = 1;
 
     // An identity to add.
-    UserAuthIdentity identity = 2 [(required) = true];
+    Identity identity = 2 [(required) = true];
 }
 
-// Removes a secondary authentication identity of the user.
+// Removes a secondary identity of the user.
 //
-message RemoveSecondaryAuthIdentity {
-    option (events) = "SecondaryAuthIdentityRemoved";
-    option (rejections) = "AuthIdentityDoesNotExist";
+message RemoveSecondaryIdentity {
+    option (events) = "SecondaryIdentityRemoved";
+    option (rejections) = "IdentityDoesNotExist";
 
     core.UserId id = 1;
 
@@ -168,15 +168,15 @@ message RemoveSecondaryAuthIdentity {
     IdentityProviderId provider_id = 3 [(required) = true];
 }
 
-// Changes the primary authentication identity.
+// Changes the primary identity.
 //
-message ChangePrimaryAuthIdentity {
-    option (events) = "PrimaryAuthIdentityChanged";
+message ChangePrimaryIdentity {
+    option (events) = "PrimaryIdentityChanged";
 
     core.UserId id = 1;
 
     // A new primary identity.
-    UserAuthIdentity identity = 2 [(required) = true];
+    Identity identity = 2 [(required) = true];
 }
 
 // Renames a user.

@@ -35,8 +35,8 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
-import "spine/users/user_auth_identity.proto";
 import "spine/users/person_profile.proto";
+import "spine/users/c/user/identity.proto";
 
 // A new user was created.
 //
@@ -56,8 +56,8 @@ message UserCreated {
     // An entity in the organizational structure the user belongs to, if applicable.
     OrganizationOrUnit org_entity = 5;
 
-    // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 6 [(required) = true];
+    // The primary identity of the user.
+    Identity primary_identity = 6 [(required) = true];
 
     // A user profile, if applicable.
     PersonProfile profile = 7;
@@ -139,34 +139,34 @@ message UserStatusChanged {
     User.Status new_status = 3 [(required) = true];
 }
 
-// A new secondary authentication identity was added.
+// A new secondary identity was added.
 //
-message SecondaryAuthIdentityAdded {
+message SecondaryIdentityAdded {
 
     core.UserId id = 1;
 
-    // A new secondary authentication identity.
-    UserAuthIdentity identity = 2 [(required) = true];
+    // A new secondary identity.
+    Identity identity = 2 [(required) = true];
 }
 
-// A secondary authentication identity was removed.
+// A secondary identity was removed.
 //
-message SecondaryAuthIdentityRemoved {
+message SecondaryIdentityRemoved {
 
     core.UserId id = 1;
 
     // The removed identity.
-    UserAuthIdentity identity = 2 [(required) = true];
+    Identity identity = 2 [(required) = true];
 }
 
-// The primary authentication identity was changed.
+// The primary identity was changed.
 //
-message PrimaryAuthIdentityChanged {
+message PrimaryIdentityChanged {
 
     core.UserId id = 1;
 
-    // A new primary authentication identity.
-    UserAuthIdentity identity = 2 [(required) = true];
+    // A new primary identity.
+    Identity identity = 2 [(required) = true];
 }
 
 // A user was renamed.

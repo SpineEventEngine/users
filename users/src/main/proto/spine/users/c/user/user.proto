@@ -36,7 +36,7 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/person_profile.proto";
-import "spine/users/user_auth_identity.proto";
+import "spine/users/c/user/identity.proto";
 
 // A user of the application, either a person or machine.
 //
@@ -80,17 +80,17 @@ message User {
     // The current status of a user.
     Status status = 8 [(required) = true];
 
-    // The primary authentication identity of a user.
+    // The primary user identity.
     //
     // The primary identity and its provider are used as a single source of truth about a user:
     //  - to get a user profile;
     //  - to check whether a user account is active;
     //  - etc.
     //
-    UserAuthIdentity primary_auth_identity = 9 [(required) = true];
+    Identity primary_identity = 9 [(required) = true];
 
-    // Secondary authentication identities of a user, used solely for authentication.
-    repeated UserAuthIdentity secondary_auth_identity = 10;
+    // Secondary identities of a user, used solely for authentication.
+    repeated Identity secondary_identity = 10;
 
     // A moment in time when a user was created.
     google.protobuf.Timestamp when_created = 11;

@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/core/user_id.proto";
 import "spine/time/time.proto";
 import "spine/users/c/signin/values.proto";
-import "spine/users/user_auth_identity.proto";
+import "spine/users/c/user/identity.proto";
 
 // The sign-in process was successfully completed.
 //
@@ -41,8 +41,8 @@ message SignInSuccessful {
 
     core.UserId id = 1;
 
-    // An authentication identity used to sign-in.
-    UserAuthIdentity identity = 2 [(required) = true];
+    // A user identity used to sign-in.
+    Identity identity = 2 [(required) = true];
 
     // A date and a time when the user signed in.
     spine.time.ZonedDateTime when_signed_in = 3 [(required) = true];
@@ -54,8 +54,8 @@ message SignInFailed {
 
     core.UserId id = 1;
 
-    // An authentication identity used to sign-in.
-    UserAuthIdentity identity = 2 [(required) = true];
+    // A user identity used to sign-in.
+    Identity identity = 2 [(required) = true];
 
     // Indicates why the sign-in failed.
     SignInFailureReason failure_reason = 3 [(required) = true];

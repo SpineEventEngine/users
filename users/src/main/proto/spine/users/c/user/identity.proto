@@ -26,7 +26,7 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.users";
-option java_outer_classname = "UserAuthIdentityProto";
+option java_outer_classname = "IdentityProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
@@ -34,9 +34,9 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// The authentication identity of a user.
+// A identity of a user.
 //
-message UserAuthIdentity {
+message Identity {
 
     // A user identifier as specified by the authentication provider.
     string user_id = 1 [(required) = true];

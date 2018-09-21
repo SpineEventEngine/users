@@ -42,8 +42,8 @@ enum SignInFailureReason {
     //
     UNKNOWN_IDENTITY = 1;
 
-    // Indicates that the requested authentication identity is not supprted and the corresponding
-    // identity provider can't be found.
+    // Indicates that the requested identity is not supprted and the corresponding identity
+    // provider can't be found.
     //
     UNSUPPORTED_IDENTITY = 2;
 

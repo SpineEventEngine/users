@@ -32,13 +32,13 @@ option java_generate_equals_and_hash = true;
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when trying to access an authentication identity that doesn't exist.
+// The rejection is generated when trying to access an identity that doesn't exist.
 //
-message AuthIdentityDoesNotExist {
+message IdentityDoesNotExist {
 
     core.UserId id = 1;
 
-    // An authentication identity that wasn't found.
+    // A user identity that wasn't found.
     IdentityProviderId provider_id = 2 [(required) = true];
 
     // A unique identifier of the authentication provider.
