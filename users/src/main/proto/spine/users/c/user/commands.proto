@@ -192,8 +192,8 @@ message RenameUser {
 
 // Updates a user profile.
 //
-message UpdateUserProfile {
-    option (events) = "UserProfileUpdated";
+message UpdatePersonProfile {
+    option (events) = "PersonProfileUpdated";
 
     core.UserId id = 1;
 

@@ -184,7 +184,7 @@ message UserRenamed {
 
 // A user profile was updated.
 //
-message UserProfileUpdated {
+message PersonProfileUpdated {
 
     core.UserId id = 1;
 
