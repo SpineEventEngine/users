@@ -44,17 +44,6 @@ import "spine/users/values.proto";
 // It is forbidden for groups to directly or indirectly join themselves; in other words,
 // all nested group memberships must always form an acyclic graph.
 //
-// ## Group Attributes
-//
-// To make `Group` meet specific requirements of the application, it can be extended using custom
-// attributes.
-//
-// The following commands are available to work with the group attributes:
-//
-// * `AddGroupAttribute` to add a new attribute;
-// * `UpdateGroupAttribute` to update an existing attribute;
-// * `RemoveGroupAttribute` to remove an attribute.
-//
 // ## Usage Example
 //
 // For example, a software development department of a company may well have the following groups:
@@ -65,7 +54,6 @@ import "spine/users/values.proto";
 //          display_name: "Developers",
 //          email: "developers@department.company.com",
 //          role: ["github-contributor", "test-server-admin"],
-//          attributes: [{"responsible_manager": "Mark Twain"}],
 //          membership: ["staff_members"]
 //      }
 //      ```
@@ -75,7 +63,6 @@ import "spine/users/values.proto";
 //          display_name: "Support Team",
 //          email: "support@department.company.com",
 //          role: ["bugtracker-contributor"],
-//          attributes: [{"regional_supervisor": "Agatha Christie"}],
 //          membership: ["external_contractors"]
 //      }
 //      ```
@@ -100,9 +87,6 @@ message Group {
     // Other groups this group is a member of.
     repeated GroupId membership = 6;
 
-    // Attributes of the group.
-    map<string, google.protobuf.Any> attributes = 7;
-
     // Roles explicitly assigned to the group.
-    repeated RoleId role = 8;
+    repeated RoleId role = 7;
 }

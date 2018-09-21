@@ -51,11 +51,8 @@ message CreateGroup {
     // An entity in the organizational structure the group belongs to.
     OrganizationOrUnit org_entity = 4 [(required) = true];
 
-    // Attributes of the group.
-    map<string, google.protobuf.Any> attributes = 5;
-
-    // An email address of the group if applicable.
-    net.EmailAddress email = 6;
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 5;
 }
 
 // Moves a group from one organization or orgunit to another.
@@ -121,49 +118,6 @@ message UnassignRoleFromGroup {
 
     // An ID of the role to unassign.
     RoleId role_id = 2 [(required) = true];
-}
-
-// Adds a new attribute to a group.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddGroupAttribute {
-    option (events) = "GroupAttributeAdded";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// Removes an attribute from a group.
-//
-message RemoveGroupAttribute {
-    option (events) = "GroupAttributeRemoved";
-    option (rejections) = "GroupAttributeDoesNotExist";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-}
-
-// Updates a group attribute.
-//
-message UpdateGroupAttribute {
-    option (events) = "GroupAttributeUpdated";
-    option (rejections) = "GroupAttributeDoesNotExist";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
 }
 
 // Renames a group.
