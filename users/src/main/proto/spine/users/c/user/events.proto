@@ -188,29 +188,6 @@ message UserStatusChanged {
     User.Status new_status = 3 [(required) = true];
 }
 
-// A user signed in.
-//
-message UserSignedIn {
-
-    core.UserId id = 1;
-
-    // An identity used for sign-in.
-    UserAuthIdentity identity = 2;
-
-    // A date and a time when the user signed in.
-    spine.time.ZonedDateTime when_signed_in = 3;
-}
-
-// A user signed out.
-//
-message UserSignedOut {
-
-    core.UserId id = 1;
-
-    // A date and a time when the user signed out.
-    spine.time.ZonedDateTime when_signed_out = 3;
-}
-
 // A new secondary authentication identity is added.
 //
 message SecondaryAuthIdentityAdded {

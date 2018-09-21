@@ -31,6 +31,7 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
+import "spine/time/time.proto";
 import "spine/users/c/signin/values.proto";
 import "spine/users/user_auth_identity.proto";
 
@@ -42,6 +43,9 @@ message SignInSuccessful {
 
     // An authentication identity used to sign-in.
     UserAuthIdentity identity = 2 [(required) = true];
+
+    // A date and a time when the user signed in.
+    spine.time.ZonedDateTime when_signed_in = 3 [(required) = true];
 }
 
 // The sign-in process failed.
@@ -55,6 +59,9 @@ message SignInFailed {
 
     // Indicates why the sign-in failed.
     SignInFailureReason failure_reason = 3 [(required) = true];
+
+    // A date and a time when the user signed out.
+    spine.time.ZonedDateTime when_signed_out = 4 [(required) = true];
 }
 
 // A user successfully signed out.
