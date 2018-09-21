@@ -53,22 +53,6 @@ message OrganizationCreated {
 
     // A tenant associated with the organization.
     core.TenantId tenant = 5 [(required) = true];
-
-    // An ID of an owner.
-    core.UserId owner = 6 [(required) = true];
-}
-
-// An owner of an organization was changed.
-//
-message OrganizationOwnerChanged {
-
-    OrganizationId id = 1;
-
-    // An ID of the new owner.
-    core.UserId new_owner = 2 [(required) = true];
-
-    // An ID of the old owner.
-    core.UserId old_owner = 3 [(required) = true];
 }
 
 // An organization was deleted.

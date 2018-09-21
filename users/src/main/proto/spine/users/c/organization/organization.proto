@@ -70,7 +70,4 @@ message Organization {
 
     // A tenant associated with the organization.
     core.TenantId tenant = 5 [(required) = true];
-
-    // An organization owner.
-    core.UserId owner = 6 [(required) = true];
 }

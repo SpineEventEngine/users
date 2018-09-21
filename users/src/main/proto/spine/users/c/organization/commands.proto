@@ -54,20 +54,6 @@ message CreateOrganization {
 
     // A tenant associated with the organization.
     core.TenantId tenant = 5 [(required) = true];
-
-    // An organization owner.
-    core.UserId owner = 6 [(required) = true];
-}
-
-// Changes the owner of an organization.
-//
-message ChangeOrganizationOwner {
-    option (events) = "OrganizationOwnerChanged";
-
-    OrganizationId id = 1;
-
-    // An ID of a new owner.
-    core.UserId new_owner = 2 [(required) = true];
 }
 
 // Deletes an organization.
