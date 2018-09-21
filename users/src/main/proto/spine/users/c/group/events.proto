@@ -69,7 +69,7 @@ message GroupMoved {
 
 // A group joined a parent group, that is became a member of another group.
 //
-message ParentGroupJoined {
+message JoinedParentGroup {
 
     GroupId id = 1;
 
@@ -79,7 +79,7 @@ message ParentGroupJoined {
 
 // A group left a parent group.
 //
-message ParentGroupLeft {
+message LeftParentGroup {
 
     GroupId id = 1;
 

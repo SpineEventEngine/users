@@ -84,9 +84,19 @@ message Group {
     // An entity in the organizational structure the group belongs to.
     OrganizationOrUnit org_entity = 4 [(required) = true];
 
-    // Other groups this group is a member of.
-    repeated GroupId membership = 6;
-
     // Roles explicitly assigned to the group.
     repeated RoleId role = 7;
+}
+
+// A group membership, a part of the `Group` aggregate.
+//
+// TODO:2018-09-21:vladyslav.lubenskyi: add documentation
+//
+message GroupMembership {
+    option (entity).kind = AGGREGATE;
+
+    GroupId id = 1;
+
+    // Other groups this group is a member of.
+    repeated GroupId parent_groups = 2;
 }
