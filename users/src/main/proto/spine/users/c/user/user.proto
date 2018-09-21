@@ -35,7 +35,7 @@ import "spine/core/user_id.proto";
 import "spine/time/time.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/user_profile.proto";
+import "spine/users/person_profile.proto";
 import "spine/users/user_auth_identity.proto";
 
 // A user of the application, either a person or machine.
@@ -69,27 +69,30 @@ message User {
 
     core.UserId id = 1;
 
+    // A kind of user: a person or machine.
+    UserKind kind = 2 [(required) = true];
+
     // A user name to be displayed on UI.
-    string display_name = 2 [(required) = true];
+    string display_name = 3 [(required) = true];
 
     // Roles explicitly assigned to the user.
-    repeated RoleId role = 3;
+    repeated RoleId role = 4;
 
     // Group memberships of a user.
     //
-    repeated GroupId membership = 4;
+    repeated GroupId membership = 5;
 
     // An entity in the organizational structure a user belongs to, if applicable.
-    OrganizationOrUnit org_entity = 5;
+    OrganizationOrUnit org_entity = 6;
 
     // Attributes of a user.
-    map<string, google.protobuf.Any> attributes = 6;
+    map<string, google.protobuf.Any> attributes = 7;
 
     // General profile information for a user.
-    UserProfile profile = 7;
+    PersonProfile profile = 8;
 
     // The current status of a user.
-    Status status = 8 [(required) = true];
+    Status status = 9 [(required) = true];
 
     // The primary authentication identity of a user.
     //
@@ -98,18 +101,19 @@ message User {
     //  - to check whether a user account is active;
     //  - etc.
     //
-    UserAuthIdentity primary_auth_identity = 9 [(required) = true];
+    UserAuthIdentity primary_auth_identity = 10 [(required) = true];
 
     // Secondary authentication identities of a user, used solely for authentication.
-    repeated UserAuthIdentity secondary_auth_identity = 10;
+    repeated UserAuthIdentity secondary_auth_identity = 11;
 
     // A date and a time when a user was created.
-    spine.time.ZonedDateTime when_created = 11;
+    spine.time.ZonedDateTime when_created = 12;
 
     // A status of a user.
     //
     enum Status {
 
+        // The default value.
         US_UNKNOWN = 0;
 
         // A user is created but not yet ready to work.
@@ -124,4 +128,21 @@ message User {
         // A user is suspended by an identity provider.
         SUSPENDED = 3;
     }
+}
+
+// Possible kinds of `User`s.
+//
+enum UserKind {
+
+    // The default value.
+    UK_UNKNOWN = 0;
+
+    // A `User` represents a person and acts on behalf of this person.
+    PERSON = 1;
+
+    // Indicates that a `User` is a machine, a service account.
+    //
+    // Examples of `MACHINE`s: a printer, a cron job, a bot.
+    //
+    MACHINE = 2;
 }

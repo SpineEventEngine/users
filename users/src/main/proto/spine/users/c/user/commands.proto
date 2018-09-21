@@ -36,7 +36,7 @@ import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
 import "spine/users/user_auth_identity.proto";
-import "spine/users/user_profile.proto";
+import "spine/users/person_profile.proto";
 
 // Creates a new user.
 //
@@ -45,26 +45,29 @@ message CreateUser {
 
     core.UserId id = 1;
 
+    // A kind of user: a person or machine.
+    UserKind kind = 2 [(required) = true];
+
     // A user name to be displayed on UI.
-    string display_name = 2 [(required) = true];
+    string display_name = 3 [(required) = true];
 
     // Roles explicitly assigned to the user.
-    repeated RoleId role = 3;
+    repeated RoleId role = 4;
 
     // An entity in the organizational structure the user belongs to, if applicable.
-    OrganizationOrUnit org_entity = 4;
+    OrganizationOrUnit org_entity = 5;
 
     // Attributes of the user.
-    map<string, google.protobuf.Any> attributes = 5;
+    map<string, google.protobuf.Any> attributes = 6;
 
     // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 6 [(required) = true];
+    UserAuthIdentity primary_identity = 7 [(required) = true];
 
     // A user profile.
-    UserProfile profile = 7;
+    PersonProfile profile = 8;
 
     // The current status of the user.
-    User.Status status = 8 [(required) = true];
+    User.Status status = 9 [(required) = true];
 }
 
 // Moves a user from one organization or organizational unit to another.
@@ -241,5 +244,5 @@ message UpdateUserProfile {
     core.UserId id = 1;
 
     // An updated version of a profile.
-    UserProfile updated_profile = 2 [(required) = true];
+    PersonProfile updated_profile = 2 [(required) = true];
 }
