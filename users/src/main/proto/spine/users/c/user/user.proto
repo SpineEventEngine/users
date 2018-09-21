@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -17,12 +31,12 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "spine/core/user_id.proto";
-import "spine/time/time.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
-import "spine/users/user_profile.proto";
-import "spine/users/user_auth_identity.proto";
+import "spine/users/person_profile.proto";
+import "spine/users/c/user/identity.proto";
 
 // A user of the application, either a person or machine.
 //
@@ -39,63 +53,53 @@ import "spine/users/user_auth_identity.proto";
 // A user is a leaf in the hierarchical structure of the organization. It can have either
 // a single `Organization` or single `OrgUnit` as a parent organizational entity.
 //
-// ## User Attributes
-//
-// To make `User` meet specific requirements of the application, it can be extended by custom
-// attributes.
-//
-// The following commands are available to work with the user attributes:
-//
-// * `AddUserAttribute` to add a new attribute, or replace the existing one;
-// * `RemoveUserAttribute` to remove an attribute;
-// * `UpdateUserAttribute` to update an existing attribute.
-//
 message User {
     option (entity).kind = AGGREGATE;
 
     core.UserId id = 1;
 
+    // A kind of user: a person or machine.
+    UserKind kind = 2 [(required) = true];
+
     // A user name to be displayed on UI.
-    string display_name = 2 [(required) = true];
+    string display_name = 3 [(required) = true];
 
     // Roles explicitly assigned to the user.
-    repeated RoleId role = 3;
+    repeated RoleId role = 4;
 
     // Group memberships of a user.
     //
-    repeated GroupId membership = 4;
+    repeated GroupId membership = 5;
 
     // An entity in the organizational structure a user belongs to, if applicable.
-    OrganizationalEntity org_entity = 5;
+    OrganizationOrUnit org_entity = 6;
 
-    // Attributes of a user.
-    map<string, google.protobuf.Any> attributes = 6;
-
-    // General profile information for a user.
-    UserProfile profile = 7;
+    // General profile information for a user, if applicable.
+    PersonProfile profile = 7;
 
     // The current status of a user.
     Status status = 8 [(required) = true];
 
-    // The primary authentication identity of a user.
+    // The primary user identity.
     //
     // The primary identity and its provider are used as a single source of truth about a user:
     //  - to get a user profile;
     //  - to check whether a user account is active;
     //  - etc.
     //
-    UserAuthIdentity primary_auth_identity = 9 [(required) = true];
+    Identity primary_identity = 9 [(required) = true];
 
-    // Secondary authentication identities of a user, used solely for authentication.
-    repeated UserAuthIdentity secondary_auth_identity = 10;
+    // Secondary identities of a user, used solely for authentication.
+    repeated Identity secondary_identity = 10;
 
-    // A date and a time when a user was created.
-    spine.time.ZonedDateTime when_created = 11;
+    // A moment in time when a user was created.
+    google.protobuf.Timestamp when_created = 11;
 
     // A status of a user.
     //
     enum Status {
 
+        // The default value.
         US_UNKNOWN = 0;
 
         // A user is created but not yet ready to work.
@@ -110,4 +114,21 @@ message User {
         // A user is suspended by an identity provider.
         SUSPENDED = 3;
     }
+}
+
+// Possible kinds of `User`s.
+//
+enum UserKind {
+
+    // The default value.
+    UK_UNKNOWN = 0;
+
+    // A `User` represents a person and acts on behalf of this person.
+    PERSON = 1;
+
+    // Indicates that a `User` is a machine, a service account.
+    //
+    // Examples of `MACHINE`s: a printer, a cron job, a bot.
+    //
+    MACHINE = 2;
 }

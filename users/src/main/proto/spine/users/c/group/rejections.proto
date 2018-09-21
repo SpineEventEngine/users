@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -15,18 +29,7 @@ option java_package = "io.spine.users.c.group";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
-import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-
-// The rejection is generated when trying to access a group attribute that doesn't exist.
-//
-message GroupAttributeDoesNotExist {
-
-    GroupId id = 1;
-
-    // A name of the attribute.
-    string attribute_name = 2 [(required) = true];
-}
 
 // The rejection is generated when trying to remove a role that isn't assigned to a group.
 //
@@ -46,21 +49,4 @@ message GroupsCanNotFormCycles {
 
     // A group that closes a cycle.
     GroupId closing_group = 2 [(required) = true];
-}
-
-// The rejection is generated when trying to remove the last owner of the group.
-//
-message GroupMustHaveAnOwner {
-
-    GroupId id = 1;
-}
-
-// The rejection is generatied when trying to refer to an unexisting owner of the group.
-//
-message NoSuchOwnerInGroup {
-
-    GroupId id = 1;
-
-    // The referenced owner.
-    core.UserId owner = 2 [(required) = true];
 }

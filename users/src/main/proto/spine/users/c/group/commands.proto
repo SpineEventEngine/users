@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -17,12 +31,11 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
-import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The command to create a group.
+// Creates a group.
 //
 message CreateGroup {
     option (events) = "GroupCreated";
@@ -36,42 +49,13 @@ message CreateGroup {
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
-    OrganizationalEntity org_entity = 4 [(required) = true];
+    OrganizationOrUnit org_entity = 4 [(required) = true];
 
-    // Attributes of the group.
-    map<string, google.protobuf.Any> attributes = 5;
-
-    // Owners of the group.
-    repeated core.UserId owners = 6 [(required) = true];
-
-    // An email address of the group if applicable.
-    net.EmailAddress email = 7;
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 5;
 }
 
-// The command to add a new owner of a group.
-//
-message AddGroupOwner {
-    option (events) = "GroupOwnerAdded";
-
-    GroupId id = 1;
-
-    // An ID of the owner.
-    core.UserId new_owner = 2 [(required) = true];
-}
-
-// The command to remove an owner of a group owners list.
-//
-message RemoveGroupOwner {
-    option (events) = "GroupOwnerRemoved";
-    option (rejections) = "GroupMustHaveAnOwner, NoSuchOwnerInGroup";
-
-    GroupId id = 1;
-
-    // An ID of the owner to remove.
-    core.UserId owner = 2 [(required) = true];
-}
-
-// The command to move a group from one organization or orgunit to another.
+// Moves a group from one organization or orgunit to another.
 //
 message MoveGroup {
     option (events) = "GroupMoved";
@@ -79,10 +63,10 @@ message MoveGroup {
     GroupId id = 1;
 
     // A new parent entity in the organizational structure.
-    OrganizationalEntity new_org_entity = 2 [(required) = true];
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
-// The command to delete a group.
+// Deletes a group.
 //
 message DeleteGroup {
     option (events) = "GroupDeleted";
@@ -90,7 +74,7 @@ message DeleteGroup {
     GroupId id = 1;
 }
 
-// The command for this group to join another group.
+// Joins a parent group.
 //
 message JoinParentGroup {
     option (events) = "ParentGroupJoined";
@@ -102,7 +86,7 @@ message JoinParentGroup {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The command for this group to leave another group.
+// Leaves a parent group.
 //
 message LeaveParentGroup {
     option (events) = "ParentGroupLeft";
@@ -113,7 +97,7 @@ message LeaveParentGroup {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The command to assign a `Role` to the group.
+// Assigns a role to the group.
 //
 message AssignRoleToGroup {
     option (events) = "RoleAssignedToGroup";
@@ -124,7 +108,7 @@ message AssignRoleToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to assign a `Role` from the group.
+// Removes a role assignment from the group.
 //
 message UnassignRoleFromGroup {
     option (events) = "RoleUnassignedFromGroup";
@@ -136,50 +120,7 @@ message UnassignRoleFromGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to add a new attribute to a group.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddGroupAttribute {
-    option (events) = "GroupAttributeAdded";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// The command to remove an attribute from a group.
-//
-message RemoveGroupAttribute {
-    option (events) = "GroupAttributeRemoved";
-    option (rejections) = "GroupAttributeDoesNotExist";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-}
-
-// The command to update a group attribute.
-//
-message UpdateGroupAttribute {
-    option (events) = "GroupAttributeUpdated";
-    option (rejections) = "GroupAttributeDoesNotExist";
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
-}
-
-// The command to rename a group.
+// Renames a group.
 //
 message RenameGroup {
     option (events) = "GroupRenamed";
@@ -190,7 +131,7 @@ message RenameGroup {
     string new_name = 2 [(required) = true];
 }
 
-// The command to change a group email address.
+// Changes a group email address.
 //
 message ChangeGroupEmail {
     option (events) = "GroupEmailChanged";

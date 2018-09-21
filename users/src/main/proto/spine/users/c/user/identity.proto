@@ -20,37 +20,33 @@
 
 syntax = "proto3";
 
-package spine.users.c.user;
+package spine.users;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.c.user";
-option java_multiple_files = false;
+option java_package = "io.spine.users";
+option java_outer_classname = "IdentityProto";
+option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when trying to access an identity that doesn't exist.
+// A identity of a user.
 //
-message IdentityDoesNotExist {
+message Identity {
 
-    core.UserId id = 1;
-
-    // A user identity that wasn't found.
-    IdentityProviderId provider_id = 2 [(required) = true];
+    // A user identifier as specified by the authentication provider.
+    string user_id = 1 [(required) = true];
 
     // A unique identifier of the authentication provider.
-    string user_id = 3 [(required) = true];
-}
+    IdentityProviderId provider_id = 2 [(required) = true];
 
-// The rejection is generation when trying to remove a role that is't assigned to a user.
-//
-message RoleIsNotAssignedToUser {
+    // A user's name to display on UI.
+    string display_name = 3 [(required) = true];
 
-    core.UserId id = 1;
-
-    // An ID of a role.
-    RoleId role_id = 2 [(required) = true];
+    // A domain of the user, if applicable.
+    net.InternetDomain domain = 4;
 }

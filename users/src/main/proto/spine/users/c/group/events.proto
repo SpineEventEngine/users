@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -17,12 +31,11 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
-import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// The event is emitted when a new group is created.
+// A new group was created.
 //
 message GroupCreated {
 
@@ -35,52 +48,26 @@ message GroupCreated {
     repeated RoleId role = 3;
 
     // An entity in the organizational structure the group belongs to.
-    OrganizationalEntity org_entity = 4 [(required) = true];
+    OrganizationOrUnit org_entity = 4 [(required) = true];
 
-    // Attributes of the group.
-    map<string, google.protobuf.Any> attributes = 5;
-
-    // Owners of the group, may not be group members.
-    repeated core.UserId owners = 6;
-
-    // An email address of the group if applicable.
-    net.EmailAddress email = 7;
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 5;
 }
 
-// The event is emitter when a new owner is added to a group.
-//
-message GroupOwnerAdded {
-
-    GroupId id = 1;
-
-    // An ID of the owner.
-    core.UserId new_owner = 2 [(required) = true];
-}
-
-// The event is emitted when a `User` is removed from a group owners list.
-//
-message GroupOwnerRemoved {
-
-    GroupId id = 1;
-
-    // An ID of the removed owner.
-    core.UserId removed_owner = 2 [(required) = true];
-}
-
-// The event is emitted when a group is moved to another organization or orgunit.
+// A group was moved to another organization or orgunit.
 //
 message GroupMoved {
 
     GroupId id = 1;
 
     // A new parent entity in the organizational structure.
-    OrganizationalEntity new_org_entity = 2 [(required) = true];
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 
     // The former parent entity in the organizational structure.
-    OrganizationalEntity old_org_entity = 3 [(required) = true];
+    OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }
 
-// The event is emitted when a group becomes a member of another group.
+// A group joined a parent group, that is became a member of another group.
 //
 message ParentGroupJoined {
 
@@ -90,7 +77,7 @@ message ParentGroupJoined {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a group stops being a member of another group.
+// A group left a parent group.
 //
 message ParentGroupLeft {
 
@@ -100,14 +87,14 @@ message ParentGroupLeft {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// The event is emitted when a new group is deleted.
+// A new group was deleted.
 //
 message GroupDeleted {
 
     GroupId id = 1;
 }
 
-// The event is emitted when a role is assigned to the group.
+// A role was assigned to the group.
 //
 message RoleAssignedToGroup {
 
@@ -117,7 +104,7 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when a role is unassigned from the group.
+// A role assignment was removed from the group.
 //
 message RoleUnassignedFromGroup {
 
@@ -127,49 +114,7 @@ message RoleUnassignedFromGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The event is emitted when an attribute of the orgunit is added.
-//
-message GroupAttributeAdded {
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// The event is emitted when an attribute of the group is removed.
-//
-message GroupAttributeRemoved {
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// The event is emitted when an attribute of the group is updated.
-//
-message GroupAttributeUpdated {
-
-    GroupId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An old attribute value.
-    google.protobuf.Any old_value = 3 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 4 [(required) = true];
-}
-
-// The event is emitted when a group is renamed.
+// A group was renamed.
 //
 message GroupRenamed {
 
@@ -182,7 +127,7 @@ message GroupRenamed {
     string old_name = 3 [(required) = true];
 }
 
-// The event is emitted when a group email address is changed.
+// A group email address was changed.
 //
 message GroupEmailChanged {
 
