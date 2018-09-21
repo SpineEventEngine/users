@@ -49,9 +49,6 @@ message OrgUnitCreated {
 
     // A parent entity in the organizational structure.
     OrganizationOrUnit parent_entity = 4 [(required) = true];
-
-    // Attributes of the orgunit.
-    map<string, google.protobuf.Any> attributes = 5;
 }
 
 // An orgunit was moved to another organization or orgunit.
@@ -72,48 +69,6 @@ message OrgUnitMoved {
 message OrgUnitDeleted {
 
     OrgUnitId id = 1;
-}
-
-// A new attribute was added to an orgunit.
-//
-message OrgUnitAttributeAdded {
-
-    OrgUnitId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// An orgunit attribute was removed.
-//
-message OrgUnitAttributeRemoved {
-
-    OrgUnitId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// An orgunit attribute was updated.
-//
-message OrgUnitAttributeUpdated {
-
-    OrgUnitId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An old attribute value.
-    google.protobuf.Any old_value = 4 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 5 [(required) = true];
 }
 
 // An orgunit was renamed.
