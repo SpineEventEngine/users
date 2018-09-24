@@ -9,7 +9,7 @@ package io.spine.users.c.signin;
 import io.spine.core.UserId;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.users.c.IdentityProviderBridgeFactory;
-import io.spine.users.c.user.UserAggregateRepository;
+import io.spine.users.c.user.UserPartRepository;
 
 /**
  * The repository for {@link SignInPm}.
@@ -18,11 +18,11 @@ import io.spine.users.c.user.UserAggregateRepository;
  */
 public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInPm, SignIn> {
 
-    private final UserAggregateRepository userRepository;
+    private final UserPartRepository userRepository;
     private final IdentityProviderBridgeFactory identityProviderFactory;
 
     public SignInPmRepository(IdentityProviderBridgeFactory identityProviderFactory,
-                              UserAggregateRepository userRepository) {
+                              UserPartRepository userRepository) {
         super();
         this.identityProviderFactory = identityProviderFactory;
         this.userRepository = userRepository;

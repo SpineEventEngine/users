@@ -19,9 +19,9 @@ import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserAggregate;
-import io.spine.users.c.user.UserAggregateRepository;
 import io.spine.users.c.user.UserCreated;
+import io.spine.users.c.user.UserPart;
+import io.spine.users.c.user.UserPartRepository;
 
 import java.util.Optional;
 
@@ -66,7 +66,7 @@ import static java.util.Optional.of;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
-    private UserAggregateRepository userRepository;
+    private UserPartRepository userRepository;
     private IdentityProviderBridgeFactory identityProviders;
 
     /**
@@ -80,7 +80,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         this.identityProviders = identityProviderFactory;
     }
 
-    void setUserRepository(UserAggregateRepository userRepository) {
+    void setUserRepository(UserPartRepository userRepository) {
         this.userRepository = userRepository;
     }
 

@@ -27,7 +27,7 @@ import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.CreateUserVBuilder;
 
 import static io.spine.users.c.user.User.Status.ACTIVE;
-import static io.spine.users.c.user.UserKind.PERSON;
+import static io.spine.users.c.user.UserNature.PERSON;
 
 /**
  * A command factory for the {@link SignIn} process manager.
@@ -87,7 +87,7 @@ class SignInCommandFactory {
                                  .setPrimaryIdentity(identity)
                                  .setProfile(profile)
                                  .setStatus(ACTIVE)
-                                 .setKind(PERSON)
+                                 .setNature(PERSON)
                                  .build();
     }
 }

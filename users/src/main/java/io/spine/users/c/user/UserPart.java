@@ -9,9 +9,9 @@ package io.spine.users.c.user;
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
 import io.spine.server.aggregate.Aggregate;
+import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.GroupId;
 import io.spine.users.Identity;
 import io.spine.users.RoleId;
 import io.spine.users.c.group.Group;
@@ -44,13 +44,13 @@ import java.util.function.Predicate;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
+public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot> {
 
     /**
      * @see Aggregate#Aggregate(Object)
      */
-    UserAggregate(UserId id) {
-        super(id);
+    UserPart(UserRoot root) {
+        super(root);
     }
 
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
@@ -139,24 +139,13 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
                     .setPrimaryIdentity(event.getPrimaryIdentity())
                     .addAllRole(event.getRoleList())
                     .setProfile(event.getProfile())
-                    .setKind(event.getKind())
+                    .setNature(event.getNature())
                     .setStatus(event.getStatus());
     }
 
     @Apply
     void on(UserMoved event) {
         getBuilder().setOrgEntity(event.getNewOrgEntity());
-    }
-
-    @Apply
-    void on(UserJoinedGroup event) {
-        getBuilder().addMembership(event.getGroupId());
-
-    }
-
-    @Apply
-    void on(UserLeftGroup event) {
-        removeGroupMembership(event.getGroupId());
     }
 
     @Apply
@@ -216,14 +205,6 @@ public class UserAggregate extends Aggregate<UserId, User, UserVBuilder> {
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
             getBuilder().removeRole(index);
-        }
-    }
-
-    private void removeGroupMembership(GroupId groupId) {
-        List<GroupId> groups = getBuilder().getMembership();
-        if (groups.contains(groupId)) {
-            int index = groups.indexOf(groupId);
-            getBuilder().removeMembership(index);
         }
     }
 

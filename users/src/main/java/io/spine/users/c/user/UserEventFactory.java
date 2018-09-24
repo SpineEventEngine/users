@@ -14,7 +14,7 @@ import io.spine.users.c.EntityEventFactory;
 import io.spine.users.c.user.User.Status;
 
 /**
- * An event factory for the {@linkplain UserAggregate User aggregate}.
+ * An event factory for the {@linkplain UserPart User aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -49,7 +49,7 @@ final class UserEventFactory extends EntityEventFactory {
                                    .addAllRole(command.getRoleList())
                                    .setStatus(command.getStatus())
                                    .setProfile(command.getProfile())
-                                   .setKind(command.getKind())
+                                   .setNature(command.getNature())
                                    .build();
         return event;
     }

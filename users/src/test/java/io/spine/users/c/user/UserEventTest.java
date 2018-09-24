@@ -8,8 +8,8 @@ package io.spine.users.c.user;
 
 import com.google.protobuf.Message;
 import io.spine.core.UserId;
-import io.spine.testing.server.aggregate.AggregateEventReactionTest;
 import io.spine.server.entity.Repository;
+import io.spine.testing.server.aggregate.AggregateEventReactionTest;
 
 import static io.spine.users.c.user.given.UserTestEnv.userId;
 
@@ -29,7 +29,7 @@ abstract class UserEventTest<E extends Message>
     }
 
     @Override
-    protected Repository<UserId, UserAggregate> createEntityRepository() {
-        return new UserAggregateRepository();
+    protected Repository<UserId, UserPart> createEntityRepository() {
+        return new UserPartRepository();
     }
 }

@@ -18,14 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * This package contains classes and interfaces related to
- * {@link io.spine.users.c.user.UserRoot User aggregate}.
- */
-@ParametersAreNonnullByDefault
-@CheckReturnValue
 package io.spine.users.c.user;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.core.UserId;
+import io.spine.server.aggregate.AggregatePartRepository;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * The repository for {@linkplain UserMembershipPart UserMembership} aggregate part.
+ *
+ * @author Vladyslav Lubenskyi
+ */
+public class UserMembershipPartRepository
+        extends AggregatePartRepository<UserId, UserMembershipPart, UserRoot> {
+}

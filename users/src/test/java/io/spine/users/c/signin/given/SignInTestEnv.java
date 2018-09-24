@@ -29,14 +29,14 @@ import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserAggregate;
-import io.spine.users.c.user.UserAggregateRepository;
+import io.spine.users.c.user.UserPart;
+import io.spine.users.c.user.UserPartRepository;
 import io.spine.users.c.user.UserVBuilder;
 
 import java.util.Optional;
 
 import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserKind.PERSON;
+import static io.spine.users.c.user.UserNature.PERSON;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,16 +62,16 @@ public final class SignInTestEnv {
                              .build();
     }
 
-    public static UserAggregateRepository emptyUserRepo() {
-        UserAggregateRepository mock = mock(UserAggregateRepository.class);
-        Optional<UserAggregate> user = empty();
+    public static UserPartRepository emptyUserRepo() {
+        UserPartRepository mock = mock(UserPartRepository.class);
+        Optional<UserPart> user = empty();
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
 
-    public static UserAggregateRepository nonEmptyUserRepo() {
-        UserAggregateRepository mock = mock(UserAggregateRepository.class);
-        Optional<UserAggregate> user = of(userAggregateState());
+    public static UserPartRepository nonEmptyUserRepo() {
+        UserPartRepository mock = mock(UserPartRepository.class);
+        Optional<UserPart> user = of(userAggregateState());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
@@ -102,7 +102,7 @@ public final class SignInTestEnv {
                                  .setStatus(NOT_READY)
                                  .addSecondaryIdentity(identity())
                                  .addRole(adminRoleId())
-                                 .setKind(PERSON)
+                                 .setNature(PERSON)
                                  .build();
         UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
                                        .withState(state)

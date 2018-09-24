@@ -7,12 +7,12 @@
 package io.spine.users.c.user;
 
 import io.spine.core.UserId;
-import io.spine.server.aggregate.AggregateRepository;
+import io.spine.server.aggregate.AggregatePartRepository;
 
 /**
- * The repository for {@linkplain UserAggregate User aggregate}.
+ * The repository for {@linkplain UserPart User} aggregate part.
  *
  * @author Vladyslav Lubenskyi
  */
-public class UserAggregateRepository extends AggregateRepository<UserId, UserAggregate> {
+public class UserPartRepository extends AggregatePartRepository<UserId, UserPart, UserRoot> {
 }

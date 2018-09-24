@@ -46,7 +46,7 @@ message CreateUser {
     core.UserId id = 1;
 
     // A kind of user: a person or machine.
-    UserKind kind = 2 [(required) = true];
+    UserNature nature = 2 [(required) = true];
 
     // A user name to be displayed on UI.
     string display_name = 3 [(required) = true];
@@ -78,7 +78,7 @@ message MoveUser {
     OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
-// Joins the group.
+// Joins a group.
 //
 message JoinGroup {
     option (events) = "UserJoinedGroup";
@@ -87,9 +87,12 @@ message JoinGroup {
 
     // An ID of a group.
     GroupId group_id = 2 [(required) = true];
+
+    // A role of a user in the group.
+    RoleInGroup role = 3 [(required) = true];
 }
 
-// Leaves the group.
+// Leaves a group.
 //
 message LeaveGroup {
     option (events) = "UserLeftGroup";
