@@ -41,9 +41,6 @@ import "spine/users/values.proto";
 // The roles, assigned to a `Group` are implicitly inherited by all members of the group,
 // including sub-groups.
 //
-// It is forbidden for groups to directly or indirectly join themselves; in other words,
-// all nested group memberships must always form an acyclic graph.
-//
 // ## Usage Example
 //
 // For example, a software development department of a company may well have the following groups:
@@ -54,7 +51,6 @@ import "spine/users/values.proto";
 //          display_name: "Developers",
 //          email: "developers@department.company.com",
 //          role: ["github-contributor", "test-server-admin"],
-//          membership: ["staff_members"]
 //      }
 //      ```
 // * Support Engineers
@@ -63,7 +59,6 @@ import "spine/users/values.proto";
 //          display_name: "Support Team",
 //          email: "support@department.company.com",
 //          role: ["bugtracker-contributor"],
-//          membership: ["external_contractors"]
 //      }
 //      ```
 //
@@ -85,12 +80,15 @@ message Group {
     OrganizationOrUnit org_entity = 4 [(required) = true];
 
     // Roles explicitly assigned to the group.
-    repeated RoleId role = 7;
+    repeated RoleId role = 5;
 }
 
-// A group membership, a part of the `Group` aggregate.
+// A group's membership in other groups, a part of the `Group` aggregate.
 //
-// TODO:2018-09-21:vladyslav.lubenskyi: add documentation
+// It is forbidden for groups to directly or indirectly join themselves; in other words,
+// all nested group memberships must always form an acyclic graph.
+//
+// Please, see `JoinParentGroup` and `LeaveParentGroup` commands.
 //
 message GroupMembership {
     option (entity).kind = AGGREGATE;
@@ -98,5 +96,5 @@ message GroupMembership {
     GroupId id = 1;
 
     // Other groups this group is a member of.
-    repeated GroupId parent_groups = 2;
+    repeated GroupId membership = 2;
 }

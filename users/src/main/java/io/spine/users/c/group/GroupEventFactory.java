@@ -27,7 +27,7 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
 
 /**
- * An event factory for the {@linkplain GroupAggregate Group aggregate}.
+ * An event factory for the {@linkplain GroupPart Group aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -75,15 +75,15 @@ class GroupEventFactory extends EntityEventFactory {
                                    .build();
     }
 
-    ParentGroupJoined joinGroup(JoinParentGroup command) {
-        return ParentGroupJoinedVBuilder.newBuilder()
+    JoinedParentGroup joinGroup(JoinParentGroup command) {
+        return JoinedParentGroupVBuilder.newBuilder()
                                         .setId(command.getId())
                                         .setParentGroupId(command.getParentGroupId())
                                         .build();
     }
 
-    ParentGroupLeft leaveGroup(LeaveParentGroup command) {
-        return ParentGroupLeftVBuilder.newBuilder()
+    LeftParentGroup leaveGroup(LeaveParentGroup command) {
+        return LeftParentGroupVBuilder.newBuilder()
                                       .setId(command.getId())
                                       .setParentGroupId(command.getParentGroupId())
                                       .build();

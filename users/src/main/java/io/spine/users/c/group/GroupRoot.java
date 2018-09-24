@@ -20,13 +20,21 @@
 
 package io.spine.users.c.group;
 
-import io.spine.server.aggregate.AggregateRepository;
+import io.spine.server.BoundedContext;
+import io.spine.server.aggregate.AggregateRoot;
 import io.spine.users.GroupId;
 
 /**
- * The repository for {@link GroupAggregate groups}.
+ * The {@link Group} aggregate root.
  *
  * @author Vladyslav Lubenskyi
  */
-public class GroupAggregateRepository extends AggregateRepository<GroupId, GroupAggregate> {
+public class GroupRoot extends AggregateRoot<GroupId> {
+
+    /**
+     * @see AggregateRoot#AggregateRoot(BoundedContext, Object)
+     */
+    protected GroupRoot(BoundedContext boundedContext, GroupId id) {
+        super(boundedContext, id);
+    }
 }

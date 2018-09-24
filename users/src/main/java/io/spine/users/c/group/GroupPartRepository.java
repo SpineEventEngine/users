@@ -18,14 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * This package contains classes and interfaces related to
- * {@link io.spine.users.c.group.GroupRoot Group} aggregate.
- */
-@ParametersAreNonnullByDefault
-@CheckReturnValue
 package io.spine.users.c.group;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.server.aggregate.AggregatePartRepository;
+import io.spine.users.GroupId;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * The repository for {@link GroupPart Group} aggregate part.
+ *
+ * @author Vladyslav Lubenskyi
+ */
+public class GroupPartRepository extends AggregatePartRepository<GroupId, GroupPart, GroupRoot> {
+}

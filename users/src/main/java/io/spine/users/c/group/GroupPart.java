@@ -22,39 +22,37 @@ package io.spine.users.c.group;
 
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
+import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
 import java.util.List;
 
 /**
  * An aggregate for {@link Group}.
  *
- * <p>A {@code Group} is the way to group {@linkplain UserAggregate users} by their common functions
+ * <p>A {@code Group} is the way to group {@linkplain UserPart users} by their common functions
  * and functional roles inside of an {@linkplain Organization organization} or
  * {@linkplain OrgUnit organizational unit}.
  *
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
- *
- * <p>It is forbidden for groups to directly or indirectly join themselves; in other words,
- * all nested group memberships must always form an acyclic graph.
- *
+
  * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
+@SuppressWarnings({"OverlyCoupledClass"}) // It is OK for an aggregate.
+public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, GroupRoot> {
 
     /**
      * @see Aggregate#Aggregate(Object)
      */
-    GroupAggregate(GroupId id) {
-        super(id);
+    GroupPart(GroupRoot root) {
+        super(root);
     }
 
     @Assign
@@ -70,16 +68,6 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     @Assign
     GroupDeleted handle(DeleteGroup command, CommandContext context) {
         return events(context).deleteGroup(command);
-    }
-
-    @Assign
-    ParentGroupJoined handle(JoinParentGroup command, CommandContext context) {
-        return events(context).joinGroup(command);
-    }
-
-    @Assign
-    ParentGroupLeft handle(LeaveParentGroup command, CommandContext context) {
-        return events(context).leaveGroup(command);
     }
 
     @Assign
@@ -127,25 +115,6 @@ public class GroupAggregate extends Aggregate<GroupId, Group, GroupVBuilder> {
     void on(GroupDeleted event) {
         setDeleted(true);
     }
-
-    @Apply
-    void on(ParentGroupJoined event) {
-        getBuilder().addMembership(event.getParentGroupId());
-    }
-
-    @Apply
-    void on(ParentGroupLeft event) {
-        GroupId upperGroup = event.getParentGroupId();
-        GroupVBuilder builder = getBuilder();
-        List<GroupId> memberships = builder.getMembership();
-        if (memberships.contains(upperGroup)) {
-            int index = memberships.indexOf(upperGroup);
-            builder.removeMembership(index);
-        }
-    }
-
-//    GroupOwnerAdded
-//    GroupOwnerRemoved
 
     @Apply
     void on(RoleAssignedToGroup event) {
