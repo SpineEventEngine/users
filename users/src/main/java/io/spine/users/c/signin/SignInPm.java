@@ -42,9 +42,9 @@ import static java.util.Optional.of;
  *
  * <ol>
  *     <li>{@link SignUserIn} command initializes the sign-in process.
- *     <li>If a {@linkplain UserAggregate user} with the given {@linkplain UserId ID} already exists
+ *     <li>If a {@linkplain UserPart user} with the given {@linkplain UserId ID} already exists
  *         and all checks pass {@link SignInSuccessful} event is generated in response.
- *     <li>Otherwise, the process manager creates a {@link UserAggregate} and then attempts to
+ *     <li>Otherwise, the process manager creates a {@link UserPart} and then attempts to
  *         {@linkplain SignUserIn sign user in} again.
  * </ol>
  *
@@ -105,7 +105,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withA(commands().finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
-        Optional<UserAggregate> user = userRepository.find(id);
+        Optional<UserPart> user = userRepository.find(id);
         if (!user.isPresent()) {
             builder.setStatus(AWAITING_USER_AGGREGATE_CREATION);
             return withB(createUser(identityProvider));
@@ -153,7 +153,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         return getBuilder().getStatus() == AWAITING_USER_AGGREGATE_CREATION;
     }
 
-    private static boolean identityBelongsToUser(UserAggregate user, Identity identity) {
+    private static boolean identityBelongsToUser(UserPart user, Identity identity) {
         User userState = user.getState();
         if (userState.getPrimaryIdentity()
                      .equals(identity)) {

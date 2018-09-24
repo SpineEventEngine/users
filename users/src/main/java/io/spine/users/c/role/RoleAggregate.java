@@ -26,15 +26,15 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
 import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.GroupAggregate;
+import io.spine.users.c.group.GroupPart;
 import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
 /**
- * A role that can be assigned to {@linkplain UserAggregate users} and
- * {@linkplain GroupAggregate groups}, to perform access control.
+ * A role that can be assigned to {@linkplain UserPart users} and
+ * {@linkplain GroupPart groups}, to perform access control.
  *
- * <p>Roles are assigned to {@link UserAggregate users} and {@link GroupAggregate groups} directly
+ * <p>Roles are assigned to {@link UserPart users} and {@link GroupPart groups} directly
  * and explicitly (please, see {@link AssignRoleToUser} and {@link AssignRoleToGroup} commands).
  *
  * <p>A role exists in the scope of an organization or an orgunit, therefore it can be assigned
@@ -43,11 +43,11 @@ import io.spine.users.c.user.UserAggregate;
  *
  * <h3>Access Control</h3>
  *
- * The roles assigned to a {@linkplain GroupAggregate group} are recursively propagated to all
+ * The roles assigned to a {@linkplain GroupPart group} are recursively propagated to all
  * members of the group. This propagation is implicit and is not reflected in aggregate states.
  *
  * <p>Therefore, when carrying out role-based access control, consider that a
- * {@link UserAggregate User} and {@link GroupAggregate Group} aggregates have not only the roles
+ * {@link UserPart User} and {@link GroupPart Group} aggregates have not only the roles
  * listed in their aggregate states, but effectively all the roles derived from parent groups.
  *
  * @author Vladyslav Lubenskyi
