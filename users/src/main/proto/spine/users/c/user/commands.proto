@@ -32,6 +32,8 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
@@ -54,23 +56,34 @@ message CreateUser {
     // Roles explicitly assigned to the user.
     repeated RoleId role = 4;
 
-    // An entity in the organizational structure the user belongs to, if applicable.
-    OrganizationOrUnit org_entity = 5;
+    // An email address of a user.
+    net.EmailAddress email = 5;
+
+    // An entity a user belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 6;
+
+        // An external domain.
+        net.InternetDomain external_domain = 7;
+    }
 
     // The primary identity of the user.
-    Identity primary_identity = 6 [(required) = true];
+    Identity primary_identity = 8;
 
     // A user profile, if applicable.
-    PersonProfile profile = 7;
+    PersonProfile profile = 9;
 
     // The current status of the user.
-    User.Status status = 8 [(required) = true];
+    User.Status status = 10 [(required) = true];
 }
 
 // Moves a user from one organization or organizational unit to another.
 //
 message MoveUser {
     option (events) = "UserMoved";
+    option (rejections) = "CanNotMoveExternalUser";
 
     core.UserId id = 1;
 

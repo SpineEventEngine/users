@@ -32,6 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/net/email_address.proto";
+import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
@@ -48,17 +49,25 @@ message CreateGroup {
     // Roles explicitly assigned to the group.
     repeated RoleId role = 3;
 
-    // An entity in the organizational structure the group belongs to.
-    OrganizationOrUnit org_entity = 4 [(required) = true];
+    // An entity a group belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one the of tenant's domains.
+        OrganizationOrUnit org_entity = 4;
+
+        // An external domain.
+        net.InternetDomain external_domain = 5;
+    }
 
     // An email address of the group, if applicable.
-    net.EmailAddress email = 5;
+    net.EmailAddress email = 6;
 }
 
 // Moves a group from one organization or orgunit to another.
 //
 message MoveGroup {
     option (events) = "GroupMoved";
+    option (rejections) = "CanNotMoveExternalGroup";
 
     GroupId id = 1;
 

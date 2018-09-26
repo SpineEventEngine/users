@@ -30,9 +30,10 @@ option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when trying to access an identity that doesn't exist.
+// The rejection to accessing an identity that doesn't exist.
 //
 message IdentityDoesNotExist {
 
@@ -45,7 +46,7 @@ message IdentityDoesNotExist {
     string user_id = 3 [(required) = true];
 }
 
-// The rejection is generation when trying to remove a role that is't assigned to a user.
+// The rejection to removing a role that is't assigned to a user.
 //
 message RoleIsNotAssignedToUser {
 
@@ -53,4 +54,14 @@ message RoleIsNotAssignedToUser {
 
     // An ID of a role.
     RoleId role_id = 2 [(required) = true];
+}
+
+// The rejection to moving an external user.
+//
+message CanNotMoveExternalUser {
+
+    core.UserId id = 1;
+
+    // An external domain the user belongs to.
+    net.InternetDomain external_domain = 2 [(required) = true];
 }

@@ -29,6 +29,7 @@ option java_package = "io.spine.users.c.group";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
+import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
 // The rejection is generated when trying to remove a role that isn't assigned to a group.
@@ -49,4 +50,14 @@ message GroupsCanNotFormCycles {
 
     // A group that closes a cycle.
     GroupId closing_group = 2 [(required) = true];
+}
+
+// The rejection to moving an external user.
+//
+message CanNotMoveExternalGroup {
+
+    GroupId id = 1;
+
+    // An external domain the group belongs to.
+    net.InternetDomain external_domain = 2 [(required) = true];
 }
