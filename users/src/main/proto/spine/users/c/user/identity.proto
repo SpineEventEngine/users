@@ -34,7 +34,7 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// A identity of a user.
+// An identity of a user.
 //
 message Identity {
 

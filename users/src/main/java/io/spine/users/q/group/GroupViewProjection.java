@@ -47,13 +47,18 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
 
     @Subscribe
     public void on(GroupCreated event) {
-        getBuilder().setId(event.getId())
-                    .setDisplayName(event.getDisplayName())
-                    .setEmail(event.getEmail())
-                    .addAllRole(event.getRoleList())
-                    .setExternal(event.getOriginCase() == EXTERNAL_DOMAIN)
-                    .setOrgEntity(event.getOrgEntity())
-                    .setExternalDomain(event.getExternalDomain());
+        boolean external = event.getOriginCase() == EXTERNAL_DOMAIN;
+        GroupViewVBuilder builder = getBuilder();
+        builder.setId(event.getId())
+               .setDisplayName(event.getDisplayName())
+               .setEmail(event.getEmail())
+               .addAllRole(event.getRoleList())
+               .setExternal(external);
+        if (external) {
+            builder.setExternalDomain(event.getExternalDomain());
+        } else {
+            builder.setOrgEntity(event.getOrgEntity());
+        }
     }
 
     @Subscribe

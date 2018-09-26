@@ -18,13 +18,13 @@ import io.spine.users.c.group.Group;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.role.Role;
-import io.spine.util.Exceptions;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import static io.spine.users.c.user.User.OriginCase.EXTERNAL_DOMAIN;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * An aggregate for user of the application, either a person or machine.
@@ -146,7 +146,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                 builder.setExternalDomain(event.getExternalDomain());
                 break;
             case ORIGIN_NOT_SET:
-                throw Exceptions.newIllegalArgumentException(
+                throw newIllegalArgumentException(
                         "No `origin` found in UserCreated event");
         }
     }
