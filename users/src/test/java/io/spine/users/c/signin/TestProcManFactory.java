@@ -9,8 +9,10 @@ package io.spine.users.c.signin;
 import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.c.signin.SignIn.Status;
-import io.spine.users.c.signin.given.SignInTestEnv;
 import io.spine.users.c.user.UserPart;
+
+import static io.spine.users.c.signin.given.SignInTestEnv.identity;
+import static io.spine.users.c.signin.given.SignInTestEnv.userId;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.
@@ -34,12 +36,12 @@ final class TestProcManFactory {
 
     public static SignInPm nonEmptyProcMan(Status status) {
         SignIn state = SignInVBuilder.newBuilder()
-                                     .setId(SignInTestEnv.userId())
-                                     .setIdentity(SignInTestEnv.identity())
+                                     .setId(userId())
+                                     .setIdentity(identity())
                                      .setStatus(status)
                                      .build();
         return Given.processManagerOfClass(SignInPm.class)
-                    .withId(SignInTestEnv.userId())
+                    .withId(userId())
                     .withState(state)
                     .build();
     }

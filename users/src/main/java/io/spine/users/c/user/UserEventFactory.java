@@ -14,6 +14,7 @@ import io.spine.users.c.EntityEventFactory;
 import io.spine.users.c.user.User.Status;
 
 import static io.spine.users.c.user.RoleInGroup.MEMBER;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * An event factory for the {@linkplain UserPart User aggregate}.
@@ -42,19 +43,27 @@ final class UserEventFactory extends EntityEventFactory {
     }
 
     UserCreated create(CreateUser command) {
-        UserCreated event =
+        UserCreatedVBuilder eventBuilder =
                 UserCreatedVBuilder.newBuilder()
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
-                                   .setOrgEntity(command.getOrgEntity())
-                                   .setExternalDomain(command.getExternalDomain())
                                    .setPrimaryIdentity(command.getPrimaryIdentity())
                                    .addAllRole(command.getRoleList())
                                    .setStatus(command.getStatus())
                                    .setProfile(command.getProfile())
-                                   .setNature(command.getNature())
-                                   .build();
-        return event;
+                                   .setNature(command.getNature());
+
+        switch (command.getOriginCase()) {
+            case ORG_ENTITY:
+                eventBuilder.setOrgEntity(command.getOrgEntity());
+                break;
+            case EXTERNAL_DOMAIN:
+                eventBuilder.setExternalDomain(command.getExternalDomain());
+                break;
+            case ORIGIN_NOT_SET:
+                throw newIllegalArgumentException("No `origin` found in CreateUser command");
+        }
+        return eventBuilder.build();
     }
 
     UserMoved changeParent(MoveUser command, OrganizationOrUnit oldOrgEntity) {
