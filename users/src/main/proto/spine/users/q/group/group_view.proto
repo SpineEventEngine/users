@@ -67,4 +67,10 @@ message GroupView {
 
     // Roles explicitly assigned to a group.
     repeated RoleId role = 7;
+
+    // A list of child groups. Only direct members of the group are included.
+    repeated GroupId group_members = 8;
+
+    // A list of `User` members. Only direct members of the group are included.
+    repeated GroupId user_members = 9;
 }
