@@ -56,6 +56,7 @@ class GroupEventFactory extends EntityEventFactory {
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
                                    .setEmail(command.getEmail())
+                                   .setExternalDomain(command.getExternalDomain())
                                    .setOrgEntity(command.getOrgEntity())
                                    .addAllRole(command.getRoleList())
                                    .build();

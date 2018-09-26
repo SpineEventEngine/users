@@ -30,8 +30,11 @@ import io.spine.users.RoleId;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.user.UserPart;
+import io.spine.util.Exceptions;
 
 import java.util.List;
+
+import static io.spine.users.c.group.Group.OriginCase.EXTERNAL_DOMAIN;
 
 /**
  * An aggregate for {@link Group}.
@@ -61,7 +64,10 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Assign
-    GroupMoved handle(MoveGroup command, CommandContext context) {
+    GroupMoved handle(MoveGroup command, CommandContext context) throws CanNotMoveExternalGroup {
+        if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
+            throw new CanNotMoveExternalGroup(command.getId(), getState().getExternalDomain());
+        }
         return events(context).moveGroup(command, getState().getOrgEntity());
     }
 
@@ -98,12 +104,24 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Apply
     void on(GroupCreated event) {
-        getBuilder().setId(event.getId())
-                    .setDisplayName(event.getDisplayName())
-                    .setEmail(event.getEmail())
-                    .setOrgEntity(event.getOrgEntity())
-                    .addAllRole(event.getRoleList())
-                    .build();
+        GroupVBuilder builder = getBuilder();
+        builder.setId(event.getId())
+               .setDisplayName(event.getDisplayName())
+               .setEmail(event.getEmail())
+               .addAllRole(event.getRoleList())
+               .build();
+
+        switch (event.getOriginCase()) {
+            case ORG_ENTITY:
+                builder.setOrgEntity(event.getOrgEntity());
+                break;
+            case EXTERNAL_DOMAIN:
+                builder.setExternalDomain(event.getExternalDomain());
+                break;
+            case ORIGIN_NOT_SET:
+                throw Exceptions.newIllegalArgumentException(
+                        "No `origin` found in GroupCreated event");
+        }
     }
 
     @Apply

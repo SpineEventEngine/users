@@ -13,6 +13,8 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.c.EntityEventFactory;
 import io.spine.users.c.user.User.Status;
 
+import static io.spine.users.c.user.RoleInGroup.MEMBER;
+
 /**
  * An event factory for the {@linkplain UserPart User aggregate}.
  *
@@ -45,6 +47,7 @@ final class UserEventFactory extends EntityEventFactory {
                                    .setId(command.getId())
                                    .setDisplayName(command.getDisplayName())
                                    .setOrgEntity(command.getOrgEntity())
+                                   .setExternalDomain(command.getExternalDomain())
                                    .setPrimaryIdentity(command.getPrimaryIdentity())
                                    .addAllRole(command.getRoleList())
                                    .setStatus(command.getStatus())
@@ -69,6 +72,7 @@ final class UserEventFactory extends EntityEventFactory {
                 UserJoinedGroupVBuilder.newBuilder()
                                        .setId(command.getId())
                                        .setGroupId(command.getGroupId())
+                                       .setRole(MEMBER)
                                        .build();
         return event;
     }

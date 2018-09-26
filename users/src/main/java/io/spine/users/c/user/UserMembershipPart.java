@@ -38,11 +38,6 @@ public class UserMembershipPart
     }
 
     @Assign
-    UserCreated handle(CreateUser command, CommandContext context) {
-        return events(context).create(command);
-    }
-
-    @Assign
     UserJoinedGroup handle(JoinGroup command, CommandContext context) {
         return events(context).joinGroup(command);
     }

@@ -18,10 +18,13 @@ import io.spine.users.c.group.Group;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.role.Role;
+import io.spine.util.Exceptions;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import static io.spine.users.c.user.User.OriginCase.EXTERNAL_DOMAIN;
 
 /**
  * An aggregate for user of the application, either a person or machine.
@@ -60,18 +63,11 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     @Assign
-    UserMoved handle(MoveUser command, CommandContext context) {
+    UserMoved handle(MoveUser command, CommandContext context) throws CanNotMoveExternalUser {
+        if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
+            throw new CanNotMoveExternalUser(command.getId(), getState().getExternalDomain());
+        }
         return events(context).changeParent(command, getState().getOrgEntity());
-    }
-
-    @Assign
-    UserJoinedGroup handle(JoinGroup command, CommandContext context) {
-        return events(context).joinGroup(command);
-    }
-
-    @Assign
-    UserLeftGroup handle(LeaveGroup command, CommandContext context) {
-        return events(context).leaveGroup(command);
     }
 
     @Assign
@@ -133,14 +129,26 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(UserCreated event) {
-        getBuilder().setId(event.getId())
+        UserVBuilder builder = getBuilder();
+        builder.setId(event.getId())
                     .setDisplayName(event.getDisplayName())
-                    .setOrgEntity(event.getOrgEntity())
                     .setPrimaryIdentity(event.getPrimaryIdentity())
                     .addAllRole(event.getRoleList())
                     .setProfile(event.getProfile())
                     .setNature(event.getNature())
                     .setStatus(event.getStatus());
+
+        switch (event.getOriginCase()) {
+            case ORG_ENTITY:
+                builder.setOrgEntity(event.getOrgEntity());
+                break;
+            case EXTERNAL_DOMAIN:
+                builder.setExternalDomain(event.getExternalDomain());
+                break;
+            case ORIGIN_NOT_SET:
+                throw Exceptions.newIllegalArgumentException(
+                        "No `origin` found in UserCreated event");
+        }
     }
 
     @Apply
