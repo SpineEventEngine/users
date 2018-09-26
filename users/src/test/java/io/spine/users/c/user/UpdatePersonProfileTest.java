@@ -9,7 +9,6 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.updatePersonProfile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("UpdatePersonProfile command should")
-class UpdatePersonProfileTest extends UserCommandTest<UpdatePersonProfile> {
+class UpdatePersonProfileTest extends UserPartCommandTest<UpdatePersonProfile> {
 
     UpdatePersonProfileTest() {
         super(createMessage());
@@ -26,7 +25,7 @@ class UpdatePersonProfileTest extends UserCommandTest<UpdatePersonProfile> {
     @Test
     @DisplayName("generate PersonProfileUpdated event")
     void generateEvent() {
-        expectThat(createAggregate()).producesEvent(PersonProfileUpdated.class, event -> {
+        expectThat(createPartWithState()).producesEvent(PersonProfileUpdated.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getUpdatedProfile(), event.getUpdatedProfile());
         });
@@ -35,7 +34,7 @@ class UpdatePersonProfileTest extends UserCommandTest<UpdatePersonProfile> {
     @Test
     @DisplayName("update the profile")
     void changeState() {
-        expectThat(createAggregate()).hasState(
+        expectThat(createPartWithState()).hasState(
                 state -> assertEquals(message().getUpdatedProfile(), state.getProfile()));
     }
 

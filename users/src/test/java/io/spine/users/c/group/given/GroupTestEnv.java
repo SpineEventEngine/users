@@ -32,12 +32,12 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
-import io.spine.users.c.group.GroupAggregate;
+import io.spine.users.c.group.GroupPart;
 
 import static io.spine.base.Identifier.newUuid;
 
 /**
- * The environment for the {@link GroupAggregate} tests.
+ * The environment for the {@link GroupPart} tests.
  *
  * @author Vladyslav Lubenskyi
  */

@@ -9,7 +9,6 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.addAuthIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("AddAuthIdentity command should")
-class AddAuthIdentityTest extends UserCommandTest<AddSecondaryIdentity> {
+class AddAuthIdentityTest extends UserPartCommandTest<AddSecondaryIdentity> {
 
     AddAuthIdentityTest() {
         super(createMessage());
@@ -26,7 +25,7 @@ class AddAuthIdentityTest extends UserCommandTest<AddSecondaryIdentity> {
     @Test
     @DisplayName("generate AuthIdentityAdded event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(SecondaryIdentityAdded.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getIdentity(), event.getIdentity());
@@ -36,7 +35,7 @@ class AddAuthIdentityTest extends UserCommandTest<AddSecondaryIdentity> {
     @Test
     @DisplayName("add a new identity")
     void changeState() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).hasState(
                 state -> assertEquals(message().getIdentity(), state.getSecondaryIdentity(1)));
     }

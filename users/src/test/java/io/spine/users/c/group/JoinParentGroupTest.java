@@ -24,7 +24,6 @@ import io.spine.users.GroupId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.joinParentGroup;
 import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("JoinParentGroup command should")
-class JoinParentGroupTest extends GroupCommandTest<JoinParentGroup> {
+class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup> {
 
     private static final GroupId SUPER_GROUP = createGroupId();
 
@@ -43,10 +42,10 @@ class JoinParentGroupTest extends GroupCommandTest<JoinParentGroup> {
     }
 
     @Test
-    @DisplayName("produce ParentGroupJoined event")
+    @DisplayName("produce JoinedParentGroup event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(ParentGroupJoined.class, event -> {
+        GroupMembershipPart part = createPartWithState();
+        expectThat(part).producesEvent(JoinedParentGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getParentGroupId(), event.getParentGroupId());
         });
@@ -55,9 +54,8 @@ class JoinParentGroupTest extends GroupCommandTest<JoinParentGroup> {
     @Test
     @DisplayName("add a group membership")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-
-        expectThat(aggregate).hasState(state -> {
+        GroupMembershipPart part = createPartWithState();
+        expectThat(part).hasState(state -> {
             GroupId expectedGroup = message().getParentGroupId();
             assertTrue(state.getMembershipList()
                             .contains(expectedGroup));

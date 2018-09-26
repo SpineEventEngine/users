@@ -30,13 +30,13 @@ import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
 import static io.spine.base.Identifier.newUuid;
 import static io.spine.protobuf.AnyPacker.pack;
 
 /**
- * The environment for the {@link UserAggregate} tests.
+ * The environment for the {@link UserPart} tests.
  *
  * @author Vladyslav Lubenskyi
  */

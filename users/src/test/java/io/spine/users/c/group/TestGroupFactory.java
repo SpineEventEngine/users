@@ -27,10 +27,9 @@ import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
-import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
 
 /**
- * A factory for creating test {@linkplain GroupAggregate Group aggregates}.
+ * A factory for creating test {@linkplain GroupPart Group aggregates}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -45,31 +44,55 @@ final class TestGroupFactory {
     /**
      * Creates a new instance of the aggregate with the default state.
      */
-    static GroupAggregate createEmptyAggregate(GroupId id) {
-        return new GroupAggregate(id);
+    static GroupPart createEmptyGroupPart(GroupRoot root) {
+        return new GroupPart(root);
+    }
+
+    static GroupMembershipPart createEmptyMembershipPart(GroupRoot root) {
+        return new GroupMembershipPart(root);
     }
 
     /**
-     * Creates a new instance of the aggregate with the filled state.
+     * Creates a new instance of the {@link GroupPart} with the filled state.
      */
-    static GroupAggregate createAggregate(GroupId id) {
-        return aggregate(state(id).build());
+    static GroupPart createGroupPart(GroupRoot root) {
+        return groupPart(groupState(root.getId()).build(), root);
     }
 
-    private static GroupAggregate aggregate(Group state) {
-        return Given.aggregateOfClass(GroupAggregate.class)
+    /**
+     * Creates a new instance of the {@link GroupMembershipPart} with the filled state.
+     */
+    static GroupMembershipPart createMembershipPart(GroupRoot root) {
+        return membershipPart(membershipState(root.getId()).build(), root);
+    }
+
+    private static GroupPart groupPart(Group state, GroupRoot root) {
+        return Given.aggregatePartOfClass(GroupPart.class)
+                    .withRoot(root)
                     .withState(state)
                     .withId(state.getId())
                     .build();
     }
 
-    private static GroupVBuilder state(GroupId id) {
+    private static GroupMembershipPart membershipPart(GroupMembership state, GroupRoot root) {
+        return Given.aggregatePartOfClass(GroupMembershipPart.class)
+                    .withRoot(root)
+                    .withState(state)
+                    .withId(state.getId())
+                    .build();
+    }
+
+    private static GroupVBuilder groupState(GroupId id) {
         return GroupVBuilder.newBuilder()
                             .setId(id)
                             .setOrgEntity(groupOrgEntityOrganization())
                             .setDisplayName(groupName())
                             .setEmail(groupEmail())
-                            .addMembership(upperGroupId())
                             .addRole(groupRole());
+    }
+
+    private static GroupMembershipVBuilder membershipState(GroupId id) {
+        return GroupMembershipVBuilder.newBuilder()
+                                      .setId(id);
     }
 }

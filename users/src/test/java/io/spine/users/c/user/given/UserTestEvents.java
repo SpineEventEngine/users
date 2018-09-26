@@ -11,12 +11,12 @@ import io.spine.users.c.signin.SignInSuccessful;
 import io.spine.users.c.signin.SignInSuccessfulVBuilder;
 import io.spine.users.c.signin.SignOutCompleted;
 import io.spine.users.c.signin.SignOutCompletedVBuilder;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
 
 /**
- * Test events for {@link UserAggregate}.
+ * Test events for {@link UserPart}.
  *
  * @author Vladyslav Lubenskyi
  */

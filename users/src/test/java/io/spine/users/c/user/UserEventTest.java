@@ -20,7 +20,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  * @author Vladyslav Lubenskyi
  */
 abstract class UserEventTest<E extends Message>
-        extends AggregateEventReactionTest<UserId, E, User, UserAggregate> {
+        extends AggregateEventReactionTest<UserId, E, User, UserPart> {
 
     protected static final UserId USER_ID = userId();
 

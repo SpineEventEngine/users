@@ -9,7 +9,6 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.startGroupMembership;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("JoinGroup command should")
-class JoinGroupTest extends UserCommandTest<JoinGroup> {
+class JoinGroupTest extends UserMembershipCommandTest<JoinGroup> {
 
     JoinGroupTest() {
         super(createMessage());
@@ -26,8 +25,8 @@ class JoinGroupTest extends UserCommandTest<JoinGroup> {
     @Test
     @DisplayName("generate UserJoinedGroup event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).producesEvent(UserJoinedGroup.class, event -> {
+        UserMembershipPart part = createPartWithState();
+        expectThat(part).producesEvent(UserJoinedGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getGroupId(), event.getGroupId());
         });
@@ -36,9 +35,10 @@ class JoinGroupTest extends UserCommandTest<JoinGroup> {
     @Test
     @DisplayName("add a new group membership")
     void changeState() {
-        UserAggregate aggregate = createAggregate();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getGroupId(), state.getMembership(0)));
+        UserMembershipPart part = createPartWithState();
+        expectThat(part).hasState(
+                state -> assertEquals(message().getGroupId(), state.getMembership(0)
+                                                                   .getGroupId()));
     }
 
     private static JoinGroup createMessage() {

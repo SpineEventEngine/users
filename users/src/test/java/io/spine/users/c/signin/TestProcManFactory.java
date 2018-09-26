@@ -10,10 +10,10 @@ import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.c.signin.SignIn.Status;
 import io.spine.users.c.signin.given.SignInTestEnv;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
 /**
- * A factory for creating test {@linkplain UserAggregate User aggregates}.
+ * A factory for creating test {@linkplain UserPart User aggregates}.
  *
  * @author Vladyslav Lubenskyi
  */

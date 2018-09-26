@@ -35,10 +35,11 @@ import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.c.user.UpdatePersonProfile;
 import io.spine.users.c.user.UpdatePersonProfileVBuilder;
 import io.spine.users.c.user.User.Status;
-import io.spine.users.c.user.UserAggregate;
+import io.spine.users.c.user.UserPart;
 
+import static io.spine.users.c.user.RoleInGroup.MEMBER;
 import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserKind.PERSON;
+import static io.spine.users.c.user.UserNature.PERSON;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
@@ -52,7 +53,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 
 /**
- * Test commands for {@link UserAggregate}.
+ * Test commands for {@link UserPart}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -77,7 +78,7 @@ public class UserTestCommands {
                                  .setProfile(profile())
                                  .addRole(adminRoleId())
                                  .setStatus(NOT_READY)
-                                 .setKind(PERSON)
+                                 .setNature(PERSON)
                                  .build();
     }
 
@@ -90,9 +91,10 @@ public class UserTestCommands {
 
     public static JoinGroup startGroupMembership(UserId id) {
         return JoinGroupVBuilder.newBuilder()
-                                           .setId(id)
-                                           .setGroupId(firstGroupId())
-                                           .build();
+                                .setId(id)
+                                .setGroupId(firstGroupId())
+                                .setRole(MEMBER)
+                                .build();
     }
 
     public static LeaveGroup stopGroupMembership(UserId id) {

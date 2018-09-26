@@ -10,8 +10,6 @@ import io.spine.users.Identity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
-import static io.spine.users.c.user.TestUserFactory.createEmptyAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.removeAuthIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("RemoveSecondaryIdentity command should")
-class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryIdentity> {
+class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity> {
 
     RemoveAuthIdentityTest() {
         super(createMessage());
@@ -29,7 +27,7 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryIdentity> {
     @Test
     @DisplayName("generate AuthIdentityRemoved event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(SecondaryIdentityRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             Identity eventIdentity = event.getIdentity();
@@ -41,7 +39,7 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryIdentity> {
     @Test
     @DisplayName("remove an identity")
     void changeState() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryIdentityList()
                                                                 .isEmpty()));
     }
@@ -49,8 +47,7 @@ class RemoveAuthIdentityTest extends UserCommandTest<RemoveSecondaryIdentity> {
     @Test
     @DisplayName("throw rejection if auth identity doesn't exist")
     void generateRejection() {
-        UserAggregate aggregate = createEmptyAggregate();
-        expectThat(aggregate).throwsRejection(Rejections.IdentityDoesNotExist.class);
+        expectThat(newPart(USER_ID)).throwsRejection(Rejections.IdentityDoesNotExist.class);
     }
 
     private static RemoveSecondaryIdentity createMessage() {

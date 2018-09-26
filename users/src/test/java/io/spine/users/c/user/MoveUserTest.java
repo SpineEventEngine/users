@@ -10,7 +10,6 @@ import io.spine.users.OrganizationOrUnit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.moveUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("MoveUser command should")
-class MoveUserTest extends UserCommandTest<MoveUser> {
+class MoveUserTest extends UserPartCommandTest<MoveUser> {
 
     MoveUserTest() {
         super(createMessage());
@@ -27,7 +26,7 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     @Test
     @DisplayName("generate UserMoved event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         OrganizationOrUnit oldParent = aggregate.getState()
                                                   .getOrgEntity();
         expectThat(aggregate).producesEvent(UserMoved.class, event -> {
@@ -40,7 +39,7 @@ class MoveUserTest extends UserCommandTest<MoveUser> {
     @Test
     @DisplayName("change parent entity of the user")
     void changeState() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).hasState(
                 state -> assertEquals(message().getNewOrgEntity(), state.getOrgEntity()));
     }

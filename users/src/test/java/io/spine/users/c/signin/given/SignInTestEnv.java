@@ -35,8 +35,10 @@ import io.spine.users.c.user.UserVBuilder;
 
 import java.util.Optional;
 
+import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.UserNature.PERSON;
+import static io.spine.users.c.user.UserRoot.getForTest;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.mockito.ArgumentMatchers.any;
@@ -92,7 +94,7 @@ public final class SignInTestEnv {
         return new TestIdentityProviderFactory(mock);
     }
 
-    private static UserAggregate userAggregateState() {
+    private static UserPart userAggregateState() {
         User state = UserVBuilder.newBuilder()
                                  .setId(userId())
                                  .setOrgEntity(orgEntity())
@@ -104,10 +106,11 @@ public final class SignInTestEnv {
                                  .addRole(adminRoleId())
                                  .setNature(PERSON)
                                  .build();
-        UserAggregate aggregate = Given.aggregateOfClass(UserAggregate.class)
-                                       .withState(state)
-                                       .withId(userId())
-                                       .build();
+        UserPart aggregate = Given.aggregatePartOfClass(UserPart.class)
+                                  .withRoot(getForTest(create(), userId()))
+                                  .withState(state)
+                                  .withId(userId())
+                                  .build();
         return aggregate;
     }
 

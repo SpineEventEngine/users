@@ -9,7 +9,6 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregate;
 import static io.spine.users.c.user.given.UserTestCommands.deleteUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("DeleteUser command should")
-class DeleteUserTest extends UserCommandTest<DeleteUser> {
+class DeleteUserTest extends UserPartCommandTest<DeleteUser> {
 
     DeleteUserTest() {
         super(createMessage());
@@ -27,7 +26,7 @@ class DeleteUserTest extends UserCommandTest<DeleteUser> {
     @Test
     @DisplayName("generate UserDeleted event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(UserDeleted.class,
                 event -> assertEquals(message().getId(),
                         event.getId()));
@@ -36,7 +35,7 @@ class DeleteUserTest extends UserCommandTest<DeleteUser> {
     @Test
     @DisplayName("mark aggregate as deleted")
     void changeState() {
-        UserAggregate aggregate = createAggregate();
+        UserPart aggregate = createPartWithState();
         expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
                 .getDeleted()));
     }

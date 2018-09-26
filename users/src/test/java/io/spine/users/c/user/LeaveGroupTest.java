@@ -9,7 +9,6 @@ package io.spine.users.c.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.TestUserFactory.createAggregateWithGroup;
 import static io.spine.users.c.user.given.UserTestCommands.stopGroupMembership;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("LeaveGroup command should")
-class LeaveGroupTest extends UserCommandTest<LeaveGroup> {
+class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup> {
 
     LeaveGroupTest() {
         super(createMessage());
@@ -27,8 +26,8 @@ class LeaveGroupTest extends UserCommandTest<LeaveGroup> {
     @Test
     @DisplayName("generate UserLeftGroup event")
     void generateEvent() {
-        UserAggregate aggregate = createAggregateWithGroup();
-        expectThat(aggregate).producesEvent(UserLeftGroup.class, event -> {
+        UserMembershipPart part = createPartWithState();
+        expectThat(part).producesEvent(UserLeftGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getGroupId(), event.getGroupId());
         });
@@ -37,9 +36,10 @@ class LeaveGroupTest extends UserCommandTest<LeaveGroup> {
     @Test
     @DisplayName("stop a group membership")
     void changeState() {
-        UserAggregate aggregate = createAggregateWithGroup();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getMembershipList()
-                .isEmpty()));
+        UserMembershipPart part = createPartWithState();
+        expectThat(part)
+                .hasState(state -> assertTrue(state.getMembershipList()
+                                                   .isEmpty()));
     }
 
     private static LeaveGroup createMessage() {

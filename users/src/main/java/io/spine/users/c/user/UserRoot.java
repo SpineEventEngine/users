@@ -20,6 +20,7 @@
 
 package io.spine.users.c.user;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.spine.core.UserId;
 import io.spine.server.BoundedContext;
 import io.spine.server.aggregate.AggregateRoot;
@@ -34,7 +35,15 @@ public class UserRoot extends AggregateRoot<UserId> {
     /**
      * @see AggregateRoot#AggregateRoot(BoundedContext, Object)
      */
-    protected UserRoot(BoundedContext boundedContext, UserId id) {
+    UserRoot(BoundedContext boundedContext, UserId id) {
         super(boundedContext, id);
+    }
+
+    /**
+     * A test method to obtain obtains a new {@link UserRoot}.
+     */
+    @VisibleForTesting
+    public static UserRoot getForTest(BoundedContext boundedContext, UserId id) {
+        return new UserRoot(boundedContext, id);
     }
 }

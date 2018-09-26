@@ -24,8 +24,6 @@ import io.spine.users.RoleId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
-import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.unassignRoleFromGroup;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +42,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("produce RoleUnassignedFromGroup event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(RoleUnassignedFromGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getRoleId(), event.getRoleId());
@@ -54,7 +52,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("un-assign role from group")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
 
         expectThat(aggregate).hasState(state -> {
             RoleId expectedRole = message().getRoleId();
@@ -66,7 +64,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("throw rejection if role isn't assigned to a group")
     void throwsRejection() {
-        GroupAggregate aggregate = createEmptyAggregate(GROUP_ID);
+        GroupPart aggregate = newPart(GROUP_ID);
 
         expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToGroup.class);
     }

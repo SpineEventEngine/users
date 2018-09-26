@@ -24,7 +24,6 @@ import io.spine.users.GroupId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.leaveParentGroup;
 import static io.spine.users.c.group.given.GroupTestEnv.upperGroupId;
 import static org.junit.Assert.assertFalse;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("LeaveParentGroup command should")
-class LeaveParentGroupTest extends GroupCommandTest<LeaveParentGroup> {
+class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup> {
 
     LeaveParentGroupTest() {
         super(createMessage());
@@ -43,8 +42,8 @@ class LeaveParentGroupTest extends GroupCommandTest<LeaveParentGroup> {
     @Test
     @DisplayName("produce ParentGroupLeft event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).producesEvent(ParentGroupLeft.class, event -> {
+        GroupMembershipPart part = createPartWithState();
+        expectThat(part).producesEvent(LeftParentGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getParentGroupId(), event.getParentGroupId());
         });
@@ -53,8 +52,8 @@ class LeaveParentGroupTest extends GroupCommandTest<LeaveParentGroup> {
     @Test
     @DisplayName("remove a group membership")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
-        expectThat(aggregate).hasState(state -> {
+        GroupMembershipPart part = createPartWithState();
+        expectThat(part).hasState(state -> {
             GroupId expectedGroup = message().getParentGroupId();
             assertFalse(state.getMembershipList()
                              .contains(expectedGroup));

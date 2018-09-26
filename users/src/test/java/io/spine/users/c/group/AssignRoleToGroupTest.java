@@ -26,7 +26,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.assignRoleToGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,7 +47,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
     @Test
     @DisplayName("produce RoleAssignedToGroup event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(RoleAssignedToGroup.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getRoleId(), event.getRoleId());
@@ -58,7 +57,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
     @Test
     @DisplayName("add a role assignment")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
 
         expectThat(aggregate).hasState(state -> {
             RoleId expectedRole = message().getRoleId();

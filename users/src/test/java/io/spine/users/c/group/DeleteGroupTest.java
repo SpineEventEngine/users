@@ -23,7 +23,6 @@ package io.spine.users.c.group;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.deleteGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,7 +40,7 @@ class DeleteGroupTest extends GroupCommandTest<DeleteGroup> {
     @Test
     @DisplayName("produce GroupDeleted event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
         expectThat(aggregate).producesEvent(GroupDeleted.class, event -> {
             assertEquals(message().getId(), event.getId());
         });
@@ -50,7 +49,7 @@ class DeleteGroupTest extends GroupCommandTest<DeleteGroup> {
     @Test
     @DisplayName("delete the group")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
 
         expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
                                                                     .getDeleted()));

@@ -23,7 +23,6 @@ package io.spine.users.c.group;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.renameGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,7 +39,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup> {
     @Test
     @DisplayName("produce GroupRenamed event")
     void produceEvent() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
         String oldName = aggregate.getState()
                                   .getDisplayName();
         expectThat(aggregate).producesEvent(GroupRenamed.class, event -> {
@@ -53,7 +52,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup> {
     @Test
     @DisplayName("change the display_name")
     void changeState() {
-        GroupAggregate aggregate = createAggregate(GROUP_ID);
+        GroupPart aggregate = createPartWithState();
 
         expectThat(aggregate).hasState(state -> {
             assertEquals(message().getNewName(), state.getDisplayName());

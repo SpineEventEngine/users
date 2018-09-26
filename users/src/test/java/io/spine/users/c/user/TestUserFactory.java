@@ -9,9 +9,8 @@ package io.spine.users.c.user;
 import io.spine.testing.server.entity.given.Given;
 
 import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserKind.PERSON;
+import static io.spine.users.c.user.UserNature.PERSON;
 import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.c.user.given.UserTestEnv.profile;
 import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
@@ -19,7 +18,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
 import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 
 /**
- * A factory for creating test {@linkplain UserAggregate User aggregates}.
+ * A factory for creating test {@linkplain UserPart User aggregates}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -32,36 +31,36 @@ final class TestUserFactory {
     }
 
     /**
-     * Creates a new instance of the aggregate with the default state.
+     * Creates a new instance of the {@link UserPart} with the filled state.
      */
-    static UserAggregate createEmptyAggregate() {
-        return new UserAggregate(userId());
+    static UserPart createUserPart(UserRoot root) {
+        return userPart(userPartState().build(), root);
     }
 
     /**
-     * Creates a new instance of the aggregate with the filled state.
+     * Creates a new instance of the {@link UserMembershipPart} with the filled state.
      */
-    static UserAggregate createAggregate() {
-        return aggregate(state().build());
+    static UserMembershipPart createMembershipPart(UserRoot root) {
+        return membershipPart(membershipState().build(), root);
     }
 
-    /**
-     * Creates a new instance of the aggregate with the group membership.
-     */
-    static UserAggregate createAggregateWithGroup() {
-        User state = state().addMembership(firstGroupId())
-                            .build();
-        return aggregate(state);
-    }
-
-    private static UserAggregate aggregate(User state) {
-        return Given.aggregateOfClass(UserAggregate.class)
+    private static UserPart userPart(User state, UserRoot root) {
+        return Given.aggregatePartOfClass(UserPart.class)
+                    .withRoot(root)
                     .withState(state)
                     .withId(userId())
                     .build();
     }
 
-    private static UserVBuilder state() {
+    private static UserMembershipPart membershipPart(UserMembership state, UserRoot root) {
+        return Given.aggregatePartOfClass(UserMembershipPart.class)
+                    .withRoot(root)
+                    .withState(state)
+                    .withId(userId())
+                    .build();
+    }
+
+    private static UserVBuilder userPartState() {
         return UserVBuilder.newBuilder()
                            .setId(userId())
                            .setOrgEntity(userOrgEntity())
@@ -70,7 +69,20 @@ final class TestUserFactory {
                            .setProfile(profile())
                            .setStatus(NOT_READY)
                            .addSecondaryIdentity(googleIdentity())
-                           .setKind(PERSON)
+                           .setNature(PERSON)
                            .addRole(adminRoleId());
+    }
+
+    private static UserMembershipVBuilder membershipState() {
+        return UserMembershipVBuilder.newBuilder()
+                                     .setId(userId());
+    }
+
+    static UserMembershipPart createEmptyMembershipPart(UserRoot root) {
+        return new UserMembershipPart(root);
+    }
+
+    static UserPart createEmptyUserPart(UserRoot root) {
+        return new UserPart(root);
     }
 }

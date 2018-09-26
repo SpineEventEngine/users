@@ -12,8 +12,8 @@ import io.spine.testing.server.aggregate.AggregatePartCommandTest;
 import io.spine.users.GroupId;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.group.TestGroupFactory.createEmptyGroupPart;
-import static io.spine.users.c.group.TestGroupFactory.createGroupPart;
+import static io.spine.users.c.group.TestGroupFactory.createEmptyMembershipPart;
+import static io.spine.users.c.group.TestGroupFactory.createMembershipPart;
 import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
 
 /**
@@ -22,19 +22,24 @@ import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends Message>
-        extends AggregatePartCommandTest<GroupId, C, Group, GroupPart, GroupRoot> {
+abstract class GroupMembershipCommandTest<C extends Message>
+        extends AggregatePartCommandTest<GroupId,
+                                         C,
+                                         GroupMembership,
+                                         GroupMembershipPart,
+                                         GroupRoot> {
 
     static final GroupId GROUP_ID = createGroupId();
 
-    GroupCommandTest(C commandMessage) {
+    GroupMembershipCommandTest(C commandMessage) {
         super(GROUP_ID, commandMessage);
     }
 
     @Override
-    protected Repository<GroupId, GroupPart> createEntityRepository() {
-        return new GroupPartRepository();
+    protected Repository<GroupId, GroupMembershipPart> createEntityRepository() {
+        return new GroupMembershipPartRepository();
     }
+
 
     @Override
     protected GroupRoot newRoot(GroupId id) {
@@ -42,11 +47,11 @@ abstract class GroupCommandTest<C extends Message>
     }
 
     @Override
-    protected GroupPart newPart(GroupRoot root) {
-        return createEmptyGroupPart(root);
+    protected GroupMembershipPart newPart(GroupRoot root) {
+        return createEmptyMembershipPart(root);
     }
 
-    protected GroupPart createPartWithState() {
-        return createGroupPart(newRoot(GROUP_ID));
+    protected GroupMembershipPart createPartWithState() {
+        return createMembershipPart(newRoot(GROUP_ID));
     }
 }

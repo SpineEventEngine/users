@@ -31,7 +31,7 @@ import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.CreateGroupVBuilder;
 import io.spine.users.c.group.DeleteGroup;
 import io.spine.users.c.group.DeleteGroupVBuilder;
-import io.spine.users.c.group.GroupAggregate;
+import io.spine.users.c.group.GroupPart;
 import io.spine.users.c.group.JoinParentGroup;
 import io.spine.users.c.group.LeaveParentGroup;
 import io.spine.users.c.group.LeaveParentGroupVBuilder;
@@ -50,7 +50,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
 
 /**
- * Test commands for {@link GroupAggregate}.
+ * Test commands for {@link GroupPart}.
  *
  * @author Vladyslav Lubenskyi
  */

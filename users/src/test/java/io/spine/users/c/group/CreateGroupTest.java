@@ -23,7 +23,6 @@ package io.spine.users.c.group;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.TestGroupFactory.createEmptyAggregate;
 import static io.spine.users.c.group.given.GroupTestCommands.createGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -42,7 +41,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
     @DisplayName("produce GroupCreated event")
     void produceEvent() {
         CreateGroup command = message();
-        expectThat(createEmptyAggregate(GROUP_ID)).producesEvent(GroupCreated.class, event -> {
+        expectThat(newPart(GROUP_ID)).producesEvent(GroupCreated.class, event -> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
             assertEquals(command.getEmail(), event.getEmail());
@@ -55,7 +54,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
     @DisplayName("create a group")
     void changeState() {
         CreateGroup command = message();
-        expectThat(createEmptyAggregate(GROUP_ID)).hasState(state -> {
+        expectThat(newPart(GROUP_ID)).hasState(state -> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
             assertEquals(command.getEmail(), state.getEmail());
