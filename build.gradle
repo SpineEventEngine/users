@@ -221,4 +221,5 @@ idea.project.ipr {
     }
 }
 
+apply from: deps.scripts.jacoco
 apply from: deps.scripts.publish
