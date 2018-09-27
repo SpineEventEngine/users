@@ -20,7 +20,7 @@
 
 package io.spine.users.c.role;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.RoleId;
@@ -34,7 +34,7 @@ import static io.spine.users.c.role.given.RoleTestEnv.createRoleId;
  *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-public class RoleCommandTest<C extends Message>
+public class RoleCommandTest<C extends CommandMessage>
         extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
 
     static final RoleId ROLE_ID = createRoleId();

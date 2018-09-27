@@ -6,7 +6,7 @@
 
 package io.spine.users.c.group;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregatePartCommandTest;
 import io.spine.users.GroupId;
@@ -22,7 +22,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends Message>
+abstract class GroupCommandTest<C extends CommandMessage>
         extends AggregatePartCommandTest<GroupId, C, Group, GroupPart, GroupRoot> {
 
     static final GroupId GROUP_ID = createGroupId();

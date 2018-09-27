@@ -6,7 +6,7 @@
 
 package io.spine.users.c.user;
 
-import com.google.protobuf.Message;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateEventReactionTest;
@@ -19,7 +19,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  * @param <E> the type of the event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class UserEventTest<E extends Message>
+abstract class UserEventTest<E extends EventMessage>
         extends AggregateEventReactionTest<UserId, E, User, UserPart> {
 
     protected static final UserId USER_ID = userId();

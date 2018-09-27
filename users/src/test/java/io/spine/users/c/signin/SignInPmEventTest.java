@@ -6,7 +6,7 @@
 
 package io.spine.users.c.signin;
 
-import com.google.protobuf.Message;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnEventTest;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
  * @param <E> the type of the event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class SignInPmEventTest<E extends Message>
+abstract class SignInPmEventTest<E extends EventMessage>
         extends PmCommandOnEventTest<UserId, E, SignIn, SignInPm> {
 
     SignInPmEventTest(UserId processManagerId, E eventMessage) {

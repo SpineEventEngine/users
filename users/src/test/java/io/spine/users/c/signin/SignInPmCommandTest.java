@@ -6,7 +6,7 @@
 
 package io.spine.users.c.signin;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandTest;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class SignInPmCommandTest<C extends Message>
+abstract class SignInPmCommandTest<C extends CommandMessage>
         extends PmCommandTest<UserId, C, SignIn, SignInPm> {
 
     SignInPmCommandTest(UserId processManagerId, C commandMessage) {

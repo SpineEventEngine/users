@@ -6,7 +6,7 @@
 
 package io.spine.users.c.user;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregatePartCommandTest;
@@ -22,7 +22,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class UserMembershipCommandTest<C extends Message>
+abstract class UserMembershipCommandTest<C extends CommandMessage>
         extends AggregatePartCommandTest<UserId, C, UserMembership, UserMembershipPart, UserRoot> {
 
     protected static final UserId USER_ID = userId();

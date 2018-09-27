@@ -6,7 +6,7 @@
 
 package io.spine.users.c.orgunit;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.OrgUnitId;
@@ -19,7 +19,7 @@ import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.createOrgUnitId;
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class OrgUnitCommandTest<C extends Message>
+abstract class OrgUnitCommandTest<C extends CommandMessage>
         extends AggregateCommandTest<OrgUnitId, C, OrgUnit, OrgUnitAggregate> {
 
     static final OrgUnitId ORG_UNIT_ID = createOrgUnitId();

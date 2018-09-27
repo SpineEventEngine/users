@@ -20,7 +20,7 @@
 
 package io.spine.users.q.group;
 
-import com.google.protobuf.Message;
+import io.spine.base.EventMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.projection.ProjectionTest;
 import io.spine.users.GroupId;
@@ -33,7 +33,7 @@ import static io.spine.users.q.group.given.GroupViewTestEnv.newGroupId;
  * @param <M> the type of event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupViewTest<M extends Message>
+abstract class GroupViewTest<M extends EventMessage>
         extends ProjectionTest<GroupId, M, GroupView, GroupViewProjection> {
 
     protected static final GroupId PROJECTION_ID = newGroupId();

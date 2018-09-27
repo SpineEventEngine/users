@@ -6,7 +6,7 @@
 
 package io.spine.users.c.organization;
 
-import com.google.protobuf.Message;
+import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.OrganizationId;
@@ -19,7 +19,7 @@ import static io.spine.users.c.organization.given.OrganizationTestEnv.createOrga
  * @param <C> the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class OrgCommandTest<C extends Message>
+abstract class OrgCommandTest<C extends CommandMessage>
         extends AggregateCommandTest<OrganizationId, C, Organization, OrganizationAggregate> {
 
     static final OrganizationId ORG_ID = createOrganizationId();

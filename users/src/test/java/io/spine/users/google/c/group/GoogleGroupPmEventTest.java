@@ -20,7 +20,7 @@
 
 package io.spine.users.google.c.group;
 
-import com.google.protobuf.Message;
+import io.spine.base.EventMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnEventTest;
 import io.spine.users.GroupId;
@@ -33,7 +33,7 @@ import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newGroupId;
  * @param <E> an event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GoogleGroupPmEventTest<E extends Message>
+abstract class GoogleGroupPmEventTest<E extends EventMessage>
         extends PmCommandOnEventTest<GroupId, E, GoogleGroup, GoogleGroupPm> {
 
     protected static final GroupId GROUP_ID = newGroupId();
