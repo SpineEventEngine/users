@@ -20,32 +20,27 @@
 
 package io.spine.users.c.signin;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.core.UserId;
 import io.spine.users.Identity;
-import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@link SignIn} process manager.
  *
  * @author Vladyslav Lubenskyi
  */
-class SignInEventFactory extends EntityEventFactory {
+class SignInEventFactory {
 
-    private SignInEventFactory(ActorContext actorContext) {
-        super(actorContext);
+    /**
+     * Prevents direct instantiation.
+     */
+    private SignInEventFactory() {
     }
 
     /**
      * Retrieves an instance of {@link SignInEventFactory}.
-     *
-     * @param context the {@link CommandContext} of the command to handle
-     * @return new instance of {@link SignInEventFactory}
      */
-    static SignInEventFactory instance(CommandContext context) {
-        ActorContext actorContext = context.getActorContext();
-        return new SignInEventFactory(actorContext);
+    static SignInEventFactory instance() {
+        return new SignInEventFactory();
     }
 
     SignInSuccessful completeSignIn(UserId id, Identity identity) {

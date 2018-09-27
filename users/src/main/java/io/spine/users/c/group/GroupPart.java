@@ -60,7 +60,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Assign
     GroupCreated handle(CreateGroup command, CommandContext context) {
-        return events(context).createGroup(command);
+        return events().createGroup(command);
     }
 
     @Assign
@@ -68,17 +68,17 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
             throw new CanNotMoveExternalGroup(command.getId(), getState().getExternalDomain());
         }
-        return events(context).moveGroup(command, getState().getOrgEntity());
+        return events().moveGroup(command, getState().getOrgEntity());
     }
 
     @Assign
     GroupDeleted handle(DeleteGroup command, CommandContext context) {
-        return events(context).deleteGroup(command);
+        return events().deleteGroup(command);
     }
 
     @Assign
     RoleAssignedToGroup handle(AssignRoleToGroup command, CommandContext context) {
-        return events(context).assignRole(command);
+        return events().assignRole(command);
     }
 
     @Assign
@@ -89,17 +89,17 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (!roles.contains(roleId)) {
             throw new RoleIsNotAssignedToGroup(getId(), roleId);
         }
-        return events(context).unassignRole(command);
+        return events().unassignRole(command);
     }
 
     @Assign
     GroupRenamed handle(RenameGroup command, CommandContext context) {
-        return events(context).rename(command, getState().getDisplayName());
+        return events().rename(command, getState().getDisplayName());
     }
 
     @Assign
     GroupEmailChanged handle(ChangeGroupEmail command, CommandContext context) {
-        return events(context).changeEmail(command, getState().getEmail());
+        return events().changeEmail(command, getState().getEmail());
     }
 
     @Apply
@@ -160,7 +160,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         getBuilder().setEmail(event.getNewEmail());
     }
 
-    private static GroupEventFactory events(CommandContext context) {
-        return GroupEventFactory.instance(context);
+    private static GroupEventFactory events() {
+        return GroupEventFactory.instance();
     }
 }

@@ -6,11 +6,8 @@
 
 package io.spine.users.c.user;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.users.Identity;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.c.EntityEventFactory;
 import io.spine.users.c.user.User.Status;
 
 import static io.spine.users.c.user.RoleInGroup.MEMBER;
@@ -22,24 +19,19 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It's OK for an event factory
-final class UserEventFactory extends EntityEventFactory {
+final class UserEventFactory {
 
     /**
-     * @see EntityEventFactory#EntityEventFactory(ActorContext)
+     * Prevents direct instantiation.
      */
-    private UserEventFactory(ActorContext actorContext) {
-        super(actorContext);
+    private UserEventFactory() {
     }
 
     /**
      * Retrieves an instance of {@link UserEventFactory}.
-     *
-     * @param context the {@link CommandContext} of the command to handle
-     * @return new instance of {@link UserEventFactory}
      */
-    static UserEventFactory instance(CommandContext context) {
-        ActorContext actorContext = context.getActorContext();
-        return new UserEventFactory(actorContext);
+    static UserEventFactory instance() {
+        return new UserEventFactory();
     }
 
     UserCreated create(CreateUser command) {

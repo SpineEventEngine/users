@@ -51,27 +51,27 @@ public class OrgUnitAggregate
 
     @Assign
     OrgUnitCreated handle(CreateOrgUnit command, CommandContext context) {
-        return events(context).createOrgUnit(command);
+        return events().createOrgUnit(command);
     }
 
     @Assign
     OrgUnitDeleted handle(DeleteOrgUnit command, CommandContext context) {
-        return events(context).deleteOrgUnit(command);
+        return events().deleteOrgUnit(command);
     }
 
     @Assign
     OrgUnitMoved handle(MoveOrgUnit command, CommandContext context) {
-        return events(context).moveOrgUnit(command, getState().getParentEntity());
+        return events().moveOrgUnit(command, getState().getParentEntity());
     }
 
     @Assign
     OrgUnitRenamed handle(RenameOrgUnit command, CommandContext context) {
-        return events(context).rename(command, getState().getDisplayName());
+        return events().rename(command, getState().getDisplayName());
     }
 
     @Assign
     OrgUnitDomainChanged handle(ChangeOrgUnitDomain command, CommandContext context) {
-        return events(context).changeDomain(command, getState().getDomain());
+        return events().changeDomain(command, getState().getDomain());
     }
 
     @Apply
@@ -102,7 +102,7 @@ public class OrgUnitAggregate
         getBuilder().setDomain(event.getNewDomain());
     }
 
-    private static OrgUnitEventFactory events(CommandContext context) {
-        return OrgUnitEventFactory.instance(context);
+    private static OrgUnitEventFactory events() {
+        return OrgUnitEventFactory.instance();
     }
 }

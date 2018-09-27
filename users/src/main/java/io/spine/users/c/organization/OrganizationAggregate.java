@@ -48,27 +48,27 @@ public class OrganizationAggregate
 
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {
-        return events(context).createOrganization(command);
+        return events().createOrganization(command);
     }
 
     @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
-        return events(context).deleteOrganization(command);
+        return events().deleteOrganization(command);
     }
 
     @Assign
     OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
-        return events(context).renameOrganization(command, getState().getDisplayName());
+        return events().renameOrganization(command, getState().getDisplayName());
     }
 
     @Assign
     OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
-        return events(context).changeDomain(command, getState().getDomain());
+        return events().changeDomain(command, getState().getDomain());
     }
 
     @Assign
     OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
-        return events(context).changeTenant(command, getState().getTenant());
+        return events().changeTenant(command, getState().getTenant());
     }
 
     @Apply
@@ -99,7 +99,7 @@ public class OrganizationAggregate
         getBuilder().setTenant(event.getNewTenant());
     }
 
-    private static OrganizationEventFactory events(CommandContext context) {
-        return OrganizationEventFactory.instance(context);
+    private static OrganizationEventFactory events() {
+        return OrganizationEventFactory.instance();
     }
 }

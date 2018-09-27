@@ -20,11 +20,8 @@
 
 package io.spine.users.c.group;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.net.EmailAddress;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain GroupPart Group aggregate}.
@@ -33,22 +30,19 @@ import io.spine.users.c.EntityEventFactory;
  */
 @SuppressWarnings("OverlyCoupledClass")
         // It is OK for an event factory.
-class GroupEventFactory extends EntityEventFactory {
+class GroupEventFactory {
 
     /**
      * Prevents direct instantiation.
      */
-    private GroupEventFactory(ActorContext actorContext) {
-        super(actorContext);
+    private GroupEventFactory() {
     }
 
     /**
      * Retrieves an instance of {@link GroupEventFactory}.
-     *
-     * @return new instance of {@link GroupEventFactory}
      */
-    static GroupEventFactory instance(CommandContext commandContext) {
-        return new GroupEventFactory(commandContext.getActorContext());
+    static GroupEventFactory instance() {
+        return new GroupEventFactory();
     }
 
     GroupCreated createGroup(CreateGroup command) {

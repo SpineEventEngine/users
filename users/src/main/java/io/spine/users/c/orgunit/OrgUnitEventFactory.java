@@ -20,11 +20,8 @@
 
 package io.spine.users.c.orgunit;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.net.InternetDomain;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain OrgUnit OrgUnit aggregate}.
@@ -32,25 +29,19 @@ import io.spine.users.c.EntityEventFactory;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for event factory.
-final class OrgUnitEventFactory extends EntityEventFactory {
+final class OrgUnitEventFactory {
 
     /**
-     * @see EntityEventFactory#EntityEventFactory(ActorContext)
+     * Prevents direct instantiation.
      */
-    private OrgUnitEventFactory(ActorContext actorContext) {
-        super(actorContext);
-    }
+    private OrgUnitEventFactory() {
 
+    }
     /**
      * Retrieves an instance of {@link OrgUnitEventFactory}.
-     *
-     * @param context
-     *         the {@link CommandContext} of the command to handle
-     * @return new instance of {@link OrgUnitEventFactory}
      */
-    static OrgUnitEventFactory instance(CommandContext context) {
-        ActorContext actorContext = context.getActorContext();
-        return new OrgUnitEventFactory(actorContext);
+    static OrgUnitEventFactory instance() {
+        return new OrgUnitEventFactory();
     }
 
     OrgUnitCreated createOrgUnit(CreateOrgUnit command) {

@@ -20,36 +20,27 @@
 
 package io.spine.users.c.organization;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
-import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain Organization Organization aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
-final class OrganizationEventFactory extends EntityEventFactory {
+final class OrganizationEventFactory {
 
     /**
-     * @see EntityEventFactory#EntityEventFactory(ActorContext)
+     * Prevents direct instantiation.
      */
-    private OrganizationEventFactory(ActorContext actorContext) {
-        super(actorContext);
+    private OrganizationEventFactory() {
     }
 
     /**
      * Retrieves an instance of {@link OrganizationEventFactory}.
-     *
-     * @param context
-     *         the {@link CommandContext} of the command to handle
-     * @return new instance of {@link OrganizationEventFactory}
      */
-    static OrganizationEventFactory instance(CommandContext context) {
-        ActorContext actorContext = context.getActorContext();
-        return new OrganizationEventFactory(actorContext);
+    static OrganizationEventFactory instance() {
+        return new OrganizationEventFactory();
     }
 
     OrganizationCreated createOrganization(CreateOrganization command) {

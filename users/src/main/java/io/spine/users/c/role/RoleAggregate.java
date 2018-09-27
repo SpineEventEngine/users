@@ -63,22 +63,22 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Assign
     RoleCreated handle(CreateRole command, CommandContext context) {
-        return events(context).createRole(command);
+        return events().createRole(command);
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command, CommandContext context) {
-        return events(context).deleteRole(command);
+        return events().deleteRole(command);
     }
 
     @Assign
     RoleRenamed handle(RenameRole command, CommandContext context) {
-        return events(context).renameRole(command, getState().getDisplayName());
+        return events().renameRole(command, getState().getDisplayName());
     }
 
     @Assign
     RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
-        return events(context).changeParent(command, getState().getOrgEntity());
+        return events().changeParent(command, getState().getOrgEntity());
     }
 
     @Apply
@@ -104,7 +104,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
         getBuilder().setOrgEntity(event.getNewOrgEntity());
     }
 
-    private static RoleEventFactory events(CommandContext context) {
-        return RoleEventFactory.instance(context);
+    private static RoleEventFactory events() {
+        return RoleEventFactory.instance();
     }
 }

@@ -20,32 +20,26 @@
 
 package io.spine.users.c.role;
 
-import io.spine.core.ActorContext;
-import io.spine.core.CommandContext;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.c.EntityEventFactory;
 
 /**
  * An event factory for the {@linkplain RoleAggregate Role aggregate}.
  *
  * @author Vladyslav Lubenskyi
  */
-final class RoleEventFactory extends EntityEventFactory {
+final class RoleEventFactory {
 
-    private RoleEventFactory(ActorContext actorContext) {
-        super(actorContext);
+    /**
+     * Prevents direct instantiation.
+     */
+    private RoleEventFactory() {
     }
 
     /**
      * Retrieves an instance of {@link RoleEventFactory}.
-     *
-     * @param context
-     *         the {@link CommandContext} of the command to handle
-     * @return new instance of {@link RoleEventFactory}
      */
-    static RoleEventFactory instance(CommandContext context) {
-        ActorContext actorContext = context.getActorContext();
-        return new RoleEventFactory(actorContext);
+    static RoleEventFactory instance() {
+        return new RoleEventFactory();
     }
 
     RoleCreated createRole(CreateRole command) {
