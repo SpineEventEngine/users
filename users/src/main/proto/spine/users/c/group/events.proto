@@ -75,7 +75,7 @@ message GroupMoved {
     OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }
 
-// A group joined a parent group, that is became a member of another group.
+// A group joined a parent group, that is, became a member of another group.
 //
 message JoinedParentGroup {
 

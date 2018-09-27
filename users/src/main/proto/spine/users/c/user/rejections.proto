@@ -46,7 +46,7 @@ message IdentityDoesNotExist {
     string user_id = 3 [(required) = true];
 }
 
-// The rejection to removing a role that is't assigned to a user.
+// The rejection to removing a role that isn't assigned to a user.
 //
 message RoleIsNotAssignedToUser {
 

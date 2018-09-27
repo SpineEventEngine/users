@@ -46,7 +46,7 @@ import "spine/users/values.proto";
 // This propagation is implicit and is not reflected in aggregate states.
 //
 // Therefore, when carrying out role-based access control, consider that a `User` or a `Group`
-// has not only the roles listed in the aggregate state, but effectively all the roles derived from
+// has not only the roles listed in the aggregate state but effectively all the roles derived from
 // parent groups.
 //
 // ## Case Study

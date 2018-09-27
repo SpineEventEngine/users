@@ -44,7 +44,7 @@ message OrgUnitCreated {
     // A name of the orgunit to display on UI.
     string display_name = 2 [(required) = true];
 
-    // An interent domain of the orgunit.
+    // An internet domain of the orgunit.
     net.InternetDomain domain = 3;
 
     // A parent entity in the organizational structure.

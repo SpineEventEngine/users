@@ -62,7 +62,7 @@ message RoleRenamed {
     // A new name of the role.
     string new_name = 2 [(required) = true];
 
-    // A old name of the role.
+    // An old name of the role.
     string old_name = 3 [(required) = true];
 }
 

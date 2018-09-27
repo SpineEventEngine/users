@@ -37,7 +37,7 @@ import "spine/users/c/signin/values.proto";
 
 // The process of a user sign-in..
 //
-// This process manager covers a straighforward sign-in scenario:
+// This process manager covers a straightforward sign-in scenario:
 //
 // 1. `SignUserIn` command initializes the sign-in process.
 // 2. If a `User` aggregate with the given ID already exists all checks pass the `SignInSuccessful`
@@ -63,7 +63,7 @@ message SignIn {
     // The current status of the process.
     Status status = 2;
 
-    // A user identity user to sign in.
+    // A user identity used to sign in.
     Identity identity = 3 [(required) = true];
 
     // A reason why the process failed, if applicable.
@@ -75,7 +75,7 @@ message SignIn {
 
         SIS_UNKNOWN = 0;
 
-        // Indicates that the process manager is waiting till a `User` aggregate is created.
+        // Indicates that the process manager is waiting until a `User` aggregate is created.
         //
         // If there is no `User` aggregate for the given `core.UserId` the process manager
         // creates it in the first instance, and then attempt to sign the user in.

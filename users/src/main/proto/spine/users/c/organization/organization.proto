@@ -37,7 +37,7 @@ import "spine/users/identifiers.proto";
 
 // An organization of a tenant.
 //
-// The topmost entity in organizational structure.
+// The topmost entity in the organizational structure.
 //
 // An organization aggregates users and groups directly or in the hierarchy of organizational units
 // (`OrgUnit`).

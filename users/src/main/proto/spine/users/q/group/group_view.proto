@@ -58,7 +58,7 @@ message GroupView {
     // An entity a group belongs to.
     oneof origin {
 
-        // An organization or orgunit in one of tenant's domains.
+        // An organization or orgunit in one of the tenant's domains.
         OrganizationOrUnit org_entity = 5;
 
         // An external domain.

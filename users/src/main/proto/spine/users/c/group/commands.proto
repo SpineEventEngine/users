@@ -52,7 +52,7 @@ message CreateGroup {
     // An entity a group belongs to.
     oneof origin {
 
-        // An organization or orgunit in one the of tenant's domains.
+        // An organization or orgunit in one of the tenant's domains.
         OrganizationOrUnit org_entity = 4;
 
         // An external domain.

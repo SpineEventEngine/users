@@ -54,6 +54,6 @@ message OrgUnit {
     // A parent entity in the organizational structure.
     OrganizationOrUnit parent_entity = 3 [(required) = true];
 
-    // An interent domain of the orgunit.
+    // An internet domain of the orgunit.
     net.InternetDomain domain = 4;
 }

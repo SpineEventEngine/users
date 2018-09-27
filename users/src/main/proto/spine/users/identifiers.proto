@@ -59,7 +59,7 @@ message OrgUnitId {
     string value = 1;
 }
 
-// A string-based identifer of an authentication identity provider.
+// A string-based identifier of an authentication identity provider.
 //
 // For example, "google.com", "active-directory.mycompany.co.uk".
 //

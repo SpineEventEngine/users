@@ -72,7 +72,7 @@ message User {
     // An entity a user belongs to.
     oneof origin {
 
-        // An organization or orgunit in one of tenant's domains.
+        // An organization or orgunit in one of the tenant's domains.
         OrganizationOrUnit org_entity = 6;
 
         // An external domain.
@@ -97,7 +97,7 @@ message User {
     //
     Identity primary_identity = 10;
 
-    // Secondary identities of a user, used solely for authentication.
+    // Secondary identities of a user; used solely for authentication.
     repeated Identity secondary_identity = 11;
 
     // A moment in time when a user was created.
@@ -112,7 +112,7 @@ message User {
 
         // A user is created but not yet ready to work.
         //
-        // For example, the user hasn't accepted an invitation yet, or hasn't finished registration.
+        // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
         //
         NOT_READY = 1;
 
@@ -154,7 +154,7 @@ message UserMembership {
 
 // A role of the `User` as a member of the group.
 //
-// This role defines whether user is a regular member or can manage the group.
+// This role defines whether a user is a regular member or can manage the group.
 //
 enum RoleInGroup {
 
@@ -164,7 +164,7 @@ enum RoleInGroup {
     // A regular member of a group: can't add or remove members, rename the group, etc.
     MEMBER = 1;
 
-    // A priveleged member with permissions to manage the group.
+    // A privileged member with permissions to manage the group.
     PRIVILEGED = 2;
 }
 
@@ -178,8 +178,8 @@ enum UserNature {
     // A `User` represents a person and acts on behalf of this person.
     PERSON = 1;
 
-    // A `User` is a machine, a service account, which acts on behalf of inanimate entity
-    // such as: a printer,  a CRON job, a bot.
+    // A `User` is a machine, a service account, which acts on behalf of an inanimate entity
+    // such as a printer, a CRON job, a bot.
     //
     MACHINE = 2;
 
