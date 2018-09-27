@@ -18,53 +18,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.q.given;
+package io.spine.users.google.c.group;
 
-import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
-
-import static io.spine.base.Identifier.newUuid;
 
 /**
- * Test environment for testing
+ * Test {@link io.spine.users.google.c.group.GoogleGroupPm Google Group process managers}.
  *
  * @author Vladyslav Lubenskyi
  */
-public class GoogleGroupTestEnv {
+public class GoogleGroupTestPms {
 
     /**
      * Prevents instantiation.
      */
-    private GoogleGroupTestEnv() {
+    private GoogleGroupTestPms() {
     }
 
-    static GroupId groupId() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(newUuid())
-                              .build();
-    }
-
-    static String googleGroupDisplayName() {
-        return "Developers Group";
-    }
-
-    static OrganizationId organization() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
-    }
-
-    static String googleId() {
-        return newUuid();
-    }
-
-    static EmailAddress email() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers@company.com")
-                                   .build();
+    /**
+     * Creates empty process manager in the default state.
+     *
+     * @param id and ID of the process manager
+     */
+    static GoogleGroupPm emptyPm(GroupId id) {
+        return new GoogleGroupPm(id);
     }
 }

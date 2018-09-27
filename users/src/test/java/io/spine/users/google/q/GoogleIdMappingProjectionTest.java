@@ -26,7 +26,7 @@ import io.spine.users.GroupId;
 import io.spine.users.google.GoogleIdMappingViewId;
 import io.spine.users.google.GoogleIdMappingViewIdVBuilder;
 import io.spine.users.google.c.group.GoogleGroupCreated;
-import io.spine.users.google.q.given.GoogleGroupTestEvents;
+import io.spine.users.google.q.given.GoogleIdMappingTestEvents;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -77,6 +77,6 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
     }
 
     private static GoogleGroupCreated createMessage() {
-        return GoogleGroupTestEvents.googleGroupCreated();
+        return GoogleIdMappingTestEvents.googleGroupCreated();
     }
 }

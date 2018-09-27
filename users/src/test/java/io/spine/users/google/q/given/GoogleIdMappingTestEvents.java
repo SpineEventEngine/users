@@ -23,28 +23,28 @@ package io.spine.users.google.q.given;
 import io.spine.users.google.c.group.GoogleGroupCreated;
 import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
 
-import static io.spine.users.google.q.given.GoogleGroupTestEnv.email;
-import static io.spine.users.google.q.given.GoogleGroupTestEnv.googleGroupDisplayName;
-import static io.spine.users.google.q.given.GoogleGroupTestEnv.googleId;
-import static io.spine.users.google.q.given.GoogleGroupTestEnv.groupId;
-import static io.spine.users.google.q.given.GoogleGroupTestEnv.organization;
+import static io.spine.users.google.q.given.GoogleIdMappingTestEnv.domain;
+import static io.spine.users.google.q.given.GoogleIdMappingTestEnv.email;
+import static io.spine.users.google.q.given.GoogleIdMappingTestEnv.googleGroupDisplayName;
+import static io.spine.users.google.q.given.GoogleIdMappingTestEnv.googleId;
+import static io.spine.users.google.q.given.GoogleIdMappingTestEnv.groupId;
 
 /**
  * Test events for testing Google Group views.
  */
-public class GoogleGroupTestEvents {
+public class GoogleIdMappingTestEvents {
 
     /**
      * Prevents instantiation.
      */
-    private GoogleGroupTestEvents() {
+    private GoogleIdMappingTestEvents() {
     }
 
     public static GoogleGroupCreated googleGroupCreated() {
         return GoogleGroupCreatedVBuilder.newBuilder()
                                          .setId(groupId())
                                          .setDisplayName(googleGroupDisplayName())
-                                         .setOrganization(organization())
+                                         .setDomain(domain())
                                          .setGoogleId(googleId())
                                          .setEmail(email())
                                          .build();
