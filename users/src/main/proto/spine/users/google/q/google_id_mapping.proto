@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-package spine.users.google.q.group;
+package spine.users.google.q;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.google.q.group";
+option java_package = "io.spine.users.google.q";
 option java_outer_classname = "GoogleIdMappingListViewProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
@@ -33,9 +33,9 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/google/identifiers.proto";
 
-// A projection that maps Google Group IDs to `GroupId`s.
+// A projection that maps IDs of Google Groups to `GroupId`, Users to `UserId` and so on.
 //
-// This projection is used to find corresponding `GroupId` when handling external events from
+// This projection is used to match IDs when importing handling external events from
 // Directory API.
 //
 message GoogleIdMappingView {
@@ -44,5 +44,5 @@ message GoogleIdMappingView {
     GoogleIdMappingViewId id = 1;
 
     // A mapping of a single Google Group ID to a single `GroupId`.
-    map<string, GroupId> mappings = 2;
+    map<string, GroupId> groups = 2;
 }

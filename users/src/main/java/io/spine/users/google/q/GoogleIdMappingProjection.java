@@ -18,39 +18,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.q.group;
+package io.spine.users.google.q;
 
-import io.spine.server.projection.ProjectionRepository;
+import io.spine.core.Subscribe;
+import io.spine.server.projection.Projection;
 import io.spine.users.google.GoogleIdMappingViewId;
-import io.spine.users.google.GoogleIdMappingViewIdVBuilder;
 import io.spine.users.google.c.group.GoogleGroupCreated;
 
-import static com.google.common.collect.ImmutableSet.of;
-import static io.spine.users.google.GoogleIdMappingViewId.Value.SINGLETON;
+import static io.spine.users.google.q.GoogleIdMappingRepository.PROJECTION_ID;
 
 /**
- * The repository for {@link GoogleIdMappingProjection}.
+ * A projection that maps Google Group IDs to `GroupId`s.
+ *
+ * <p>This projection is used to find corresponding `GroupId` when handling external events from
+ * Directory API.
  *
  * @author Vladyslav Lubenskyi
  */
-public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMappingViewId,
-                                                                    GoogleIdMappingProjection,
-                                                                    GoogleIdMappingView> {
-
-    static final GoogleIdMappingViewId PROJECTION_ID =
-            GoogleIdMappingViewIdVBuilder.newBuilder()
-                                         .setValue(SINGLETON)
-                                         .build();
+public class GoogleIdMappingProjection
+        extends Projection<GoogleIdMappingViewId,
+                           GoogleIdMappingView,
+                           GoogleIdMappingViewVBuilder> {
 
     /**
-     * {@inheritDoc}
-     *
-     * <p>Sets up the event routing for {@link io.spine.users.google.c.group.GoogleGroupCreated}
-     * events.
+     * @see Projection#Projection(Object)
      */
-    @Override
-    public void onRegistered() {
-        super.onRegistered();
-        getEventRouting().route(GoogleGroupCreated.class, (event, context) -> of(PROJECTION_ID));
+    protected GoogleIdMappingProjection(GoogleIdMappingViewId id) {
+        super(id);
+    }
+
+    @Subscribe
+    public void on(GoogleGroupCreated event) {
+        getBuilder().setId(PROJECTION_ID)
+                    .putGroups(event.getGoogleId(), event.getId());
     }
 }
