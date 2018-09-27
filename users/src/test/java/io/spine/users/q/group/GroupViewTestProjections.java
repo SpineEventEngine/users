@@ -55,7 +55,7 @@ public class GroupViewTestProjections {
     static GroupViewProjection groupWithMemberProjection(GroupId id) {
         return Given.projectionOfClass(GroupViewProjection.class)
                     .withId(id)
-                    .withState(state(id).addGroupMembers(childGroup())
+                    .withState(state(id).addChildGroups(childGroup())
                                         .build())
                     .build();
     }

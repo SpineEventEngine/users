@@ -65,7 +65,7 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     public void on(JoinedParentGroup event) {
         if (event.getParentGroupId()
                  .equals(getId())) {
-            getBuilder().addGroupMembers(event.getId());
+            getBuilder().addChildGroups(event.getId());
         }
     }
 
@@ -73,9 +73,9 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     public void on(LeftParentGroup event) {
         GroupId memberId = event.getId();
         GroupViewVBuilder builder = getBuilder();
-        List<GroupId> members = builder.getGroupMembers();
+        List<GroupId> members = builder.getChildGroups();
         if (members.contains(memberId)) {
-            builder.removeGroupMembers(members.indexOf(memberId));
+            builder.removeChildGroups(members.indexOf(memberId));
         }
     }
 }

@@ -47,9 +47,6 @@ message GroupView {
     string display_name = 2 [(required) = true];
 
     // An email address of the group if applicable.
-    //
-    // The email address may be used to send messages to all the group members.
-    //
     net.EmailAddress email = 3;
 
     // Indicates whether a group is external or not.
@@ -69,7 +66,7 @@ message GroupView {
     repeated RoleId role = 7;
 
     // A list of child groups. Only direct members of the group are included.
-    repeated GroupId group_members = 8;
+    repeated GroupId child_groups = 8;
 
     // A list of `User` members. Only direct members of the group are included.
     repeated GroupId user_members = 9;

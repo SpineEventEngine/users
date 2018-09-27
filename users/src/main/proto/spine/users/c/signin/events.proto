@@ -43,9 +43,6 @@ message SignInSuccessful {
 
     // A user identity used to sign-in.
     Identity identity = 2 [(required) = true];
-
-    // A date and a time when the user signed in.
-    spine.time.ZonedDateTime when_signed_in = 3 [(required) = true];
 }
 
 // The sign-in process failed.
@@ -59,9 +56,6 @@ message SignInFailed {
 
     // Indicates why the sign-in failed.
     SignInFailureReason failure_reason = 3 [(required) = true];
-
-    // A date and a time when the user signed out.
-    spine.time.ZonedDateTime when_signed_out = 4 [(required) = true];
 }
 
 // A user successfully signed out.

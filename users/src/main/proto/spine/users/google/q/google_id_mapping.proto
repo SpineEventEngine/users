@@ -35,8 +35,8 @@ import "spine/users/google/identifiers.proto";
 
 // A projection that maps IDs of Google Groups to `GroupId`, Users to `UserId` and so on.
 //
-// This projection is used to match IDs when importing handling external events from
-// Directory API.
+// This projection is used to match IDs when mapping external events from Directory API to
+// `Users` bounded context events.
 //
 message GoogleIdMappingView {
     option (entity).kind = PROJECTION;

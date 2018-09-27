@@ -12,7 +12,6 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
-import io.spine.testing.server.entity.given.Given;
 import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
@@ -27,6 +26,7 @@ import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
+import io.spine.users.c.signin.SignInFailureReason;
 import io.spine.users.c.signin.SignInPm;
 import io.spine.users.c.user.User;
 import io.spine.users.c.user.UserPart;
@@ -36,11 +36,14 @@ import io.spine.users.c.user.UserVBuilder;
 import java.util.Optional;
 
 import static io.spine.testing.server.TestBoundedContext.create;
+import static io.spine.testing.server.entity.given.Given.aggregatePartOfClass;
+import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.UserNature.PERSON;
 import static io.spine.users.c.user.UserRoot.getForTest;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -73,7 +76,14 @@ public final class SignInTestEnv {
 
     public static UserPartRepository nonEmptyUserRepo() {
         UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = of(userAggregateState());
+        Optional<UserPart> user = of(normalUserPart());
+        when(mock.find(any())).thenReturn(user);
+        return mock;
+    }
+
+    public static UserPartRepository noIdentityUserRepo() {
+        UserPartRepository mock = mock(UserPartRepository.class);
+        Optional<UserPart> user = of(noIdentityUserPart());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
@@ -94,24 +104,36 @@ public final class SignInTestEnv {
         return new TestIdentityProviderFactory(mock);
     }
 
-    private static UserPart userAggregateState() {
-        User state = UserVBuilder.newBuilder()
-                                 .setId(userId())
-                                 .setOrgEntity(orgEntity())
-                                 .setDisplayName(displayName())
-                                 .setPrimaryIdentity(identity())
-                                 .setProfile(profile())
-                                 .setStatus(NOT_READY)
-                                 .addSecondaryIdentity(identity())
-                                 .addRole(adminRoleId())
-                                 .setNature(PERSON)
-                                 .build();
-        UserPart aggregate = Given.aggregatePartOfClass(UserPart.class)
-                                  .withRoot(getForTest(create(), userId()))
-                                  .withState(state)
-                                  .withId(userId())
-                                  .build();
-        return aggregate;
+    public static IdentityProviderBridgeFactory mockEmptyIdentityProvider() {
+        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+        when(mock.hasIdentity(any())).thenReturn(false);
+        when(mock.signInAllowed(any())).thenReturn(false);
+        when(mock.fetchPersonProfile(any())).thenReturn(PersonProfile.getDefaultInstance());
+        return new TestIdentityProviderFactory(mock);
+    }
+
+    public static IdentityProviderBridgeFactory mockEmptyProviderFactory() {
+        return new TestIdentityProviderFactory(null);
+    }
+
+    public static Identity identity() {
+        return IdentityVBuilder.newBuilder()
+                               .setDisplayName("j.s@google.com")
+                               .setProviderId(googleProviderId())
+                               .setUserId("123543")
+                               .build();
+    }
+
+    public static Identity secondaryIdentity() {
+        return IdentityVBuilder.newBuilder()
+                               .setDisplayName("s.j@google.com")
+                               .setProviderId(googleProviderId())
+                               .setUserId("6987")
+                               .build();
+    }
+
+    public static SignInFailureReason failureReason() {
+        return SIGN_IN_NOT_AUTHORIZED;
     }
 
     static String displayName() {
@@ -120,35 +142,59 @@ public final class SignInTestEnv {
 
     static PersonProfile profile() {
         return PersonProfileVBuilder.newBuilder()
-                                  .setName(name())
-                                  .setEmail(email())
-                                  .build();
+                                    .setName(name())
+                                    .setEmail(email())
+                                    .build();
+    }
+
+    static IdentityProviderId googleProviderId() {
+        return IdentityProviderIdVBuilder.newBuilder()
+                                         .setValue("gmail.com")
+                                         .build();
+    }
+
+    private static UserPart normalUserPart() {
+        User state = userPartState().setPrimaryIdentity(identity())
+                                    .build();
+        UserPart aggregate = aggregatePartOfClass(UserPart.class)
+                .withRoot(getForTest(create(), userId()))
+                .withState(state)
+                .withId(userId())
+                .build();
+        return aggregate;
+    }
+
+    private static UserPart noIdentityUserPart() {
+        UserPart aggregate = aggregatePartOfClass(UserPart.class)
+                .withRoot(getForTest(create(), userId()))
+                .withState(userPartState().build())
+                .withId(userId())
+                .build();
+        return aggregate;
+    }
+
+    private static UserVBuilder userPartState() {
+        return UserVBuilder.newBuilder()
+                           .setId(userId())
+                           .setOrgEntity(orgEntity())
+                           .setDisplayName(displayName())
+                           .setProfile(profile())
+                           .setStatus(NOT_READY)
+                           .addSecondaryIdentity(secondaryIdentity())
+                           .addRole(adminRoleId())
+                           .setNature(PERSON);
     }
 
     private static OrganizationOrUnit orgEntity() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                   .setOrganization(organizationId())
-                                   .build();
-    }
-
-    public static Identity identity() {
-        return IdentityVBuilder.newBuilder()
-                                       .setDisplayName("j.s@google.com")
-                                       .setProviderId(googleProviderId())
-                                       .setUserId("123543")
-                                       .build();
+                                         .setOrganization(organizationId())
+                                         .build();
     }
 
     private static RoleId adminRoleId() {
         return RoleIdVBuilder.newBuilder()
                              .setValue("admin_role")
                              .build();
-    }
-
-    static IdentityProviderId googleProviderId() {
-        return IdentityProviderIdVBuilder.newBuilder()
-                                               .setValue("gmail.com")
-                                               .build();
     }
 
     private static OrganizationId organizationId() {
@@ -184,7 +230,7 @@ public final class SignInTestEnv {
 
         @Override
         public Optional<IdentityProviderBridge> get(IdentityProviderId id) {
-            return of(provider);
+            return ofNullable(provider);
         }
     }
 }

@@ -57,7 +57,4 @@ message GoogleGroup {
     // Please, use `GoogleIdMappingView` projection to match `google_id` and `id`.
     //
     GroupId id = 1;
-
-    // An ID of the group in Google.
-    string google_id = 2 [(required) = true];
 }
