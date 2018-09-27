@@ -69,15 +69,8 @@ message GoogleGroupCreated {
     // A list of email aliases of the group.
     repeated net.EmailAddress alialses = 6;
 
-    // An domain a group originates from.
-    oneof origin {
-
-        // An organization of a tenant that corresponds to the `domain` of the Google Group.
-        OrganizationId organization = 7;
-
-        // A domain of an external organization.
-        net.InternetDomain external_domain = 8;
-    }
+    // A domain the groups belongs to.
+    net.InternetDomain domain = 8;
 }
 
 // A Google Group joined a new parent Google Group.
@@ -102,7 +95,7 @@ message GoogleGroupLeftParentGroup {
     GroupId id = 1;
 
     // An ID of the parent group.
-    GroupId parent_group = 2 [(required) = true];
+    GroupId parent_group_id = 2 [(required) = true];
 }
 
 // A name of the Google Group was changed.
@@ -122,50 +115,6 @@ message GoogleGroupDeleted {
 
     // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
     GroupId id = 1;
-}
-
-// A role was assigned to a Google Group.
-//
-message RoleAssignedToGoogleGroup {
-
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
-    GroupId id = 1;
-
-    // An ID of a role.
-    RoleId role_id = 2 [(required) = true];
-
-    // An ID of a role at Google.
-    string google_role_id = 3 [(required) = true];
-
-    // A role name.
-    string role_name = 4 [(required) = true];
-
-    // A role description.
-    string role_description = 5 [(required) = true];
-
-    // Indicates wheter it's a system role.
-    bool system_role = 6;
-
-    // Indicates wheter it's super admin role.
-    bool super_admin_role = 7;
-
-}
-
-// A role assignment was removed from a Google Group.
-//
-message RoleUnassignedFromGoogleGroup {
-
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
-    GroupId id = 1;
-
-    // An ID of a role.
-    RoleId role_id = 2 [(required) = true];
-
-    // An ID of a role at Google.
-    string google_role_id = 3 [(required) = true];
-
-    // A role name at Google.
-    string role_name = 4 [(required) = true];
 }
 
 // An email address of a Group changed.

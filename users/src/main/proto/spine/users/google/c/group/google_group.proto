@@ -47,8 +47,6 @@ import "spine/users/values.proto";
 // * `GoogleGroupLeftParentGroup` event into `JoinParentGroup` command;
 // * `GoogleGroupRenamed` event into `RenameGroup` command;
 // * `GoogleGroupDeleted` event into `DeleteGroup` command;
-// * `RoleAssignedToGoogleGroup` event into `AssignRoleToGroup` command;
-// * `RoleUnassignedFromGoogleGroup` event into `UnassignRoleFromGroup` command;
 // * `GoogleGroupEmailChanged` event into `ChangeGroupEmail` command.
 //
 message GoogleGroup {

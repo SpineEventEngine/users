@@ -20,17 +20,19 @@
 
 package io.spine.users.google.c.group;
 
+import io.spine.net.InternetDomain;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
-import io.spine.users.c.group.AssignRoleToGroup;
+import io.spine.users.OrganizationId;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.DeleteGroup;
 import io.spine.users.c.group.JoinParentGroup;
 import io.spine.users.c.group.LeaveParentGroup;
 import io.spine.users.c.group.RenameGroup;
-import io.spine.users.c.group.UnassignRoleFromGroup;
+
+import java.util.Optional;
 
 /**
  * A Google Group process manager.
@@ -46,8 +48,6 @@ import io.spine.users.c.group.UnassignRoleFromGroup;
  *     <li>{@link GoogleGroupLeftParentGroup} event into {@link JoinParentGroup} command;
  *     <li>{@link GoogleGroupRenamed} event into {@link RenameGroup} command;
  *     <li>{@link GoogleGroupDeleted} event into {@link DeleteGroup} command;
- *     <li>{@link RoleAssignedToGoogleGroup} event into {@link AssignRoleToGroup} command;
- *     <li>{@link RoleUnassignedFromGoogleGroup} event into {@link UnassignRoleFromGroup} command;
  *     <li>{@link GoogleGroupEmailChanged} event into {@link ChangeGroupEmail} command.
  * </ul>
  *
@@ -59,13 +59,19 @@ public class GoogleGroupPm extends ProcessManager<GroupId, GoogleGroup, GoogleGr
     /**
      * @see ProcessManager#ProcessManager(Object)
      */
-    protected GoogleGroupPm(GroupId id) {
+    GoogleGroupPm(GroupId id) {
         super(id);
     }
 
     @Command
     CreateGroup on(GoogleGroupCreated event) {
-        return commands().createGroup(event);
+        InternetDomain domain = event.getDomain();
+        Optional<OrganizationId> organization = organizationByDomain(domain);
+        if (organization.isPresent()) {
+            return commands().createInternalGroup(event, organization.get());
+        } else {
+            return commands().createExternalGroup(event);
+        }
     }
 
     @Command
@@ -89,18 +95,14 @@ public class GoogleGroupPm extends ProcessManager<GroupId, GoogleGroup, GoogleGr
     }
 
     @Command
-    AssignRoleToGroup on(RoleAssignedToGoogleGroup event) {
-        return commands().assignRole(event);
-    }
-
-    @Command
-    UnassignRoleFromGroup on(RoleUnassignedFromGoogleGroup event) {
-        return commands().unassignRole(event);
-    }
-
-    @Command
     ChangeGroupEmail on(GoogleGroupEmailChanged event) {
         return commands().changeEmail(event);
+    }
+
+    private Optional<OrganizationId> organizationByDomain(InternetDomain domain) {
+        // TODO:2018-09-27:vladyslav.lubenskyi: implement this look up when Organization
+        // projection is ready
+        return Optional.empty();
     }
 
     private static GoogleGroupCommandFactory commands() {

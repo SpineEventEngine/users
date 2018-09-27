@@ -23,8 +23,6 @@ package io.spine.users.google.c.group;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.ChangeGroupEmailVBuilder;
 import io.spine.users.c.group.CreateGroup;
@@ -37,10 +35,6 @@ import io.spine.users.c.group.LeaveParentGroup;
 import io.spine.users.c.group.LeaveParentGroupVBuilder;
 import io.spine.users.c.group.RenameGroup;
 import io.spine.users.c.group.RenameGroupVBuilder;
-import io.spine.users.c.group.UnassignRoleFromGroup;
-import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
-
-import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * A command factory for {@link GoogleGroupPm}.
@@ -62,27 +56,27 @@ class GoogleGroupCommandFactory {
     }
 
     /**
-     * Creates {@link CreateGroup} command based on information from {@link GoogleGroupCreated}
-     * event.
+     * Creates {@link CreateGroup} command for a group from an external domain.
      */
-    CreateGroup createGroup(GoogleGroupCreated event) {
+    CreateGroup createExternalGroup(GoogleGroupCreated event) {
         CreateGroupVBuilder builder = CreateGroupVBuilder.newBuilder()
                                                          .setId(event.getId())
                                                          .setEmail(event.getEmail())
-                                                         .setDisplayName(event.getDisplayName());
-        switch (event.getOriginCase()) {
+                                                         .setDisplayName(event.getDisplayName())
+                                                         .setExternalDomain(event.getDomain());
 
-            case ORGANIZATION:
-                OrganizationOrUnit orgEntity = orgEntity(event.getOrganization());
-                builder.setOrgEntity(orgEntity);
-                break;
-            case EXTERNAL_DOMAIN:
-                builder.setExternalDomain(event.getExternalDomain());
-                break;
-            case ORIGIN_NOT_SET:
-                throw newIllegalArgumentException(
-                        "No `origin` found in `GoogleGroupCreated` event");
-        }
+        return builder.build();
+    }
+
+    /**
+     * Creates {@link CreateGroup} command for a group from a tenant's domain.
+     */
+    CreateGroup createInternalGroup(GoogleGroupCreated event, OrganizationId organization) {
+        CreateGroupVBuilder builder = CreateGroupVBuilder.newBuilder()
+                                                         .setId(event.getId())
+                                                         .setEmail(event.getEmail())
+                                                         .setDisplayName(event.getDisplayName())
+                                                         .setOrgEntity(orgEntity(organization));
         return builder.build();
     }
 
@@ -115,7 +109,7 @@ class GoogleGroupCommandFactory {
     LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
         return LeaveParentGroupVBuilder.newBuilder()
                                        .setId(event.getId())
-                                       .setParentGroupId(event.getId())
+                                       .setParentGroupId(event.getParentGroupId())
                                        .build();
     }
 
@@ -138,28 +132,6 @@ class GoogleGroupCommandFactory {
                                        .setId(event.getId())
                                        .setNewEmail(event.getNewEmail())
                                        .build();
-    }
-
-    /**
-     * Creates {@link AssignRoleToGroup} command based on information from
-     * {@link RoleAssignedToGoogleGroup} event.
-     */
-    AssignRoleToGroup assignRole(RoleAssignedToGoogleGroup event) {
-        return AssignRoleToGroupVBuilder.newBuilder()
-                                        .setId(event.getId())
-                                        .setRoleId(event.getRoleId())
-                                        .build();
-    }
-
-    /**
-     * Creates {@link UnassignRoleFromGroup} command based on information from
-     * {@link RoleUnassignedFromGoogleGroup} event.
-     */
-    UnassignRoleFromGroup unassignRole(RoleUnassignedFromGoogleGroup event) {
-        return UnassignRoleFromGroupVBuilder.newBuilder()
-                                            .setId(event.getId())
-                                            .setRoleId(event.getRoleId())
-                                            .build();
     }
 
     private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
