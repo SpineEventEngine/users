@@ -22,6 +22,7 @@
  * This package contains classes and interfaces related to
  * {@link io.spine.users.c.signin.SignIn SignIn} process manager.
  */
+
 @ParametersAreNonnullByDefault
 @CheckReturnValue
 package io.spine.users.c.signin;

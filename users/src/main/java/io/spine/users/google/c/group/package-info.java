@@ -19,12 +19,12 @@
  */
 
 /**
- * This package contains the {@code Users} bounded context.
+ * This package contains Google Directory API related projections.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users;
+package io.spine.users.google.c.group;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

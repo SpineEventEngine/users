@@ -19,12 +19,12 @@
  */
 
 /**
- * This package contains the {@code Users} bounded context.
+ * This package contains projections for {@link io.spine.users.c.group.GroupRoot Group aggregate}.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users;
+package io.spine.users.q.group;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

@@ -19,12 +19,12 @@
  */
 
 /**
- * This package contains the {@code Users} bounded context.
+ * This package contains classes and interfaces of `Users` bounded context write-side.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users;
+package io.spine.users.c;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

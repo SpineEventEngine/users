@@ -22,6 +22,7 @@
  * This package contains classes and interfaces related to
  * {@link io.spine.users.c.user.UserRoot User aggregate}.
  */
+
 @ParametersAreNonnullByDefault
 @CheckReturnValue
 package io.spine.users.c.user;
