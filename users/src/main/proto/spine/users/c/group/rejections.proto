@@ -44,7 +44,7 @@ message RoleIsNotAssignedToGroup {
 
 // The rejection is generated when joining a parent group forms a cycle.
 //
-message GroupsCanNotFormCycles {
+message GroupsCannotFormCycles {
 
     GroupId id = 1;
 
@@ -54,7 +54,7 @@ message GroupsCanNotFormCycles {
 
 // The rejection to moving an external user.
 //
-message CanNotMoveExternalGroup {
+message CannotMoveExternalGroup {
 
     GroupId id = 1;
 

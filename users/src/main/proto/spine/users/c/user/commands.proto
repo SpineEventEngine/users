@@ -83,7 +83,7 @@ message CreateUser {
 //
 message MoveUser {
     option (events) = "UserMoved";
-    option (rejections) = "CanNotMoveExternalUser";
+    option (rejections) = "CannotMoveExternalUser";
 
     core.UserId id = 1;
 

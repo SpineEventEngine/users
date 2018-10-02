@@ -39,7 +39,7 @@ import "spine/users/values.proto";
 //
 message CreateOrgUnit {
     option (events) = "OrgUnitCreated";
-    option (rejections) = "OrgUnitsCanNotFormCycles";
+    option (rejections) = "OrgUnitsCannotFormCycles";
 
     OrgUnitId id = 1;
 
@@ -57,7 +57,7 @@ message CreateOrgUnit {
 //
 message MoveOrgUnit {
     option (events) = "OrgUnitMoved";
-    option (rejections) = "OrgUnitsCanNotFormCycles";
+    option (rejections) = "OrgUnitsCannotFormCycles";
 
     OrgUnitId id = 1;
 

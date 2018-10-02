@@ -63,9 +63,9 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     @Assign
-    UserMoved handle(MoveUser command, CommandContext context) throws CanNotMoveExternalUser {
+    UserMoved handle(MoveUser command, CommandContext context) throws CannotMoveExternalUser {
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw new CanNotMoveExternalUser(command.getId(), getState().getExternalDomain());
+            throw new CannotMoveExternalUser(command.getId(), getState().getExternalDomain());
         }
         return events().changeParent(command, getState().getOrgEntity());
     }

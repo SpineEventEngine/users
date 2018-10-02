@@ -58,7 +58,7 @@ message RoleIsNotAssignedToUser {
 
 // The rejection to moving an external user.
 //
-message CanNotMoveExternalUser {
+message CannotMoveExternalUser {
 
     core.UserId id = 1;
 

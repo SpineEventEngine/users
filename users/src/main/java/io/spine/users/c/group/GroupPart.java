@@ -45,7 +45,7 @@ import static io.spine.users.c.group.Group.OriginCase.EXTERNAL_DOMAIN;
  *
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
-
+ *
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass"}) // It is OK for an aggregate.
@@ -59,30 +59,30 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Assign
-    GroupCreated handle(CreateGroup command, CommandContext context) {
+    GroupCreated handle(CreateGroup command) {
         return events().createGroup(command);
     }
 
     @Assign
-    GroupMoved handle(MoveGroup command, CommandContext context) throws CanNotMoveExternalGroup {
+    GroupMoved handle(MoveGroup command) throws CannotMoveExternalGroup {
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw new CanNotMoveExternalGroup(command.getId(), getState().getExternalDomain());
+            throw new CannotMoveExternalGroup(command.getId(), getState().getExternalDomain());
         }
         return events().moveGroup(command, getState().getOrgEntity());
     }
 
     @Assign
-    GroupDeleted handle(DeleteGroup command, CommandContext context) {
+    GroupDeleted handle(DeleteGroup command) {
         return events().deleteGroup(command);
     }
 
     @Assign
-    RoleAssignedToGroup handle(AssignRoleToGroup command, CommandContext context) {
+    RoleAssignedToGroup handle(AssignRoleToGroup command) {
         return events().assignRole(command);
     }
 
     @Assign
-    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command, CommandContext context)
+    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command)
             throws RoleIsNotAssignedToGroup {
         List<RoleId> roles = getState().getRoleList();
         RoleId roleId = command.getRoleId();
@@ -93,12 +93,12 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Assign
-    GroupRenamed handle(RenameGroup command, CommandContext context) {
+    GroupRenamed handle(RenameGroup command) {
         return events().rename(command, getState().getDisplayName());
     }
 
     @Assign
-    GroupEmailChanged handle(ChangeGroupEmail command, CommandContext context) {
+    GroupEmailChanged handle(ChangeGroupEmail command) {
         return events().changeEmail(command, getState().getEmail());
     }
 

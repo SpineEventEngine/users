@@ -33,7 +33,7 @@ import "spine/users/identifiers.proto";
 
 // The rejection is generated when a change to an organizational structure forms a cycle.
 //
-message OrgUnitsCanNotFormCycles {
+message OrgUnitsCannotFormCycles {
 
     OrgUnitId id = 1;
 

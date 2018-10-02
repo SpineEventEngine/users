@@ -67,7 +67,7 @@ message CreateGroup {
 //
 message MoveGroup {
     option (events) = "GroupMoved";
-    option (rejections) = "CanNotMoveExternalGroup";
+    option (rejections) = "CannotMoveExternalGroup";
 
     GroupId id = 1;
 
@@ -87,7 +87,7 @@ message DeleteGroup {
 //
 message JoinParentGroup {
     option (events) = "JoinedParentGroup";
-    option (rejections) = "GroupsCanNotFormCycles";
+    option (rejections) = "GroupsCannotFormCycles";
 
     GroupId id = 1;
 

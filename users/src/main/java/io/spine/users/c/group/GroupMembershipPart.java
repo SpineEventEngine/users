@@ -52,7 +52,7 @@ public class GroupMembershipPart
 
     @Assign
     JoinedParentGroup handle(JoinParentGroup command, CommandContext context)
-            throws GroupsCanNotFormCycles {
+            throws GroupsCannotFormCycles {
         ensureNoCycles(command);
         return events().joinGroup(command);
     }
@@ -72,7 +72,7 @@ public class GroupMembershipPart
         removeMembership(event.getParentGroupId());
     }
 
-    private void ensureNoCycles(JoinParentGroup event) throws GroupsCanNotFormCycles {
+    private void ensureNoCycles(JoinParentGroup event) throws GroupsCannotFormCycles {
         // TODO:2018-09-21:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/23
     }
 
