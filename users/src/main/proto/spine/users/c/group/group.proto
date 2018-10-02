@@ -77,18 +77,21 @@ message Group {
     //
     net.EmailAddress email = 3;
 
+    // A human-friendly description of a group.
+    string description = 4;
+
     // An entity a group belongs to.
     oneof origin {
 
         // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 4;
+        OrganizationOrUnit org_entity = 5;
 
         // An external domain.
-        net.InternetDomain external_domain = 5;
+        net.InternetDomain external_domain = 6;
     }
 
     // Roles explicitly assigned to the group.
-    repeated RoleId role = 6;
+    repeated RoleId role = 7;
 }
 
 // A group's membership in other groups, a part of the `Group` aggregate.

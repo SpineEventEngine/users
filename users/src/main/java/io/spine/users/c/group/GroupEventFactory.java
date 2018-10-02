@@ -113,4 +113,13 @@ class GroupEventFactory {
                                         .setOldEmail(oldEmail)
                                         .build();
     }
+
+    GroupDescriptionChanged changeDescription(ChangeGroupDescription command,
+                                              String oldDescription) {
+        return GroupDescriptionChangedVBuilder.newBuilder()
+                                              .setId(command.getId())
+                                              .setNewDescription(command.getDescription())
+                                              .setOldDescription(oldDescription)
+                                              .build();
+    }
 }

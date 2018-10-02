@@ -20,7 +20,6 @@
 
 package io.spine.users.c.group;
 
-import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
@@ -102,6 +101,11 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         return events().changeEmail(command, getState().getEmail());
     }
 
+    @Assign
+    GroupDescriptionChanged handle(ChangeGroupDescription command) {
+        return events().changeDescription(command, getState().getDescription());
+    }
+
     @Apply
     void on(GroupCreated event) {
         GroupVBuilder builder = getBuilder();
@@ -158,6 +162,11 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Apply
     void on(GroupEmailChanged event) {
         getBuilder().setEmail(event.getNewEmail());
+    }
+
+    @Apply
+    void on(GroupDescriptionChanged event) {
+        getBuilder().setDescription(event.getNewDescription());
     }
 
     private static GroupEventFactory events() {

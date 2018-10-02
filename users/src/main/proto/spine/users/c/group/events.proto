@@ -48,18 +48,21 @@ message GroupCreated {
     // Roles explicitly assigned to the group.
     repeated RoleId role = 3;
 
+    // A human-friendly description of a group.
+    string description = 4;
+
     // An entity a group belongs to.
     oneof origin {
 
         // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 4;
+        OrganizationOrUnit org_entity = 5;
 
         // An external domain.
-        net.InternetDomain external_domain = 5;
+        net.InternetDomain external_domain = 6;
     }
 
     // An email address of the group, if applicable.
-    net.EmailAddress email = 6;
+    net.EmailAddress email = 7;
 }
 
 // A group was moved to another organization or orgunit.
@@ -146,4 +149,17 @@ message GroupEmailChanged {
 
     // An old email address of the group.
     net.EmailAddress old_email = 3 [(required) = true];
+}
+
+// A group description changed.
+//
+message GroupDescriptionChanged {
+
+    GroupId id = 1;
+
+    // A new human-friendly description of a group.
+    string new_description = 2 [(required) = true];
+
+    // An old human-friendly description of a group.
+    string old_description = 3 [(required) = true];
 }
