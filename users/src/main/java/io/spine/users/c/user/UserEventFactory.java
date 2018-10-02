@@ -34,7 +34,7 @@ final class UserEventFactory {
         return new UserEventFactory();
     }
 
-    UserCreated create(CreateUser command) {
+    UserCreated userCreated(CreateUser command) {
         UserCreatedVBuilder eventBuilder =
                 UserCreatedVBuilder
                         .newBuilder()
@@ -59,7 +59,7 @@ final class UserEventFactory {
         return eventBuilder.build();
     }
 
-    UserMoved changeParent(MoveUser command, OrganizationOrUnit oldOrgEntity) {
+    UserMoved userMoved(MoveUser command, OrganizationOrUnit oldOrgEntity) {
         UserMoved event =
                 UserMovedVBuilder
                         .newBuilder()
@@ -70,7 +70,7 @@ final class UserEventFactory {
         return event;
     }
 
-    UserJoinedGroup joinGroup(JoinGroup command) {
+    UserJoinedGroup joinedGroup(JoinGroup command) {
         UserJoinedGroup event =
                 UserJoinedGroupVBuilder
                         .newBuilder()
@@ -81,7 +81,7 @@ final class UserEventFactory {
         return event;
     }
 
-    UserLeftGroup leaveGroup(LeaveGroup command) {
+    UserLeftGroup leftGroup(LeaveGroup command) {
         UserLeftGroup event =
                 UserLeftGroupVBuilder
                         .newBuilder()
@@ -91,88 +91,88 @@ final class UserEventFactory {
         return event;
     }
 
-    UserDeleted deleteUser(DeleteUser command) {
+    UserDeleted userDeleted(DeleteUser command) {
         UserDeleted event = UserDeletedVBuilder
                 .newBuilder()
-                                               .setId(command.getId())
-                                               .build();
+                .setId(command.getId())
+                .build();
         return event;
     }
 
-    RoleAssignedToUser assignRoleToUser(AssignRoleToUser command) {
+    RoleAssignedToUser roleAssigned(AssignRoleToUser command) {
         RoleAssignedToUser event = RoleAssignedToUserVBuilder
                 .newBuilder()
-                                                             .setId(command.getId())
-                                                             .setRoleId(command.getRoleId())
-                                                             .build();
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
         return event;
     }
 
-    RoleUnassignedFromUser unassignRoleFromUser(UnassignRoleFromUser command) {
+    RoleUnassignedFromUser roleUnassigned(UnassignRoleFromUser command) {
         RoleUnassignedFromUser event =
                 RoleUnassignedFromUserVBuilder
                         .newBuilder()
-                                              .setId(command.getId())
-                                              .setRoleId(command.getRoleId())
-                                              .build();
+                        .setId(command.getId())
+                        .setRoleId(command.getRoleId())
+                        .build();
         return event;
     }
 
-    UserStatusChanged changeStatus(ChangeUserStatus command, Status oldStatus) {
+    UserStatusChanged statusChanged(ChangeUserStatus command, Status oldStatus) {
         UserStatusChanged event = UserStatusChangedVBuilder
                 .newBuilder()
-                                                           .setId(command.getId())
-                                                           .setNewStatus(command.getStatus())
-                                                           .setOldStatus(oldStatus)
-                                                           .build();
+                .setId(command.getId())
+                .setNewStatus(command.getStatus())
+                .setOldStatus(oldStatus)
+                .build();
         return event;
     }
 
-    SecondaryIdentityAdded addIdentity(AddSecondaryIdentity command) {
+    SecondaryIdentityAdded identityAdded(AddSecondaryIdentity command) {
         SecondaryIdentityAdded event =
                 SecondaryIdentityAddedVBuilder
                         .newBuilder()
-                                              .setId(command.getId())
-                                              .setIdentity(command.getIdentity())
-                                              .build();
+                        .setId(command.getId())
+                        .setIdentity(command.getIdentity())
+                        .build();
         return event;
     }
 
-    SecondaryIdentityRemoved removeIdentity(RemoveSecondaryIdentity command,
-                                            Identity identity) {
+    SecondaryIdentityRemoved identityRemoved(RemoveSecondaryIdentity command,
+                                             Identity identity) {
         SecondaryIdentityRemoved event =
                 SecondaryIdentityRemovedVBuilder
                         .newBuilder()
-                                                .setId(command.getId())
-                                                .setIdentity(identity)
-                                                .build();
+                        .setId(command.getId())
+                        .setIdentity(identity)
+                        .build();
         return event;
     }
 
-    PrimaryIdentityChanged changePrimaryIdentity(ChangePrimaryIdentity command) {
+    PrimaryIdentityChanged primaryIdentityChanged(ChangePrimaryIdentity command) {
         PrimaryIdentityChanged event =
                 PrimaryIdentityChangedVBuilder
                         .newBuilder()
-                                              .setId(command.getId())
-                                              .setIdentity(command.getIdentity())
-                                              .build();
+                        .setId(command.getId())
+                        .setIdentity(command.getIdentity())
+                        .build();
         return event;
     }
 
-    PersonProfileUpdated updateProfile(UpdatePersonProfile command) {
+    PersonProfileUpdated profileUpdated(UpdatePersonProfile command) {
         return PersonProfileUpdatedVBuilder
                 .newBuilder()
-                                         .setId(command.getId())
-                                         .setUpdatedProfile(command.getUpdatedProfile())
-                                         .build();
+                .setId(command.getId())
+                .setUpdatedProfile(command.getUpdatedProfile())
+                .build();
     }
 
-    UserRenamed renameUser(RenameUser command, String oldName) {
+    UserRenamed userRenamed(RenameUser command, String oldName) {
         return UserRenamedVBuilder
                 .newBuilder()
-                                  .setId(command.getId())
-                                  .setNewName(command.getNewName())
-                                  .setOldName(oldName)
-                                  .build();
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(oldName)
+                .build();
     }
 }

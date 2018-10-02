@@ -63,22 +63,22 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Assign
     RoleCreated handle(CreateRole command, CommandContext context) {
-        return events().createRole(command);
+        return events().roleCreated(command);
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command, CommandContext context) {
-        return events().deleteRole(command);
+        return events().roleDeleted(command);
     }
 
     @Assign
     RoleRenamed handle(RenameRole command, CommandContext context) {
-        return events().renameRole(command, getState().getDisplayName());
+        return events().roleRenamed(command, getState().getDisplayName());
     }
 
     @Assign
     RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
-        return events().changeParent(command, getState().getOrgEntity());
+        return events().parentChanged(command, getState().getOrgEntity());
     }
 
     @Apply

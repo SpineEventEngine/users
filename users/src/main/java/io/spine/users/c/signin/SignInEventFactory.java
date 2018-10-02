@@ -43,7 +43,7 @@ class SignInEventFactory {
         return new SignInEventFactory();
     }
 
-    SignInSuccessful completeSignIn(UserId id, Identity identity) {
+    SignInSuccessful signInSuccessful(UserId id, Identity identity) {
         return SignInSuccessfulVBuilder
                 .newBuilder()
                 .setId(id)
@@ -51,8 +51,8 @@ class SignInEventFactory {
                 .build();
     }
 
-    SignInFailed failSignIn(UserId id, Identity identity,
-                            SignInFailureReason reason) {
+    SignInFailed signInFailed(UserId id, Identity identity,
+                              SignInFailureReason reason) {
         return SignInFailedVBuilder
                 .newBuilder()
                 .setId(id)
@@ -61,7 +61,7 @@ class SignInEventFactory {
                 .build();
     }
 
-    SignOutCompleted signOut(UserId id) {
+    SignOutCompleted signOutCompleted(UserId id) {
         return SignOutCompletedVBuilder
                 .newBuilder()
                 .setId(id)

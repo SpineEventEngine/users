@@ -39,12 +39,12 @@ public class UserMembershipPart
 
     @Assign
     UserJoinedGroup handle(JoinGroup command, CommandContext context) {
-        return events().joinGroup(command);
+        return events().joinedGroup(command);
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command, CommandContext context) {
-        return events().leaveGroup(command);
+        return events().leftGroup(command);
     }
 
     @Apply

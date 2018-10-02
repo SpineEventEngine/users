@@ -43,7 +43,7 @@ final class OrganizationEventFactory {
         return new OrganizationEventFactory();
     }
 
-    OrganizationCreated createOrganization(CreateOrganization command) {
+    OrganizationCreated organizationCreated(CreateOrganization command) {
         return OrganizationCreatedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -53,14 +53,14 @@ final class OrganizationEventFactory {
                 .build();
     }
 
-    OrganizationDeleted deleteOrganization(DeleteOrganization command) {
+    OrganizationDeleted organizationDeleted(DeleteOrganization command) {
         return OrganizationDeletedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    OrganizationRenamed renameOrganization(RenameOrganization command, String oldName) {
+    OrganizationRenamed organizationRenamed(RenameOrganization command, String oldName) {
         return OrganizationRenamedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -69,8 +69,8 @@ final class OrganizationEventFactory {
                 .build();
     }
 
-    OrganizationDomainChanged changeDomain(ChangeOrganizationDomain command,
-                                           InternetDomain oldDomain) {
+    OrganizationDomainChanged domainChanged(ChangeOrganizationDomain command,
+                                            InternetDomain oldDomain) {
         return OrganizationDomainChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -79,8 +79,8 @@ final class OrganizationEventFactory {
                 .build();
     }
 
-    OrganizationTenantChanged changeTenant(ChangeOrganizationTenant command,
-                                           TenantId oldTenant) {
+    OrganizationTenantChanged tenantChanged(ChangeOrganizationTenant command,
+                                            TenantId oldTenant) {
         return OrganizationTenantChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())

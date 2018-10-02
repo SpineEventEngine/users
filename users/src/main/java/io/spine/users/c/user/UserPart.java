@@ -59,7 +59,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        return events().create(command);
+        return events().userCreated(command);
     }
 
     @Assign
@@ -67,17 +67,17 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
             throw new CannotMoveExternalUser(command.getId(), getState().getExternalDomain());
         }
-        return events().changeParent(command, getState().getOrgEntity());
+        return events().userMoved(command, getState().getOrgEntity());
     }
 
     @Assign
     UserDeleted handle(DeleteUser command, CommandContext context) {
-        return events().deleteUser(command);
+        return events().userDeleted(command);
     }
 
     @Assign
     RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
-        return events().assignRoleToUser(command);
+        return events().roleAssigned(command);
     }
 
     @Assign
@@ -88,17 +88,17 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         if (!roles.contains(roleId)) {
             throw new RoleIsNotAssignedToUser(getId(), roleId);
         }
-        return events().unassignRoleFromUser(command);
+        return events().roleUnassigned(command);
     }
 
     @Assign
     UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
-        return events().changeStatus(command, getState().getStatus());
+        return events().statusChanged(command, getState().getStatus());
     }
 
     @Assign
     SecondaryIdentityAdded handle(AddSecondaryIdentity command, CommandContext context) {
-        return events().addIdentity(command);
+        return events().identityAdded(command);
     }
 
     @Assign
@@ -106,7 +106,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                                     CommandContext context) throws IdentityDoesNotExist {
         Optional<Identity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
-            return events().removeIdentity(command, identityToRemove.get());
+            return events().identityRemoved(command, identityToRemove.get());
         } else {
             throw identityDoesNotExist(command);
         }
@@ -114,17 +114,17 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Assign
     PrimaryIdentityChanged handle(ChangePrimaryIdentity command, CommandContext context) {
-        return events().changePrimaryIdentity(command);
+        return events().primaryIdentityChanged(command);
     }
 
     @Assign
     UserRenamed handle(RenameUser command, CommandContext context) {
-        return events().renameUser(command, getState().getDisplayName());
+        return events().userRenamed(command, getState().getDisplayName());
     }
 
     @Assign
     PersonProfileUpdated handle(UpdatePersonProfile command, CommandContext context) {
-        return events().updateProfile(command);
+        return events().profileUpdated(command);
     }
 
     @Apply

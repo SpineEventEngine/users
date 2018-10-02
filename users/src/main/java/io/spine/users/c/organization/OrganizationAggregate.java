@@ -48,27 +48,27 @@ public class OrganizationAggregate
 
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {
-        return events().createOrganization(command);
+        return events().organizationCreated(command);
     }
 
     @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
-        return events().deleteOrganization(command);
+        return events().organizationDeleted(command);
     }
 
     @Assign
     OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
-        return events().renameOrganization(command, getState().getDisplayName());
+        return events().organizationRenamed(command, getState().getDisplayName());
     }
 
     @Assign
     OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
-        return events().changeDomain(command, getState().getDomain());
+        return events().domainChanged(command, getState().getDomain());
     }
 
     @Assign
     OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
-        return events().changeTenant(command, getState().getTenant());
+        return events().tenantChanged(command, getState().getTenant());
     }
 
     @Apply

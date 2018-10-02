@@ -45,7 +45,7 @@ class GroupEventFactory {
         return new GroupEventFactory();
     }
 
-    GroupCreated createGroup(CreateGroup command) {
+    GroupCreated groupCreated(CreateGroup command) {
         return GroupCreatedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -58,7 +58,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    GroupMoved moveGroup(MoveGroup command, OrganizationOrUnit oldOrgEntity) {
+    GroupMoved groupMoved(MoveGroup command, OrganizationOrUnit oldOrgEntity) {
         return GroupMovedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -67,14 +67,14 @@ class GroupEventFactory {
                 .build();
     }
 
-    GroupDeleted deleteGroup(DeleteGroup command) {
+    GroupDeleted groupDeleted(DeleteGroup command) {
         return GroupDeletedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    JoinedParentGroup joinGroup(JoinParentGroup command) {
+    JoinedParentGroup groupJoined(JoinParentGroup command) {
         return JoinedParentGroupVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -82,7 +82,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    LeftParentGroup leaveGroup(LeaveParentGroup command) {
+    LeftParentGroup groupLeft(LeaveParentGroup command) {
         return LeftParentGroupVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -90,7 +90,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    RoleAssignedToGroup assignRole(AssignRoleToGroup command) {
+    RoleAssignedToGroup roleAssigned(AssignRoleToGroup command) {
         return RoleAssignedToGroupVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -98,7 +98,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    RoleUnassignedFromGroup unassignRole(UnassignRoleFromGroup command) {
+    RoleUnassignedFromGroup roleUnassigned(UnassignRoleFromGroup command) {
         return RoleUnassignedFromGroupVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -106,7 +106,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    GroupRenamed rename(RenameGroup command, String oldName) {
+    GroupRenamed groupRenamed(RenameGroup command, String oldName) {
         return GroupRenamedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -115,7 +115,7 @@ class GroupEventFactory {
                 .build();
     }
 
-    GroupEmailChanged changeEmail(ChangeGroupEmail command, EmailAddress oldEmail) {
+    GroupEmailChanged groupEmailChanged(ChangeGroupEmail command, EmailAddress oldEmail) {
         return GroupEmailChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -124,8 +124,8 @@ class GroupEventFactory {
                 .build();
     }
 
-    GroupDescriptionChanged changeDescription(ChangeGroupDescription command,
-                                              String oldDescription) {
+    GroupDescriptionChanged descriptionChanged(ChangeGroupDescription command,
+                                               String oldDescription) {
         return GroupDescriptionChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())

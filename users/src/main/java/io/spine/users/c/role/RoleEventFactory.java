@@ -42,7 +42,7 @@ final class RoleEventFactory {
         return new RoleEventFactory();
     }
 
-    RoleCreated createRole(CreateRole command) {
+    RoleCreated roleCreated(CreateRole command) {
         return RoleCreatedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -51,14 +51,14 @@ final class RoleEventFactory {
                 .build();
     }
 
-    RoleDeleted deleteRole(DeleteRole command) {
+    RoleDeleted roleDeleted(DeleteRole command) {
         return RoleDeletedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    RoleRenamed renameRole(RenameRole command, String oldName) {
+    RoleRenamed roleRenamed(RenameRole command, String oldName) {
         return RoleRenamedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -67,7 +67,7 @@ final class RoleEventFactory {
                 .build();
     }
 
-    RoleParentChanged changeParent(ChangeRoleParent command, OrganizationOrUnit oldParent) {
+    RoleParentChanged parentChanged(ChangeRoleParent command, OrganizationOrUnit oldParent) {
         return RoleParentChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())

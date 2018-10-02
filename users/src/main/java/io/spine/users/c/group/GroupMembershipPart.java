@@ -54,12 +54,12 @@ public class GroupMembershipPart
     JoinedParentGroup handle(JoinParentGroup command, CommandContext context)
             throws GroupsCannotFormCycles {
         ensureNoCycles(command);
-        return events().joinGroup(command);
+        return events().groupJoined(command);
     }
 
     @Assign
     LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
-        return events().leaveGroup(command);
+        return events().groupLeft(command);
     }
 
     @Apply

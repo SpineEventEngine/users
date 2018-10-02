@@ -132,16 +132,16 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         UserId id = command.getId();
         Identity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
-            return withA(events().completeSignIn(id, identity));
+            return withA(events().signInSuccessful(id, identity));
         } else {
 
-            return withB(events().failSignIn(id, identity, command.getFailureReason()));
+            return withB(events().signInFailed(id, identity, command.getFailureReason()));
         }
     }
 
     @Assign
     SignOutCompleted handle(SignUserOut command, CommandContext context) {
-        return events().signOut(command.getId());
+        return events().signOutCompleted(command.getId());
     }
 
     private CreateUser createUser(IdentityProviderBridge identityProvider) {

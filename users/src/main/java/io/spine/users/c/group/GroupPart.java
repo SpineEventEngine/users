@@ -29,7 +29,6 @@ import io.spine.users.RoleId;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.user.UserPart;
-import io.spine.util.Exceptions;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Assign
     GroupCreated handle(CreateGroup command) {
-        return events().createGroup(command);
+        return events().groupCreated(command);
     }
 
     @Assign
@@ -68,17 +67,17 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
             throw new CannotMoveExternalGroup(command.getId(), getState().getExternalDomain());
         }
-        return events().moveGroup(command, getState().getOrgEntity());
+        return events().groupMoved(command, getState().getOrgEntity());
     }
 
     @Assign
     GroupDeleted handle(DeleteGroup command) {
-        return events().deleteGroup(command);
+        return events().groupDeleted(command);
     }
 
     @Assign
     RoleAssignedToGroup handle(AssignRoleToGroup command) {
-        return events().assignRole(command);
+        return events().roleAssigned(command);
     }
 
     @Assign
@@ -89,22 +88,22 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (!roles.contains(roleId)) {
             throw new RoleIsNotAssignedToGroup(getId(), roleId);
         }
-        return events().unassignRole(command);
+        return events().roleUnassigned(command);
     }
 
     @Assign
     GroupRenamed handle(RenameGroup command) {
-        return events().rename(command, getState().getDisplayName());
+        return events().groupRenamed(command, getState().getDisplayName());
     }
 
     @Assign
     GroupEmailChanged handle(ChangeGroupEmail command) {
-        return events().changeEmail(command, getState().getEmail());
+        return events().groupEmailChanged(command, getState().getEmail());
     }
 
     @Assign
     GroupDescriptionChanged handle(ChangeGroupDescription command) {
-        return events().changeDescription(command, getState().getDescription());
+        return events().descriptionChanged(command, getState().getDescription());
     }
 
     @Apply

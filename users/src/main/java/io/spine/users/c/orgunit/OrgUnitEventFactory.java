@@ -44,7 +44,7 @@ final class OrgUnitEventFactory {
         return new OrgUnitEventFactory();
     }
 
-    OrgUnitCreated createOrgUnit(CreateOrgUnit command) {
+    OrgUnitCreated orgUnitCreated(CreateOrgUnit command) {
         return OrgUnitCreatedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -54,14 +54,14 @@ final class OrgUnitEventFactory {
                 .build();
     }
 
-    OrgUnitDeleted deleteOrgUnit(DeleteOrgUnit command) {
+    OrgUnitDeleted orgUnitDeleted(DeleteOrgUnit command) {
         return OrgUnitDeletedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    OrgUnitMoved moveOrgUnit(MoveOrgUnit command, OrganizationOrUnit oldParent) {
+    OrgUnitMoved orgUnitMoved(MoveOrgUnit command, OrganizationOrUnit oldParent) {
         return OrgUnitMovedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -70,7 +70,7 @@ final class OrgUnitEventFactory {
                 .build();
     }
 
-    OrgUnitRenamed rename(RenameOrgUnit command, String oldName) {
+    OrgUnitRenamed orgUnitRenamed(RenameOrgUnit command, String oldName) {
         return OrgUnitRenamedVBuilder
                 .newBuilder()
                 .setId(command.getId())
@@ -79,7 +79,8 @@ final class OrgUnitEventFactory {
                 .build();
     }
 
-    OrgUnitDomainChanged changeDomain(ChangeOrgUnitDomain command, InternetDomain oldDomain) {
+    OrgUnitDomainChanged orgUnitDomainChanged(ChangeOrgUnitDomain command,
+                                              InternetDomain oldDomain) {
         return OrgUnitDomainChangedVBuilder
                 .newBuilder()
                 .setId(command.getId())
