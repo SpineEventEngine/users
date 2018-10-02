@@ -71,5 +71,5 @@ public interface IdentityProviderBridge {
      * @param identity an identity of the user
      * @return a user profile
      */
-    PersonProfile fetchPersonProfile(Identity identity);
+    PersonProfile fetchProfile(Identity identity);
 }

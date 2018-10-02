@@ -145,7 +145,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     private CreateUser createUser(IdentityProviderBridge identityProvider) {
-        PersonProfile profile = identityProvider.fetchPersonProfile(getBuilder().getIdentity());
+        PersonProfile profile = identityProvider.fetchProfile(getBuilder().getIdentity());
         return commands().createUser(getBuilder().getIdentity(), profile);
     }
 
