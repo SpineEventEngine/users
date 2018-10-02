@@ -35,9 +35,31 @@ import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A Google Group process manager.
+// A Google Group part.
 //
-// Translates the terminology of Google Groups into `Users` bounded context language.
+// This part handles external events happen to a Google Groups and stores all information
+// that is specific for a Google Groups. For example:
+//
+// * an identifier of a group at Google;
+// * the list of email aliases.
+//
+message GoogleGroup {
+    option (entity).kind = AGGREGATE;
+
+    // An internal identifier of the group.
+    //
+    // Please, use `GoogleIdMappingView` projection to match `google_id` and `id`.
+    //
+    GroupId id = 1;
+
+    string google_id = 2 [(required) = true];
+
+    // A list of email aliases of the group.
+    repeated net.EmailAddress alialses = 3;
+}
+
+// A process manager that translates the terminology of Google Groups into `Users` bounded context
+// language.
 //
 // This process manager handles external events happened with a Google Group and transforms them
 // into native `Users` commands:
@@ -47,9 +69,10 @@ import "spine/users/values.proto";
 // * `GoogleGroupLeftParentGroup` event into `JoinParentGroup` command;
 // * `GoogleGroupRenamed` event into `RenameGroup` command;
 // * `GoogleGroupDeleted` event into `DeleteGroup` command;
-// * `GoogleGroupEmailChanged` event into `ChangeGroupEmail` command.
+// * `GoogleGroupEmailChanged` event into `ChangeGroupEmail` command;
+// * `GoogleGroupDescriptionChanged` event into `ChangeGroupDescription` command.
 //
-message GoogleGroup {
+message GoogleGroupLifecycle {
     option (entity).kind = PROCESS_MANAGER;
 
     // An internal identifier of the group.

@@ -20,14 +20,15 @@
 
 package io.spine.users.google.c.group;
 
-import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.server.aggregate.AggregatePartRepository;
 import io.spine.users.GroupId;
+import io.spine.users.c.group.GroupRoot;
 
 /**
- * The repository for {@link GoogleGroupPm}.
+ * The repository for {@link GoogleGroupPart}.
  *
  * @author Vladyslav Lubenskyi
  */
-public class GoogleGroupPmRepository
-        extends ProcessManagerRepository<GroupId, GoogleGroupPm, GoogleGroup> {
+public class GoogleGroupPartRepository
+        extends AggregatePartRepository<GroupId, GoogleGroupPart, GroupRoot> {
 }

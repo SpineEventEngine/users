@@ -53,6 +53,7 @@ class GroupEventFactory {
                                    .setExternalDomain(command.getExternalDomain())
                                    .setOrgEntity(command.getOrgEntity())
                                    .addAllRole(command.getRoleList())
+                                   .setDescription(command.getDescription())
                                    .build();
     }
 

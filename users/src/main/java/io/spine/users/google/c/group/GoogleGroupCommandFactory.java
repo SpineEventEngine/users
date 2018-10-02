@@ -23,6 +23,8 @@ package io.spine.users.google.c.group;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
+import io.spine.users.c.group.ChangeGroupDescription;
+import io.spine.users.c.group.ChangeGroupDescriptionVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.ChangeGroupEmailVBuilder;
 import io.spine.users.c.group.CreateGroup;
@@ -37,7 +39,7 @@ import io.spine.users.c.group.RenameGroup;
 import io.spine.users.c.group.RenameGroupVBuilder;
 
 /**
- * A command factory for {@link GoogleGroupPm}.
+ * A command factory for {@link GoogleGroupLifecyclePm}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -132,6 +134,13 @@ class GoogleGroupCommandFactory {
                                        .setId(event.getId())
                                        .setNewEmail(event.getNewEmail())
                                        .build();
+    }
+
+    ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
+        return ChangeGroupDescriptionVBuilder.newBuilder()
+                                             .setId(event.getId())
+                                             .setDescription(event.getNewDescription())
+                                             .build();
     }
 
     private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {

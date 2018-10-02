@@ -113,6 +113,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
                .addAllRole(event.getRoleList())
+               .setDescription(event.getDescription())
                .build();
 
         switch (event.getOriginCase()) {

@@ -25,6 +25,7 @@ import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationId;
+import io.spine.users.c.group.ChangeGroupDescription;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.DeleteGroup;
@@ -33,6 +34,8 @@ import io.spine.users.c.group.LeaveParentGroup;
 import io.spine.users.c.group.RenameGroup;
 
 import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 /**
  * A Google Group process manager.
@@ -54,12 +57,14 @@ import java.util.Optional;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
-public class GoogleGroupPm extends ProcessManager<GroupId, GoogleGroup, GoogleGroupVBuilder> {
+public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
+        GoogleGroupLifecycle,
+        GoogleGroupLifecycleVBuilder> {
 
     /**
      * @see ProcessManager#ProcessManager(Object)
      */
-    GoogleGroupPm(GroupId id) {
+    GoogleGroupLifecyclePm(GroupId id) {
         super(id);
     }
 
@@ -99,10 +104,15 @@ public class GoogleGroupPm extends ProcessManager<GroupId, GoogleGroup, GoogleGr
         return commands().changeEmail(event);
     }
 
+    @Command
+    ChangeGroupDescription on(GoogleGroupDescriptionChanged event) {
+        return commands().changeDescription(event);
+    }
+
     private Optional<OrganizationId> organizationByDomain(InternetDomain domain) {
         // TODO:2018-09-27:vladyslav.lubenskyi: implement this look up when Organization
         // projection is ready
-        return Optional.empty();
+        return empty();
     }
 
     private static GoogleGroupCommandFactory commands() {
