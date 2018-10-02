@@ -47,6 +47,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
             assertEquals(command.getEmail(), event.getEmail());
             assertEquals(command.getRoleList(), event.getRoleList());
             assertEquals(command.getOrgEntity(), event.getOrgEntity());
+            assertEquals(command.getDescription(), event.getDescription());
         });
     }
 
@@ -60,6 +61,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
             assertEquals(command.getEmail(), state.getEmail());
             assertEquals(command.getRoleList(), state.getRoleList());
             assertEquals(command.getOrgEntity(), state.getOrgEntity());
+            assertEquals(command.getDescription(), state.getDescription());
         });
     }
 

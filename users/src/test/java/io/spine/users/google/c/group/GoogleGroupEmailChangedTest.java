@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("GoogleGroupPm should, when GoogleGroupEmailChanged")
-class GoogleGroupEmailChangedTest extends GoogleGroupPmEventTest<GoogleGroupEmailChanged> {
+class GoogleGroupEmailChangedTest extends GoogleGroupLifecycleEventTest<GoogleGroupEmailChanged> {
 
     GoogleGroupEmailChangedTest() {
         super(googleGroupEmailChanged(GROUP_ID));

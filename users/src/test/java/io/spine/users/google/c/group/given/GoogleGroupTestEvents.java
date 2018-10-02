@@ -25,12 +25,15 @@ import io.spine.users.google.c.group.GoogleGroupCreated;
 import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupDeleted;
 import io.spine.users.google.c.group.GoogleGroupDeletedVBuilder;
+import io.spine.users.google.c.group.GoogleGroupDescriptionChanged;
+import io.spine.users.google.c.group.GoogleGroupDescriptionChangedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupEmailChanged;
 import io.spine.users.google.c.group.GoogleGroupEmailChangedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupJoinedParentGroup;
 import io.spine.users.google.c.group.GoogleGroupJoinedParentGroupVBuilder;
 import io.spine.users.google.c.group.GoogleGroupLeftParentGroup;
 import io.spine.users.google.c.group.GoogleGroupLeftParentGroupVBuilder;
+import io.spine.users.google.c.group.GoogleGroupLifecyclePm;
 import io.spine.users.google.c.group.GoogleGroupRenamed;
 import io.spine.users.google.c.group.GoogleGroupRenamedVBuilder;
 
@@ -41,12 +44,13 @@ import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.email;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.googleId;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.groupName;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.internalDomain;
+import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newDescription;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newEmail;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.parentGroup;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.role;
 
 /**
- * Test events for {@link io.spine.users.google.c.group.GoogleGroupPm}.
+ * Test events for {@link GoogleGroupLifecyclePm}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -115,5 +119,12 @@ public class GoogleGroupTestEvents {
                                               .setId(groupId)
                                               .setNewEmail(newEmail())
                                               .build();
+    }
+
+    public static GoogleGroupDescriptionChanged googleGroupDescriptionChanged(GroupId groupId) {
+        return GoogleGroupDescriptionChangedVBuilder.newBuilder()
+                                                    .setId(groupId)
+                                                    .setNewDescription(newDescription())
+                                                    .build();
     }
 }

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("GoogleGroupPm should, when GoogleGroupDeleted")
-class GoogleGroupDeletedTest extends GoogleGroupPmEventTest<GoogleGroupDeleted> {
+class GoogleGroupDeletedTest extends GoogleGroupLifecycleEventTest<GoogleGroupDeleted> {
 
     GoogleGroupDeletedTest() {
         super(googleGroupDeleted(GROUP_ID));

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Vladyslav Lubenskyi
  */
 @DisplayName("GoogleGroupPm should, when GoogleGroupLeftParentGroup")
-class GoogleGroupLeftGroupTest extends GoogleGroupPmEventTest<GoogleGroupLeftParentGroup> {
+class GoogleGroupLeftGroupTest extends GoogleGroupLifecycleEventTest<GoogleGroupLeftParentGroup> {
 
     GoogleGroupLeftGroupTest() {
         super(googleGroupLeftParentGroup(GROUP_ID));

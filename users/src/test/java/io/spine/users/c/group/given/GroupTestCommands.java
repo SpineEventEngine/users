@@ -25,6 +25,8 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
 import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
+import io.spine.users.c.group.ChangeGroupDescription;
+import io.spine.users.c.group.ChangeGroupDescriptionVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
 import io.spine.users.c.group.ChangeGroupEmailVBuilder;
 import io.spine.users.c.group.CreateGroup;
@@ -42,10 +44,12 @@ import io.spine.users.c.group.RenameGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 
+import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.c.group.given.GroupTestEnv.newGroupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
 
@@ -69,6 +73,7 @@ public class GroupTestCommands {
                                   .setEmail(groupEmail())
                                   .setOrgEntity(groupOrgEntityOrganization())
                                   .addRole(groupRole())
+                                  .setDescription(groupDescription())
                                   .build();
     }
 
@@ -127,5 +132,12 @@ public class GroupTestCommands {
                                        .setId(id)
                                        .setNewEmail(newGroupEmail())
                                        .build();
+    }
+
+    public static ChangeGroupDescription changeGroupDescription(GroupId id) {
+        return ChangeGroupDescriptionVBuilder.newBuilder()
+                                             .setId(id)
+                                             .setDescription(newGroupDescription())
+                                             .build();
     }
 }

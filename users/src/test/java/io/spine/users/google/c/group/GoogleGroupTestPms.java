@@ -23,7 +23,7 @@ package io.spine.users.google.c.group;
 import io.spine.users.GroupId;
 
 /**
- * Test {@link io.spine.users.google.c.group.GoogleGroupPm Google Group process managers}.
+ * Test {@link GoogleGroupLifecyclePm Google Group process managers}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -40,7 +40,7 @@ public class GoogleGroupTestPms {
      *
      * @param id and ID of the process manager
      */
-    static GoogleGroupPm emptyPm(GroupId id) {
-        return new GoogleGroupPm(id);
+    static GoogleGroupLifecyclePm emptyPm(GroupId id) {
+        return new GoogleGroupLifecyclePm(id);
     }
 }

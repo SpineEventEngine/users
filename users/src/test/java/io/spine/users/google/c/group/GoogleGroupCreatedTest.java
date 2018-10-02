@@ -42,7 +42,7 @@ class GoogleGroupCreatedTest {
     @Nested
     @Disabled // Enable when Organization projection is ready.
     @DisplayName("internal GoogleGroupCreated")
-    class InternalGroupCreated extends GoogleGroupPmEventTest<GoogleGroupCreated> {
+    class InternalGroupCreated extends GoogleGroupLifecycleEventTest<GoogleGroupCreated> {
 
         InternalGroupCreated() {
             super(internalGoogleGroupCreated(GROUP_ID));
@@ -63,7 +63,7 @@ class GoogleGroupCreatedTest {
     @Nested
     @Disabled // Enable when Organization projection is ready.
     @DisplayName("external GoogleGroupCreated")
-    class ExternalGroupCreated extends GoogleGroupPmEventTest<GoogleGroupCreated> {
+    class ExternalGroupCreated extends GoogleGroupLifecycleEventTest<GoogleGroupCreated> {
 
         ExternalGroupCreated() {
             super(externalGoogleGroupCreated(GROUP_ID));

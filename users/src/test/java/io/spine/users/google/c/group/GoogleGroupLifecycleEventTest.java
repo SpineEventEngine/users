@@ -28,22 +28,22 @@ import io.spine.users.GroupId;
 import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newGroupId;
 
 /**
- * The implementation base for {@link GoogleGroupPm} commanding method tests.
+ * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.
  *
  * @param <E> an event being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GoogleGroupPmEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<GroupId, E, GoogleGroup, GoogleGroupPm> {
+abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
+        extends PmCommandOnEventTest<GroupId, E, GoogleGroupLifecycle, GoogleGroupLifecyclePm> {
 
     protected static final GroupId GROUP_ID = newGroupId();
 
-    protected GoogleGroupPmEventTest(E eventMessage) {
+    GoogleGroupLifecycleEventTest(E eventMessage) {
         super(GROUP_ID, eventMessage);
     }
 
     @Override
-    protected Repository<GroupId, GoogleGroupPm> createEntityRepository() {
-        return new GoogleGroupPmRepository();
+    protected Repository<GroupId, GoogleGroupLifecyclePm> createEntityRepository() {
+        return new GoogleGroupLifecyclePmRepository();
     }
 }

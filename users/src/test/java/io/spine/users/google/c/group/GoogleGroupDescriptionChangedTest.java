@@ -20,30 +20,31 @@
 
 package io.spine.users.google.c.group;
 
-import io.spine.users.c.group.RenameGroup;
+import io.spine.users.c.group.ChangeGroupDescription;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.c.group.GoogleGroupTestPms.emptyPm;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEvents.googleGroupRenamed;
+import static io.spine.users.google.c.group.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi
  */
-@DisplayName("GoogleGroupPm should, when GoogleGroupRenamed")
-class GoogleGroupRenamedTest extends GoogleGroupLifecycleEventTest<GoogleGroupRenamed> {
+@DisplayName("GoogleGroupPm should, when GoogleGroupDescriptionChanged")
+class GoogleGroupDescriptionChangedTest
+        extends GoogleGroupLifecycleEventTest<GoogleGroupDescriptionChanged> {
 
-    GoogleGroupRenamedTest() {
-        super(googleGroupRenamed(GROUP_ID));
+    GoogleGroupDescriptionChangedTest() {
+        super(googleGroupDescriptionChanged(GROUP_ID));
     }
 
     @Test
-    @DisplayName("translate it to RenameGroup command")
+    @DisplayName("translate it to ChangeGroupDescription command")
     void testBeTranslated() {
-        expectThat(emptyPm(GROUP_ID)).producesCommand(RenameGroup.class, command -> {
+        expectThat(emptyPm(GROUP_ID)).producesCommand(ChangeGroupDescription.class, command -> {
             assertEquals(GROUP_ID, command.getId());
-            assertEquals(message().getDisplayName(), command.getNewName());
+            assertEquals(message().getNewDescription(), command.getDescription());
         });
     }
 }

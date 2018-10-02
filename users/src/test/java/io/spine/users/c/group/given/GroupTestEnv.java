@@ -65,19 +65,9 @@ public class GroupTestEnv {
         return "Developers";
     }
 
-    public static String newGroupName() {
-        return "Developers-renamed";
-    }
-
     public static EmailAddress groupEmail() {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers-list@gmail.com")
-                                   .build();
-    }
-
-    public static EmailAddress newGroupEmail() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers-renamed-list@gmail.com")
                                    .build();
     }
 
@@ -97,6 +87,24 @@ public class GroupTestEnv {
         return RoleIdVBuilder.newBuilder()
                              .setValue("administrator")
                              .build();
+    }
+
+    public static String groupDescription() {
+        return "A relatively nice group";
+    }
+
+    static String newGroupDescription() {
+        return "A very nice group";
+    }
+
+    static String newGroupName() {
+        return "Developers-renamed";
+    }
+
+    static EmailAddress newGroupEmail() {
+        return EmailAddressVBuilder.newBuilder()
+                                   .setValue("developers-renamed-list@gmail.com")
+                                   .build();
     }
 
     private static OrgUnitId orgUnit() {

@@ -26,13 +26,12 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
+import io.spine.users.google.c.group.GoogleGroupLifecyclePm;
 
 import static io.spine.base.Identifier.newUuid;
 
 /**
- * Test environment for testing {@link io.spine.users.google.c.group.GoogleGroupPm}.
+ * Test environment for testing {@link GoogleGroupLifecyclePm}.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -64,16 +63,14 @@ public class GoogleGroupTestEnv {
                                    .build();
     }
 
-    public static EmailAddress newEmail() {
+    static EmailAddress newEmail() {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers+1@spine.io")
                                    .build();
     }
 
-    static OrganizationId organization() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
+    static String newDescription() {
+        return "Big Google Group";
     }
 
     static InternetDomain internalDomain() {

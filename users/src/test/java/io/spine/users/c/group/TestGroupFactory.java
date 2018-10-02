@@ -23,6 +23,7 @@ package io.spine.users.c.group;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
+import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
@@ -88,6 +89,7 @@ final class TestGroupFactory {
                             .setOrgEntity(groupOrgEntityOrganization())
                             .setDisplayName(groupName())
                             .setEmail(groupEmail())
+                            .setDescription(groupDescription())
                             .addRole(groupRole());
     }
 
