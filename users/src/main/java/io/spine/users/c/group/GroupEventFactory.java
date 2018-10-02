@@ -46,81 +46,91 @@ class GroupEventFactory {
     }
 
     GroupCreated createGroup(CreateGroup command) {
-        return GroupCreatedVBuilder.newBuilder()
-                                   .setId(command.getId())
-                                   .setDisplayName(command.getDisplayName())
-                                   .setEmail(command.getEmail())
-                                   .setExternalDomain(command.getExternalDomain())
-                                   .setOrgEntity(command.getOrgEntity())
-                                   .addAllRole(command.getRoleList())
-                                   .setDescription(command.getDescription())
-                                   .build();
+        return GroupCreatedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setEmail(command.getEmail())
+                .setExternalDomain(command.getExternalDomain())
+                .setOrgEntity(command.getOrgEntity())
+                .addAllRole(command.getRoleList())
+                .setDescription(command.getDescription())
+                .build();
     }
 
     GroupMoved moveGroup(MoveGroup command, OrganizationOrUnit oldOrgEntity) {
-        return GroupMovedVBuilder.newBuilder()
-                                 .setId(command.getId())
-                                 .setNewOrgEntity(command.getNewOrgEntity())
-                                 .setOldOrgEntity(oldOrgEntity)
-                                 .build();
+        return GroupMovedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewOrgEntity(command.getNewOrgEntity())
+                .setOldOrgEntity(oldOrgEntity)
+                .build();
     }
 
     GroupDeleted deleteGroup(DeleteGroup command) {
-        return GroupDeletedVBuilder.newBuilder()
-                                   .setId(command.getId())
-                                   .build();
+        return GroupDeletedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
     JoinedParentGroup joinGroup(JoinParentGroup command) {
-        return JoinedParentGroupVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setParentGroupId(command.getParentGroupId())
-                                        .build();
+        return JoinedParentGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 
     LeftParentGroup leaveGroup(LeaveParentGroup command) {
-        return LeftParentGroupVBuilder.newBuilder()
-                                      .setId(command.getId())
-                                      .setParentGroupId(command.getParentGroupId())
-                                      .build();
+        return LeftParentGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 
     RoleAssignedToGroup assignRole(AssignRoleToGroup command) {
-        return RoleAssignedToGroupVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setRoleId(command.getRoleId())
-                                          .build();
+        return RoleAssignedToGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
     }
 
     RoleUnassignedFromGroup unassignRole(UnassignRoleFromGroup command) {
-        return RoleUnassignedFromGroupVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setRoleId(command.getRoleId())
-                                              .build();
+        return RoleUnassignedFromGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
     }
 
     GroupRenamed rename(RenameGroup command, String oldName) {
-        return GroupRenamedVBuilder.newBuilder()
-                                   .setId(command.getId())
-                                   .setNewName(command.getNewName())
-                                   .setOldName(oldName)
-                                   .build();
+        return GroupRenamedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(oldName)
+                .build();
     }
 
     GroupEmailChanged changeEmail(ChangeGroupEmail command, EmailAddress oldEmail) {
-        return GroupEmailChangedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setNewEmail(command.getNewEmail())
-                                        .setOldEmail(oldEmail)
-                                        .build();
+        return GroupEmailChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewEmail(command.getNewEmail())
+                .setOldEmail(oldEmail)
+                .build();
     }
 
     GroupDescriptionChanged changeDescription(ChangeGroupDescription command,
                                               String oldDescription) {
-        return GroupDescriptionChangedVBuilder.newBuilder()
-                                              .setId(command.getId())
-                                              .setNewDescription(command.getDescription())
-                                              .setOldDescription(oldDescription)
-                                              .build();
+        return GroupDescriptionChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDescription(command.getDescription())
+                .setOldDescription(oldDescription)
+                .build();
     }
 }

@@ -43,32 +43,36 @@ final class RoleEventFactory {
     }
 
     RoleCreated createRole(CreateRole command) {
-        return RoleCreatedVBuilder.newBuilder()
-                                  .setId(command.getId())
-                                  .setDisplayName(command.getDisplayName())
-                                  .setOrgEntity(command.getOrgEntity())
-                                  .build();
+        return RoleCreatedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setOrgEntity(command.getOrgEntity())
+                .build();
     }
 
     RoleDeleted deleteRole(DeleteRole command) {
-        return RoleDeletedVBuilder.newBuilder()
-                                  .setId(command.getId())
-                                  .build();
+        return RoleDeletedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
     RoleRenamed renameRole(RenameRole command, String oldName) {
-        return RoleRenamedVBuilder.newBuilder()
-                                  .setId(command.getId())
-                                  .setNewName(command.getNewName())
-                                  .setOldName(oldName)
-                                  .build();
+        return RoleRenamedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(oldName)
+                .build();
     }
 
     RoleParentChanged changeParent(ChangeRoleParent command, OrganizationOrUnit oldParent) {
-        return RoleParentChangedVBuilder.newBuilder()
-                                        .setId(command.getId())
-                                        .setNewOrgEntity(command.getNewOrgEntity())
-                                        .setOldOrgEntity(oldParent)
-                                        .build();
+        return RoleParentChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewOrgEntity(command.getNewOrgEntity())
+                .setOldOrgEntity(oldParent)
+                .build();
     }
 }

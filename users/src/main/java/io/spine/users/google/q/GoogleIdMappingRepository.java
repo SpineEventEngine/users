@@ -38,9 +38,10 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
                                                                     GoogleIdMappingView> {
 
     static final GoogleIdMappingViewId PROJECTION_ID =
-            GoogleIdMappingViewIdVBuilder.newBuilder()
-                                         .setValue(SINGLETON)
-                                         .build();
+            GoogleIdMappingViewIdVBuilder
+                    .newBuilder()
+                    .setValue(SINGLETON)
+                    .build();
 
     /**
      * {@inheritDoc}

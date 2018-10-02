@@ -36,14 +36,15 @@ final class UserEventFactory {
 
     UserCreated create(CreateUser command) {
         UserCreatedVBuilder eventBuilder =
-                UserCreatedVBuilder.newBuilder()
-                                   .setId(command.getId())
-                                   .setDisplayName(command.getDisplayName())
-                                   .setPrimaryIdentity(command.getPrimaryIdentity())
-                                   .addAllRole(command.getRoleList())
-                                   .setStatus(command.getStatus())
-                                   .setProfile(command.getProfile())
-                                   .setNature(command.getNature());
+                UserCreatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setDisplayName(command.getDisplayName())
+                        .setPrimaryIdentity(command.getPrimaryIdentity())
+                        .addAllRole(command.getRoleList())
+                        .setStatus(command.getStatus())
+                        .setProfile(command.getProfile())
+                        .setNature(command.getNature());
 
         switch (command.getOriginCase()) {
             case ORG_ENTITY:
@@ -60,42 +61,47 @@ final class UserEventFactory {
 
     UserMoved changeParent(MoveUser command, OrganizationOrUnit oldOrgEntity) {
         UserMoved event =
-                UserMovedVBuilder.newBuilder()
-                                 .setId(command.getId())
-                                 .setNewOrgEntity(command.getNewOrgEntity())
-                                 .setOldOrgEntity(oldOrgEntity)
-                                 .build();
+                UserMovedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewOrgEntity(command.getNewOrgEntity())
+                        .setOldOrgEntity(oldOrgEntity)
+                        .build();
         return event;
     }
 
     UserJoinedGroup joinGroup(JoinGroup command) {
         UserJoinedGroup event =
-                UserJoinedGroupVBuilder.newBuilder()
-                                       .setId(command.getId())
-                                       .setGroupId(command.getGroupId())
-                                       .setRole(MEMBER)
-                                       .build();
+                UserJoinedGroupVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setGroupId(command.getGroupId())
+                        .setRole(MEMBER)
+                        .build();
         return event;
     }
 
     UserLeftGroup leaveGroup(LeaveGroup command) {
         UserLeftGroup event =
-                UserLeftGroupVBuilder.newBuilder()
-                                     .setId(command.getId())
-                                     .setGroupId(command.getGroupId())
-                                     .build();
+                UserLeftGroupVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setGroupId(command.getGroupId())
+                        .build();
         return event;
     }
 
     UserDeleted deleteUser(DeleteUser command) {
-        UserDeleted event = UserDeletedVBuilder.newBuilder()
+        UserDeleted event = UserDeletedVBuilder
+                .newBuilder()
                                                .setId(command.getId())
                                                .build();
         return event;
     }
 
     RoleAssignedToUser assignRoleToUser(AssignRoleToUser command) {
-        RoleAssignedToUser event = RoleAssignedToUserVBuilder.newBuilder()
+        RoleAssignedToUser event = RoleAssignedToUserVBuilder
+                .newBuilder()
                                                              .setId(command.getId())
                                                              .setRoleId(command.getRoleId())
                                                              .build();
@@ -104,7 +110,8 @@ final class UserEventFactory {
 
     RoleUnassignedFromUser unassignRoleFromUser(UnassignRoleFromUser command) {
         RoleUnassignedFromUser event =
-                RoleUnassignedFromUserVBuilder.newBuilder()
+                RoleUnassignedFromUserVBuilder
+                        .newBuilder()
                                               .setId(command.getId())
                                               .setRoleId(command.getRoleId())
                                               .build();
@@ -112,7 +119,8 @@ final class UserEventFactory {
     }
 
     UserStatusChanged changeStatus(ChangeUserStatus command, Status oldStatus) {
-        UserStatusChanged event = UserStatusChangedVBuilder.newBuilder()
+        UserStatusChanged event = UserStatusChangedVBuilder
+                .newBuilder()
                                                            .setId(command.getId())
                                                            .setNewStatus(command.getStatus())
                                                            .setOldStatus(oldStatus)
@@ -122,7 +130,8 @@ final class UserEventFactory {
 
     SecondaryIdentityAdded addIdentity(AddSecondaryIdentity command) {
         SecondaryIdentityAdded event =
-                SecondaryIdentityAddedVBuilder.newBuilder()
+                SecondaryIdentityAddedVBuilder
+                        .newBuilder()
                                               .setId(command.getId())
                                               .setIdentity(command.getIdentity())
                                               .build();
@@ -132,7 +141,8 @@ final class UserEventFactory {
     SecondaryIdentityRemoved removeIdentity(RemoveSecondaryIdentity command,
                                             Identity identity) {
         SecondaryIdentityRemoved event =
-                SecondaryIdentityRemovedVBuilder.newBuilder()
+                SecondaryIdentityRemovedVBuilder
+                        .newBuilder()
                                                 .setId(command.getId())
                                                 .setIdentity(identity)
                                                 .build();
@@ -141,7 +151,8 @@ final class UserEventFactory {
 
     PrimaryIdentityChanged changePrimaryIdentity(ChangePrimaryIdentity command) {
         PrimaryIdentityChanged event =
-                PrimaryIdentityChangedVBuilder.newBuilder()
+                PrimaryIdentityChangedVBuilder
+                        .newBuilder()
                                               .setId(command.getId())
                                               .setIdentity(command.getIdentity())
                                               .build();
@@ -149,14 +160,16 @@ final class UserEventFactory {
     }
 
     PersonProfileUpdated updateProfile(UpdatePersonProfile command) {
-        return PersonProfileUpdatedVBuilder.newBuilder()
+        return PersonProfileUpdatedVBuilder
+                .newBuilder()
                                          .setId(command.getId())
                                          .setUpdatedProfile(command.getUpdatedProfile())
                                          .build();
     }
 
     UserRenamed renameUser(RenameUser command, String oldName) {
-        return UserRenamedVBuilder.newBuilder()
+        return UserRenamedVBuilder
+                .newBuilder()
                                   .setId(command.getId())
                                   .setNewName(command.getNewName())
                                   .setOldName(oldName)

@@ -45,41 +45,46 @@ final class OrgUnitEventFactory {
     }
 
     OrgUnitCreated createOrgUnit(CreateOrgUnit command) {
-        return OrgUnitCreatedVBuilder.newBuilder()
-                                     .setId(command.getId())
-                                     .setDisplayName(command.getDisplayName())
-                                     .setDomain(command.getDomain())
-                                     .setParentEntity(command.getParentEntity())
-                                     .build();
+        return OrgUnitCreatedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setParentEntity(command.getParentEntity())
+                .build();
     }
 
     OrgUnitDeleted deleteOrgUnit(DeleteOrgUnit command) {
-        return OrgUnitDeletedVBuilder.newBuilder()
-                                     .setId(command.getId())
-                                     .build();
+        return OrgUnitDeletedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
     OrgUnitMoved moveOrgUnit(MoveOrgUnit command, OrganizationOrUnit oldParent) {
-        return OrgUnitMovedVBuilder.newBuilder()
-                                   .setId(command.getId())
-                                   .setNewParentEntity(command.getNewParentEntity())
-                                   .setOldParentEntity(oldParent)
-                                   .build();
+        return OrgUnitMovedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewParentEntity(command.getNewParentEntity())
+                .setOldParentEntity(oldParent)
+                .build();
     }
 
     OrgUnitRenamed rename(RenameOrgUnit command, String oldName) {
-        return OrgUnitRenamedVBuilder.newBuilder()
-                                     .setId(command.getId())
-                                     .setNewName(command.getNewName())
-                                     .setOldName(oldName)
-                                     .build();
+        return OrgUnitRenamedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(oldName)
+                .build();
     }
 
     OrgUnitDomainChanged changeDomain(ChangeOrgUnitDomain command, InternetDomain oldDomain) {
-        return OrgUnitDomainChangedVBuilder.newBuilder()
-                                           .setId(command.getId())
-                                           .setNewDomain(command.getNewDomain())
-                                           .setOldDomain(oldDomain)
-                                           .build();
+        return OrgUnitDomainChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .setOldDomain(oldDomain)
+                .build();
     }
 }

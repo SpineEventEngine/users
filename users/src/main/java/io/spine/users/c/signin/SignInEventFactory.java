@@ -44,24 +44,27 @@ class SignInEventFactory {
     }
 
     SignInSuccessful completeSignIn(UserId id, Identity identity) {
-        return SignInSuccessfulVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setIdentity(identity)
-                                       .build();
+        return SignInSuccessfulVBuilder
+                .newBuilder()
+                .setId(id)
+                .setIdentity(identity)
+                .build();
     }
 
     SignInFailed failSignIn(UserId id, Identity identity,
                             SignInFailureReason reason) {
-        return SignInFailedVBuilder.newBuilder()
-                                   .setId(id)
-                                   .setIdentity(identity)
-                                   .setFailureReason(reason)
-                                   .build();
+        return SignInFailedVBuilder
+                .newBuilder()
+                .setId(id)
+                .setIdentity(identity)
+                .setFailureReason(reason)
+                .build();
     }
 
     SignOutCompleted signOut(UserId id) {
-        return SignOutCompletedVBuilder.newBuilder()
-                                       .setId(id)
-                                       .build();
+        return SignOutCompletedVBuilder
+                .newBuilder()
+                .setId(id)
+                .build();
     }
 }

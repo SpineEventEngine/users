@@ -44,43 +44,48 @@ final class OrganizationEventFactory {
     }
 
     OrganizationCreated createOrganization(CreateOrganization command) {
-        return OrganizationCreatedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setDisplayName(command.getDisplayName())
-                                          .setDomain(command.getDomain())
-                                          .setTenant(command.getTenant())
-                                          .build();
+        return OrganizationCreatedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
     }
 
     OrganizationDeleted deleteOrganization(DeleteOrganization command) {
-        return OrganizationDeletedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .build();
+        return OrganizationDeletedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
     OrganizationRenamed renameOrganization(RenameOrganization command, String oldName) {
-        return OrganizationRenamedVBuilder.newBuilder()
-                                          .setId(command.getId())
-                                          .setNewName(command.getNewName())
-                                          .setOldName(oldName)
-                                          .build();
+        return OrganizationRenamedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(oldName)
+                .build();
     }
 
     OrganizationDomainChanged changeDomain(ChangeOrganizationDomain command,
                                            InternetDomain oldDomain) {
-        return OrganizationDomainChangedVBuilder.newBuilder()
-                                                .setId(command.getId())
-                                                .setNewDomain(command.getNewDomain())
-                                                .setOldDomain(oldDomain)
-                                                .build();
+        return OrganizationDomainChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .setOldDomain(oldDomain)
+                .build();
     }
 
     OrganizationTenantChanged changeTenant(ChangeOrganizationTenant command,
                                            TenantId oldTenant) {
-        return OrganizationTenantChangedVBuilder.newBuilder()
-                                                .setId(command.getId())
-                                                .setNewTenant(command.getNewTenant())
-                                                .setOldTenant(oldTenant)
-                                                .build();
+        return OrganizationTenantChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewTenant(command.getNewTenant())
+                .setOldTenant(oldTenant)
+                .build();
     }
 }

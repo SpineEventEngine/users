@@ -50,10 +50,11 @@ public class UserMembershipPart
     @Apply
     void on(UserJoinedGroup event) {
         UserMembershipRecord membershipRecord =
-                UserMembershipRecord.newBuilder()
-                                    .setGroupId(event.getGroupId())
-                                    .setRole(event.getRole())
-                                    .build();
+                UserMembershipRecord
+                        .newBuilder()
+                        .setGroupId(event.getGroupId())
+                        .setRole(event.getRole())
+                        .build();
         getBuilder().addMembership(membershipRecord);
 
     }

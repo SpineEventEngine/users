@@ -57,22 +57,25 @@ class SignInCommandFactory {
     }
 
     FinishSignIn finishWithError(SignInFailureReason failureReason) {
-        return FinishSignInVBuilder.newBuilder()
-                                   .setId(id)
-                                   .setSuccessful(false)
-                                   .setFailureReason(failureReason)
-                                   .build();
+        return FinishSignInVBuilder
+                .newBuilder()
+                .setId(id)
+                .setSuccessful(false)
+                .setFailureReason(failureReason)
+                .build();
     }
 
     FinishSignIn finishSuccessfully() {
-        return FinishSignInVBuilder.newBuilder()
-                                   .setId(id)
-                                   .setSuccessful(true)
-                                   .build();
+        return FinishSignInVBuilder
+                .newBuilder()
+                .setId(id)
+                .setSuccessful(true)
+                .build();
     }
 
     SignUserIn signIn(Identity identity) {
-        return SignUserInVBuilder.newBuilder()
+        return SignUserInVBuilder
+                .newBuilder()
                                  .setId(id)
                                  .setIdentity(identity)
                                  .build();
@@ -81,7 +84,8 @@ class SignInCommandFactory {
     CreateUser createUser(Identity identity, PersonProfile profile) {
         String displayName = profile.getEmail()
                                     .getValue();
-        return CreateUserVBuilder.newBuilder()
+        return CreateUserVBuilder
+                .newBuilder()
                                  .setId(id)
                                  .setDisplayName(displayName)
                                  .setPrimaryIdentity(identity)

@@ -34,6 +34,7 @@ import io.spine.util.Exceptions;
 import java.util.List;
 
 import static io.spine.users.c.group.Group.OriginCase.EXTERNAL_DOMAIN;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * An aggregate for {@link Group}.
@@ -124,8 +125,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 builder.setExternalDomain(event.getExternalDomain());
                 break;
             case ORIGIN_NOT_SET:
-                throw Exceptions.newIllegalArgumentException(
-                        "No `origin` found in GroupCreated event");
+                throw newIllegalArgumentException("No `origin` found in GroupCreated event");
         }
     }
 

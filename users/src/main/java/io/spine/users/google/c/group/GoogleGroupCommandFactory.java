@@ -61,11 +61,13 @@ class GoogleGroupCommandFactory {
      * Creates {@link CreateGroup} command for a group from an external domain.
      */
     CreateGroup createExternalGroup(GoogleGroupCreated event) {
-        CreateGroupVBuilder builder = CreateGroupVBuilder.newBuilder()
-                                                         .setId(event.getId())
-                                                         .setEmail(event.getEmail())
-                                                         .setDisplayName(event.getDisplayName())
-                                                         .setExternalDomain(event.getDomain());
+        CreateGroupVBuilder builder =
+                CreateGroupVBuilder
+                        .newBuilder()
+                        .setId(event.getId())
+                        .setEmail(event.getEmail())
+                        .setDisplayName(event.getDisplayName())
+                        .setExternalDomain(event.getDomain());
 
         return builder.build();
     }
@@ -74,7 +76,8 @@ class GoogleGroupCommandFactory {
      * Creates {@link CreateGroup} command for a group from a tenant's domain.
      */
     CreateGroup createInternalGroup(GoogleGroupCreated event, OrganizationId organization) {
-        CreateGroupVBuilder builder = CreateGroupVBuilder.newBuilder()
+        CreateGroupVBuilder builder = CreateGroupVBuilder
+                .newBuilder()
                                                          .setId(event.getId())
                                                          .setEmail(event.getEmail())
                                                          .setDisplayName(event.getDisplayName())
@@ -87,7 +90,8 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupJoinedParentGroup} event.
      */
     JoinParentGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
-        return JoinParentGroupVBuilder.newBuilder()
+        return JoinParentGroupVBuilder
+                .newBuilder()
                                       .setId(event.getId())
                                       .setParentGroupId(event.getNewParentId())
                                       .build();
@@ -98,7 +102,8 @@ class GoogleGroupCommandFactory {
      * event.
      */
     RenameGroup renameGroup(GoogleGroupRenamed event) {
-        return RenameGroupVBuilder.newBuilder()
+        return RenameGroupVBuilder
+                .newBuilder()
                                   .setId(event.getId())
                                   .setNewName(event.getDisplayName())
                                   .build();
@@ -109,7 +114,8 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupLeftParentGroup} event.
      */
     LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
-        return LeaveParentGroupVBuilder.newBuilder()
+        return LeaveParentGroupVBuilder
+                .newBuilder()
                                        .setId(event.getId())
                                        .setParentGroupId(event.getParentGroupId())
                                        .build();
@@ -120,7 +126,8 @@ class GoogleGroupCommandFactory {
      * event.
      */
     DeleteGroup deleteGroup(GoogleGroupDeleted event) {
-        return DeleteGroupVBuilder.newBuilder()
+        return DeleteGroupVBuilder
+                .newBuilder()
                                   .setId(event.getId())
                                   .build();
     }
@@ -130,21 +137,24 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupEmailChanged} event.
      */
     ChangeGroupEmail changeEmail(GoogleGroupEmailChanged event) {
-        return ChangeGroupEmailVBuilder.newBuilder()
+        return ChangeGroupEmailVBuilder
+                .newBuilder()
                                        .setId(event.getId())
                                        .setNewEmail(event.getNewEmail())
                                        .build();
     }
 
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
-        return ChangeGroupDescriptionVBuilder.newBuilder()
+        return ChangeGroupDescriptionVBuilder
+                .newBuilder()
                                              .setId(event.getId())
                                              .setDescription(event.getNewDescription())
                                              .build();
     }
 
     private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
-        return OrganizationOrUnitVBuilder.newBuilder()
+        return OrganizationOrUnitVBuilder
+                .newBuilder()
                                          .setOrganization(organizationId)
                                          .build();
     }
