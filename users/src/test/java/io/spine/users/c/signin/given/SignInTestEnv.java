@@ -91,7 +91,7 @@ public final class SignInTestEnv {
     public static IdentityProviderBridgeFactory mockActiveIdentityProvider() {
         IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
-        when(mock.signInAllowed(any())).thenReturn(true);
+        when(mock.isSignInAllowed(any())).thenReturn(true);
         when(mock.fetchProfile(any())).thenReturn(profile());
         return new TestIdentityProviderFactory(mock);
     }
@@ -99,7 +99,7 @@ public final class SignInTestEnv {
     public static IdentityProviderBridgeFactory mockSuspendedIdentityProvider() {
         IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(true);
-        when(mock.signInAllowed(any())).thenReturn(false);
+        when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(profile());
         return new TestIdentityProviderFactory(mock);
     }
@@ -107,7 +107,7 @@ public final class SignInTestEnv {
     public static IdentityProviderBridgeFactory mockEmptyIdentityProvider() {
         IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
         when(mock.hasIdentity(any())).thenReturn(false);
-        when(mock.signInAllowed(any())).thenReturn(false);
+        when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(PersonProfile.getDefaultInstance());
         return new TestIdentityProviderFactory(mock);
     }

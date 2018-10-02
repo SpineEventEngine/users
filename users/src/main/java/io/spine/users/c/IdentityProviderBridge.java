@@ -63,7 +63,7 @@ public interface IdentityProviderBridge {
      * @param identity an authentication identity to check
      * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise
      */
-    boolean signInAllowed(Identity identity);
+    boolean isSignInAllowed(Identity identity);
 
     /**
      * Fetches the profile of the user associated with the given identity.

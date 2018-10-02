@@ -101,7 +101,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         if (!identityProvider.hasIdentity(identity)) {
             return withA(commands().finishWithError(UNKNOWN_IDENTITY));
         }
-        if (!identityProvider.signInAllowed(identity)) {
+        if (!identityProvider.isSignInAllowed(identity)) {
             return withA(commands().finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
