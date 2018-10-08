@@ -12,7 +12,7 @@ import io.spine.core.UserId;
 import io.spine.server.command.Assign;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
-import io.spine.server.tuple.EitherOfTwo;
+import io.spine.server.tuple.EitherOf2;
 import io.spine.users.Identity;
 import io.spine.users.PersonProfile;
 import io.spine.users.c.IdentityProviderBridge;
@@ -25,8 +25,8 @@ import io.spine.users.c.user.UserPartRepository;
 
 import java.util.Optional;
 
-import static io.spine.server.tuple.EitherOfTwo.withA;
-import static io.spine.server.tuple.EitherOfTwo.withB;
+import static io.spine.server.tuple.EitherOf2.withA;
+import static io.spine.server.tuple.EitherOf2.withB;
 import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
 import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
@@ -85,7 +85,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Command
-    EitherOfTwo<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
+    EitherOf2<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
         UserId id = command.getId();
         Identity identity = command.getIdentity();
         Optional<IdentityProviderBridge> identityProviderOptional =
@@ -127,8 +127,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Assign
-    EitherOfTwo<SignInSuccessful, SignInFailed> handle(FinishSignIn command,
-                                                       CommandContext context) {
+    EitherOf2<SignInSuccessful, SignInFailed> handle(FinishSignIn command,
+                                                     CommandContext context) {
         UserId id = command.getId();
         Identity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
