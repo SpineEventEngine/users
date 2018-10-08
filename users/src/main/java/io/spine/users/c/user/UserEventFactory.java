@@ -53,7 +53,8 @@ final class UserEventFactory {
             case EXTERNAL_DOMAIN:
                 eventBuilder.setExternalDomain(command.getExternalDomain());
                 break;
-            case ORIGIN_NOT_SET:
+            case ORIGIN_NOT_SET: // Fallthrough intended.
+            default:
                 throw newIllegalArgumentException("No `origin` found in CreateUser command");
         }
         return eventBuilder.build();

@@ -28,6 +28,8 @@ import io.spine.users.GroupId;
 
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * A group's membership in other groups, a part of the  {@linkplain GroupRoot Group} aggregate.
  *
@@ -72,7 +74,8 @@ public class GroupMembershipPart
         removeMembership(event.getParentGroupId());
     }
 
-    private void ensureNoCycles(JoinParentGroup event) throws GroupsCannotFormCycles {
+    private static void ensureNoCycles(JoinParentGroup event) throws GroupsCannotFormCycles {
+        checkNotNull(event);
         // TODO:2018-09-21:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/23
     }
 

@@ -145,7 +145,8 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
             case EXTERNAL_DOMAIN:
                 builder.setExternalDomain(event.getExternalDomain());
                 break;
-            case ORIGIN_NOT_SET:
+            case ORIGIN_NOT_SET: // Fallthrough intended.
+            default:
                 throw newIllegalArgumentException(
                         "No `origin` found in UserCreated event");
         }
