@@ -51,27 +51,61 @@ public class OrgUnitAggregate
 
     @Assign
     OrgUnitCreated handle(CreateOrgUnit command, CommandContext context) {
-        return events().orgUnitCreated(command);
+        OrgUnitCreated event =
+                OrgUnitCreatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setDisplayName(command.getDisplayName())
+                        .setDomain(command.getDomain())
+                        .setParentEntity(command.getParentEntity())
+                        .build();
+        return event;
     }
 
     @Assign
     OrgUnitDeleted handle(DeleteOrgUnit command, CommandContext context) {
-        return events().orgUnitDeleted(command);
+        OrgUnitDeleted event =
+                OrgUnitDeletedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .build();
+        return event;
     }
 
     @Assign
     OrgUnitMoved handle(MoveOrgUnit command, CommandContext context) {
-        return events().orgUnitMoved(command, getState().getParentEntity());
+        OrgUnitMoved event =
+                OrgUnitMovedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewParentEntity(command.getNewParentEntity())
+                        .setOldParentEntity(getState().getParentEntity())
+                        .build();
+        return event;
     }
 
     @Assign
     OrgUnitRenamed handle(RenameOrgUnit command, CommandContext context) {
-        return events().orgUnitRenamed(command, getState().getDisplayName());
+        OrgUnitRenamed event =
+                OrgUnitRenamedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewName(command.getNewName())
+                        .setOldName(getState().getDisplayName())
+                        .build();
+        return event;
     }
 
     @Assign
     OrgUnitDomainChanged handle(ChangeOrgUnitDomain command, CommandContext context) {
-        return events().orgUnitDomainChanged(command, getState().getDomain());
+        OrgUnitDomainChanged event =
+                OrgUnitDomainChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewDomain(command.getNewDomain())
+                        .setOldDomain(getState().getDomain())
+                        .build();
+        return event;
     }
 
     @Apply
@@ -100,9 +134,5 @@ public class OrgUnitAggregate
     @Apply
     void on(OrgUnitDomainChanged event) {
         getBuilder().setDomain(event.getNewDomain());
-    }
-
-    private static OrgUnitEventFactory events() {
-        return OrgUnitEventFactory.instance();
     }
 }
