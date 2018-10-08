@@ -60,7 +60,16 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Assign
     GroupCreated handle(CreateGroup command) {
-        return events().groupCreated(command);
+        return GroupCreatedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setEmail(command.getEmail())
+                .setExternalDomain(command.getExternalDomain())
+                .setOrgEntity(command.getOrgEntity())
+                .addAllRole(command.getRoleList())
+                .setDescription(command.getDescription())
+                .build();
     }
 
     @Assign
@@ -68,17 +77,29 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
             throw new CannotMoveExternalGroup(command.getId(), getState().getExternalDomain());
         }
-        return events().groupMoved(command, getState().getOrgEntity());
+        return GroupMovedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewOrgEntity(command.getNewOrgEntity())
+                .setOldOrgEntity(getState().getOrgEntity())
+                .build();
     }
 
     @Assign
     GroupDeleted handle(DeleteGroup command) {
-        return events().groupDeleted(command);
+        return GroupDeletedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
     @Assign
     RoleAssignedToGroup handle(AssignRoleToGroup command) {
-        return events().roleAssigned(command);
+        return RoleAssignedToGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
     }
 
     @Assign
@@ -89,22 +110,42 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         if (!roles.contains(roleId)) {
             throw new RoleIsNotAssignedToGroup(getId(), roleId);
         }
-        return events().roleUnassigned(command);
+        return RoleUnassignedFromGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
     }
 
     @Assign
     GroupRenamed handle(RenameGroup command) {
-        return events().groupRenamed(command, getState().getDisplayName());
+        return GroupRenamedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(getState().getDisplayName())
+                .build();
+
     }
 
     @Assign
     GroupEmailChanged handle(ChangeGroupEmail command) {
-        return events().groupEmailChanged(command, getState().getEmail());
+        return GroupEmailChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewEmail(command.getNewEmail())
+                .setOldEmail(getState().getEmail())
+                .build();
     }
 
     @Assign
     GroupDescriptionChanged handle(ChangeGroupDescription command) {
-        return events().descriptionChanged(command, getState().getDescription());
+        return GroupDescriptionChangedVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDescription(command.getDescription())
+                .setOldDescription(getState().getDescription())
+                .build();
     }
 
     @Apply
@@ -169,9 +210,5 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Apply
     void on(GroupDescriptionChanged event) {
         getBuilder().setDescription(event.getNewDescription());
-    }
-
-    private static GroupEventFactory events() {
-        return GroupEventFactory.instance();
     }
 }

@@ -56,12 +56,20 @@ public class GroupMembershipPart
     JoinedParentGroup handle(JoinParentGroup command, CommandContext context)
             throws GroupsCannotFormCycles {
         ensureNoCycles(command);
-        return events().groupJoined(command);
+        return JoinedParentGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 
     @Assign
     LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
-        return events().groupLeft(command);
+        return LeftParentGroupVBuilder
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 
     @Apply
@@ -86,9 +94,5 @@ public class GroupMembershipPart
             int index = memberships.indexOf(parentGroup);
             builder.removeMembership(index);
         }
-    }
-
-    private static GroupEventFactory events() {
-        return GroupEventFactory.instance();
     }
 }
