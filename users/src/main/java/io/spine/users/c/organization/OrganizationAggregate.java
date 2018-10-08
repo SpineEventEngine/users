@@ -48,27 +48,61 @@ public class OrganizationAggregate
 
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {
-        return events().organizationCreated(command);
+        OrganizationCreated event =
+                OrganizationCreatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setDisplayName(command.getDisplayName())
+                        .setDomain(command.getDomain())
+                        .setTenant(command.getTenant())
+                        .build();
+        return event;
     }
 
     @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
-        return events().organizationDeleted(command);
+        OrganizationDeleted event =
+                OrganizationDeletedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .build();
+        return event;
     }
 
     @Assign
     OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
-        return events().organizationRenamed(command, getState().getDisplayName());
+        OrganizationRenamed event =
+                OrganizationRenamedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewName(command.getNewName())
+                        .setOldName(getState().getDisplayName())
+                        .build();
+        return event;
     }
 
     @Assign
     OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
-        return events().domainChanged(command, getState().getDomain());
+        OrganizationDomainChanged event =
+                OrganizationDomainChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewDomain(command.getNewDomain())
+                        .setOldDomain(getState().getDomain())
+                        .build();
+        return event;
     }
 
     @Assign
     OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
-        return events().tenantChanged(command, getState().getTenant());
+        OrganizationTenantChanged event =
+                OrganizationTenantChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewTenant(command.getNewTenant())
+                        .setOldTenant(getState().getTenant())
+                        .build();
+        return event;
     }
 
     @Apply
@@ -97,9 +131,5 @@ public class OrganizationAggregate
     @Apply
     void on(OrganizationTenantChanged event) {
         getBuilder().setTenant(event.getNewTenant());
-    }
-
-    private static OrganizationEventFactory events() {
-        return OrganizationEventFactory.instance();
     }
 }
