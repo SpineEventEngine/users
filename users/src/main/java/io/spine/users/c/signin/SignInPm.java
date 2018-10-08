@@ -18,6 +18,7 @@ import io.spine.users.PersonProfile;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.user.CreateUser;
+import io.spine.users.c.user.CreateUserVBuilder;
 import io.spine.users.c.user.User;
 import io.spine.users.c.user.UserCreated;
 import io.spine.users.c.user.UserPart;
@@ -32,6 +33,8 @@ import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
 import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
+import static io.spine.users.c.user.User.Status.ACTIVE;
+import static io.spine.users.c.user.UserNature.PERSON;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -92,17 +95,17 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                 identityProviders.get(identity.getProviderId());
 
         if (!identityProviderOptional.isPresent()) {
-            return withA(commands().finishWithError(UNSUPPORTED_IDENTITY));
+            return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
         SignInVBuilder builder = getBuilder().setId(id)
                                              .setIdentity(identity);
         IdentityProviderBridge identityProvider = identityProviderOptional.get();
         if (!identityProvider.hasIdentity(identity)) {
-            return withA(commands().finishWithError(UNKNOWN_IDENTITY));
+            return withA(finishWithError(UNKNOWN_IDENTITY));
         }
         if (!identityProvider.isSignInAllowed(identity)) {
-            return withA(commands().finishWithError(SIGN_IN_NOT_AUTHORIZED));
+            return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
         Optional<UserPart> user = userRepository.find(id);
@@ -111,17 +114,17 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withB(createUser(identityProvider));
         }
         if (!identityBelongsToUser(user.get(), identity)) {
-            return withA(commands().finishWithError(UNKNOWN_IDENTITY));
+            return withA(finishWithError(UNKNOWN_IDENTITY));
         }
 
         builder.setStatus(COMPLETED);
-        return withA(commands().finishSuccessfully());
+        return withA(finishSuccessfully());
     }
 
     @Command
     Optional<SignUserIn> on(UserCreated event, EventContext context) {
         if (awaitsUserCreation()) {
-            return of(commands().signIn(getBuilder().getIdentity()));
+            return of(signIn(getBuilder().getIdentity()));
         }
         return empty();
     }
@@ -132,21 +135,21 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         UserId id = command.getId();
         Identity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
-            return withA(events().signInSuccessful(id, identity));
+            return withA(signInSuccessful(id, identity));
         } else {
 
-            return withB(events().signInFailed(id, identity, command.getFailureReason()));
+            return withB(signInFailed(id, identity, command.getFailureReason()));
         }
     }
 
     @Assign
     SignOutCompleted handle(SignUserOut command, CommandContext context) {
-        return events().signOutCompleted(command.getId());
+        return signOutCompleted(command.getId());
     }
 
     private CreateUser createUser(IdentityProviderBridge identityProvider) {
         PersonProfile profile = identityProvider.fetchProfile(getBuilder().getIdentity());
-        return commands().createUser(getBuilder().getIdentity(), profile);
+        return createUser(getBuilder().getIdentity(), profile);
     }
 
     private boolean awaitsUserCreation() {
@@ -163,11 +166,67 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                         .contains(identity);
     }
 
-    private static SignInEventFactory events() {
-        return SignInEventFactory.instance();
+    FinishSignIn finishWithError(SignInFailureReason failureReason) {
+        return FinishSignInVBuilder
+                .newBuilder()
+                .setId(getId())
+                .setSuccessful(false)
+                .setFailureReason(failureReason)
+                .build();
     }
 
-    private SignInCommandFactory commands() {
-        return SignInCommandFactory.instance(getId());
+    FinishSignIn finishSuccessfully() {
+        return FinishSignInVBuilder
+                .newBuilder()
+                .setId(getId())
+                .setSuccessful(true)
+                .build();
+    }
+
+    SignUserIn signIn(Identity identity) {
+        return SignUserInVBuilder
+                .newBuilder()
+                .setId(getId())
+                .setIdentity(identity)
+                .build();
+    }
+
+    CreateUser createUser(Identity identity, PersonProfile profile) {
+        String displayName = profile.getEmail()
+                                    .getValue();
+        return CreateUserVBuilder
+                .newBuilder()
+                .setId(getId())
+                .setDisplayName(displayName)
+                .setPrimaryIdentity(identity)
+                .setProfile(profile)
+                .setStatus(ACTIVE)
+                .setNature(PERSON)
+                .build();
+    }
+
+    SignInSuccessful signInSuccessful(UserId id, Identity identity) {
+        return SignInSuccessfulVBuilder
+                .newBuilder()
+                .setId(id)
+                .setIdentity(identity)
+                .build();
+    }
+
+    SignInFailed signInFailed(UserId id, Identity identity,
+                              SignInFailureReason reason) {
+        return SignInFailedVBuilder
+                .newBuilder()
+                .setId(id)
+                .setIdentity(identity)
+                .setFailureReason(reason)
+                .build();
+    }
+
+    SignOutCompleted signOutCompleted(UserId id) {
+        return SignOutCompletedVBuilder
+                .newBuilder()
+                .setId(id)
+                .build();
     }
 }
