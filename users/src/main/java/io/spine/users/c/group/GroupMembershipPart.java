@@ -46,7 +46,7 @@ public class GroupMembershipPart
      *
      * @param root a root of the aggregate to which this part belongs
      */
-    protected GroupMembershipPart(GroupRoot root) {
+    GroupMembershipPart(GroupRoot root) {
         super(root);
     }
 

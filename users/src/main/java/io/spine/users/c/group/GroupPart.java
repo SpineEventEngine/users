@@ -36,7 +36,7 @@ import static io.spine.users.c.group.Group.OriginCase.EXTERNAL_DOMAIN;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
- * An aggregate for {@link Group}.
+ * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
  *
  * <p>A {@code Group} is the way to group {@linkplain UserPart users} by their common functions
  * and functional roles inside of an {@linkplain Organization organization} or
@@ -45,6 +45,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
  *
+ * @see GroupMembershipPart for the part that handle group memberships
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass"}) // It is OK for an aggregate.
