@@ -63,22 +63,48 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Assign
     RoleCreated handle(CreateRole command, CommandContext context) {
-        return events().roleCreated(command);
+        RoleCreated event =
+                RoleCreatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setDisplayName(command.getDisplayName())
+                        .setOrgEntity(command.getOrgEntity())
+                        .build();
+        return event;
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command, CommandContext context) {
-        return events().roleDeleted(command);
+        RoleDeleted event =
+                RoleDeletedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .build();
+        return event;
     }
 
     @Assign
     RoleRenamed handle(RenameRole command, CommandContext context) {
-        return events().roleRenamed(command, getState().getDisplayName());
+        RoleRenamed event =
+                RoleRenamedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewName(command.getNewName())
+                        .setOldName(getState().getDisplayName())
+                        .build();
+        return event;
     }
 
     @Assign
     RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
-        return events().parentChanged(command, getState().getOrgEntity());
+        RoleParentChanged event =
+                RoleParentChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewOrgEntity(command.getNewOrgEntity())
+                        .setOldOrgEntity(getState().getOrgEntity())
+                        .build();
+        return event;
     }
 
     @Apply
@@ -102,9 +128,5 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Apply
     void on(RoleParentChanged event) {
         getBuilder().setOrgEntity(event.getNewOrgEntity());
-    }
-
-    private static RoleEventFactory events() {
-        return RoleEventFactory.instance();
     }
 }
