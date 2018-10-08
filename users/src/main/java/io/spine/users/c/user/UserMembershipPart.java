@@ -18,6 +18,8 @@ import io.spine.users.c.user.UserMembership.UserMembershipRecord;
 
 import java.util.Optional;
 
+import static io.spine.users.c.user.RoleInGroup.MEMBER;
+
 /**
  * A user membership in multiple {@linkplain GroupRoot groups}, a part of {@linkplain UserRoot User}
  * aggregate.
@@ -39,12 +41,25 @@ public class UserMembershipPart
 
     @Assign
     UserJoinedGroup handle(JoinGroup command, CommandContext context) {
-        return events().joinedGroup(command);
+        UserJoinedGroup event =
+                UserJoinedGroupVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setGroupId(command.getGroupId())
+                        .setRole(MEMBER)
+                        .build();
+        return event;
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command, CommandContext context) {
-        return events().leftGroup(command);
+        UserLeftGroup event =
+                UserLeftGroupVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setGroupId(command.getGroupId())
+                        .build();
+        return event;
     }
 
     @Apply
@@ -79,9 +94,5 @@ public class UserMembershipPart
                                                             .equals(groupId))
                             .findFirst();
         return record;
-    }
-
-    private static UserEventFactory events() {
-        return UserEventFactory.instance();
     }
 }

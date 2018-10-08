@@ -59,7 +59,29 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        return events().userCreated(command);
+        UserCreatedVBuilder eventBuilder =
+                UserCreatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setDisplayName(command.getDisplayName())
+                        .setPrimaryIdentity(command.getPrimaryIdentity())
+                        .addAllRole(command.getRoleList())
+                        .setStatus(command.getStatus())
+                        .setProfile(command.getProfile())
+                        .setNature(command.getNature());
+
+        switch (command.getOriginCase()) {
+            case ORG_ENTITY:
+                eventBuilder.setOrgEntity(command.getOrgEntity());
+                break;
+            case EXTERNAL_DOMAIN:
+                eventBuilder.setExternalDomain(command.getExternalDomain());
+                break;
+            case ORIGIN_NOT_SET: // Fallthrough intended.
+            default:
+                throw newIllegalArgumentException("No `origin` found in CreateUser command");
+        }
+        return eventBuilder.build();
     }
 
     @Assign
@@ -67,17 +89,35 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
             throw new CannotMoveExternalUser(command.getId(), getState().getExternalDomain());
         }
-        return events().userMoved(command, getState().getOrgEntity());
+        UserMoved event =
+                UserMovedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewOrgEntity(command.getNewOrgEntity())
+                        .setOldOrgEntity(getState().getOrgEntity())
+                        .build();
+        return event;
     }
 
     @Assign
     UserDeleted handle(DeleteUser command, CommandContext context) {
-        return events().userDeleted(command);
+        UserDeleted event =
+                UserDeletedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .build();
+        return event;
     }
 
     @Assign
     RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
-        return events().roleAssigned(command);
+        RoleAssignedToUser event =
+                RoleAssignedToUserVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setRoleId(command.getRoleId())
+                        .build();
+        return event;
     }
 
     @Assign
@@ -88,17 +128,36 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         if (!roles.contains(roleId)) {
             throw new RoleIsNotAssignedToUser(getId(), roleId);
         }
-        return events().roleUnassigned(command);
+        RoleUnassignedFromUser event =
+                RoleUnassignedFromUserVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setRoleId(command.getRoleId())
+                        .build();
+        return event;
     }
 
     @Assign
     UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
-        return events().statusChanged(command, getState().getStatus());
+        UserStatusChanged event =
+                UserStatusChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewStatus(command.getStatus())
+                        .setOldStatus(getState().getStatus())
+                        .build();
+        return event;
     }
 
     @Assign
     SecondaryIdentityAdded handle(AddSecondaryIdentity command, CommandContext context) {
-        return events().identityAdded(command);
+        SecondaryIdentityAdded event =
+                SecondaryIdentityAddedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setIdentity(command.getIdentity())
+                        .build();
+        return event;
     }
 
     @Assign
@@ -106,7 +165,13 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                                     CommandContext context) throws IdentityDoesNotExist {
         Optional<Identity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
-            return events().identityRemoved(command, identityToRemove.get());
+            SecondaryIdentityRemoved event =
+                    SecondaryIdentityRemovedVBuilder
+                            .newBuilder()
+                            .setId(command.getId())
+                            .setIdentity(identityToRemove.get())
+                            .build();
+            return event;
         } else {
             throw identityDoesNotExist(command);
         }
@@ -114,17 +179,36 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Assign
     PrimaryIdentityChanged handle(ChangePrimaryIdentity command, CommandContext context) {
-        return events().primaryIdentityChanged(command);
+        PrimaryIdentityChanged event =
+                PrimaryIdentityChangedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setIdentity(command.getIdentity())
+                        .build();
+        return event;
     }
 
     @Assign
     UserRenamed handle(RenameUser command, CommandContext context) {
-        return events().userRenamed(command, getState().getDisplayName());
+        UserRenamed event =
+                UserRenamedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setNewName(command.getNewName())
+                        .setOldName(getState().getDisplayName())
+                        .build();
+        return event;
     }
 
     @Assign
     PersonProfileUpdated handle(UpdatePersonProfile command, CommandContext context) {
-        return events().profileUpdated(command);
+        PersonProfileUpdated event =
+                PersonProfileUpdatedVBuilder
+                        .newBuilder()
+                        .setId(command.getId())
+                        .setUpdatedProfile(command.getUpdatedProfile())
+                        .build();
+        return event;
     }
 
     @Apply
@@ -239,9 +323,5 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
             RemoveSecondaryIdentity command) {
         return new IdentityDoesNotExist(command.getId(), command.getProviderId(),
                                         command.getUserId());
-    }
-
-    private static UserEventFactory events() {
-        return UserEventFactory.instance();
     }
 }
