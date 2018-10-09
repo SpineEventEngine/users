@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>It is forbidden for groups to directly or indirectly join themselves; in other words,
  * all nested group memberships must always form an acyclic graph.
  *
- * <p>Please, see {@link JoinParentGroup} and {@link LeaveParentGroup} commands.
+ * <p>Please see {@link JoinParentGroup} and {@link LeaveParentGroup} commands.
  *
  * @author Vladyslav Lubenskyi
  */

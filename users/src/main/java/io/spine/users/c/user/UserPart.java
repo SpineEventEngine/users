@@ -32,11 +32,11 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <h3>Group And Roles</h3>
  *
  * <p>To reflect a user's functions and functional roles in the organization, the user can be
- * assigned multiple {@link Role Roles} (please, see {@link AssignRoleToUser} and
+ * assigned multiple {@link Role Roles} (please see {@link AssignRoleToUser} and
  * {@link UnassignRoleFromUser} commands).
  *
  * <p>However, if a user share its functions and functional roles with a number of other users it
- * can also join one or more {@link Group groups} (please, see {@link JoinGroup} and
+ * can also join one or more {@link Group groups} (please see {@link JoinGroup} and
  * {@link LeaveGroup} commands).
  *
  * <h3>Organizational Structure</h3>

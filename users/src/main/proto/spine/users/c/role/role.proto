@@ -35,7 +35,7 @@ import "spine/users/values.proto";
 
 // A role that can be assigned to `Users` and `Groups`, to perform access control.
 //
-// Roles are assigned to `Users` and `Group` directly and explicitly (please, see `AssignRoleToUser`,
+// Roles are assigned to `Users` and `Group` directly and explicitly (please see `AssignRoleToUser`,
 // `AssignRoleToUser` commands). A `Role` exists in the scope of an organization or an orgunit,
 // therefore it can be assigned only to those `Users` and `Groups` that are in the same organization
 // and/or orgunit (or their child orgunits).

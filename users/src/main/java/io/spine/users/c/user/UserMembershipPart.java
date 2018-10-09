@@ -25,7 +25,7 @@ import static io.spine.users.c.user.RoleInGroup.MEMBER;
  * aggregate.
  *
  * <p>If a user shares its functions and roles with a number of other users they can join
- * one or more groups (please, see {@link JoinGroup}, {@link LeaveGroup} commands).
+ * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
  *
  * @author Vladyslav Lubenskyi
  */

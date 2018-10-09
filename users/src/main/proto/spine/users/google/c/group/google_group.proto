@@ -48,10 +48,11 @@ message GoogleGroup {
 
     // An internal identifier of the group.
     //
-    // Please, use `GoogleIdMappingView` projection to match `google_id` and `id`.
+    // Please use `GoogleIdMappingView` projection to match `google_id` and `id`.
     //
     GroupId id = 1;
 
+    // A unique identifier of the group at Google.
     string google_id = 2 [(required) = true];
 
     // A list of email aliases of the group.
@@ -77,7 +78,7 @@ message GoogleGroupLifecycle {
 
     // An internal identifier of the group.
     //
-    // Please, use `GoogleIdMappingView` projection to match `google_id` and `id`.
+    // Please use `GoogleIdMappingView` projection to match `google_id` and `id`.
     //
     GroupId id = 1;
 }

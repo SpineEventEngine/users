@@ -41,7 +41,7 @@ import "spine/users/identifiers.proto";
 // To match Google's ID with the corresponding `GroupId`, please use `GoogleIdMappingView`
 // projection.
 //
-// Please, refer to Directory API documentation:
+// Please refer to Directory API documentation:
 // * [on Groups;](https://developers.google.com/admin-sdk/directory/v1/reference/groups)
 // * [om Roles;](https://developers.google.com/admin-sdk/directory/v1/guides/manage-roles)
 // * [on Members.](https://developers.google.com/admin-sdk/directory/v1/reference/members)
@@ -77,7 +77,7 @@ message GoogleGroupCreated {
 //
 message GoogleGroupJoinedParentGroup {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 
     // A new parent.
@@ -91,7 +91,7 @@ message GoogleGroupJoinedParentGroup {
 //
 message GoogleGroupLeftParentGroup {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 
     // An ID of the parent group.
@@ -102,7 +102,7 @@ message GoogleGroupLeftParentGroup {
 //
 message GoogleGroupRenamed {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 
     // A new display name.
@@ -113,7 +113,7 @@ message GoogleGroupRenamed {
 //
 message GoogleGroupDeleted {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 }
 
@@ -121,7 +121,7 @@ message GoogleGroupDeleted {
 //
 message GoogleGroupEmailChanged {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 
     // The new email address of the group.
@@ -132,7 +132,7 @@ message GoogleGroupEmailChanged {
 //
 message GoogleGroupDescriptionChanged {
 
-    // An internal identifier of the group (please, see `GoogleIdMappingView` projection).
+    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
     GroupId id = 1;
 
     // The new description of the group.

@@ -45,7 +45,7 @@ import "spine/users/c/user/identity.proto";
 // ## Roles
 //
 // To reflect a user's functions and functional roles in the organization, the user can be assigned
-// multiple `Role`s (please, see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
+// multiple `Role`s (please see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
 //
 // ## Organizational Structure
 //
@@ -130,7 +130,7 @@ message User {
 // A user membership in multiple groups, a part of `User` aggregate.
 //
 // If a `User` shares its functions and roles with a number of other users they can join
-// one or more `Group`s (please, see `JoinGroup`, `LeaveGroup` commands).
+// one or more `Group`s (please see `JoinGroup`, `LeaveGroup` commands).
 //
 message UserMembership {
     option (entity).kind = AGGREGATE;

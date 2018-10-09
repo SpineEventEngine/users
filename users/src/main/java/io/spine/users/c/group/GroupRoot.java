@@ -34,7 +34,7 @@ public class GroupRoot extends AggregateRoot<GroupId> {
     /**
      * @see AggregateRoot#AggregateRoot(BoundedContext, Object)
      */
-    GroupRoot(BoundedContext boundedContext, GroupId id) {
+    public GroupRoot(BoundedContext boundedContext, GroupId id) {
         super(boundedContext, id);
     }
 }
