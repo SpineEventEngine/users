@@ -49,12 +49,12 @@ public class GoogleGroupTestEnv {
                               .build();
     }
 
-    static String googleId() {
+    public static String googleId() {
         return "x123pwd";
     }
 
     static String description() {
-        return "An ordinary group.";
+        return "Developers from the 3rd floor";
     }
 
     static EmailAddress email() {
@@ -70,18 +70,12 @@ public class GoogleGroupTestEnv {
     }
 
     static String newDescription() {
-        return "Big Google Group";
+        return "Developers from the 5th floor";
     }
 
     static InternetDomain internalDomain() {
         return InternetDomainVBuilder.newBuilder()
                                      .setValue("spine.io")
-                                     .build();
-    }
-
-    static InternetDomain externalDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("spine.eu")
                                      .build();
     }
 
