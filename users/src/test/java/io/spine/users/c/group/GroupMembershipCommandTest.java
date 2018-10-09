@@ -40,7 +40,6 @@ abstract class GroupMembershipCommandTest<C extends CommandMessage>
         return new GroupMembershipPartRepository();
     }
 
-
     @Override
     protected GroupRoot newRoot(GroupId id) {
         return new GroupRoot(create(), id);

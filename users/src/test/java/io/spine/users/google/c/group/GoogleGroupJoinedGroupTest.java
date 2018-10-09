@@ -48,4 +48,3 @@ class GoogleGroupJoinedGroupTest extends GoogleGroupLifecycleEventTest<GoogleGro
         });
     }
 }
-

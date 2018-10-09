@@ -47,4 +47,3 @@ class GoogleGroupEmailChangedTest extends GoogleGroupLifecycleEventTest<GoogleGr
         });
     }
 }
-

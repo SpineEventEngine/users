@@ -46,4 +46,3 @@ class GoogleGroupDeletedTest extends GoogleGroupLifecycleEventTest<GoogleGroupDe
         });
     }
 }
-

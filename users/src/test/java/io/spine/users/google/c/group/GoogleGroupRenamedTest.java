@@ -47,4 +47,3 @@ class GoogleGroupRenamedTest extends GoogleGroupLifecycleEventTest<GoogleGroupRe
         });
     }
 }
-
