@@ -19,13 +19,14 @@
  */
 
 /**
- * This package contains projections of {@link io.spine.users.c.group.GroupRoot Group aggregate}.
+ * This package contains classes and interfaces of `Users` bounded context read-side.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.q.group;
+package io.spine.users.q;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
