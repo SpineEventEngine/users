@@ -18,9 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-final def SPINE_VERSION = '0.10.87-SNAPSHOT'
+/**
+ * This package contains classes and interfaces of `Users` bounded context read-side.
+ */
 
-ext {
-    spineVersion = SPINE_VERSION
-    spineBaseVersion = '0.10.69-SNAPSHOT'
-}
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.q;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+

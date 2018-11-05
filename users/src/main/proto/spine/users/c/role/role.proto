@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -19,20 +33,20 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
-// A role that can be assigned to `Users` and `Groups`, to peform access control.
+// A role that can be assigned to `Users` and `Groups`, to perform access control.
 //
-// Roles are assigned to `Users` and `Group` directly and explicitly (please, see `AssignRoleToUser`,
+// Roles are assigned to `Users` and `Group` directly and explicitly (please see `AssignRoleToUser`,
 // `AssignRoleToUser` commands). A `Role` exists in the scope of an organization or an orgunit,
 // therefore it can be assigned only to those `Users` and `Groups` that are in the same organization
 // and/or orgunit (or their child orgunits).
 //
 // ## Access Control
 //
-// The roles assigned to a `Group` are recursively propagated to all members of a group.
-// This propagation is implicit and is not reflected in aggegate states.
+// The roles assigned to a `Group` are recursively propagated to all members of the group.
+// This propagation is implicit and is not reflected in aggregate states.
 //
 // Therefore, when carrying out role-based access control, consider that a `User` or a `Group`
-// has not only the roles listed in the aggregate state, but effectively all the roles derived from
+// has not only the roles listed in the aggregate state but effectively all the roles derived from
 // parent groups.
 //
 // ## Case Study
@@ -75,5 +89,5 @@ message Role {
     string display_name = 2 [(required) = true];
 
     // An organization or organizational unit the role belongs to.
-    OrganizationalEntity org_entity = 3;
+    OrganizationOrUnit org_entity = 3;
 }

@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -18,53 +32,66 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
-import "spine/users/user_auth_identity.proto";
-import "spine/users/user_profile.proto";
+import "spine/users/person_profile.proto";
+import "spine/users/c/user/identity.proto";
 
-// The command to create a new user.
+// Creates a new user.
 //
 message CreateUser {
     option (events) = "UserCreated";
 
     core.UserId id = 1;
 
+    // A kind of user: a person or machine.
+    UserNature nature = 2 [(required) = true];
+
     // A user name to be displayed on UI.
-    string display_name = 2 [(required) = true];
+    string display_name = 3 [(required) = true];
 
     // Roles explicitly assigned to the user.
-    repeated RoleId role = 3;
+    repeated RoleId role = 4;
 
-    // An entity in the organizational structure the user belongs to, if applicable.
-    OrganizationalEntity org_entity = 4;
+    // An email address of a user.
+    net.EmailAddress email = 5;
 
-    // Attributes of the user.
-    map<string, google.protobuf.Any> attributes = 5;
+    // An entity a user belongs to.
+    oneof origin {
 
-    // The primary authentication identity of the user.
-    UserAuthIdentity primary_identity = 6 [(required) = true];
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 6;
 
-    // A user profile.
-    UserProfile profile = 7;
+        // An external domain.
+        net.InternetDomain external_domain = 7;
+    }
+
+    // The primary identity of the user.
+    Identity primary_identity = 8;
+
+    // A user profile, if applicable.
+    PersonProfile profile = 9;
 
     // The current status of the user.
-    User.Status status = 8 [(required) = true];
+    User.Status status = 10 [(required) = true];
 }
 
-// The command to move a user from one organization or organizational unit to another.
+// Moves a user from one organization or organizational unit to another.
 //
 message MoveUser {
     option (events) = "UserMoved";
+    option (rejections) = "CannotMoveExternalUser";
 
     core.UserId id = 1;
 
     // A new parent entity in the organizational structure.
-    OrganizationalEntity new_org_entity = 2 [(required) = true];
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
-// The command to start a group membership.
+// Joins a group.
 //
 message JoinGroup {
     option (events) = "UserJoinedGroup";
@@ -73,9 +100,12 @@ message JoinGroup {
 
     // An ID of a group.
     GroupId group_id = 2 [(required) = true];
+
+    // A role of a user in the group.
+    RoleInGroup role = 3 [(required) = true];
 }
 
-// The command to stop a group membership.
+// Leaves a group.
 //
 message LeaveGroup {
     option (events) = "UserLeftGroup";
@@ -86,7 +116,7 @@ message LeaveGroup {
     GroupId group_id = 2 [(required) = true];
 }
 
-// The command to delete a user.
+// Deletes a user.
 //
 message DeleteUser {
     option (events) = "UserDeleted";
@@ -94,7 +124,7 @@ message DeleteUser {
     core.UserId id = 1;
 }
 
-// The command to assign a role to a user.
+// Assigns a role to a user.
 //
 message AssignRoleToUser {
     option (events) = "RoleAssignedToUser";
@@ -105,7 +135,7 @@ message AssignRoleToUser {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to unassign a role from a user.
+// Removes a role assignment from a user.
 //
 message UnassignRoleFromUser {
     option (events) = "RoleUnassignedFromUser";
@@ -117,50 +147,7 @@ message UnassignRoleFromUser {
     RoleId role_id = 2 [(required) = true];
 }
 
-// The command to add a new attribute to a user.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddUserAttribute {
-    option (events) = "UserAttributeAdded";
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// The command to remove an attribute from a user.
-//
-message RemoveUserAttribute {
-    option (events) = "UserAttributeRemoved";
-    option (rejections) = "UserAttributeDoesNotExist";
-
-    core.UserId id = 1;
-
-    // A name of the attribute to remove.
-    string name = 2 [(required) = true];
-}
-
-// The command to update a user attribute.
-//
-message UpdateUserAttribute {
-    option (events) = "UserAttributeUpdated";
-    option (rejections) = "UserAttributeDoesNotExist";
-
-    core.UserId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
-}
-
-// The command to change the user status.
+// Changes the user status.
 //
 message ChangeUserStatus {
     option (events) = "UserStatusChanged";
@@ -171,22 +158,22 @@ message ChangeUserStatus {
     User.Status status = 2 [(required) = true];
 }
 
-// The command to add a new secondary authentication identity to the user.
+// Adds a new secondary identity to the user.
 //
-message AddSecondaryAuthIdentity {
-    option (events) = "SecondaryAuthIdentityAdded";
+message AddSecondaryIdentity {
+    option (events) = "SecondaryIdentityAdded";
 
     core.UserId id = 1;
 
     // An identity to add.
-    UserAuthIdentity identity = 2 [(required) = true];
+    Identity identity = 2 [(required) = true];
 }
 
-// The command to remove a secondary authentication identity to the user.
+// Removes a secondary identity of the user.
 //
-message RemoveSecondaryAuthIdentity {
-    option (events) = "SecondaryAuthIdentityRemoved";
-    option (rejections) = "AuthIdentityDoesNotExist";
+message RemoveSecondaryIdentity {
+    option (events) = "SecondaryIdentityRemoved";
+    option (rejections) = "IdentityDoesNotExist";
 
     core.UserId id = 1;
 
@@ -197,18 +184,18 @@ message RemoveSecondaryAuthIdentity {
     IdentityProviderId provider_id = 3 [(required) = true];
 }
 
-// The command to change the primary authentication identity.
+// Changes the primary identity.
 //
-message ChangePrimaryAuthIdentity {
-    option (events) = "PrimaryAuthIdentityChanged";
+message ChangePrimaryIdentity {
+    option (events) = "PrimaryIdentityChanged";
 
     core.UserId id = 1;
 
     // A new primary identity.
-    UserAuthIdentity identity = 2 [(required) = true];
+    Identity identity = 2 [(required) = true];
 }
 
-// The command to rename a user.
+// Renames a user.
 //
 message RenameUser {
     option (events) = "UserRenamed";
@@ -219,13 +206,13 @@ message RenameUser {
     string new_name = 2 [(required) = true];
 }
 
-// The command to update a user profile.
+// Updates a user profile.
 //
-message UpdateUserProfile {
-    option (events) = "UserProfileUpdated";
+message UpdatePersonProfile {
+    option (events) = "PersonProfileUpdated";
 
     core.UserId id = 1;
 
     // An updated version of a profile.
-    UserProfile updated_profile = 2 [(required) = true];
+    PersonProfile updated_profile = 2 [(required) = true];
 }

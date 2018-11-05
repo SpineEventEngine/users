@@ -1,0 +1,73 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.q.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.q.group";
+option java_outer_classname = "GroupViewProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/any.proto";
+import "spine/net/email_address.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/values.proto";
+
+// A projection of a single group to be displayed on UI.
+//
+message GroupView {
+    option (entity).kind = PROJECTION;
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // An email address of the group if applicable.
+    net.EmailAddress email = 3;
+
+    // Indicates whether a group is external or not.
+    bool external = 4;
+
+    // An entity a group belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 5;
+
+        // An external domain.
+        net.InternetDomain external_domain = 6;
+    }
+
+    // Roles explicitly assigned to a group.
+    repeated RoleId role = 7;
+
+    // A list of child groups. Only direct members of the group are included.
+    repeated GroupId child_groups = 8;
+
+    // A list of `User` members. Only direct members of the group are included.
+    repeated GroupId user_members = 9;
+}

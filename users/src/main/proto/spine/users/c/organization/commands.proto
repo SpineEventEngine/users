@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -18,11 +32,10 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/tenant_id.proto";
-import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// The command to create an organization.
+// Creates an organization.
 //
 message CreateOrganization {
     option (events) = "OrganizationCreated";
@@ -32,31 +45,14 @@ message CreateOrganization {
     // A name of an organization to display on UI.
     string display_name = 2 [(required) = true];
 
-    // ThAe domain of the organization.
+    // The domain of the organization.
     net.InternetDomain domain = 3;
 
-    // Attributes of the organization.
-    map<string, google.protobuf.Any> attributes = 4;
-
     // A tenant associated with the organization.
-    core.TenantId tenant = 5 [(required) = true];
-
-    // An organization owner.
-    core.UserId owner = 6 [(required) = true];
+    core.TenantId tenant = 4 [(required) = true];
 }
 
-// The command to change the owner of an organization.
-//
-message ChangeOrganizationOwner {
-    option (events) = "OrganizationOwnerChanged";
-
-    OrganizationId id = 1;
-
-    // An ID of a new owner.
-    core.UserId new_owner = 2 [(required) = true];
-}
-
-// The command to delete an organization.
+// Deletes an organization.
 //
 message DeleteOrganization {
     option (events) = "OrganizationDeleted";
@@ -64,50 +60,7 @@ message DeleteOrganization {
     OrganizationId id = 1;
 }
 
-// The command to add a new attribute to an organization.
-//
-// If an attribute with this name already exists it will be overwritten.
-//
-message AddOrganizationAttribute {
-    option (events) = "OrganizationAttributeAdded";
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // An attribute value.
-    google.protobuf.Any value = 3 [(required) = true];
-}
-
-// The command to remove an attribute from an organization.
-//
-message RemoveOrganizationAttribute {
-    option (events) = "OrganizationAttributeRemoved";
-    option (rejections) = "OrganizationAttributeDoesNotExist";
-
-    OrganizationId id = 1;
-
-    // A name of the attribute to remove.
-    string name = 2 [(required) = true];
-}
-
-// The command to update an organization attribute.
-//
-message UpdateOrganizationAttribute {
-    option (events) = "OrganizationAttributeUpdated";
-    option (rejections) = "OrganizationAttributeDoesNotExist";
-
-    OrganizationId id = 1;
-
-    // An attribute name.
-    string name = 2 [(required) = true];
-
-    // A new attribute value.
-    google.protobuf.Any new_value = 3 [(required) = true];
-}
-
-// The command to rename an organization.
+// Renames an organization.
 //
 message RenameOrganization {
     option (events) = "OrganizationRenamed";
@@ -118,7 +71,7 @@ message RenameOrganization {
     string new_name = 2 [(required) = true];
 }
 
-// The command to change an organization domain.
+// Changes an organization domain.
 //
 message ChangeOrganizationDomain {
     option (events) = "OrganizationDomainChanged";
@@ -129,7 +82,7 @@ message ChangeOrganizationDomain {
     net.InternetDomain new_domain = 2 [(required) = true];
 }
 
-// The command to change an organization tenant.
+// Changes an organization tenant.
 //
 message ChangeOrganizationTenant {
     option (events) = "OrganizationTenantChanged";

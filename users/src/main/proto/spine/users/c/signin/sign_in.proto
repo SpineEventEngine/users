@@ -1,7 +1,21 @@
 //
-// Copyright (c) 2000-2018 TeamDev. All rights reserved.
-// TeamDev PROPRIETARY and CONFIDENTIAL.
-// Use is subject to license terms.
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 syntax = "proto3";
@@ -18,12 +32,12 @@ option java_generate_equals_and_hash = true;
 
 import "google/protobuf/any.proto";
 import "spine/core/user_id.proto";
-import "spine/users/user_auth_identity.proto";
+import "spine/users/c/user/identity.proto";
 import "spine/users/c/signin/values.proto";
 
-// The process of a sign-in by the given authentication identity.
+// The process of a user sign-in..
 //
-// This process manager covers a straighforward sign-in scenario:
+// This process manager covers a straightforward sign-in scenario:
 //
 // 1. `SignUserIn` command initializes the sign-in process.
 // 2. If a `User` aggregate with the given ID already exists all checks pass the `SignInSuccessful`
@@ -33,10 +47,10 @@ import "spine/users/c/signin/values.proto";
 //
 // To sign a user in, the process manager ensures the following:
 //
-// 1. an identity provider is aware of the given authentication identity;
+// 1. an identity provider is aware of the given identity;
 // 2. an identity provider authorize the user to sign in (e.g. the opposite would be if the user
 //    account was suspended);
-// 3. the given authentication identity is associated with the user (please see `AddAuthIdentity`
+// 3. the given identity is associated with the user (please see `AddAuthIdentity`
 //    command).
 //
 // If one of the checks fails, the process is completed immediately with `SignInFailed` event.
@@ -49,18 +63,11 @@ message SignIn {
     // The current status of the process.
     Status status = 2;
 
-    // An authentication identity to sign in with.
-    UserAuthIdentity identity = 3 [(required) = true];
+    // A user identity used to sign in.
+    Identity identity = 3 [(required) = true];
 
     // A reason why the process failed, if applicable.
     SignInFailureReason failure_reason = 4;
-
-    // Attributes to are added to the user after a successful sign-in.
-    //
-    // For example:
-    //     "oauth_access_token" -> "abcdef1234"
-    //
-    map<string, google.protobuf.Any> attributes = 5;
 
     // A status of the sign-in process.
     //
@@ -68,7 +75,7 @@ message SignIn {
 
         SIS_UNKNOWN = 0;
 
-        // Indicates that the process manager is waiting till a `User` aggregate is created.
+        // Indicates that the process manager is waiting until a `User` aggregate is created.
         //
         // If there is no `User` aggregate for the given `core.UserId` the process manager
         // creates it in the first instance, and then attempt to sign the user in.
