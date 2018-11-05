@@ -41,7 +41,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
     @DisplayName("produce GroupCreated event")
     void produceEvent() {
         CreateGroup command = message();
-        expectThat(newPart(GROUP_ID)).producesEvent(GroupCreated.class, event -> {
+        expectThat(new GroupPart(root(GROUP_ID))).producesEvent(GroupCreated.class, event -> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
             assertEquals(command.getEmail(), event.getEmail());
@@ -55,7 +55,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
     @DisplayName("create a group")
     void changeState() {
         CreateGroup command = message();
-        expectThat(newPart(GROUP_ID)).hasState(state -> {
+        expectThat(new GroupPart(root(GROUP_ID))).hasState(state -> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
             assertEquals(command.getEmail(), state.getEmail());

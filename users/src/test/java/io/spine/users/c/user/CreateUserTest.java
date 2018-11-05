@@ -25,7 +25,7 @@ class CreateUserTest extends UserPartCommandTest<CreateUser> {
     @Test
     @DisplayName("generate UserCreated event")
     void produceEvent() {
-        expectThat(newPart(USER_ID)).producesEvent(UserCreated.class, event -> {
+        expectThat(new UserPart(root(USER_ID))).producesEvent(UserCreated.class, event -> {
             assertEquals(message().getId(), event.getId());
             assertEquals(message().getDisplayName(), event.getDisplayName());
             assertEquals(message().getPrimaryIdentity(), event.getPrimaryIdentity());
@@ -39,7 +39,7 @@ class CreateUserTest extends UserPartCommandTest<CreateUser> {
     @Test
     @DisplayName("create the user")
     void changeState() {
-        expectThat(newPart(USER_ID)).hasState(state -> {
+        expectThat(new UserPart(root(USER_ID))).hasState(state -> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getDisplayName(), state.getDisplayName());
             assertEquals(message().getPrimaryIdentity(), state.getPrimaryIdentity());

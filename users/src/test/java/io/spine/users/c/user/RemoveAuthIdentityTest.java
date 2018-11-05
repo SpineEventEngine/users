@@ -14,9 +14,6 @@ import static io.spine.users.c.user.given.UserTestCommands.removeAuthIdentity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("RemoveSecondaryIdentity command should")
 class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity> {
 
@@ -47,7 +44,7 @@ class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity
     @Test
     @DisplayName("throw rejection if auth identity doesn't exist")
     void generateRejection() {
-        expectThat(newPart(USER_ID)).throwsRejection(Rejections.IdentityDoesNotExist.class);
+        expectThat(new UserPart(root(USER_ID))).throwsRejection(Rejections.IdentityDoesNotExist.class);
     }
 
     private static RemoveSecondaryIdentity createMessage() {

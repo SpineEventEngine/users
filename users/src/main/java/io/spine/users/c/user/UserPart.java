@@ -87,7 +87,11 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     @Assign
     UserMoved handle(MoveUser command, CommandContext context) throws CannotMoveExternalUser {
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw new CannotMoveExternalUser(command.getId(), getState().getExternalDomain());
+            throw CannotMoveExternalUser
+                    .newBuilder()
+                    .setId(command.getId())
+                    .setExternalDomain(getState().getExternalDomain())
+                    .build();
         }
         UserMoved event =
                 UserMovedVBuilder
@@ -126,7 +130,11 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         List<RoleId> roles = getState().getRoleList();
         RoleId roleId = command.getRoleId();
         if (!roles.contains(roleId)) {
-            throw new RoleIsNotAssignedToUser(getId(), roleId);
+            throw RoleIsNotAssignedToUser
+                    .newBuilder()
+                    .setId(getId())
+                    .setRoleId(roleId)
+                    .build();
         }
         RoleUnassignedFromUser event =
                 RoleUnassignedFromUserVBuilder
@@ -321,7 +329,11 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     private static IdentityDoesNotExist identityDoesNotExist(
             RemoveSecondaryIdentity command) {
-        return new IdentityDoesNotExist(command.getId(), command.getProviderId(),
-                                        command.getUserId());
+        return IdentityDoesNotExist
+                .newBuilder()
+                .setId(command.getId())
+                .setProviderId(command.getProviderId())
+                .setUserId(command.getUserId())
+                .build();
     }
 }

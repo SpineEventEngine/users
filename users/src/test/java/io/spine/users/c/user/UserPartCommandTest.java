@@ -9,7 +9,7 @@ package io.spine.users.c.user;
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregatePartCommandTest;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.c.user.TestUserFactory.createEmptyUserPart;
@@ -23,7 +23,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  * @author Vladyslav Lubenskyi
  */
 abstract class UserPartCommandTest<C extends CommandMessage>
-        extends AggregatePartCommandTest<UserId, C, User, UserPart, UserRoot> {
+        extends AggregateCommandTest<UserId, C, User, UserPart> {
 
     protected static final UserId USER_ID = userId();
 
@@ -36,17 +36,11 @@ abstract class UserPartCommandTest<C extends CommandMessage>
         return new UserPartRepository();
     }
 
-    @Override
-    protected UserRoot newRoot(UserId id) {
-        return new UserRoot(create(), id);
-    }
-
-    @Override
-    protected UserPart newPart(UserRoot root) {
-        return createEmptyUserPart(root);
-    }
-
     protected UserPart createPartWithState() {
-        return createUserPart(newRoot(USER_ID));
+        return createUserPart(root(USER_ID));
+    }
+
+    protected static UserRoot root(UserId id) {
+        return new UserRoot(create(), id);
     }
 }

@@ -8,11 +8,10 @@ package io.spine.users.c.group;
 
 import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregatePartCommandTest;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.GroupId;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.group.TestGroupFactory.createEmptyMembershipPart;
 import static io.spine.users.c.group.TestGroupFactory.createMembershipPart;
 import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
 
@@ -23,11 +22,7 @@ import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
  * @author Vladyslav Lubenskyi
  */
 abstract class GroupMembershipCommandTest<C extends CommandMessage>
-        extends AggregatePartCommandTest<GroupId,
-                                         C,
-                                         GroupMembership,
-                                         GroupMembershipPart,
-                                         GroupRoot> {
+        extends AggregateCommandTest<GroupId, C, GroupMembership, GroupMembershipPart> {
 
     static final GroupId GROUP_ID = createGroupId();
 
@@ -40,17 +35,11 @@ abstract class GroupMembershipCommandTest<C extends CommandMessage>
         return new GroupMembershipPartRepository();
     }
 
-    @Override
-    protected GroupRoot newRoot(GroupId id) {
-        return new GroupRoot(create(), id);
-    }
-
-    @Override
-    protected GroupMembershipPart newPart(GroupRoot root) {
-        return createEmptyMembershipPart(root);
-    }
-
     protected GroupMembershipPart createPartWithState() {
-        return createMembershipPart(newRoot(GROUP_ID));
+        return createMembershipPart(root(GROUP_ID));
+    }
+
+    private static GroupRoot root(GroupId id) {
+        return new GroupRoot(create(), id);
     }
 }

@@ -75,7 +75,11 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupMoved handle(MoveGroup command) throws CannotMoveExternalGroup {
         if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw new CannotMoveExternalGroup(command.getId(), getState().getExternalDomain());
+            throw CannotMoveExternalGroup
+                    .newBuilder()
+                    .setId(command.getId())
+                    .setExternalDomain(getState().getExternalDomain())
+                    .build();
         }
         return GroupMovedVBuilder
                 .newBuilder()
@@ -108,7 +112,11 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         List<RoleId> roles = getState().getRoleList();
         RoleId roleId = command.getRoleId();
         if (!roles.contains(roleId)) {
-            throw new RoleIsNotAssignedToGroup(getId(), roleId);
+            throw RoleIsNotAssignedToGroup
+                    .newBuilder()
+                    .setId(getId())
+                    .setRoleId(roleId)
+                    .build();
         }
         return RoleUnassignedFromGroupVBuilder
                 .newBuilder()

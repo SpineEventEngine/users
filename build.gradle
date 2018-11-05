@@ -19,7 +19,7 @@
 //
 
 buildscript {
-    apply from: "ext.gradle"
+    apply from: "$rootDir/version.gradle"
     apply from: "$rootDir/config/gradle/dependencies.gradle"
 
     repositories {
@@ -57,8 +57,6 @@ allprojects {
     group = 'io.spine'
     version = spineVersion
 }
-
-apply from: 'ext.gradle'
 
 ext {
     projectsToPublish = ["users"]
@@ -99,7 +97,6 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-    apply from: "$rootDir/ext.gradle"
     apply plugin: spineProtobufPluginId
 
     sourceCompatibility = 1.8

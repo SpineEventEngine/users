@@ -44,7 +44,7 @@ class UnassignRoleFromUserTest extends UserPartCommandTest<UnassignRoleFromUser>
     @Test
     @DisplayName("throw rejection if role isn't assigned to a user")
     void throwRejection() {
-        expectThat(newPart(USER_ID)).throwsRejection(Rejections.RoleIsNotAssignedToUser.class);
+        expectThat(new UserPart(root(USER_ID))).throwsRejection(Rejections.RoleIsNotAssignedToUser.class);
     }
 
     private static UnassignRoleFromUser createMessage() {

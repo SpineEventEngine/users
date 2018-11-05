@@ -64,7 +64,7 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
     @Test
     @DisplayName("throw rejection if role isn't assigned to a group")
     void throwsRejection() {
-        GroupPart aggregate = newPart(GROUP_ID);
+        GroupPart aggregate = new GroupPart(root(GROUP_ID));
 
         expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToGroup.class);
     }

@@ -9,10 +9,9 @@ package io.spine.users.c.user;
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregatePartCommandTest;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.user.TestUserFactory.createEmptyMembershipPart;
 import static io.spine.users.c.user.TestUserFactory.createMembershipPart;
 import static io.spine.users.c.user.given.UserTestEnv.userId;
 
@@ -23,7 +22,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userId;
  * @author Vladyslav Lubenskyi
  */
 abstract class UserMembershipCommandTest<C extends CommandMessage>
-        extends AggregatePartCommandTest<UserId, C, UserMembership, UserMembershipPart, UserRoot> {
+        extends AggregateCommandTest<UserId, C, UserMembership, UserMembershipPart> {
 
     protected static final UserId USER_ID = userId();
 
@@ -36,17 +35,11 @@ abstract class UserMembershipCommandTest<C extends CommandMessage>
         return new UserMembershipPartRepository();
     }
 
-    @Override
-    protected UserRoot newRoot(UserId id) {
-        return new UserRoot(create(), id);
-    }
-
-    @Override
-    protected UserMembershipPart newPart(UserRoot root) {
-        return createEmptyMembershipPart(root);
-    }
-
     protected UserMembershipPart createPartWithState() {
-        return createMembershipPart(newRoot(USER_ID));
+        return createMembershipPart(root(USER_ID));
+    }
+
+    private static UserRoot root(UserId id) {
+        return new UserRoot(create(), id);
     }
 }
