@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains classes and interfaces for working with Google Groups.
+ * This package contains Java implementation of query-side model related to Google user management.
  */
 
 @ParametersAreNonnullByDefault

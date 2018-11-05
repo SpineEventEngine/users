@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains Google Directory API related projections.
+ * This package contains Java implementation of command-side model related to Google Groups.
  */
 
 @ParametersAreNonnullByDefault
