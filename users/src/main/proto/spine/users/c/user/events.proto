@@ -46,7 +46,7 @@ message UserCreated {
 
     core.UserId id = 1;
 
-    // A kind of user: a person or machine.
+    // A kind of user: a person or a machine.
     UserNature nature = 2 [(required) = true];
 
     // A user name to be displayed on UI.
