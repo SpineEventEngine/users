@@ -26,6 +26,7 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
+import io.spine.users.google.GoogleGroupId;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -58,8 +59,11 @@ public class GoogleIdMappingTestEnv {
                                      .build();
     }
 
-    static String googleId() {
-        return newUuid();
+    static GoogleGroupId googleId() {
+        return GoogleGroupId
+                .newBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     static EmailAddress email() {

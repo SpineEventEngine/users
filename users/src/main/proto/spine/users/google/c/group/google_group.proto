@@ -34,6 +34,7 @@ import "google/protobuf/any.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
+import "spine/users/google/identifiers.proto";
 
 // A Google Group part.
 //
@@ -53,7 +54,7 @@ message GoogleGroup {
     GroupId id = 1;
 
     // A unique identifier of the group at Google.
-    string google_id = 2 [(required) = true];
+    GoogleGroupId google_id = 2 [(required) = true, (valid) = true];
 
     // A list of email aliases of the group.
     repeated net.EmailAddress aliases = 3;

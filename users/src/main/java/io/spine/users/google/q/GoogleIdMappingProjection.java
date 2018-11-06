@@ -22,6 +22,7 @@ package io.spine.users.google.q;
 
 import io.spine.core.Subscribe;
 import io.spine.server.projection.Projection;
+import io.spine.users.google.GoogleGroupId;
 import io.spine.users.google.GoogleIdMappingViewId;
 import io.spine.users.google.c.group.GoogleGroupCreated;
 
@@ -49,7 +50,8 @@ public class GoogleIdMappingProjection
 
     @Subscribe
     public void on(GoogleGroupCreated event) {
+        GoogleGroupId googleId = event.getGoogleId();
         getBuilder().setId(PROJECTION_ID)
-                    .putGroups(event.getGoogleId(), event.getId());
+                    .putGroups(googleId.getValue(), event.getId());
     }
 }
