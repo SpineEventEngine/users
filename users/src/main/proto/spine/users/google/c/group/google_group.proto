@@ -56,7 +56,7 @@ message GoogleGroup {
     string google_id = 2 [(required) = true];
 
     // A list of email aliases of the group.
-    repeated net.EmailAddress alialses = 3;
+    repeated net.EmailAddress aliases = 3;
 }
 
 // A process manager that translates the terminology of Google Groups into `Users` bounded context

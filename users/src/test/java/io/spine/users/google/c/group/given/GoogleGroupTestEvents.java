@@ -69,7 +69,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAlialses(alias())
+                                         .addAliases(alias())
                                          .setDescription(description())
                                          .build();
     }
@@ -81,7 +81,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAlialses(alias())
+                                         .addAliases(alias())
                                          .setDescription(description())
                                          .build();
     }

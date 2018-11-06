@@ -53,12 +53,12 @@ public class GoogleGroupPart
     void on(GoogleGroupCreated event) {
         getBuilder().setId(event.getId())
                     .setGoogleId(event.getGoogleId())
-                    .addAllAlialses(event.getAlialsesList());
+                    .addAllAliases(event.getAliasesList());
     }
 
     @Apply(allowImport = true)
     void on(GoogleGroupAliasesChanged event) {
-        getBuilder().clearAlialses()
-                    .addAllAlialses(event.getNewAliasesList());
+        getBuilder().clearAliases()
+                    .addAllAliases(event.getNewAliasesList());
     }
 }
