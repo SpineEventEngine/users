@@ -25,7 +25,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnEventTest;
 import io.spine.users.GroupId;
 
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newGroupId;
+import static io.spine.users.google.given.GoogleGroupTestEnv.newGroupId;
 
 /**
  * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.

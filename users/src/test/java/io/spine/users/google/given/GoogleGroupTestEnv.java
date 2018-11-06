@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.c.group.given;
+package io.spine.users.google.given;
 
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;

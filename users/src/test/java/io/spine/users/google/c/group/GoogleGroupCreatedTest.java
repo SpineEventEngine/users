@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.c.group.GoogleGroupTestPms.emptyPm;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEvents.externalGoogleGroupCreated;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEvents.internalGoogleGroupCreated;
+import static io.spine.users.google.given.GoogleGroupTestEvents.externalGoogleGroupCreated;
+import static io.spine.users.google.given.GoogleGroupTestEvents.internalGoogleGroupCreated;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

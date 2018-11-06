@@ -25,7 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.c.group.GoogleGroupTestPms.emptyPm;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
+import static io.spine.users.google.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
