@@ -55,7 +55,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'io.spine'
-    version = spineVersion
+    version = versionToPublish
 }
 
 ext {
