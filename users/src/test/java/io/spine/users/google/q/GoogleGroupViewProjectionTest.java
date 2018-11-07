@@ -52,7 +52,7 @@ class GoogleGroupViewProjectionTest {
                     .newBuilder()
                     .setId(event().getId())
                     .setGoogleId(event().getGoogleId())
-                    .addAllAliases(event().getAliasesList())
+                    .addAllAlias(event().getAliasList())
                     .build();
             expectThat(projection)
                     .hasState(state -> assertEquals(expectedState, state));
@@ -75,8 +75,8 @@ class GoogleGroupViewProjectionTest {
         void updateState() {
             GoogleGroupView expectedState = projection.getState()
                                                       .toBuilder()
-                                                      .clearAliases()
-                                                      .addAllAliases(event().getNewAliasesList())
+                                                      .clearAlias()
+                                                      .addAllAlias(event().getNewAliasList())
                                                       .build();
             expectThat(projection).hasState(state -> assertEquals(expectedState, state));
         }

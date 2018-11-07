@@ -41,7 +41,7 @@ public class GoogleGroupViewProjectionTestEnv {
         GoogleGroupView stateWithId = GoogleGroupView.newBuilder()
                                                      .setId(id)
                                                      .setGoogleId(googleId)
-                                                     .addAliases(alias())
+                                                     .addAlias(alias())
                                                      .build();
         return projectionOfClass(GoogleGroupViewProjection.class)
                 .withId(id)

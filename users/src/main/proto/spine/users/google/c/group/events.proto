@@ -68,7 +68,7 @@ message GoogleGroupCreated {
     string description = 5;
 
     // A list of email aliases of the group.
-    repeated net.EmailAddress aliases = 6;
+    repeated net.EmailAddress alias = 6;
 
     // A domain the groups belongs to.
     net.InternetDomain domain = 8;
@@ -147,5 +147,5 @@ message GoogleGroupAliasesChanged {
     GroupId id = 1;
 
     // The new list of aliases.
-    repeated net.EmailAddress new_aliases = 2;
+    repeated net.EmailAddress new_alias = 2;
 }

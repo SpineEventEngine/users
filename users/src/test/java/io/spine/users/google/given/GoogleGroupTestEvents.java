@@ -71,7 +71,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAliases(alias())
+                                         .addAlias(alias())
                                          .setDescription(description())
                                          .build();
     }
@@ -83,7 +83,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAliases(alias())
+                                         .addAlias(alias())
                                          .setDescription(description())
                                          .build();
     }
@@ -134,7 +134,7 @@ public class GoogleGroupTestEvents {
         return GoogleGroupAliasesChangedVBuilder
                 .newBuilder()
                 .setId(groupId)
-                .addNewAliases(newEmail())
+                .addNewAlias(newEmail())
                 .build();
     }
 }

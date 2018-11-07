@@ -47,12 +47,12 @@ public class GoogleGroupViewProjection extends Projection<GroupId, GoogleGroupVi
     public void on(GoogleGroupCreated event) {
         getBuilder().setId(event.getId())
                     .setGoogleId(event.getGoogleId())
-                    .addAllAliases(event.getAliasesList());
+                    .addAllAlias(event.getAliasList());
     }
 
     @Subscribe
     public void on(GoogleGroupAliasesChanged event) {
-        getBuilder().clearAliases()
-                    .addAllAliases(event.getNewAliasesList());
+        getBuilder().clearAlias()
+                    .addAllAlias(event.getNewAliasList());
     }
 }
