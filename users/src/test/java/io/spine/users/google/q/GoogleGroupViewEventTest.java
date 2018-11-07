@@ -46,7 +46,7 @@ abstract class GoogleGroupViewEventTest<E extends EventMessage>
 
     @Override
     protected Repository<GroupId, GoogleGroupViewProjection> createEntityRepository() {
-        return new GoogleGroupProjectionRepository();
+        return new GoogleGroupViewProjectionRepository();
     }
 
     E event() {

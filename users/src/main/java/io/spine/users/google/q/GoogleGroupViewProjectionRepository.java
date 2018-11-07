@@ -29,10 +29,10 @@ import io.spine.users.google.c.group.GoogleGroupCreated;
 /**
  * The repository for {@link GoogleGroupViewProjection}.
  */
-public class GoogleGroupProjectionRepository
+public class GoogleGroupViewProjectionRepository
         extends ProjectionRepository<GroupId, GoogleGroupViewProjection, GoogleGroupView> {
 
-    public GoogleGroupProjectionRepository() {
+    public GoogleGroupViewProjectionRepository() {
         getEventRouting()
                 .route(GoogleGroupCreated.class,
                        (event, context) -> ImmutableSet.of(event.getId()))
