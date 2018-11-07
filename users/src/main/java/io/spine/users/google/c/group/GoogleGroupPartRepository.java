@@ -18,38 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.q;
+package io.spine.users.google.c.group;
 
-import io.spine.base.EventMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.projection.ProjectionTest;
+import io.spine.server.aggregate.AggregatePartRepository;
 import io.spine.users.GroupId;
-
-import static io.spine.base.Identifier.newUuid;
+import io.spine.users.c.group.GroupRoot;
 
 /**
- * The implementation base for {@link GoogleGroupViewProjection} tests.
+ * The repository for {@link GoogleGroupPart}.
+ *
+ * @author Vladyslav Lubenskyi
  */
-abstract class GoogleGroupViewEventTest<E extends EventMessage>
-        extends ProjectionTest<GroupId, E, GoogleGroupView, GoogleGroupViewProjection> {
-
-    static final GroupId PROJECTION_ID = GroupId.newBuilder()
-                                                .setValue(newUuid())
-                                                .build();
-
-    private final E event;
-
-    GoogleGroupViewEventTest(E eventMessage) {
-        super(PROJECTION_ID, eventMessage);
-        this.event = eventMessage;
-    }
-
-    @Override
-    protected Repository<GroupId, GoogleGroupViewProjection> createEntityRepository() {
-        return new GoogleGroupViewProjectionRepository();
-    }
-
-    E event() {
-        return event;
-    }
+public class GoogleGroupPartRepository
+        extends AggregatePartRepository<GroupId, GoogleGroupPart, GroupRoot> {
 }

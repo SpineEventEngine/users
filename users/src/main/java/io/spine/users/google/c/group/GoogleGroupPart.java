@@ -18,40 +18,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.q;
+package io.spine.users.google.c.group;
 
-import io.spine.core.Subscribe;
-import io.spine.server.projection.Projection;
+import io.spine.server.aggregate.AggregatePart;
+import io.spine.server.aggregate.AggregateRoot;
+import io.spine.server.aggregate.Apply;
 import io.spine.users.GroupId;
-import io.spine.users.google.c.group.GoogleGroupAliasesChanged;
-import io.spine.users.google.c.group.GoogleGroupCreated;
+import io.spine.users.c.group.GroupRoot;
 
 /**
- * A view of a Google Group.
+ * A Google Group part.
  *
- * <p>This projection subscribes on events happen to a Google Group and stores all information
- * that is specific for a Google Group. For example:
+ * <p>This part handles external events happen to a Google Groups and stores all information
+ * that is specific for a Google Groups. For example:
  * <ul>
  *     <li>an identifier of a group at Google;
  *     <li>the list of email aliases;
  *     <li>etc.
  * </ul>
  */
-public class GoogleGroupViewProjection extends Projection<GroupId, GoogleGroupView, GoogleGroupViewVBuilder> {
+public class GoogleGroupPart
+        extends AggregatePart<GroupId, GoogleGroup, GoogleGroupVBuilder, GroupRoot> {
 
-    protected GoogleGroupViewProjection(GroupId id) {
-        super(id);
+    /**
+     * @see AggregatePart#AggregatePart(AggregateRoot)
+     */
+    protected GoogleGroupPart(GroupRoot root) {
+        super(root);
     }
 
-    @Subscribe
-    public void on(GoogleGroupCreated event) {
+    @Apply(allowImport = true)
+    void on(GoogleGroupCreated event) {
         getBuilder().setId(event.getId())
                     .setGoogleId(event.getGoogleId())
                     .addAllAlias(event.getAliasList());
     }
 
-    @Subscribe
-    public void on(GoogleGroupAliasesChanged event) {
+    @Apply(allowImport = true)
+    void on(GoogleGroupAliasesChanged event) {
         getBuilder().clearAlias()
                     .addAllAlias(event.getNewAliasList());
     }
