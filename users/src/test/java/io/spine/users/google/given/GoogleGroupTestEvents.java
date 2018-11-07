@@ -18,9 +18,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.c.group.given;
+package io.spine.users.google.given;
 
 import io.spine.users.GroupId;
+import io.spine.users.google.c.group.GoogleGroupAliasesChanged;
+import io.spine.users.google.c.group.GoogleGroupAliasesChangedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupCreated;
 import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupDeleted;
@@ -37,17 +39,17 @@ import io.spine.users.google.c.group.GoogleGroupLifecyclePm;
 import io.spine.users.google.c.group.GoogleGroupRenamed;
 import io.spine.users.google.c.group.GoogleGroupRenamedVBuilder;
 
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.alias;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.description;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.displayName;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.email;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.googleId;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.groupName;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.internalDomain;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newDescription;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.newEmail;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.parentGroup;
-import static io.spine.users.google.c.group.given.GoogleGroupTestEnv.role;
+import static io.spine.users.google.given.GoogleGroupTestEnv.alias;
+import static io.spine.users.google.given.GoogleGroupTestEnv.description;
+import static io.spine.users.google.given.GoogleGroupTestEnv.displayName;
+import static io.spine.users.google.given.GoogleGroupTestEnv.email;
+import static io.spine.users.google.given.GoogleGroupTestEnv.googleId;
+import static io.spine.users.google.given.GoogleGroupTestEnv.groupName;
+import static io.spine.users.google.given.GoogleGroupTestEnv.internalDomain;
+import static io.spine.users.google.given.GoogleGroupTestEnv.newDescription;
+import static io.spine.users.google.given.GoogleGroupTestEnv.newEmail;
+import static io.spine.users.google.given.GoogleGroupTestEnv.parentGroup;
+import static io.spine.users.google.given.GoogleGroupTestEnv.role;
 
 /**
  * Test events for {@link GoogleGroupLifecyclePm}.
@@ -69,7 +71,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAlialses(alias())
+                                         .addAlias(alias())
                                          .setDescription(description())
                                          .build();
     }
@@ -81,7 +83,7 @@ public class GoogleGroupTestEvents {
                                          .setDisplayName(displayName())
                                          .setEmail(email())
                                          .setDomain(internalDomain())
-                                         .addAlialses(alias())
+                                         .addAlias(alias())
                                          .setDescription(description())
                                          .build();
     }
@@ -126,5 +128,13 @@ public class GoogleGroupTestEvents {
                                                     .setId(groupId)
                                                     .setNewDescription(newDescription())
                                                     .build();
+    }
+
+    public static GoogleGroupAliasesChanged googleGroupAliasesChanged(GroupId groupId) {
+        return GoogleGroupAliasesChangedVBuilder
+                .newBuilder()
+                .setId(groupId)
+                .addNewAlias(newEmail())
+                .build();
     }
 }

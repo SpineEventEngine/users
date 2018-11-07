@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/users/google/identifiers.proto";
 
-// A projection that maps IDs of Google Groups to `GroupId`, Users to `UserId` and so on.
+// A projection that maps a `GoogleGroupId` to the corresponding `GroupId`.
 //
 // This projection is used to match IDs when mapping external events from Directory API to
 // `Users` bounded context events.
@@ -44,5 +44,7 @@ message GoogleIdMappingView {
     GoogleIdMappingViewId id = 1;
 
     // A mapping of a single Google Group ID to a single `GroupId`.
+    //
+    // The key is a value of `GoogleGroupId`.
     map<string, GroupId> groups = 2;
 }

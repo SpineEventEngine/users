@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.c.group.given;
+package io.spine.users.google.given;
 
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
@@ -26,6 +26,7 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
+import io.spine.users.google.GoogleGroupId;
 import io.spine.users.google.c.group.GoogleGroupLifecyclePm;
 
 import static io.spine.base.Identifier.newUuid;
@@ -49,8 +50,11 @@ public class GoogleGroupTestEnv {
                               .build();
     }
 
-    public static String googleId() {
-        return "x123pwd";
+    public static GoogleGroupId googleId() {
+        return GoogleGroupId
+                .newBuilder()
+                .setValue("x123pwd")
+                .build();
     }
 
     static String description() {
@@ -79,7 +83,7 @@ public class GoogleGroupTestEnv {
                                      .build();
     }
 
-    static EmailAddress alias() {
+    public static EmailAddress alias() {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers@spine.eu")
                                    .build();

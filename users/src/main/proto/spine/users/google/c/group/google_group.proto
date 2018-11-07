@@ -30,10 +30,10 @@ option java_outer_classname = "GoogleGroupProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "google/protobuf/any.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
+import "spine/users/google/identifiers.proto";
 
 // A Google Group part.
 //
@@ -53,10 +53,10 @@ message GoogleGroup {
     GroupId id = 1;
 
     // A unique identifier of the group at Google.
-    string google_id = 2 [(required) = true];
+    GoogleGroupId google_id = 2 [(required) = true, (valid) = true];
 
     // A list of email aliases of the group.
-    repeated net.EmailAddress alialses = 3;
+    repeated net.EmailAddress alias = 3;
 }
 
 // A process manager that translates the terminology of Google Groups into `Users` bounded context

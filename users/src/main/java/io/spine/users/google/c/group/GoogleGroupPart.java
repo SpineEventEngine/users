@@ -36,8 +36,6 @@ import io.spine.users.c.group.GroupRoot;
  *     <li>the list of email aliases;
  *     <li>etc.
  * </ul>
- *
- * @author Vladyslav Lubenskyi
  */
 public class GoogleGroupPart
         extends AggregatePart<GroupId, GoogleGroup, GoogleGroupVBuilder, GroupRoot> {
@@ -53,12 +51,12 @@ public class GoogleGroupPart
     void on(GoogleGroupCreated event) {
         getBuilder().setId(event.getId())
                     .setGoogleId(event.getGoogleId())
-                    .addAllAlialses(event.getAlialsesList());
+                    .addAllAlias(event.getAliasList());
     }
 
     @Apply(allowImport = true)
     void on(GoogleGroupAliasesChanged event) {
-        getBuilder().clearAlialses()
-                    .addAllAlialses(event.getNewAliasesList());
+        getBuilder().clearAlias()
+                    .addAllAlias(event.getNewAliasList());
     }
 }

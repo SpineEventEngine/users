@@ -31,7 +31,17 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-// A singleton identifer of the `GoogleIdMappingView` projection.
+// An identifier of a Google Group.
+//
+// Every `GoogleGroupId` has the corresponding `GroupId`.
+//
+message GoogleGroupId {
+
+    // The value of the ID.
+    string value = 1 [(required) = true];
+}
+
+// A singleton identifier of the `GoogleIdMappingView` projection.
 //
 message GoogleIdMappingViewId {
 

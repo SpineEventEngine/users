@@ -31,7 +31,6 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
-import "spine/time/time.proto";
 import "spine/users/c/signin/values.proto";
 import "spine/users/c/user/identity.proto";
 

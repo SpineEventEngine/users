@@ -18,32 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.google.c.group;
-
-import io.spine.base.EventMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnEventTest;
-import io.spine.users.GroupId;
-
-import static io.spine.users.google.given.GoogleGroupTestEnv.newGroupId;
-
 /**
- * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.
- *
- * @param <E> an event being tested
- * @author Vladyslav Lubenskyi
+ * The test environment classes for Google Groups projections.
  */
-abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<GroupId, E, GoogleGroupLifecycle, GoogleGroupLifecyclePm> {
-
-    protected static final GroupId GROUP_ID = newGroupId();
-
-    GoogleGroupLifecycleEventTest(E eventMessage) {
-        super(GROUP_ID, eventMessage);
-    }
-
-    @Override
-    protected Repository<GroupId, GoogleGroupLifecyclePm> createEntityRepository() {
-        return new GoogleGroupLifecyclePmRepository();
-    }
-}
+package io.spine.users.google.q.given;

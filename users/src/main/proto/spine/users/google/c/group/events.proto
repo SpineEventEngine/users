@@ -33,6 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
+import "spine/users/google/identifiers.proto";
 
 // This file contains definitions of external events that can happen to a Google Group.
 // These events aren't produced by any aggregate inside the application. Instead, they should be
@@ -55,7 +56,7 @@ message GoogleGroupCreated {
     GroupId id = 1;
 
     // An ID of the group at Google.
-    string google_id = 2 [(required) = true];
+    GoogleGroupId google_id = 2 [(required) = true, (valid) = true];
 
     // A name to display on UI.
     string display_name = 3 [(required) = true];
@@ -67,7 +68,7 @@ message GoogleGroupCreated {
     string description = 5;
 
     // A list of email aliases of the group.
-    repeated net.EmailAddress alialses = 6;
+    repeated net.EmailAddress alias = 6;
 
     // A domain the groups belongs to.
     net.InternetDomain domain = 8;
@@ -146,5 +147,5 @@ message GoogleGroupAliasesChanged {
     GroupId id = 1;
 
     // The new list of aliases.
-    repeated net.EmailAddress new_aliases = 2;
+    repeated net.EmailAddress new_alias = 2;
 }

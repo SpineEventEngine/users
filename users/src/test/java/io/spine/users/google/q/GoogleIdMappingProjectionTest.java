@@ -33,9 +33,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.google.GoogleIdMappingViewId.Value.SINGLETON;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -52,7 +50,7 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
                                          .build();
 
     GoogleIdMappingProjectionTest() {
-        super(ID, createMessage());
+        super(ID, groupCreated());
     }
 
     @Test
@@ -63,10 +61,11 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
             Map<String, GroupId> mapping = state.getGroupsMap();
             assertFalse(mapping.isEmpty());
 
-            String googleId = message().getGoogleId();
-            assertTrue(mapping.containsKey(googleId));
+            String rawGoogleId = message().getGoogleId()
+                                          .getValue();
+            assertTrue(mapping.containsKey(rawGoogleId));
 
-            GroupId groupId = mapping.get(googleId);
+            GroupId groupId = mapping.get(rawGoogleId);
             assertEquals(message().getId(), groupId);
         });
     }
@@ -76,7 +75,7 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
         return new GoogleIdMappingRepository();
     }
 
-    private static GoogleGroupCreated createMessage() {
+    private static GoogleGroupCreated groupCreated() {
         return GoogleIdMappingTestEvents.googleGroupCreated();
     }
 }
