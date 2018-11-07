@@ -47,7 +47,7 @@ class GoogleGroupViewProjectionTest {
 
         @Test
         @DisplayName("and update state")
-        void testBeTranslated() {
+        void updateState() {
             GoogleGroupView expectedState = GoogleGroupView
                     .newBuilder()
                     .setId(event().getId())
@@ -72,7 +72,7 @@ class GoogleGroupViewProjectionTest {
 
         @Test
         @DisplayName("and update state")
-        void testBeTranslated() {
+        void updateState() {
             GoogleGroupView expectedState = projection.getState()
                                                       .toBuilder()
                                                       .clearAliases()
