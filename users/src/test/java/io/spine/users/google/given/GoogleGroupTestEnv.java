@@ -83,7 +83,7 @@ public class GoogleGroupTestEnv {
                                      .build();
     }
 
-    static EmailAddress alias() {
+    public static EmailAddress alias() {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers@spine.eu")
                                    .build();

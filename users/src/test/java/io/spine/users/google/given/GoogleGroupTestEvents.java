@@ -21,6 +21,8 @@
 package io.spine.users.google.given;
 
 import io.spine.users.GroupId;
+import io.spine.users.google.c.group.GoogleGroupAliasesChanged;
+import io.spine.users.google.c.group.GoogleGroupAliasesChangedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupCreated;
 import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
 import io.spine.users.google.c.group.GoogleGroupDeleted;
@@ -126,5 +128,13 @@ public class GoogleGroupTestEvents {
                                                     .setId(groupId)
                                                     .setNewDescription(newDescription())
                                                     .build();
+    }
+
+    public static GoogleGroupAliasesChanged googleGroupAliasesChanged(GroupId groupId) {
+        return GoogleGroupAliasesChangedVBuilder
+                .newBuilder()
+                .setId(groupId)
+                .addNewAliases(newEmail())
+                .build();
     }
 }
