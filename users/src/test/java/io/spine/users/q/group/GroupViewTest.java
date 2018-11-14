@@ -25,7 +25,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.projection.ProjectionTest;
 import io.spine.users.GroupId;
 
-import static io.spine.users.q.group.given.GroupViewTestEnv.newGroupId;
+import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
 
 /**
  * The implementation base for testing event subscriptions in {@link GroupView}
@@ -35,10 +35,8 @@ import static io.spine.users.q.group.given.GroupViewTestEnv.newGroupId;
 abstract class GroupViewTest<M extends EventMessage>
         extends ProjectionTest<GroupId, M, GroupView, GroupViewProjection> {
 
-    static final GroupId PROJECTION_ID = newGroupId();
-
     GroupViewTest(M eventMessage) {
-        super(PROJECTION_ID, eventMessage);
+        super(groupId(), eventMessage);
     }
 
     @Override

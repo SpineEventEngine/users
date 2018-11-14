@@ -21,20 +21,10 @@
 package io.spine.users.q.group.given;
 
 import io.spine.users.GroupId;
-import io.spine.users.c.group.GroupCreated;
-import io.spine.users.c.group.GroupCreatedVBuilder;
-import io.spine.users.c.group.JoinedParentGroup;
-import io.spine.users.c.group.JoinedParentGroupVBuilder;
-import io.spine.users.c.group.LeftParentGroup;
-import io.spine.users.c.group.LeftParentGroupVBuilder;
+import io.spine.users.c.group.*;
 import io.spine.users.q.group.GroupViewProjection;
 
-import static io.spine.users.q.group.given.GroupViewTestEnv.childGroup;
-import static io.spine.users.q.group.given.GroupViewTestEnv.email;
-import static io.spine.users.q.group.given.GroupViewTestEnv.externalDomain;
-import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
-import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
-import static io.spine.users.q.group.given.GroupViewTestEnv.role;
+import static io.spine.users.q.group.given.GroupViewTestEnv.*;
 
 /**
  * Test events for testing {@link GroupViewProjection}.
@@ -52,9 +42,9 @@ public class GroupViewTestEvents {
     /**
      * Returns a new {@link GroupCreated} event with {@code orgEntity} set.
      */
-    public static GroupCreated internalGroupCreated(GroupId groupId) {
+    public static GroupCreated internalGroupCreated() {
         return GroupCreatedVBuilder.newBuilder()
-                                   .setId(groupId)
+                                   .setId(groupId())
                                    .setEmail(email())
                                    .setDisplayName(groupDisplayName())
                                    .addRole(role())
@@ -65,9 +55,9 @@ public class GroupViewTestEvents {
     /**
      * Returns a new {@link GroupCreated} event with {@code external_domain} set.
      */
-    public static GroupCreated externalGroupCreated(GroupId groupId) {
+    public static GroupCreated externalGroupCreated() {
         return GroupCreatedVBuilder.newBuilder()
-                                   .setId(groupId)
+                                   .setId(groupId())
                                    .setEmail(email())
                                    .setDisplayName(groupDisplayName())
                                    .addRole(role())

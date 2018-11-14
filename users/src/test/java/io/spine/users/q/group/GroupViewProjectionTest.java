@@ -24,22 +24,16 @@ import io.spine.users.GroupId;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
-import io.spine.users.q.group.given.GroupViewTestEvents;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.spine.users.q.group.GroupViewTest.PROJECTION_ID;
-import static io.spine.users.q.group.GroupViewTestProjections.emptyProjection;
-import static io.spine.users.q.group.GroupViewTestProjections.groupWithMemberProjection;
-import static io.spine.users.q.group.GroupViewTestProjections.groupWithoutMemberProjection;
-import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
-import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.spine.users.q.group.GroupViewTestProjections.*;
+import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
+import static io.spine.users.q.group.given.GroupViewTestEvents.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("GroupView projection should")
 class GroupViewProjectionTest {
@@ -55,7 +49,7 @@ class GroupViewProjectionTest {
         @Test
         @DisplayName("initialize state")
         void testState() {
-            expectThat(emptyProjection(PROJECTION_ID)).hasState(state -> {
+            expectThat(emptyProjection(groupId())).hasState(state -> {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getOrgEntity(), state.getOrgEntity());
@@ -76,7 +70,7 @@ class GroupViewProjectionTest {
         @Test
         @DisplayName("initialize state")
         void testState() {
-            expectThat(emptyProjection(PROJECTION_ID)).hasState(state -> {
+            expectThat(emptyProjection(groupId())).hasState(state -> {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getExternalDomain(), state.getExternalDomain());
@@ -91,13 +85,13 @@ class GroupViewProjectionTest {
     class OnLeftParentGroup extends GroupViewTest<LeftParentGroup> {
 
         OnLeftParentGroup() {
-            super(leftParentGroup(PROJECTION_ID));
+            super(leftParentGroup(groupId()));
         }
 
         @Test
         @DisplayName("parent group should remove a member")
         void testState() {
-            expectThat(groupWithMemberProjection(PROJECTION_ID)).hasState(state -> {
+            expectThat(groupWithMemberProjection(groupId())).hasState(state -> {
                 List<GroupId> membersList = state.getChildGroupList();
                 assertTrue(membersList.isEmpty());
             });
@@ -109,25 +103,17 @@ class GroupViewProjectionTest {
     class OnJoinedParentGroup extends GroupViewTest<JoinedParentGroup> {
 
         OnJoinedParentGroup() {
-            super(joinedParentGroup(PROJECTION_ID));
+            super(joinedParentGroup(groupId()));
         }
 
         @Test
         @DisplayName("parent group should add a member")
         void testState() {
-            expectThat(groupWithoutMemberProjection(PROJECTION_ID)).hasState(state -> {
+            expectThat(groupWithoutMemberProjection(groupId())).hasState(state -> {
                 List<GroupId> membersList = state.getChildGroupList();
                 assertFalse(membersList.isEmpty());
                 assertEquals(membersList.get(0), message().getId());
             });
         }
-    }
-
-    private static GroupCreated internalGroupCreated() {
-        return GroupViewTestEvents.internalGroupCreated(PROJECTION_ID);
-    }
-
-    private static GroupCreated externalGroupCreated() {
-        return GroupViewTestEvents.externalGroupCreated(PROJECTION_ID);
     }
 }
