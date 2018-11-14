@@ -23,9 +23,12 @@ package io.spine.users.q.group;
 import io.spine.core.Subscribe;
 import io.spine.server.projection.Projection;
 import io.spine.users.GroupId;
+import io.spine.users.RoleId;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
+import io.spine.users.c.group.RoleAssignedToGroup;
+import io.spine.users.c.group.RoleUnassignedFromGroup;
 
 import java.util.List;
 
@@ -74,6 +77,24 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
         List<GroupId> members = builder.getChildGroup();
         if (members.contains(memberId)) {
             builder.removeChildGroup(members.indexOf(memberId));
+        }
+    }
+
+    @Subscribe
+    public void on(RoleAssignedToGroup event) {
+        getBuilder().addRole(event.getRoleId());
+    }
+
+    @Subscribe
+    public void on(RoleUnassignedFromGroup event) {
+        RoleId unassignedRole = event.getRoleId();
+        removeRole(unassignedRole);
+    }
+
+    private void removeRole(RoleId role) {
+        List<RoleId> roles = getBuilder().getRole();
+        if (roles.contains(role)) {
+            getBuilder().removeRole(roles.indexOf(role));
         }
     }
 }

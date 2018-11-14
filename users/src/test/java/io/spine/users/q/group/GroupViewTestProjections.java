@@ -23,7 +23,11 @@ package io.spine.users.q.group;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
-import static io.spine.users.q.group.given.GroupViewTestEnv.*;
+import static io.spine.users.q.group.given.GroupViewTestEnv.childGroup;
+import static io.spine.users.q.group.given.GroupViewTestEnv.email;
+import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
+import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
+import static io.spine.users.q.group.given.GroupViewTestEnv.role;
 
 /**
  * Test {@link io.spine.users.q.group.GroupView} projections.
@@ -40,14 +44,21 @@ class GroupViewTestProjections {
         return new GroupViewProjection(id);
     }
 
-    static GroupViewProjection groupWithoutMemberProjection(GroupId id) {
+    static GroupViewProjection groupAfterCreation(GroupId id) {
         GroupView state = state(id).build();
         return newProjection(state);
     }
 
-    static GroupViewProjection groupWithMemberProjection(GroupId id) {
+    static GroupViewProjection groupWithChildGroups(GroupId id) {
         GroupView state = state(id)
                 .addChildGroup(childGroup())
+                .build();
+        return newProjection(state);
+    }
+
+    static GroupViewProjection groupWithRole(GroupId id) {
+        GroupView state = state(id)
+                .addRole(role())
                 .build();
         return newProjection(state);
     }

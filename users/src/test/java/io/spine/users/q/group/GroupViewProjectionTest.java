@@ -20,20 +20,34 @@
 
 package io.spine.users.q.group;
 
+import com.google.common.collect.ImmutableList;
 import io.spine.users.GroupId;
+import io.spine.users.RoleId;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
+import io.spine.users.c.group.RoleAssignedToGroup;
+import io.spine.users.c.group.RoleUnassignedFromGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.spine.users.q.group.GroupViewTestProjections.*;
+import static io.spine.users.q.group.GroupViewTestProjections.emptyProjection;
+import static io.spine.users.q.group.GroupViewTestProjections.groupAfterCreation;
+import static io.spine.users.q.group.GroupViewTestProjections.groupWithChildGroups;
+import static io.spine.users.q.group.GroupViewTestProjections.groupWithRole;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
-import static io.spine.users.q.group.given.GroupViewTestEvents.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.spine.users.q.group.given.GroupViewTestEvents.externalGroupCreated;
+import static io.spine.users.q.group.given.GroupViewTestEvents.internalGroupCreated;
+import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.roleAssignedToGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.roleUnassignedFromGroup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("GroupView projection should")
 class GroupViewProjectionTest {
@@ -85,13 +99,13 @@ class GroupViewProjectionTest {
     class OnLeftParentGroup extends GroupViewTest<LeftParentGroup> {
 
         OnLeftParentGroup() {
-            super(leftParentGroup(groupId()));
+            super(leftParentGroup());
         }
 
         @Test
         @DisplayName("parent group should remove a member")
         void testState() {
-            expectThat(groupWithMemberProjection(groupId())).hasState(state -> {
+            expectThat(groupWithChildGroups(groupId())).hasState(state -> {
                 List<GroupId> membersList = state.getChildGroupList();
                 assertTrue(membersList.isEmpty());
             });
@@ -103,16 +117,51 @@ class GroupViewProjectionTest {
     class OnJoinedParentGroup extends GroupViewTest<JoinedParentGroup> {
 
         OnJoinedParentGroup() {
-            super(joinedParentGroup(groupId()));
+            super(joinedParentGroup());
         }
 
         @Test
         @DisplayName("parent group should add a member")
         void testState() {
-            expectThat(groupWithoutMemberProjection(groupId())).hasState(state -> {
+            expectThat(groupAfterCreation(groupId())).hasState(state -> {
                 List<GroupId> membersList = state.getChildGroupList();
                 assertFalse(membersList.isEmpty());
                 assertEquals(membersList.get(0), message().getId());
+            });
+        }
+    }
+
+    @Nested
+    @DisplayName("when RoleAssignedToGroup")
+    class OnRoleAssignedToGroup extends GroupViewTest<RoleAssignedToGroup> {
+
+        OnRoleAssignedToGroup() {
+            super(roleAssignedToGroup());
+        }
+
+        @Test
+        @DisplayName("add the role")
+        void addRole() {
+            List<RoleId> expectedRoles = ImmutableList.of(message().getRoleId());
+            expectThat(groupAfterCreation(groupId()))
+                    .hasState(state -> assertEquals(expectedRoles, state.getRoleList()));
+        }
+    }
+
+    @Nested
+    @DisplayName("when RoleUnassignedFromGroup")
+    class OnRoleUnassignedFromGroup extends GroupViewTest<RoleUnassignedFromGroup> {
+
+        OnRoleUnassignedFromGroup() {
+            super(roleUnassignedFromGroup());
+        }
+
+        @Test
+        @DisplayName("remove the role")
+        void removeRole() {
+            expectThat(groupWithRole(groupId())).hasState(state -> {
+                assertTrue(state.getRoleList()
+                                .isEmpty());
             });
         }
     }

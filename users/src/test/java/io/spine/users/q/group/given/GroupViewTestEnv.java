@@ -24,7 +24,14 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
-import io.spine.users.*;
+import io.spine.users.GroupId;
+import io.spine.users.GroupIdVBuilder;
+import io.spine.users.OrganizationId;
+import io.spine.users.OrganizationIdVBuilder;
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrganizationOrUnitVBuilder;
+import io.spine.users.RoleId;
+import io.spine.users.RoleIdVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -35,6 +42,7 @@ public class GroupViewTestEnv {
 
     private static final GroupId CHILD_GROUP_ID = newGroupId();
     private static final GroupId GROUP_ID = newGroupId();
+    private static final RoleId ROLE_ID = roleUuid();
 
     /**
      * Prevents instantiation.
@@ -66,10 +74,8 @@ public class GroupViewTestEnv {
         return "Developers Developers Developers";
     }
 
-    static RoleId role() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
+    public static RoleId role() {
+        return ROLE_ID;
     }
 
     public static OrganizationOrUnit orgEntity() {
@@ -85,10 +91,14 @@ public class GroupViewTestEnv {
     }
 
     private static OrganizationId organizationId() {
-
         return OrganizationIdVBuilder.newBuilder()
                                      .setValue(newUuid())
                                      .build();
     }
 
+    private static RoleId roleUuid() {
+        return RoleIdVBuilder.newBuilder()
+                             .setValue(newUuid())
+                             .build();
+    }
 }

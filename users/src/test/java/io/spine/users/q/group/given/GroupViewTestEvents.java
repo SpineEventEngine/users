@@ -20,11 +20,25 @@
 
 package io.spine.users.q.group.given;
 
-import io.spine.users.GroupId;
-import io.spine.users.c.group.*;
+import io.spine.users.c.group.GroupCreated;
+import io.spine.users.c.group.GroupCreatedVBuilder;
+import io.spine.users.c.group.JoinedParentGroup;
+import io.spine.users.c.group.JoinedParentGroupVBuilder;
+import io.spine.users.c.group.LeftParentGroup;
+import io.spine.users.c.group.LeftParentGroupVBuilder;
+import io.spine.users.c.group.RoleAssignedToGroup;
+import io.spine.users.c.group.RoleAssignedToGroupVBuilder;
+import io.spine.users.c.group.RoleUnassignedFromGroup;
+import io.spine.users.c.group.RoleUnassignedFromGroupVBuilder;
 import io.spine.users.q.group.GroupViewProjection;
 
-import static io.spine.users.q.group.given.GroupViewTestEnv.*;
+import static io.spine.users.q.group.given.GroupViewTestEnv.childGroup;
+import static io.spine.users.q.group.given.GroupViewTestEnv.email;
+import static io.spine.users.q.group.given.GroupViewTestEnv.externalDomain;
+import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
+import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
+import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
+import static io.spine.users.q.group.given.GroupViewTestEnv.role;
 
 /**
  * Test events for testing {@link GroupViewProjection}.
@@ -65,18 +79,31 @@ public class GroupViewTestEvents {
                                    .build();
     }
 
-    public static JoinedParentGroup joinedParentGroup(GroupId groupId) {
+    public static JoinedParentGroup joinedParentGroup() {
         return JoinedParentGroupVBuilder.newBuilder()
                                         .setId(childGroup())
-                                        .setParentGroupId(groupId)
+                                        .setParentGroupId(groupId())
                                         .build();
     }
 
-    public static LeftParentGroup leftParentGroup(GroupId groupId) {
+    public static LeftParentGroup leftParentGroup() {
         return LeftParentGroupVBuilder.newBuilder()
                                       .setId(childGroup())
-                                      .setParentGroupId(groupId)
+                                      .setParentGroupId(groupId())
                                       .build();
     }
 
+    public static RoleAssignedToGroup roleAssignedToGroup() {
+        return RoleAssignedToGroupVBuilder.newBuilder()
+                                          .setId(groupId())
+                                          .setRoleId(role())
+                                          .build();
+    }
+
+    public static RoleUnassignedFromGroup roleUnassignedFromGroup() {
+        return RoleUnassignedFromGroupVBuilder.newBuilder()
+                                              .setId(groupId())
+                                              .setRoleId(role())
+                                              .build();
+    }
 }
