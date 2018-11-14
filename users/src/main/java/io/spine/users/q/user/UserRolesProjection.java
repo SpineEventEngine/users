@@ -23,8 +23,20 @@ package io.spine.users.q.user;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
+import io.spine.users.GroupId;
+import io.spine.users.RoleId;
+import io.spine.users.c.user.RoleAssignedToUser;
+import io.spine.users.c.user.RoleUnassignedFromUser;
+import io.spine.users.c.user.UserCreated;
+import io.spine.users.c.user.UserLeftGroup;
 import io.spine.users.q.group.GroupView;
 
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * A projection, which represents all roles of a user (both explicitly and implicitly assigned).
+ */
 public class UserRolesProjection extends Projection<UserId, UserRoles, UserRolesVBuilder> {
 
     protected UserRolesProjection(UserId id) {
@@ -32,16 +44,77 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     @Subscribe
-    public void onUpdate(GroupView group) {
-
+    public void on(UserCreated event) {
+        UserId userId = event.getId();
+        getBuilder().setId(userId);
     }
 
-    private static GroupRoles groupRoles(GroupView group) {
-        GroupRoles roles = GroupRolesVBuilder
-                .newBuilder()
-                .setGroup(group.getId())
-                .addAllRole(group.getRoleList())
-                .build();
+    /**
+     * Updates roles of a group using the state update of {@link GroupView}.
+     */
+    @Subscribe
+    public void onUpdate(GroupView group) {
+        GroupRoles updatedRoles = rolesOf(group);
+        removeGroupRoles(group.getId());
+        getBuilder().addGroupRole(updatedRoles);
+    }
+
+    /**
+     * Removes the roles for the left group.
+     *
+     * @implNote this subscription is required because {@link GroupView} update
+     *           won't be routed if a user left a group
+     */
+    @Subscribe
+    public void on(UserLeftGroup event) {
+        GroupId groupId = event.getGroupId();
+        removeGroupRoles(groupId);
+    }
+
+    @Subscribe
+    public void on(RoleAssignedToUser event) {
+        getBuilder().addRole(event.getRoleId());
+    }
+
+    @Subscribe
+    public void on(RoleUnassignedFromUser event) {
+        removeRole(event.getRoleId());
+    }
+
+    private void removeGroupRoles(GroupId groupId) {
+        Optional<GroupRoles> roles = findRoles(groupId);
+        roles.ifPresent(this::removeGroupRoles);
+    }
+
+    private void removeRole(RoleId role) {
+        List<RoleId> roles = getBuilder().getRole();
+        if (roles.contains(role)) {
+            int roleIndex = roles.indexOf(role);
+            getBuilder().removeRole(roleIndex);
+        }
+    }
+
+    private Optional<GroupRoles> findRoles(GroupId groupId) {
+        Optional<GroupRoles> record =
+                getBuilder().getGroupRole()
+                            .stream()
+                            .filter(roles -> roles.getGroup()
+                                                  .equals(groupId))
+                            .findFirst();
+        return record;
+    }
+
+    private void removeGroupRoles(GroupRoles roles) {
+        int index = getBuilder().getGroupRole()
+                                .indexOf(roles);
+        getBuilder().removeGroupRole(index);
+    }
+
+    private static GroupRoles rolesOf(GroupView group) {
+        GroupRoles roles = GroupRolesVBuilder.newBuilder()
+                                             .setGroup(group.getId())
+                                             .addAllRole(group.getRoleList())
+                                             .build();
         return roles;
     }
 }
