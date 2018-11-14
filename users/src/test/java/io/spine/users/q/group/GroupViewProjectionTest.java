@@ -20,30 +20,36 @@
 
 package io.spine.users.q.group;
 
+import io.spine.users.GroupId;
 import io.spine.users.c.group.GroupCreated;
+import io.spine.users.c.group.JoinedParentGroup;
+import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.q.group.given.GroupViewTestEvents;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static io.spine.users.q.group.GroupViewTest.PROJECTION_ID;
 import static io.spine.users.q.group.GroupViewTestProjections.emptyProjection;
+import static io.spine.users.q.group.GroupViewTestProjections.groupWithMemberProjection;
+import static io.spine.users.q.group.GroupViewTestProjections.groupWithoutMemberProjection;
+import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("GroupView projection should")
-class GroupCreatedTest {
+class GroupViewProjectionTest {
 
     @Nested
-    @DisplayName("when inner GroupCreated")
-    class InnerGroupCreatedTest extends GroupViewTest<GroupCreated> {
+    @DisplayName("when internal GroupCreated")
+    class OnInternalGroupCreated extends GroupViewTest<GroupCreated> {
 
-        InnerGroupCreatedTest() {
-            super(innerGroupCreated());
+        OnInternalGroupCreated() {
+            super(internalGroupCreated());
         }
 
         @Test
@@ -61,9 +67,9 @@ class GroupCreatedTest {
 
     @Nested
     @DisplayName("when external GroupCreated")
-    class ExternalGroupCreatedTest extends GroupViewTest<GroupCreated> {
+    class OnExternalGroupCreated extends GroupViewTest<GroupCreated> {
 
-        ExternalGroupCreatedTest() {
+        OnExternalGroupCreated() {
             super(externalGroupCreated());
         }
 
@@ -80,7 +86,44 @@ class GroupCreatedTest {
         }
     }
 
-    private static GroupCreated innerGroupCreated() {
+    @Nested
+    @DisplayName("when a group LeftParentGroup")
+    class OnLeftParentGroup extends GroupViewTest<LeftParentGroup> {
+
+        OnLeftParentGroup() {
+            super(leftParentGroup(PROJECTION_ID));
+        }
+
+        @Test
+        @DisplayName("parent group should remove a member")
+        void testState() {
+            expectThat(groupWithMemberProjection(PROJECTION_ID)).hasState(state -> {
+                List<GroupId> membersList = state.getChildGroupList();
+                assertTrue(membersList.isEmpty());
+            });
+        }
+    }
+
+    @Nested
+    @DisplayName("when a group JoinedParentGroup")
+    class OnJoinedParentGroup extends GroupViewTest<JoinedParentGroup> {
+
+        OnJoinedParentGroup() {
+            super(joinedParentGroup(PROJECTION_ID));
+        }
+
+        @Test
+        @DisplayName("parent group should add a member")
+        void testState() {
+            expectThat(groupWithoutMemberProjection(PROJECTION_ID)).hasState(state -> {
+                List<GroupId> membersList = state.getChildGroupList();
+                assertFalse(membersList.isEmpty());
+                assertEquals(membersList.get(0), message().getId());
+            });
+        }
+    }
+
+    private static GroupCreated internalGroupCreated() {
         return GroupViewTestEvents.internalGroupCreated(PROJECTION_ID);
     }
 

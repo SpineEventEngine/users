@@ -18,35 +18,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.q.group;
+package io.spine.users.q.user;
 
-import io.spine.users.GroupId;
-import io.spine.users.c.group.LeftParentGroup;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.core.Subscribe;
+import io.spine.core.UserId;
+import io.spine.server.projection.Projection;
+import io.spine.users.q.group.GroupView;
 
-import java.util.List;
+public class UserRolesProjection extends Projection<UserId, UserRoles, UserRolesVBuilder> {
 
-import static io.spine.users.q.group.GroupViewTestProjections.groupWithMemberProjection;
-import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("when a group LeftParentGroup")
-class LeftParentGroupTest extends GroupViewTest<LeftParentGroup> {
-
-    LeftParentGroupTest() {
-        super(leftParentGroup(PROJECTION_ID));
+    protected UserRolesProjection(UserId id) {
+        super(id);
     }
 
-    @Test
-    @DisplayName("parent group should remove a member")
-    void testState() {
-        expectThat(groupWithMemberProjection(PROJECTION_ID)).hasState(state -> {
-            List<GroupId> membersList = state.getChildGroupList();
-            assertTrue(membersList.isEmpty());
-        });
+    @Subscribe
+    public void onUpdate(GroupView group) {
+
+    }
+
+    private static GroupRoles groupRoles(GroupView group) {
+        GroupRoles roles = GroupRolesVBuilder
+                .newBuilder()
+                .setGroup(group.getId())
+                .addAllRole(group.getRoleList())
+                .build();
+        return roles;
     }
 }
