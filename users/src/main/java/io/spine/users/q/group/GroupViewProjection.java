@@ -21,6 +21,7 @@
 package io.spine.users.q.group;
 
 import io.spine.core.Subscribe;
+import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
@@ -29,6 +30,8 @@ import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
+import io.spine.users.c.user.UserJoinedGroup;
+import io.spine.users.c.user.UserLeftGroup;
 
 import java.util.List;
 
@@ -91,10 +94,30 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
         removeRole(unassignedRole);
     }
 
+    @Subscribe
+    public void on(UserJoinedGroup event) {
+        getBuilder().addUserMember(event.getId());
+    }
+
+    @Subscribe
+    public void on(UserLeftGroup event) {
+        UserId member = event.getId();
+        removeMember(member);
+    }
+
     private void removeRole(RoleId role) {
         List<RoleId> roles = getBuilder().getRole();
         if (roles.contains(role)) {
-            getBuilder().removeRole(roles.indexOf(role));
+            int roleIndex = roles.indexOf(role);
+            getBuilder().removeRole(roleIndex);
+        }
+    }
+
+    private void removeMember(UserId member) {
+        List<UserId> members = getBuilder().getUserMember();
+        if (members.contains(member)) {
+            int memberIndex = members.indexOf(member);
+            getBuilder().removeUserMember(memberIndex);
         }
     }
 }

@@ -30,6 +30,10 @@ import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleAssignedToGroupVBuilder;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroupVBuilder;
+import io.spine.users.c.user.UserJoinedGroup;
+import io.spine.users.c.user.UserJoinedGroupVBuilder;
+import io.spine.users.c.user.UserLeftGroup;
+import io.spine.users.c.user.UserLeftGroupVBuilder;
 import io.spine.users.q.group.GroupViewProjection;
 
 import static io.spine.users.q.group.given.GroupViewTestEnv.childGroup;
@@ -37,8 +41,10 @@ import static io.spine.users.q.group.given.GroupViewTestEnv.email;
 import static io.spine.users.q.group.given.GroupViewTestEnv.externalDomain;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
+import static io.spine.users.q.group.given.GroupViewTestEnv.member;
 import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
 import static io.spine.users.q.group.given.GroupViewTestEnv.role;
+import static io.spine.users.q.group.given.GroupViewTestEnv.roleInGroup;
 
 /**
  * Test events for testing {@link GroupViewProjection}.
@@ -105,5 +111,20 @@ public class GroupViewTestEvents {
                                               .setId(groupId())
                                               .setRoleId(role())
                                               .build();
+    }
+
+    public static UserJoinedGroup userJoinedGroup() {
+        return UserJoinedGroupVBuilder.newBuilder()
+                                      .setGroupId(groupId())
+                                      .setId(member())
+                                      .setRole(roleInGroup())
+                                      .build();
+    }
+
+    public static UserLeftGroup userLeftGroup() {
+        return UserLeftGroupVBuilder.newBuilder()
+                                    .setGroupId(groupId())
+                                    .setId(member())
+                                    .build();
     }
 }

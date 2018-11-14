@@ -25,13 +25,13 @@ import io.spine.server.route.EventRouting;
 import io.spine.users.GroupId;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
+import io.spine.users.c.user.UserJoinedGroup;
+import io.spine.users.c.user.UserLeftGroup;
 
 import static com.google.common.collect.ImmutableSet.of;
 
 /**
  * The repository for {@link GroupViewProjection}.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GroupViewProjectionRepository extends ProjectionRepository<GroupId,
                                                                         GroupViewProjection,
@@ -50,6 +50,10 @@ public class GroupViewProjectionRepository extends ProjectionRepository<GroupId,
         routing.route(JoinedParentGroup.class,
                       (event, context) -> of(event.getParentGroupId()))
                .route(LeftParentGroup.class,
-                      (event, context) -> of(event.getParentGroupId()));
+                      (event, context) -> of(event.getParentGroupId()))
+               .route(UserJoinedGroup.class,
+                      (event, context) -> of(event.getGroupId()))
+               .route(UserLeftGroup.class,
+                      (event, context) -> of(event.getGroupId()));
     }
 }

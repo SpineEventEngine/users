@@ -21,6 +21,7 @@
 package io.spine.users.q.group;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.core.UserId;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.c.group.GroupCreated;
@@ -28,6 +29,8 @@ import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
+import io.spine.users.c.user.UserJoinedGroup;
+import io.spine.users.c.user.UserLeftGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,13 +41,17 @@ import static io.spine.users.q.group.GroupViewTestProjections.emptyProjection;
 import static io.spine.users.q.group.GroupViewTestProjections.groupAfterCreation;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithChildGroups;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithRole;
+import static io.spine.users.q.group.GroupViewTestProjections.groupWithUserMember;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
+import static io.spine.users.q.group.given.GroupViewTestEnv.member;
 import static io.spine.users.q.group.given.GroupViewTestEvents.externalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.internalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
 import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
 import static io.spine.users.q.group.given.GroupViewTestEvents.roleAssignedToGroup;
 import static io.spine.users.q.group.given.GroupViewTestEvents.roleUnassignedFromGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.userJoinedGroup;
+import static io.spine.users.q.group.given.GroupViewTestEvents.userLeftGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -140,7 +147,7 @@ class GroupViewProjectionTest {
         }
 
         @Test
-        @DisplayName("add the role")
+        @DisplayName("add to roles")
         void addRole() {
             List<RoleId> expectedRoles = ImmutableList.of(message().getRoleId());
             expectThat(groupAfterCreation(groupId()))
@@ -163,6 +170,40 @@ class GroupViewProjectionTest {
                 assertTrue(state.getRoleList()
                                 .isEmpty());
             });
+        }
+    }
+
+    @Nested
+    @DisplayName("when UserJoinedGroup")
+    class OnUserJoinedGroup extends GroupViewTest<UserJoinedGroup> {
+
+        OnUserJoinedGroup() {
+            super(userJoinedGroup());
+        }
+
+        @Test
+        @DisplayName("add to users")
+        void addUser() {
+            List<UserId> expectedMembers = ImmutableList.of(member());
+            expectThat(groupAfterCreation(groupId()))
+                    .hasState(state -> assertEquals(expectedMembers, state.getUserMemberList()));
+        }
+    }
+
+    @Nested
+    @DisplayName("when UserLeftGroup")
+    class OnUserLeftGroup extends GroupViewTest<UserLeftGroup> {
+
+        OnUserLeftGroup() {
+            super(userLeftGroup());
+        }
+
+        @Test
+        @DisplayName("remove from users")
+        void removeUser() {
+            expectThat(groupWithUserMember(groupId()))
+                    .hasState(state -> assertTrue(state.getUserMemberList()
+                                                       .isEmpty()));
         }
     }
 }

@@ -20,6 +20,8 @@
 
 package io.spine.users.q.group.given;
 
+import io.spine.core.UserId;
+import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
@@ -32,6 +34,7 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
+import io.spine.users.c.user.RoleInGroup;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -76,6 +79,16 @@ public class GroupViewTestEnv {
 
     public static RoleId role() {
         return ROLE_ID;
+    }
+
+    public static RoleInGroup roleInGroup() {
+        return RoleInGroup.MEMBER;
+    }
+
+    public static UserId member() {
+        return UserIdVBuilder.newBuilder()
+                             .setValue("group member")
+                             .build();
     }
 
     public static OrganizationOrUnit orgEntity() {
