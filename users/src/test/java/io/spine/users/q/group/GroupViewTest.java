@@ -31,14 +31,13 @@ import static io.spine.users.q.group.given.GroupViewTestEnv.newGroupId;
  * The implementation base for testing event subscriptions in {@link GroupView}
  *
  * @param <M> the type of event being tested
- * @author Vladyslav Lubenskyi
  */
 abstract class GroupViewTest<M extends EventMessage>
         extends ProjectionTest<GroupId, M, GroupView, GroupViewProjection> {
 
-    protected static final GroupId PROJECTION_ID = newGroupId();
+    static final GroupId PROJECTION_ID = newGroupId();
 
-    protected GroupViewTest(M eventMessage) {
+    GroupViewTest(M eventMessage) {
         super(PROJECTION_ID, eventMessage);
     }
 

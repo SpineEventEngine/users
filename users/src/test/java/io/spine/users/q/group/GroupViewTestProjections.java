@@ -23,17 +23,12 @@ package io.spine.users.q.group;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
-import static io.spine.users.q.group.given.GroupViewTestEnv.childGroup;
-import static io.spine.users.q.group.given.GroupViewTestEnv.email;
-import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
-import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
+import static io.spine.users.q.group.given.GroupViewTestEnv.*;
 
 /**
  * Test {@link io.spine.users.q.group.GroupView} projections.
- *
- * @author Vladyslav Lubenskyi
  */
-public class GroupViewTestProjections {
+class GroupViewTestProjections {
 
     /**
      * Prevents direct instantiation.
@@ -46,18 +41,15 @@ public class GroupViewTestProjections {
     }
 
     static GroupViewProjection groupWithoutMemberProjection(GroupId id) {
-        return Given.projectionOfClass(GroupViewProjection.class)
-                    .withId(id)
-                    .withState(state(id).build())
-                    .build();
+        GroupView state = state(id).build();
+        return newProjection(state);
     }
 
     static GroupViewProjection groupWithMemberProjection(GroupId id) {
-        return Given.projectionOfClass(GroupViewProjection.class)
-                    .withId(id)
-                    .withState(state(id).addChildGroup(childGroup())
-                                        .build())
-                    .build();
+        GroupView state = state(id)
+                .addChildGroup(childGroup())
+                .build();
+        return newProjection(state);
     }
 
     private static GroupViewVBuilder state(GroupId id) {
@@ -66,5 +58,12 @@ public class GroupViewTestProjections {
                                 .setEmail(email())
                                 .setOrgEntity(orgEntity())
                                 .setDisplayName(groupDisplayName());
+    }
+
+    private static GroupViewProjection newProjection(GroupView state) {
+        return Given.projectionOfClass(GroupViewProjection.class)
+                .withId(state.getId())
+                .withState(state)
+                .build();
     }
 }
