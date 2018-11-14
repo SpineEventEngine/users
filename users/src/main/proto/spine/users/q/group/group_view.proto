@@ -30,6 +30,7 @@ option java_outer_classname = "GroupViewProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
@@ -65,8 +66,8 @@ message GroupView {
     repeated RoleId role = 7;
 
     // A list of child groups. Only direct members of the group are included.
-    repeated GroupId child_groups = 8;
+    repeated GroupId child_group = 8;
 
     // A list of `User` members. Only direct members of the group are included.
-    repeated GroupId user_members = 9;
+    repeated core.UserId user_member = 9;
 }

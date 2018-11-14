@@ -33,8 +33,6 @@ import static io.spine.users.c.group.GroupCreated.OriginCase.EXTERNAL_DOMAIN;
 
 /**
  * A projection of a single group to be displayed on UI.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GroupViewProjection extends Projection<GroupId, GroupView, GroupViewVBuilder> {
 
@@ -65,7 +63,7 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     public void on(JoinedParentGroup event) {
         if (event.getParentGroupId()
                  .equals(getId())) {
-            getBuilder().addChildGroups(event.getId());
+            getBuilder().addChildGroup(event.getId());
         }
     }
 
@@ -73,9 +71,9 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     public void on(LeftParentGroup event) {
         GroupId memberId = event.getId();
         GroupViewVBuilder builder = getBuilder();
-        List<GroupId> members = builder.getChildGroups();
+        List<GroupId> members = builder.getChildGroup();
         if (members.contains(memberId)) {
-            builder.removeChildGroups(members.indexOf(memberId));
+            builder.removeChildGroup(members.indexOf(memberId));
         }
     }
 }

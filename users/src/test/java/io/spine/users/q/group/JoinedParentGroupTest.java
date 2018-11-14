@@ -47,7 +47,7 @@ class JoinedParentGroupTest extends GroupViewTest<JoinedParentGroup> {
     void testState() {
         expectThat(groupWithoutMemberProjection(PROJECTION_ID)).hasState(state -> {
 
-            List<GroupId> membersList = state.getChildGroupsList();
+            List<GroupId> membersList = state.getChildGroupList();
             assertFalse(membersList.isEmpty());
             assertEquals(membersList.get(0), message().getId());
         });

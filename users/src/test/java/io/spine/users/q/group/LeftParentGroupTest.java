@@ -45,7 +45,7 @@ class LeftParentGroupTest extends GroupViewTest<LeftParentGroup> {
     @DisplayName("parent group should remove a member")
     void testState() {
         expectThat(groupWithMemberProjection(PROJECTION_ID)).hasState(state -> {
-            List<GroupId> membersList = state.getChildGroupsList();
+            List<GroupId> membersList = state.getChildGroupList();
             assertTrue(membersList.isEmpty());
         });
     }
