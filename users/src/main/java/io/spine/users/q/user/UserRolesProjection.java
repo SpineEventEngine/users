@@ -54,9 +54,13 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
      */
     @Subscribe
     public void onUpdate(GroupView group) {
-        GroupRoles updatedRoles = rolesOf(group);
         removeGroupRoles(group.getId());
-        getBuilder().addGroupRole(updatedRoles);
+        boolean groupHasRoles = !group.getRoleList()
+                                      .isEmpty();
+        if (groupHasRoles) {
+            GroupRoles updatedRoles = rolesOf(group);
+            getBuilder().addGroupRole(updatedRoles);
+        }
     }
 
     /**

@@ -30,19 +30,23 @@ import io.spine.users.c.user.UserMembershipPartRepository;
 import io.spine.users.c.user.UserPartRepository;
 import io.spine.users.q.group.GroupViewProjectionRepository;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.google.common.collect.ImmutableSet.of;
-import static io.spine.testing.server.blackbox.VerifyState.exactly;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.assignRoleToGroup;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.assignRoleToUser;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.createGroup;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.createUser;
+import static io.spine.testing.server.blackbox.VerifyState.exactlyOne;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToUser;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createUser;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.joinGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.leaveGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.joinGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userWithoutRoles;
 
 /**
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
@@ -53,18 +57,26 @@ class UserRolesProjectionIntegrationTest {
 
     @Test
     @DisplayName("have explicitly assigned roles")
-    void explicitlyAssignedRoles() {
+    void assignExplicitRoles() {
         UserId user = userUuid();
         RoleId role = roleUuid();
-        newBoundedContext()
-                .receivesCommands(createUser(user),
-                                  assignRoleToUser(user, role))
-                .assertThat(exactly(UserRoles.class, of(
-                        UserRoles.newBuilder()
-                                 .setId(user)
-                                 .addRole(role)
-                                 .build()
-                )));
+        UserRoles expectedRoles = UserRoles.newBuilder()
+                                           .setId(user)
+                                           .addRole(role)
+                                           .build();
+        bcUserWithRole(user, role)
+                .assertThat(exactlyOne(expectedRoles));
+    }
+
+    @Test
+    @DisplayName("remove role if it is unassigned")
+    void removeUnassignedRole() {
+        UserId user = userUuid();
+        RoleId role = roleUuid();
+        UserRoles userWithoutRoles = userWithoutRoles(user);
+        bcUserWithRole(user, role)
+                .receivesCommand(unassignRoleFromUser(user, role))
+                .assertThat(exactlyOne(userWithoutRoles));
     }
 
     @Test
@@ -73,21 +85,61 @@ class UserRolesProjectionIntegrationTest {
         UserId user = userUuid();
         RoleId role = roleUuid();
         GroupId group = groupUuid();
-        GroupRoles expectedRoles = GroupRolesVBuilder.newBuilder()
-                                                     .setGroup(group)
-                                                     .addRole(role)
-                                                     .build();
-        newBoundedContext()
+        GroupRoles expectedGroupRoles = GroupRolesVBuilder.newBuilder()
+                                                          .setGroup(group)
+                                                          .addRole(role)
+                                                          .build();
+        UserRoles expectedRoles = UserRoles.newBuilder()
+                                           .setId(user)
+                                           .addGroupRole(expectedGroupRoles)
+                                           .build();
+        bcUserInGroupWithRole(user, role, group)
+                .assertThat(exactlyOne(expectedRoles));
+    }
+
+    @Nested
+    @DisplayName("when a user is in group with a role")
+    class UserInGroupWithRole {
+
+        @Test
+        @DisplayName("remove group role if it is unassigned")
+        void removeUnassignedGroupRole() {
+            UserId user = userUuid();
+            RoleId role = roleUuid();
+            GroupId group = groupUuid();
+            UserRoles userWithoutRoles = userWithoutRoles(user);
+            bcUserInGroupWithRole(user, role, group)
+                    .receivesCommand(unassignRoleFromGroup(group, role))
+                    .assertThat(exactlyOne(userWithoutRoles));
+        }
+
+        @Test
+        @DisplayName("remove group role if user leaves the group")
+        void removeRoleOfLeftGroup() {
+            UserId user = userUuid();
+            RoleId role = roleUuid();
+            GroupId group = groupUuid();
+            UserRoles userWithoutRoles = userWithoutRoles(user);
+            bcUserInGroupWithRole(user, role, group)
+                    .receivesCommand(leaveGroup(user, group))
+                    .assertThat(exactlyOne(userWithoutRoles));
+        }
+    }
+
+    private static BlackBoxBoundedContext bcUserInGroupWithRole(UserId user,
+                                                                RoleId role,
+                                                                GroupId group) {
+        return newBoundedContext()
                 .receivesCommands(createUser(user),
                                   createGroup(group),
                                   joinGroup(user, group),
-                                  assignRoleToGroup(group, role))
-                .assertThat(exactly(UserRoles.class, of(
-                        UserRoles.newBuilder()
-                                 .setId(user)
-                                 .addGroupRole(expectedRoles)
-                                 .build()
-                )));
+                                  assignRoleToGroup(group, role));
+    }
+
+    private static BlackBoxBoundedContext bcUserWithRole(UserId user, RoleId role) {
+        return newBoundedContext()
+                .receivesCommands(createUser(user),
+                                  assignRoleToUser(user, role));
     }
 
     /** The bounded context with repositories related to {@link UserRolesProjection}. */

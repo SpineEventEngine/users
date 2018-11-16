@@ -24,25 +24,9 @@ import io.spine.core.UserId;
 import io.spine.core.UserIdVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.AssignRoleToGroupVBuilder;
-import io.spine.users.c.group.CreateGroup;
-import io.spine.users.c.group.CreateGroupVBuilder;
-import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.AssignRoleToUserVBuilder;
-import io.spine.users.c.user.CreateUser;
-import io.spine.users.c.user.CreateUserVBuilder;
-import io.spine.users.c.user.JoinGroup;
-import io.spine.users.c.user.JoinGroupVBuilder;
-import io.spine.users.c.user.RoleInGroup;
-import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserNature;
+import io.spine.users.q.user.UserRoles;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -50,52 +34,6 @@ public class UserRolesProjectionTestEnv {
 
     /** Prevents instantiation of this utility class. */
     private UserRolesProjectionTestEnv() {
-    }
-
-    public static CreateUser createUser(UserId userId) {
-        OrganizationId organizationId = OrganizationIdVBuilder
-                .newBuilder()
-                .setValue("organization of " + userId.getValue())
-                .build();
-        OrganizationOrUnit orgEntity = OrganizationOrUnitVBuilder.newBuilder()
-                                                                 .setOrganization(organizationId)
-                                                                 .build();
-        return CreateUserVBuilder.newBuilder()
-                                 .setId(userId)
-                                 .setNature(UserNature.UNAVAILABLE)
-                                 .setDisplayName("display name of " + userId.getValue())
-                                 .setOrgEntity(orgEntity)
-                                 .setStatus(User.Status.ACTIVE)
-                                 .build();
-    }
-
-    public static CreateGroup createGroup(GroupId groupId) {
-        return CreateGroupVBuilder.newBuilder()
-                                  .setId(groupId)
-                                  .setDisplayName("group " + groupId.getValue())
-                                  .build();
-    }
-
-    public static JoinGroup joinGroup(UserId user, GroupId groupId) {
-        return JoinGroupVBuilder.newBuilder()
-                                .setId(user)
-                                .setGroupId(groupId)
-                                .setRole(RoleInGroup.MEMBER)
-                                .build();
-    }
-
-    public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
-        return AssignRoleToUserVBuilder.newBuilder()
-                                       .setId(userId)
-                                       .setRoleId(roleId)
-                                       .build();
-    }
-
-    public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
-        return AssignRoleToGroupVBuilder.newBuilder()
-                                        .setId(groupId)
-                                        .setRoleId(roleId)
-                                        .build();
     }
 
     public static UserId userUuid() {
@@ -114,5 +52,11 @@ public class UserRolesProjectionTestEnv {
         return GroupIdVBuilder.newBuilder()
                               .setValue(newUuid())
                               .build();
+    }
+
+    public static UserRoles userWithoutRoles(UserId user) {
+        return UserRoles.newBuilder()
+                        .setId(user)
+                        .build();
     }
 }
