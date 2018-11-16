@@ -64,6 +64,7 @@ public class UserMembershipPart
 
     @Apply
     void on(UserJoinedGroup event) {
+        ensureStateId();
         UserMembershipRecord membershipRecord =
                 UserMembershipRecord
                         .newBuilder()
@@ -71,13 +72,17 @@ public class UserMembershipPart
                         .setRole(event.getRole())
                         .build();
         getBuilder().addMembership(membershipRecord);
-
     }
 
     @Apply
     void on(UserLeftGroup event) {
+        ensureStateId();
         Optional<UserMembershipRecord> membership = findMembership(event.getGroupId());
         membership.ifPresent(this::removeMembership);
+    }
+
+    private void ensureStateId() {
+        getBuilder().setId(getId());
     }
 
     private void removeMembership(UserMembershipRecord record) {
