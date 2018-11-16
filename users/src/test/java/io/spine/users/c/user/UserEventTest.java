@@ -29,7 +29,7 @@ abstract class UserEventTest<E extends EventMessage>
     }
 
     @Override
-    protected Repository<UserId, UserPart> createEntityRepository() {
+    protected Repository<UserId, UserPart> createRepository() {
         return new UserPartRepository();
     }
 }

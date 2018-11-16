@@ -29,7 +29,7 @@ abstract class SignInPmEventTest<E extends EventMessage>
     }
 
     @Override
-    protected Repository<UserId, SignInPm> createEntityRepository() {
+    protected Repository<UserId, SignInPm> createRepository() {
         return new SignInPmRepository(mock(IdentityProviderBridgeFactory.class),
                                       mock(UserPartRepository.class));
     }

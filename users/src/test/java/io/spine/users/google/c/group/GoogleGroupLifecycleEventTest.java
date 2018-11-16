@@ -43,7 +43,7 @@ abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
     }
 
     @Override
-    protected Repository<GroupId, GoogleGroupLifecyclePm> createEntityRepository() {
+    protected Repository<GroupId, GoogleGroupLifecyclePm> createRepository() {
         return new GoogleGroupLifecyclePmRepository();
     }
 }

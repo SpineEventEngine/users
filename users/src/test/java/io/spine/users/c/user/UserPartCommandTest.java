@@ -12,7 +12,6 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.user.TestUserFactory.createEmptyUserPart;
 import static io.spine.users.c.user.TestUserFactory.createUserPart;
 import static io.spine.users.c.user.given.UserTestEnv.userId;
 
@@ -32,7 +31,7 @@ abstract class UserPartCommandTest<C extends CommandMessage>
     }
 
     @Override
-    protected Repository<UserId, UserPart> createEntityRepository() {
+    protected Repository<UserId, UserPart> createRepository() {
         return new UserPartRepository();
     }
 

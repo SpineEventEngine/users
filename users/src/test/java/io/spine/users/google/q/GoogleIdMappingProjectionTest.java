@@ -33,7 +33,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.spine.users.google.GoogleIdMappingViewId.Value.SINGLETON;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi
@@ -71,7 +73,7 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
     }
 
     @Override
-    protected Repository<GoogleIdMappingViewId, GoogleIdMappingProjection> createEntityRepository() {
+    protected Repository<GoogleIdMappingViewId, GoogleIdMappingProjection> createRepository() {
         return new GoogleIdMappingRepository();
     }
 

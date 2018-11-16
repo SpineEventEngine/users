@@ -40,7 +40,7 @@ abstract class GroupViewTest<M extends EventMessage>
     }
 
     @Override
-    protected Repository<GroupId, GroupViewProjection> createEntityRepository() {
+    protected Repository<GroupId, GroupViewProjection> createRepository() {
         return new GroupViewProjectionRepository();
     }
 }

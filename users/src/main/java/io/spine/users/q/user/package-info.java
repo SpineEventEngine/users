@@ -18,33 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
-
-import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
-import io.spine.users.RoleId;
-
-import static io.spine.users.c.role.given.RoleTestEnv.createRoleId;
-
 /**
- * An implementation base for the {@link Role} aggregate command handler tests.
- *
- * @param <C>
- *         the type of the command being tested
- * @author Vladyslav Lubenskyi
+ * This package contains projections of {@link io.spine.users.c.user.UserRoot User aggregate}.
  */
-public class RoleCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
 
-    static final RoleId ROLE_ID = createRoleId();
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.q.user;
 
-    RoleCommandTest(C commandMessage) {
-        super(ROLE_ID, commandMessage);
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    @Override
-    protected Repository<RoleId, RoleAggregate> createRepository() {
-        return new RoleAggregateRepository();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

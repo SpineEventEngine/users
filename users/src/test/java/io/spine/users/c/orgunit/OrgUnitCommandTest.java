@@ -29,7 +29,7 @@ abstract class OrgUnitCommandTest<C extends CommandMessage>
     }
 
     @Override
-    protected Repository<OrgUnitId, OrgUnitAggregate> createEntityRepository() {
+    protected Repository<OrgUnitId, OrgUnitAggregate> createRepository() {
         return new OrgUnitAggregateRepository();
     }
 }

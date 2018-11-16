@@ -31,7 +31,7 @@ abstract class UserMembershipCommandTest<C extends CommandMessage>
     }
 
     @Override
-    protected Repository<UserId, UserMembershipPart> createEntityRepository() {
+    protected Repository<UserId, UserMembershipPart> createRepository() {
         return new UserMembershipPartRepository();
     }
 
