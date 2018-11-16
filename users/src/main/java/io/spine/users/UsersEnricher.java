@@ -35,10 +35,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A factory of {@link Enricher} instances for the {@code Users} bounded context.
  */
-public class UsersEventsEnricher {
+public class UsersEnricher {
 
     /** Prevents instantiation of this utility class. */
-    private UsersEventsEnricher() {
+    private UsersEnricher() {
     }
 
     /**

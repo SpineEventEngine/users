@@ -42,5 +42,5 @@ message RoleAssignmentEnrichment {
     //
     // Role assignment happens not so often, so the enrichment won't harm the performance a lot.
     //
-    string role_name = 1 [(by) = "*.id"];
+    string role_name = 1 [(by) = "role_id"];
 }
