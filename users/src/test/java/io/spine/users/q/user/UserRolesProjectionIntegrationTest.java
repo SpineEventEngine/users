@@ -69,17 +69,6 @@ class UserRolesProjectionIntegrationTest {
     }
 
     @Test
-    @DisplayName("remove role if it is unassigned")
-    void removeUnassignedRole() {
-        UserId user = userUuid();
-        RoleId role = roleUuid();
-        UserRoles userWithoutRoles = userWithoutRoles(user);
-        bcUserWithRole(user, role)
-                .receivesCommand(unassignRoleFromUser(user, role))
-                .assertThat(exactlyOne(userWithoutRoles));
-    }
-
-    @Test
     @DisplayName("have implicitly assigned roles")
     void implicitlyAssignedRoles() {
         UserId user = userUuid();
@@ -98,15 +87,33 @@ class UserRolesProjectionIntegrationTest {
     }
 
     @Nested
-    @DisplayName("when a user is in group with a role")
-    class UserInGroupWithRole {
+    @DisplayName("when user has role")
+    class UserWithRole {
+
+        private final UserId user = userUuid();
+        private final RoleId role = roleUuid();
 
         @Test
-        @DisplayName("remove group role if it is unassigned")
+        @DisplayName("remove role if it is unassigned")
+        void removeUnassignedRole() {
+            UserRoles userWithoutRoles = userWithoutRoles(user);
+            bcUserWithRole(user, role)
+                    .receivesCommand(unassignRoleFromUser(user, role))
+                    .assertThat(exactlyOne(userWithoutRoles));
+        }
+    }
+
+    @Nested
+    @DisplayName("when user is in group with a role")
+    class UserInGroupWithRole {
+
+        private final UserId user = userUuid();
+        private final RoleId role = roleUuid();
+        private final GroupId group = groupUuid();
+
+        @Test
+        @DisplayName("remove role if it is unassigned from group")
         void removeUnassignedGroupRole() {
-            UserId user = userUuid();
-            RoleId role = roleUuid();
-            GroupId group = groupUuid();
             UserRoles userWithoutRoles = userWithoutRoles(user);
             bcUserInGroupWithRole(user, role, group)
                     .receivesCommand(unassignRoleFromGroup(group, role))
@@ -114,11 +121,8 @@ class UserRolesProjectionIntegrationTest {
         }
 
         @Test
-        @DisplayName("remove group role if user leaves the group")
+        @DisplayName("remove role if user leaves group")
         void removeRoleOfLeftGroup() {
-            UserId user = userUuid();
-            RoleId role = roleUuid();
-            GroupId group = groupUuid();
             UserRoles userWithoutRoles = userWithoutRoles(user);
             bcUserInGroupWithRole(user, role, group)
                     .receivesCommand(leaveGroup(user, group))
