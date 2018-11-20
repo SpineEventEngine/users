@@ -12,6 +12,7 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
+import static io.spine.users.c.user.TestUserFactory.createEmptyMembershipPart;
 import static io.spine.users.c.user.TestUserFactory.createMembershipPart;
 import static io.spine.users.c.user.given.UserTestEnv.userId;
 
@@ -37,6 +38,10 @@ abstract class UserMembershipCommandTest<C extends CommandMessage>
 
     protected UserMembershipPart createPartWithState() {
         return createMembershipPart(root(USER_ID));
+    }
+
+    protected UserMembershipPart createPart() {
+        return createEmptyMembershipPart(root(USER_ID));
     }
 
     private static UserRoot root(UserId id) {
