@@ -21,11 +21,14 @@
 package io.spine.users.q.user;
 
 import io.spine.core.UserId;
+import io.spine.server.event.Enricher;
 import io.spine.testing.server.ShardingReset;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.UsersEnricher;
 import io.spine.users.c.group.GroupPartRepository;
+import io.spine.users.c.role.RoleAggregateRepository;
 import io.spine.users.c.user.UserMembershipPartRepository;
 import io.spine.users.c.user.UserPartRepository;
 import io.spine.users.q.group.GroupViewProjectionRepository;
@@ -36,16 +39,19 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static io.spine.testing.server.blackbox.VerifyState.exactlyOne;
+import static io.spine.base.Identifier.newUuid;
+import static io.spine.testing.server.blackbox.verify.state.VerifyState.exactlyOne;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createRole;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.joinGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.leaveGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.newRole;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
 
@@ -67,13 +73,15 @@ class UserRolesProjectionIntegrationTest {
     @Test
     @DisplayName("have explicitly assigned roles")
     void assignExplicitRoles() {
-        RoleId role = roleUuid();
+        RoleId roleId = roleUuid();
+        String roleName = newUuid();
         UserRoles expectedRoles = UserRoles.newBuilder()
                                            .setId(user)
-                                           .addRole(role)
+                                           .addRole(newRole(roleId, roleName))
                                            .build();
         boundedContext.receivesCommands(createUser(user),
-                                        assignRoleToUser(user, role))
+                                        createRole(roleId, roleName),
+                                        assignRoleToUser(user, roleId))
                       .assertThat(exactlyOne(expectedRoles));
     }
 
@@ -102,10 +110,12 @@ class UserRolesProjectionIntegrationTest {
     class UserWithRole {
 
         private final RoleId role = roleUuid();
+        private final String roleName = newUuid();
 
         @BeforeEach
         void setUp() {
             boundedContext.receivesCommands(createUser(user),
+                                            createRole(role, roleName),
                                             assignRoleToUser(user, role));
         }
 
@@ -153,9 +163,12 @@ class UserRolesProjectionIntegrationTest {
 
     /** The bounded context with repositories related to {@link UserRolesProjection}. */
     private static BlackBoxBoundedContext newBoundedContext() {
-        return BlackBoxBoundedContext.newInstance()
+        RoleAggregateRepository roleAggregateRepository = new RoleAggregateRepository();
+        Enricher enricher = UsersEnricher.create(roleAggregateRepository);
+        return BlackBoxBoundedContext.singletenant(enricher)
                                      .with(new UserPartRepository(),
                                            new UserMembershipPartRepository(),
+                                           roleAggregateRepository,
                                            new GroupPartRepository(),
                                            new GroupViewProjectionRepository(),
                                            new UserRolesProjectionRepository());

@@ -33,6 +33,8 @@ import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.CreateGroupVBuilder;
 import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
+import io.spine.users.c.role.CreateRole;
+import io.spine.users.c.role.CreateRoleVBuilder;
 import io.spine.users.c.user.AssignRoleToUser;
 import io.spine.users.c.user.AssignRoleToUserVBuilder;
 import io.spine.users.c.user.CreateUser;
@@ -67,6 +69,13 @@ public class UserRolesProjectionTestCommands {
                                  .setDisplayName("display name of " + userId.getValue())
                                  .setOrgEntity(orgEntity)
                                  .setStatus(User.Status.ACTIVE)
+                                 .build();
+    }
+
+    public static CreateRole createRole(RoleId id, String name) {
+        return CreateRoleVBuilder.newBuilder()
+                                 .setId(id)
+                                 .setDisplayName(name)
                                  .build();
     }
 

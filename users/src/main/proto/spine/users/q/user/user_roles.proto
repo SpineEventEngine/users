@@ -42,7 +42,7 @@ message UserRoles {
     core.UserId id = 1;
 
     // Roles explicitly assigned to the user.
-    repeated RoleId role = 2;
+    repeated Role role = 2;
 
     // Roles of the groups where the user is a member.
     repeated GroupRoles group_role = 3;
@@ -57,4 +57,15 @@ message GroupRoles {
 
     // The roles assigned to the group.
     repeated RoleId role = 2;
+}
+
+// A role with its name.
+//
+message Role {
+
+    // The ID of the role.
+    RoleId id = 1 [(required) = true];
+
+    // The display name of the role.
+    string name = 2 [(required) = true];
 }

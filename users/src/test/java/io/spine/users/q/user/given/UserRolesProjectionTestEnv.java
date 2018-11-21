@@ -26,6 +26,8 @@ import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
+import io.spine.users.q.user.Role;
+import io.spine.users.q.user.RoleVBuilder;
 import io.spine.users.q.user.UserRoles;
 
 import static io.spine.base.Identifier.newUuid;
@@ -58,5 +60,13 @@ public class UserRolesProjectionTestEnv {
         return UserRoles.newBuilder()
                         .setId(user)
                         .build();
+    }
+
+    public static Role newRole(RoleId id, String name) {
+        return RoleVBuilder
+                .newBuilder()
+                .setId(id)
+                .setName(name)
+                .build();
     }
 }

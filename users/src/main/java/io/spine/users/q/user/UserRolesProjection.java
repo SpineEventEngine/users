@@ -20,11 +20,14 @@
 
 package io.spine.users.q.user;
 
+import io.spine.core.Enrichments;
+import io.spine.core.EventContext;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.c.role.RoleAssignmentEnrichment;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
 import io.spine.users.c.user.UserCreated;
@@ -76,8 +79,14 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     @Subscribe
-    public void on(RoleAssignedToUser event) {
-        getBuilder().addRole(event.getRoleId());
+    public void on(RoleAssignedToUser event, EventContext context) {
+        String roleName = roleEnrichment(context).getRoleName();
+        Role role = RoleVBuilder
+                .newBuilder()
+                .setId(event.getRoleId())
+                .setName(roleName)
+                .build();
+        getBuilder().addRole(role);
     }
 
     @Subscribe
@@ -90,12 +99,18 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
         roles.ifPresent(this::removeGroupRoles);
     }
 
-    private void removeRole(RoleId role) {
-        List<RoleId> roles = getBuilder().getRole();
-        if (roles.contains(role)) {
-            int roleIndex = roles.indexOf(role);
-            getBuilder().removeRole(roleIndex);
+    private void removeRole(RoleId roleId) {
+        Optional<Role> roleToDelete = getBuilder().getRole()
+                                                  .stream()
+                                                  .filter(role -> role.getId()
+                                                                      .equals(roleId))
+                                                  .findFirst();
+        if (!roleToDelete.isPresent()) {
+            return;
         }
+        List<Role> roles = getBuilder().getRole();
+        int roleIndex = roles.indexOf(roleToDelete.get());
+        getBuilder().removeRole(roleIndex);
     }
 
     private Optional<GroupRoles> findRoles(GroupId groupId) {
@@ -120,5 +135,12 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
                                              .addAllRole(group.getRoleList())
                                              .build();
         return roles;
+    }
+
+    private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {
+        RoleAssignmentEnrichment enrichment =
+                Enrichments.getEnrichment(RoleAssignmentEnrichment.class, context)
+                           .orElseThrow(IllegalStateException::new);
+        return enrichment;
     }
 }
