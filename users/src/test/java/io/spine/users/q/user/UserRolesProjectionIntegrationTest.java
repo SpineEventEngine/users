@@ -48,12 +48,14 @@ import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.create
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.joinGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.leaveGroup;
+import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.renameRole;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.newRole;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleName;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userWithRole;
 
 /**
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
@@ -77,7 +79,7 @@ class UserRolesProjectionIntegrationTest {
         String roleName = newUuid();
         UserRoles expectedRoles = UserRoles.newBuilder()
                                            .setId(user)
-                                           .addRole(newRole(roleId, roleName))
+                                           .addRole(roleName(roleId, roleName))
                                            .build();
         boundedContext.receivesCommands(createUser(user),
                                         createRole(roleId, roleName),
@@ -124,6 +126,14 @@ class UserRolesProjectionIntegrationTest {
         void removeUnassignedRole() {
             boundedContext.receivesCommand(unassignRoleFromUser(user, role))
                           .assertThat(exactlyOne(userWithoutRoles()));
+        }
+
+        @Test
+        @DisplayName("it should be renamed")
+        void updateRoleName() {
+            String newRoleName = "new role name";
+            boundedContext.receivesCommand(renameRole(role, newRoleName))
+                          .assertThat(exactlyOne(userWithRole(user, role, newRoleName)));
         }
     }
 

@@ -29,6 +29,7 @@ import io.spine.users.RoleIdVBuilder;
 import io.spine.users.RoleName;
 import io.spine.users.RoleNameVBuilder;
 import io.spine.users.q.user.UserRoles;
+import io.spine.users.q.user.UserRolesVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -57,16 +58,22 @@ public class UserRolesProjectionTestEnv {
     }
 
     public static UserRoles userWithoutRoles(UserId user) {
-        return UserRoles.newBuilder()
-                        .setId(user)
-                        .build();
+        return UserRolesVBuilder.newBuilder()
+                                .setId(user)
+                                .build();
     }
 
-    public static RoleName newRole(RoleId id, String name) {
-        return RoleNameVBuilder
-                .newBuilder()
-                .setId(id)
-                .setName(name)
-                .build();
+    public static UserRoles userWithRole(UserId userId, RoleId roleId, String roleName) {
+        return UserRolesVBuilder.newBuilder()
+                                .setId(userId)
+                                .addRole(roleName(roleId, roleName))
+                                .build();
+    }
+
+    public static RoleName roleName(RoleId id, String name) {
+        return RoleNameVBuilder.newBuilder()
+                               .setId(id)
+                               .setName(name)
+                               .build();
     }
 }
