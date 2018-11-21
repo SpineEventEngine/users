@@ -54,3 +54,14 @@ message OrganizationOrUnit {
         users.OrganizationId organization = 2;
     }
 }
+
+// A role with its name.
+//
+message RoleName {
+
+    // The ID of the role.
+    RoleId id = 1 [(required) = true];
+
+    // The display name of the role.
+    string name = 2 [(required) = true];
+}
