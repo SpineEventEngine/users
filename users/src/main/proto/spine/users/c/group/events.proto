@@ -45,7 +45,7 @@ message GroupCreated {
     string display_name = 2 [(required) = true];
 
     // Roles explicitly assigned to the group.
-    repeated RoleId role = 3;
+    RoleIds roles = 3;
 
     // A human-friendly description of a group.
     string description = 4;

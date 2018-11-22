@@ -26,6 +26,7 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.RoleIdsVBuilder;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.user.UserPart;
@@ -67,7 +68,9 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 .setEmail(command.getEmail())
                 .setExternalDomain(command.getExternalDomain())
                 .setOrgEntity(command.getOrgEntity())
-                .addAllRole(command.getRoleList())
+                .setRoles(RoleIdsVBuilder.newBuilder()
+                                         .addAllId(command.getRoleList())
+                                         .build())
                 .setDescription(command.getDescription())
                 .build();
     }
@@ -162,7 +165,8 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
-               .addAllRole(event.getRoleList())
+               .addAllRole(event.getRoles()
+                                .getIdList())
                .setDescription(event.getDescription())
                .build();
 

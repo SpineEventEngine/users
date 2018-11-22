@@ -74,7 +74,8 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getOrgEntity(), state.getOrgEntity());
-                assertEquals(message().getRoleList(), state.getRoleList());
+                assertEquals(message().getRoles()
+                                      .getIdList(), state.getRoleList());
                 assertFalse(state.getExternal());
             });
         }
@@ -95,7 +96,8 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getExternalDomain(), state.getExternalDomain());
-                assertEquals(message().getRoleList(), state.getRoleList());
+                assertEquals(message().getRoles()
+                                      .getIdList(), state.getRoleList());
                 assertTrue(state.getExternal());
             });
         }

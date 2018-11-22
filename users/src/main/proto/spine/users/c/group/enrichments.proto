@@ -39,5 +39,5 @@ message RoleNamesEnrichment {
     option (enrichment_for) = "spine.users.c.group.GroupCreated";
 
     // The name of roles, which enrich an event.
-    repeated RoleName role = 1 [(by) = "role"];
+    RoleNames roles = 1 [(by) = "roles"];
 }

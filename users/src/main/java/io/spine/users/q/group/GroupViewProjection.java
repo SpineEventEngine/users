@@ -59,7 +59,8 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     public void on(GroupCreated event, EventContext context) {
         boolean external = event.getOriginCase() == EXTERNAL_DOMAIN;
         GroupViewVBuilder builder = getBuilder();
-        List<RoleName> roleNames = rolesEnrichment(context).getRoleList();
+        List<RoleName> roleNames = rolesEnrichment(context).getRoles()
+                                                           .getNameList();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())

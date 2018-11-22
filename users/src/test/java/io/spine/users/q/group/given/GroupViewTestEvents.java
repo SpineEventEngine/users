@@ -20,6 +20,7 @@
 
 package io.spine.users.q.group.given;
 
+import io.spine.users.RoleIdsVBuilder;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.GroupCreatedVBuilder;
 import io.spine.users.c.group.JoinedParentGroup;
@@ -67,7 +68,9 @@ public class GroupViewTestEvents {
                                    .setId(groupId())
                                    .setEmail(email())
                                    .setDisplayName(groupDisplayName())
-                                   .addRole(role())
+                                   .setRoles(RoleIdsVBuilder.newBuilder()
+                                                            .addId(role())
+                                                            .build())
                                    .setOrgEntity(orgEntity())
                                    .build();
     }
@@ -80,7 +83,9 @@ public class GroupViewTestEvents {
                                    .setId(groupId())
                                    .setEmail(email())
                                    .setDisplayName(groupDisplayName())
-                                   .addRole(role())
+                                   .setRoles(RoleIdsVBuilder.newBuilder()
+                                                            .addId(role())
+                                                            .build())
                                    .setExternalDomain(externalDomain())
                                    .build();
     }
