@@ -175,7 +175,7 @@ class UserRolesProjectionIntegrationTest {
     private static BlackBoxBoundedContext newBoundedContext() {
         RoleAggregateRepository roleAggregateRepository = new RoleAggregateRepository();
         Enricher enricher = UsersEnricher.create(roleAggregateRepository);
-        return BlackBoxBoundedContext.singletenant(enricher)
+        return BlackBoxBoundedContext.newInstance(enricher)
                                      .with(new UserPartRepository(),
                                            new UserMembershipPartRepository(),
                                            roleAggregateRepository,

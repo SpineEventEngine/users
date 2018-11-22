@@ -30,6 +30,8 @@ option java_package = "io.spine.users.c.role";
 option java_outer_classname = "EnrichmentsProto";
 option java_multiple_files = true;
 
+import "spine/users/values.proto";
+
 // The enrichment for role-assignment events.
 //
 // Enriches an event with the name of a role.
@@ -42,5 +44,5 @@ message RoleAssignmentEnrichment {
     //
     // Role assignment happens not so often, so the enrichment won't harm the performance a lot.
     //
-    string role_name = 1 [(by) = "role_id"];
+    RoleName role_name = 1 [(by) = "role_id"];
 }

@@ -51,22 +51,25 @@ public class UsersEnricher {
     public static Enricher create(RoleAggregateRepository roleAggregateRepository) {
         checkNotNull(roleAggregateRepository);
         Enricher enricher = Enricher.newBuilder()
-                                    .add(RoleId.class, String.class,
+                                    .add(RoleId.class, RoleName.class,
                                          roleNameLookup(roleAggregateRepository))
                                     .build();
         return enricher;
     }
 
-    private static BiFunction<RoleId, EventContext, String>
+    private static BiFunction<RoleId, EventContext, RoleName>
     roleNameLookup(RoleAggregateRepository repository) {
         return (roleId, context) -> findName(repository, roleId);
     }
 
-    private static String findName(RoleAggregateRepository repository, RoleId id) {
+    private static RoleName findName(RoleAggregateRepository repository, RoleId id) {
         Optional<RoleAggregate> role = repository.find(id);
-        String roleName = role.map(Aggregate::getState)
-                              .map(Role::getDisplayName)
-                              .orElse("");
-        return roleName;
+        String name = role.map(Aggregate::getState)
+                          .map(Role::getDisplayName)
+                          .orElse("");
+        return RoleNameVBuilder.newBuilder()
+                               .setId(id)
+                               .setName(name)
+                               .build();
     }
 }

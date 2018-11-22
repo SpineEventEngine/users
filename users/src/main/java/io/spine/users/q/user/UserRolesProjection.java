@@ -28,7 +28,6 @@ import io.spine.server.projection.Projection;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.RoleName;
-import io.spine.users.RoleNameVBuilder;
 import io.spine.users.c.role.RoleAssignmentEnrichment;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
@@ -82,12 +81,7 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
 
     @Subscribe
     public void on(RoleAssignedToUser event, EventContext context) {
-        String roleName = roleEnrichment(context).getRoleName();
-        RoleName role = RoleNameVBuilder
-                .newBuilder()
-                .setId(event.getRoleId())
-                .setName(roleName)
-                .build();
+        RoleName role = roleEnrichment(context).getRoleName();
         getBuilder().addRole(role);
     }
 

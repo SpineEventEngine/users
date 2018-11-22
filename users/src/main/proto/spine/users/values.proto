@@ -63,5 +63,5 @@ message RoleName {
     RoleId id = 1 [(required) = true];
 
     // The display name of the role.
-    string name = 2 [(required) = true];
+    string name = 2;
 }
