@@ -39,9 +39,9 @@ import io.spine.users.c.user.UserJoinedGroup;
 import io.spine.users.c.user.UserLeftGroup;
 
 import java.util.List;
-import java.util.Optional;
 
 import static io.spine.users.c.group.GroupCreated.OriginCase.EXTERNAL_DOMAIN;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A projection of a single group to be displayed on UI.
@@ -115,17 +115,13 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     }
 
     private void removeRole(RoleId roleId) {
-        Optional<RoleName> roleToDelete = getBuilder().getRole()
-                                                      .stream()
-                                                      .filter(role -> role.getId()
-                                                                          .equals(roleId))
-                                                      .findFirst();
-        if (!roleToDelete.isPresent()) {
-            return;
-        }
-        List<RoleName> roles = getBuilder().getRole();
-        int roleIndex = roles.indexOf(roleToDelete.get());
-        getBuilder().removeRole(roleIndex);
+        List<RoleName> updatedRoles = getBuilder().getRole()
+                                                  .stream()
+                                                  .filter(role -> !role.getId()
+                                                                       .equals(roleId))
+                                                  .collect(toList());
+        getBuilder().clearRole()
+                    .addAllRole(updatedRoles);
     }
 
     private void removeMember(UserId member) {

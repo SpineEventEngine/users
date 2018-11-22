@@ -38,6 +38,8 @@ import io.spine.users.q.group.GroupView;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * A projection, which represents all roles of a user (both explicitly and implicitly assigned).
  */
@@ -96,17 +98,14 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeRole(RoleId roleId) {
-        Optional<RoleName> roleToDelete = getBuilder().getRole()
-                                                      .stream()
-                                                      .filter(role -> role.getId()
-                                                                          .equals(roleId))
-                                                      .findFirst();
-        if (!roleToDelete.isPresent()) {
-            return;
-        }
-        List<RoleName> roles = getBuilder().getRole();
-        int roleIndex = roles.indexOf(roleToDelete.get());
-        getBuilder().removeRole(roleIndex);
+        List<RoleName> updatedRoles = getBuilder().getRole()
+                                                  .stream()
+                                                  .filter(role -> !role.getId()
+                                                                       .equals(roleId))
+                                                  .collect(toList());
+        getBuilder().clearRole()
+                    .addAllRole(updatedRoles);
+
     }
 
     private Optional<GroupRoles> findRoles(GroupId groupId) {
