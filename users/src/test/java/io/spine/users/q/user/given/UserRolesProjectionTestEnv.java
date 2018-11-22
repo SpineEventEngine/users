@@ -76,4 +76,12 @@ public class UserRolesProjectionTestEnv {
                                .setName(name)
                                .build();
     }
+
+    public static RoleName roleName() {
+        return roleName(roleUuid(), roleDisplayName());
+    }
+
+    public static String roleDisplayName() {
+        return "Role-" + newUuid();
+    }
 }

@@ -28,7 +28,7 @@ import static io.spine.users.q.group.given.GroupViewTestEnv.email;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupDisplayName;
 import static io.spine.users.q.group.given.GroupViewTestEnv.member;
 import static io.spine.users.q.group.given.GroupViewTestEnv.orgEntity;
-import static io.spine.users.q.group.given.GroupViewTestEnv.role;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleName;
 
 /**
  * Test {@link io.spine.users.q.group.GroupView} projections.
@@ -58,7 +58,7 @@ class GroupViewTestProjections {
     }
 
     static GroupViewProjection groupWithRole(GroupId id) {
-        GroupView state = state(id).addRole(role())
+        GroupView state = state(id).addRole(roleName())
                                    .build();
         return newProjection(state);
     }

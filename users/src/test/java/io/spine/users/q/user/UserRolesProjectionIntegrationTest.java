@@ -39,7 +39,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static io.spine.base.Identifier.newUuid;
 import static io.spine.testing.server.blackbox.verify.state.VerifyState.exactlyOne;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToUser;
@@ -52,6 +51,7 @@ import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.rename
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleDisplayName;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleName;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
@@ -76,7 +76,7 @@ class UserRolesProjectionIntegrationTest {
     @DisplayName("have explicitly assigned roles")
     void assignExplicitRoles() {
         RoleId roleId = roleUuid();
-        String roleName = newUuid();
+        String roleName = roleDisplayName();
         UserRoles expectedRoles = UserRoles.newBuilder()
                                            .setId(user)
                                            .addRole(roleName(roleId, roleName))
@@ -92,15 +92,17 @@ class UserRolesProjectionIntegrationTest {
     void implicitlyAssignedRoles() {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
+        String roleName = roleDisplayName();
         GroupRoles expectedGroupRoles = GroupRolesVBuilder.newBuilder()
                                                           .setGroup(group)
-                                                          .addRole(role)
+                                                          .addRole(roleName(role, roleName))
                                                           .build();
         UserRoles expectedRoles = UserRoles.newBuilder()
                                            .setId(user)
                                            .addGroupRole(expectedGroupRoles)
                                            .build();
         boundedContext.receivesCommands(createUser(user),
+                                        createRole(role, roleName),
                                         createGroup(group),
                                         joinGroup(user, group),
                                         assignRoleToGroup(group, role))
@@ -112,7 +114,7 @@ class UserRolesProjectionIntegrationTest {
     class UserWithRole {
 
         private final RoleId role = roleUuid();
-        private final String roleName = newUuid();
+        private final String roleName = roleDisplayName();
 
         @BeforeEach
         void setUp() {

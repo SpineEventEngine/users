@@ -57,5 +57,5 @@ message GroupRoles {
     GroupId group = 1;
 
     // The roles assigned to the group.
-    repeated RoleId role = 2;
+    repeated RoleName role = 2;
 }

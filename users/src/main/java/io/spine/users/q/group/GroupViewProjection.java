@@ -20,20 +20,26 @@
 
 package io.spine.users.q.group;
 
+import io.spine.core.Enrichments;
+import io.spine.core.EventContext;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.RoleName;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
+import io.spine.users.c.group.RoleNamesEnrichment;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
+import io.spine.users.c.role.RoleAssignmentEnrichment;
 import io.spine.users.c.user.UserJoinedGroup;
 import io.spine.users.c.user.UserLeftGroup;
 
 import java.util.List;
+import java.util.Optional;
 
 import static io.spine.users.c.group.GroupCreated.OriginCase.EXTERNAL_DOMAIN;
 
@@ -50,13 +56,14 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     }
 
     @Subscribe
-    public void on(GroupCreated event) {
+    public void on(GroupCreated event, EventContext context) {
         boolean external = event.getOriginCase() == EXTERNAL_DOMAIN;
         GroupViewVBuilder builder = getBuilder();
+        List<RoleName> roleNames = rolesEnrichment(context).getRoleList();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
-               .addAllRole(event.getRoleList())
+               .addAllRole(roleNames)
                .setExternal(external);
         if (external) {
             builder.setExternalDomain(event.getExternalDomain());
@@ -84,8 +91,9 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     }
 
     @Subscribe
-    public void on(RoleAssignedToGroup event) {
-        getBuilder().addRole(event.getRoleId());
+    public void on(RoleAssignedToGroup event, EventContext context) {
+        RoleName roleName = roleEnrichment(context).getRoleName();
+        getBuilder().addRole(roleName);
     }
 
     @Subscribe
@@ -105,12 +113,18 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
         removeMember(member);
     }
 
-    private void removeRole(RoleId role) {
-        List<RoleId> roles = getBuilder().getRole();
-        if (roles.contains(role)) {
-            int roleIndex = roles.indexOf(role);
-            getBuilder().removeRole(roleIndex);
+    private void removeRole(RoleId roleId) {
+        Optional<RoleName> roleToDelete = getBuilder().getRole()
+                                                      .stream()
+                                                      .filter(role -> role.getId()
+                                                                          .equals(roleId))
+                                                      .findFirst();
+        if (!roleToDelete.isPresent()) {
+            return;
         }
+        List<RoleName> roles = getBuilder().getRole();
+        int roleIndex = roles.indexOf(roleToDelete.get());
+        getBuilder().removeRole(roleIndex);
     }
 
     private void removeMember(UserId member) {
@@ -119,5 +133,19 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
             int memberIndex = members.indexOf(member);
             getBuilder().removeUserMember(memberIndex);
         }
+    }
+
+    private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {
+        RoleAssignmentEnrichment enrichment =
+                Enrichments.getEnrichment(RoleAssignmentEnrichment.class, context)
+                           .orElseThrow(IllegalStateException::new);
+        return enrichment;
+    }
+
+    private static RoleNamesEnrichment rolesEnrichment(EventContext context) {
+        RoleNamesEnrichment enrichment =
+                Enrichments.getEnrichment(RoleNamesEnrichment.class, context)
+                           .orElseThrow(IllegalStateException::new);
+        return enrichment;
     }
 }

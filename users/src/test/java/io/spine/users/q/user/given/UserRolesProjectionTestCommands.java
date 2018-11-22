@@ -51,6 +51,11 @@ import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.c.user.User;
 import io.spine.users.c.user.UserNature;
 
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+
 public class UserRolesProjectionTestCommands {
 
     /** Prevents instantiation of this utility class. */
@@ -89,9 +94,18 @@ public class UserRolesProjectionTestCommands {
     }
 
     public static CreateGroup createGroup(GroupId groupId) {
+        return createGroup(groupId, emptyList());
+    }
+
+    public static CreateGroup createGroup(GroupId groupId, RoleId role) {
+        return createGroup(groupId, singletonList(role));
+    }
+
+    public static CreateGroup createGroup(GroupId groupId, List<RoleId> roles) {
         return CreateGroupVBuilder.newBuilder()
                                   .setId(groupId)
                                   .setDisplayName("group " + groupId.getValue())
+                                  .addAllRole(roles)
                                   .build();
     }
 
