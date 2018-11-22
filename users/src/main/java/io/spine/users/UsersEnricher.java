@@ -23,12 +23,17 @@ package io.spine.users;
 import io.spine.core.EventContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.event.Enricher;
+import io.spine.users.c.group.RoleIds;
+import io.spine.users.c.group.RoleNames;
+import io.spine.users.c.group.RoleNamesVBuilder;
 import io.spine.users.c.role.Role;
 import io.spine.users.c.role.RoleAggregate;
 import io.spine.users.c.role.RoleAggregateRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -53,6 +58,8 @@ public class UsersEnricher {
         Enricher enricher = Enricher.newBuilder()
                                     .add(RoleId.class, RoleName.class,
                                          roleNameLookup(roleAggregateRepository))
+                                    .add(RoleIds.class, RoleNames.class,
+                                         roleNamesLookup(roleAggregateRepository))
                                     .build();
         return enricher;
     }
@@ -60,6 +67,11 @@ public class UsersEnricher {
     private static BiFunction<RoleId, EventContext, RoleName>
     roleNameLookup(RoleAggregateRepository repository) {
         return (roleId, context) -> findName(repository, roleId);
+    }
+
+    private static BiFunction<RoleIds, EventContext, RoleNames>
+    roleNamesLookup(RoleAggregateRepository repository) {
+        return (roleIds, context) -> findNames(repository, roleIds);
     }
 
     private static RoleName findName(RoleAggregateRepository repository, RoleId id) {
@@ -71,5 +83,15 @@ public class UsersEnricher {
                                .setId(id)
                                .setName(name)
                                .build();
+    }
+
+    private static RoleNames findNames(RoleAggregateRepository repository, RoleIds roleIds) {
+        List<RoleName> names = roleIds.getIdList()
+                                      .stream()
+                                      .map(id -> findName(repository, id))
+                                      .collect(Collectors.toList());
+        return RoleNamesVBuilder.newBuilder()
+                                .addAllName(names)
+                                .build();
     }
 }
