@@ -26,14 +26,10 @@ import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.CreateGroupVBuilder;
 import io.spine.users.c.role.CreateRole;
 import io.spine.users.c.role.CreateRoleVBuilder;
-import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.AssignRoleToUserVBuilder;
 import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.CreateUserVBuilder;
 import io.spine.users.c.user.User;
@@ -71,20 +67,6 @@ public class RoleViewTestEnv {
                                   .setId(groupId)
                                   .setDisplayName(displayName())
                                   .build();
-    }
-
-    public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
-        return AssignRoleToUserVBuilder.newBuilder()
-                                       .setId(userId)
-                                       .setRoleId(roleId)
-                                       .build();
-    }
-
-    public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
-        return AssignRoleToGroupVBuilder.newBuilder()
-                                        .setId(groupId)
-                                        .setRoleId(roleId)
-                                        .build();
     }
 
     public static RoleViewVBuilder createdRoleView(RoleId id) {

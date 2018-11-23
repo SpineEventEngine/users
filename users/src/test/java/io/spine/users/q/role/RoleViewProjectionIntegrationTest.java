@@ -36,10 +36,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.spine.testing.server.blackbox.verify.state.VerifyState.exactlyOne;
+import static io.spine.users.given.GivenCommand.assignRoleToGroup;
+import static io.spine.users.given.GivenCommand.assignRoleToUser;
+import static io.spine.users.given.GivenCommand.unassignRoleFromGroup;
+import static io.spine.users.given.GivenCommand.unassignRoleFromUser;
 import static io.spine.users.given.GivenId.groupUuid;
 import static io.spine.users.given.GivenId.roleUuid;
-import static io.spine.users.q.role.given.RoleViewTestEnv.assignRoleToGroup;
-import static io.spine.users.q.role.given.RoleViewTestEnv.assignRoleToUser;
 import static io.spine.users.q.role.given.RoleViewTestEnv.createGroup;
 import static io.spine.users.q.role.given.RoleViewTestEnv.createRole;
 import static io.spine.users.q.role.given.RoleViewTestEnv.createUser;
@@ -60,7 +62,7 @@ class RoleViewProjectionIntegrationTest {
     }
 
     @Test
-    @DisplayName("be initialized state on RoleCreated")
+    @DisplayName("initialize state on RoleCreated")
     void roleCreated() {
         RoleView expectedState = RoleViewVBuilder.newBuilder()
                                                  .setId(role)
@@ -100,6 +102,48 @@ class RoleViewProjectionIntegrationTest {
             boundedContext.receivesCommands(createGroup(group),
                                             assignRoleToGroup(group, role))
                           .assertThat(exactlyOne(expectedState));
+        }
+
+        @Nested
+        @DisplayName("and assigned to a user")
+        class AfterAssignmentToUser {
+
+            private final UserId user = GivenUserId.newUuid();
+
+            @BeforeEach
+            void setUp() {
+                boundedContext.receivesCommands(createUser(user),
+                                                assignRoleToUser(user, role));
+            }
+
+            @Test
+            @DisplayName("then be unassigned")
+            void unassigned() {
+                RoleView expectedState = createdRoleView(role).build();
+                boundedContext.receivesCommand(unassignRoleFromUser(user, role))
+                              .assertThat(exactlyOne(expectedState));
+            }
+        }
+
+        @Nested
+        @DisplayName("and assigned to a group")
+        class AfterAssignmentToGroup {
+
+            private final GroupId group = groupUuid();
+
+            @BeforeEach
+            void setUp() {
+                boundedContext.receivesCommands(createGroup(group),
+                                                assignRoleToGroup(group, role));
+            }
+
+            @Test
+            @DisplayName("then be unassigned")
+            void unassigned() {
+                RoleView expectedState = createdRoleView(role).build();
+                boundedContext.receivesCommand(unassignRoleFromGroup(group, role))
+                              .assertThat(exactlyOne(expectedState));
+            }
         }
     }
 
