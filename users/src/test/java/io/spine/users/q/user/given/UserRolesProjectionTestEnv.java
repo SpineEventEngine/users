@@ -23,9 +23,7 @@ package io.spine.users.q.user.given;
 import io.spine.core.UserId;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import io.spine.users.RoleName;
 import io.spine.users.RoleNameVBuilder;
 import io.spine.users.q.user.GroupRoles;
@@ -44,18 +42,6 @@ public class UserRolesProjectionTestEnv {
 
     public static UserId userUuid() {
         return GivenUserId.newUuid();
-    }
-
-    public static RoleId roleUuid() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
-    }
-
-    public static GroupId groupUuid() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(newUuid())
-                              .build();
     }
 
     public static UserRoles userWithoutRoles(UserId user) {

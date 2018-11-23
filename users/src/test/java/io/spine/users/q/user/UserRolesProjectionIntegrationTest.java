@@ -40,6 +40,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.spine.testing.server.blackbox.verify.state.VerifyState.exactlyOne;
+import static io.spine.users.given.GivenId.groupUuid;
+import static io.spine.users.given.GivenId.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.assignRoleToUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createGroup;
@@ -49,9 +51,7 @@ import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.joinGr
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.leaveGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleDisplayName;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userWithRole;
 

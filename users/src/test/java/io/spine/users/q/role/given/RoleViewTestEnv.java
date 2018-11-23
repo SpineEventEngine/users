@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.q.user.given;
+package io.spine.users.q.role.given;
 
 import io.spine.core.UserId;
 import io.spine.users.GroupId;
@@ -30,73 +30,47 @@ import io.spine.users.c.group.AssignRoleToGroup;
 import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.CreateGroup;
 import io.spine.users.c.group.CreateGroupVBuilder;
-import io.spine.users.c.group.UnassignRoleFromGroup;
-import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 import io.spine.users.c.role.CreateRole;
 import io.spine.users.c.role.CreateRoleVBuilder;
 import io.spine.users.c.user.AssignRoleToUser;
 import io.spine.users.c.user.AssignRoleToUserVBuilder;
 import io.spine.users.c.user.CreateUser;
 import io.spine.users.c.user.CreateUserVBuilder;
-import io.spine.users.c.user.JoinGroup;
-import io.spine.users.c.user.JoinGroupVBuilder;
-import io.spine.users.c.user.LeaveGroup;
-import io.spine.users.c.user.LeaveGroupVBuilder;
-import io.spine.users.c.user.RoleInGroup;
-import io.spine.users.c.user.UnassignRoleFromUser;
-import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
 import io.spine.users.c.user.User;
 import io.spine.users.c.user.UserNature;
+import io.spine.users.q.role.RoleViewVBuilder;
 
 import static io.spine.users.given.GivenId.organizationId;
 
-public class UserRolesProjectionTestCommands {
+public class RoleViewTestEnv {
 
     /** Prevents instantiation of this utility class. */
-    private UserRolesProjectionTestCommands() {
+    private RoleViewTestEnv() {
     }
 
-    public static CreateUser createUser(UserId userId) {
-        OrganizationId organizationId = organizationId("organization of " + userId.getValue());
-        OrganizationOrUnit orgEntity = OrganizationOrUnitVBuilder.newBuilder()
-                                                                 .setOrganization(organizationId)
-                                                                 .build();
-        return CreateUserVBuilder.newBuilder()
-                                 .setId(userId)
-                                 .setNature(UserNature.UNAVAILABLE)
-                                 .setDisplayName("display name of " + userId.getValue())
-                                 .setOrgEntity(orgEntity)
-                                 .setStatus(User.Status.ACTIVE)
+    public static CreateRole createRole(RoleId id) {
+        return CreateRoleVBuilder.newBuilder()
+                                 .setId(id)
+                                 .setDisplayName(displayName())
+                                 .setOrgEntity(orgEntity())
                                  .build();
     }
 
-    public static CreateRole createRole(RoleId id, String name) {
-        return CreateRoleVBuilder.newBuilder()
-                                 .setId(id)
-                                 .setDisplayName(name)
+    public static CreateUser createUser(UserId userId) {
+        return CreateUserVBuilder.newBuilder()
+                                 .setId(userId)
+                                 .setNature(UserNature.UNAVAILABLE)
+                                 .setDisplayName(displayName())
+                                 .setOrgEntity(orgEntity())
+                                 .setStatus(User.Status.ACTIVE)
                                  .build();
     }
 
     public static CreateGroup createGroup(GroupId groupId) {
         return CreateGroupVBuilder.newBuilder()
                                   .setId(groupId)
-                                  .setDisplayName("group " + groupId.getValue())
+                                  .setDisplayName(displayName())
                                   .build();
-    }
-
-    public static JoinGroup joinGroup(UserId user, GroupId groupId) {
-        return JoinGroupVBuilder.newBuilder()
-                                .setId(user)
-                                .setGroupId(groupId)
-                                .setRole(RoleInGroup.MEMBER)
-                                .build();
-    }
-
-    public static LeaveGroup leaveGroup(UserId userId, GroupId group) {
-        return LeaveGroupVBuilder.newBuilder()
-                                 .setId(userId)
-                                 .setGroupId(group)
-                                 .build();
     }
 
     public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
@@ -106,13 +80,6 @@ public class UserRolesProjectionTestCommands {
                                        .build();
     }
 
-    public static UnassignRoleFromUser unassignRoleFromUser(UserId userId, RoleId roleId) {
-        return UnassignRoleFromUserVBuilder.newBuilder()
-                                           .setId(userId)
-                                           .setRoleId(roleId)
-                                           .build();
-    }
-
     public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
         return AssignRoleToGroupVBuilder.newBuilder()
                                         .setId(groupId)
@@ -120,10 +87,21 @@ public class UserRolesProjectionTestCommands {
                                         .build();
     }
 
-    public static UnassignRoleFromGroup unassignRoleFromGroup(GroupId groupId, RoleId roleId) {
-        return UnassignRoleFromGroupVBuilder.newBuilder()
-                                            .setId(groupId)
-                                            .setRoleId(roleId)
-                                            .build();
+    public static RoleViewVBuilder createdRoleView(RoleId id) {
+        return RoleViewVBuilder.newBuilder()
+                               .setId(id)
+                               .setDisplayName(displayName())
+                               .setOrgEntity(orgEntity());
+    }
+
+    public static OrganizationOrUnit orgEntity() {
+        OrganizationId organizationId = organizationId("organization-" + RoleViewTestEnv.class);
+        return OrganizationOrUnitVBuilder.newBuilder()
+                                         .setOrganization(organizationId)
+                                         .build();
+    }
+
+    public static String displayName() {
+        return "Display name " + RoleViewTestEnv.class;
     }
 }
