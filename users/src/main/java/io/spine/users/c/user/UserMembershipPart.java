@@ -6,9 +6,7 @@
 
 package io.spine.users.c.user;
 
-import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -26,21 +24,16 @@ import static io.spine.users.c.user.RoleInGroup.MEMBER;
  *
  * <p>If a user shares its functions and roles with a number of other users they can join
  * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
- *
- * @author Vladyslav Lubenskyi
  */
 public class UserMembershipPart
         extends AggregatePart<UserId, UserMembership, UserMembershipVBuilder, UserRoot> {
 
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
     UserMembershipPart(UserRoot root) {
         super(root);
     }
 
     @Assign
-    UserJoinedGroup handle(JoinGroup command, CommandContext context) {
+    UserJoinedGroup handle(JoinGroup command) {
         UserJoinedGroup event =
                 UserJoinedGroupVBuilder
                         .newBuilder()
@@ -52,7 +45,7 @@ public class UserMembershipPart
     }
 
     @Assign
-    UserLeftGroup handle(LeaveGroup command, CommandContext context) {
+    UserLeftGroup handle(LeaveGroup command) {
         UserLeftGroup event =
                 UserLeftGroupVBuilder
                         .newBuilder()
@@ -64,24 +57,21 @@ public class UserMembershipPart
 
     @Apply
     void on(UserJoinedGroup event) {
-        ensureStateId();
         UserMembershipRecord membershipRecord =
                 UserMembershipRecord
                         .newBuilder()
                         .setGroupId(event.getGroupId())
                         .setRole(event.getRole())
                         .build();
-        getBuilder().addMembership(membershipRecord);
+        getBuilder()
+                .setId(getId())
+                .addMembership(membershipRecord);
     }
 
     @Apply
     void on(UserLeftGroup event) {
-        ensureStateId();
         Optional<UserMembershipRecord> membership = findMembership(event.getGroupId());
         membership.ifPresent(this::removeMembership);
-    }
-
-    private void ensureStateId() {
         getBuilder().setId(getId());
     }
 
