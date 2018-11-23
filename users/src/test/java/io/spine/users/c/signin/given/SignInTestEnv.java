@@ -7,11 +7,11 @@
 package io.spine.users.c.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
@@ -50,8 +50,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * The environment for the {@link SignInPm} tests.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class SignInTestEnv {
 
@@ -62,9 +60,7 @@ public final class SignInTestEnv {
     }
 
     public static UserId userId() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue("john.smith@example.com")
-                             .build();
+        return GivenUserId.of("john.smith@example.com");
     }
 
     public static UserPartRepository emptyUserRepo() {

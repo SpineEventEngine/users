@@ -51,9 +51,9 @@ import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassi
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.unassignRoleFromUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.groupUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleDisplayName;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleName;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userWithRole;
 
 /**
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
@@ -75,10 +75,7 @@ class UserRolesProjectionIntegrationTest {
     void assignExplicitRoles() {
         RoleId roleId = roleUuid();
         String roleName = roleDisplayName();
-        UserRoles expectedRoles = UserRoles.newBuilder()
-                                           .setId(user)
-                                           .addRole(roleName(roleId, roleName))
-                                           .build();
+        UserRoles expectedRoles = userWithRole(user, roleId, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(roleId, roleName),
                                         assignRoleToUser(user, roleId))
@@ -91,14 +88,7 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleDisplayName();
-        GroupRoles expectedGroupRoles = GroupRolesVBuilder.newBuilder()
-                                                          .setGroup(group)
-                                                          .addRole(roleName(role, roleName))
-                                                          .build();
-        UserRoles expectedRoles = UserRoles.newBuilder()
-                                           .setId(user)
-                                           .addGroupRole(expectedGroupRoles)
-                                           .build();
+        UserRoles expectedRoles = userWithRole(user, group, role, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),

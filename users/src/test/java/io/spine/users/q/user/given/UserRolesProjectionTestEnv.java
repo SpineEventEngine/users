@@ -21,13 +21,15 @@
 package io.spine.users.q.user.given;
 
 import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.RoleName;
 import io.spine.users.RoleNameVBuilder;
+import io.spine.users.q.user.GroupRoles;
+import io.spine.users.q.user.GroupRolesVBuilder;
 import io.spine.users.q.user.UserRoles;
 import io.spine.users.q.user.UserRolesVBuilder;
 
@@ -41,9 +43,7 @@ public class UserRolesProjectionTestEnv {
     }
 
     public static UserId userUuid() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
+        return GivenUserId.newUuid();
     }
 
     public static RoleId roleUuid() {
@@ -68,6 +68,18 @@ public class UserRolesProjectionTestEnv {
         return UserRolesVBuilder.newBuilder()
                                 .setId(userId)
                                 .addRole(roleName(roleId, roleName))
+                                .build();
+    }
+
+    public static UserRoles userWithRole(UserId userId, GroupId groupId,
+                                         RoleId roleId, String roleName) {
+        GroupRoles expectedGroupRoles = GroupRolesVBuilder.newBuilder()
+                                                          .setGroup(groupId)
+                                                          .addRole(roleName(roleId, roleName))
+                                                          .build();
+        return UserRolesVBuilder.newBuilder()
+                                .setId(userId)
+                                .addGroupRole(expectedGroupRoles)
                                 .build();
     }
 
