@@ -29,10 +29,10 @@ import io.spine.users.q.group.GroupView;
 /**
  * The repository for {@link UserRolesProjection}.
  */
-public class UserRolesProjectionRepository
+public class UserRolesRepository
         extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
-    public UserRolesProjectionRepository() {
+    public UserRolesRepository() {
         StateUpdateRouting<UserId> stateUpdateRouting = StateUpdateRouting
                 .<UserId>newInstance()
                 .route(GroupView.class,

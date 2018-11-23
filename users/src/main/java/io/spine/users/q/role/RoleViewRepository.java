@@ -32,10 +32,10 @@ import static com.google.common.collect.ImmutableSet.of;
 /**
  * The repository for {@link RoleViewProjection}.
  */
-public class RoleViewProjectionRepository
+public class RoleViewRepository
         extends ProjectionRepository<RoleId, RoleViewProjection, RoleView> {
 
-    public RoleViewProjectionRepository() {
+    public RoleViewRepository() {
         getEventRouting().route(RoleAssignedToUser.class,
                                 (event, context) -> of(event.getRoleId()))
                          .route(RoleUnassignedFromUser.class,

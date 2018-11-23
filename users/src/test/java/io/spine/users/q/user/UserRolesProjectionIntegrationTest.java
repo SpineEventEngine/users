@@ -163,6 +163,6 @@ class UserRolesProjectionIntegrationTest {
                                            roleAggregateRepository,
                                            new GroupPartRepository(),
                                            new GroupViewProjectionRepository(),
-                                           new UserRolesProjectionRepository());
+                                           new UserRolesRepository());
     }
 }
