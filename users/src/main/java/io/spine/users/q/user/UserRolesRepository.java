@@ -33,6 +33,7 @@ public class UserRolesRepository
         extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
     public UserRolesRepository() {
+        super();
         StateUpdateRouting<UserId> stateUpdateRouting = StateUpdateRouting
                 .<UserId>newInstance()
                 .route(GroupView.class,

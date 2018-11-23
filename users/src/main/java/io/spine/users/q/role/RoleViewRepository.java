@@ -36,6 +36,7 @@ public class RoleViewRepository
         extends ProjectionRepository<RoleId, RoleViewProjection, RoleView> {
 
     public RoleViewRepository() {
+        super();
         getEventRouting().route(RoleAssignedToUser.class,
                                 (event, context) -> of(event.getRoleId()))
                          .route(RoleUnassignedFromUser.class,
