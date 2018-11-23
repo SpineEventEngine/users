@@ -55,17 +55,6 @@ message DeleteRole {
     RoleId id = 1;
 }
 
-// Renames a role.
-//
-message RenameRole {
-    option (events) = "RoleRenamed";
-
-    RoleId id = 1;
-
-    // A new name of a role.
-    string new_name = 2 [(required) = true];
-}
-
 // Changes an entity the role belongs to.
 //
 message ChangeRoleParent {

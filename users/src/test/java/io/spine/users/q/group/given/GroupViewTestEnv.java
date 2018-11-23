@@ -21,11 +21,11 @@
 package io.spine.users.q.group.given;
 
 import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
 import io.spine.users.OrganizationId;
@@ -34,7 +34,16 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
+import io.spine.users.RoleName;
+import io.spine.users.RoleNameVBuilder;
+import io.spine.users.RoleNamesVBuilder;
+import io.spine.users.c.group.GroupCreated;
+import io.spine.users.c.group.RoleNamesEnrichment;
+import io.spine.users.c.group.RoleNamesEnrichmentVBuilder;
 import io.spine.users.c.user.RoleInGroup;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -86,15 +95,37 @@ public class GroupViewTestEnv {
     }
 
     public static UserId member() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue("group member")
-                             .build();
+        return GivenUserId.of("group member");
     }
 
     public static OrganizationOrUnit orgEntity() {
         return OrganizationOrUnitVBuilder.newBuilder()
                                          .setOrganization(organizationId())
                                          .build();
+    }
+
+    public static RoleName roleName(RoleId roleId) {
+        return RoleNameVBuilder.newBuilder()
+                               .setId(roleId)
+                               .build();
+    }
+
+    public static List<RoleName> expectedRoles(GroupCreated message) {
+        return message.getRoles()
+                      .getIdList()
+                      .stream()
+                      .map(GroupViewTestEnv::roleName)
+                      .collect(Collectors.toList());
+    }
+
+    public static RoleNamesEnrichment roleNamesEnrichment(GroupCreated message) {
+        RoleNamesEnrichment enrichmentMessage = RoleNamesEnrichmentVBuilder
+                .newBuilder()
+                .setRoles(RoleNamesVBuilder.newBuilder()
+                                           .addAllName(expectedRoles(message))
+                                           .build())
+                .build();
+        return enrichmentMessage;
     }
 
     static InternetDomain externalDomain() {

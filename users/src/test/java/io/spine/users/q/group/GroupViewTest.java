@@ -20,7 +20,11 @@
 
 package io.spine.users.q.group;
 
+import com.google.protobuf.Descriptors;
+import com.google.protobuf.Message;
 import io.spine.base.EventMessage;
+import io.spine.core.Enrichment;
+import io.spine.protobuf.AnyPacker;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.projection.ProjectionTest;
 import io.spine.users.GroupId;
@@ -28,9 +32,10 @@ import io.spine.users.GroupId;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
 
 /**
- * The implementation base for testing event subscriptions in {@link GroupView}
+ * The implementation base for testing event subscriptions in {@link GroupView}.
  *
- * @param <M> the type of event being tested
+ * @param <M>
+ *         the type of event being tested
  */
 abstract class GroupViewTest<M extends EventMessage>
         extends ProjectionTest<GroupId, M, GroupView, GroupViewProjection> {
@@ -42,5 +47,18 @@ abstract class GroupViewTest<M extends EventMessage>
     @Override
     protected Repository<GroupId, GroupViewProjection> createRepository() {
         return new GroupViewProjectionRepository();
+    }
+
+    static Enrichment enrichWith(Enrichment enrichment, Message enrichmentMessage) {
+        Descriptors.Descriptor descriptor = enrichmentMessage.getDescriptorForType();
+        Enrichment.Container updatedContainer = enrichment
+                .getContainer()
+                .toBuilder()
+                .putItems(descriptor.getFullName(),
+                          AnyPacker.pack(enrichmentMessage))
+                .build();
+        return enrichment.toBuilder()
+                         .setContainer(updatedContainer)
+                         .build();
     }
 }

@@ -21,16 +21,21 @@
 package io.spine.users.q.group;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.core.Enrichment;
 import io.spine.core.UserId;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.RoleName;
 import io.spine.users.c.group.GroupCreated;
 import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
+import io.spine.users.c.role.RoleAssignmentEnrichment;
+import io.spine.users.c.role.RoleAssignmentEnrichmentVBuilder;
 import io.spine.users.c.user.UserJoinedGroup;
 import io.spine.users.c.user.UserLeftGroup;
+import io.spine.users.q.group.given.GroupViewTestEnv;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,8 +47,10 @@ import static io.spine.users.q.group.GroupViewTestProjections.groupAfterCreation
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithChildGroups;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithRole;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithUserMember;
+import static io.spine.users.q.group.given.GroupViewTestEnv.expectedRoles;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
 import static io.spine.users.q.group.given.GroupViewTestEnv.member;
+import static io.spine.users.q.group.given.GroupViewTestEnv.roleNamesEnrichment;
 import static io.spine.users.q.group.given.GroupViewTestEvents.externalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.internalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
@@ -74,10 +81,15 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getOrgEntity(), state.getOrgEntity());
-                assertEquals(message().getRoles()
-                                      .getIdList(), state.getRoleList());
+                assertEquals(expectedRoles(message()), state.getRoleList());
                 assertFalse(state.getExternal());
             });
+        }
+
+        @Override
+        protected Enrichment enrichment() {
+            Enrichment enrichment = super.enrichment();
+            return enrichWith(enrichment, roleNamesEnrichment(message()));
         }
     }
 
@@ -96,10 +108,15 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getExternalDomain(), state.getExternalDomain());
-                assertEquals(message().getRoles()
-                                      .getIdList(), state.getRoleList());
+                assertEquals(expectedRoles(message()), state.getRoleList());
                 assertTrue(state.getExternal());
             });
+        }
+
+        @Override
+        protected Enrichment enrichment() {
+            Enrichment enrichment = super.enrichment();
+            return enrichWith(enrichment, roleNamesEnrichment(message()));
         }
     }
 
@@ -151,9 +168,24 @@ class GroupViewProjectionTest {
         @Test
         @DisplayName("add to roles")
         void addRole() {
-            List<RoleId> expectedRoles = ImmutableList.of(message().getRoleId());
+            List<RoleName> expectedRoles = ImmutableList.of(roleName());
             expectThat(groupAfterCreation(groupId()))
                     .hasState(state -> assertEquals(expectedRoles, state.getRoleList()));
+        }
+
+        @Override
+        protected Enrichment enrichment() {
+            RoleAssignmentEnrichment enrichmentMessage =
+                    RoleAssignmentEnrichmentVBuilder.newBuilder()
+                                                    .setRoleName(roleName())
+                                                    .build();
+            Enrichment enrichment = super.enrichment();
+            return enrichWith(enrichment, enrichmentMessage);
+        }
+
+        private RoleName roleName() {
+            RoleId roleId = message().getRoleId();
+            return GroupViewTestEnv.roleName(roleId);
         }
     }
 
@@ -168,10 +200,9 @@ class GroupViewProjectionTest {
         @Test
         @DisplayName("remove the role")
         void removeRole() {
-            expectThat(groupWithRole(groupId())).hasState(state -> {
-                assertTrue(state.getRoleList()
-                                .isEmpty());
-            });
+            expectThat(groupWithRole(groupId()))
+                    .hasState(state -> assertTrue(state.getRoleList()
+                                                       .isEmpty()));
         }
     }
 

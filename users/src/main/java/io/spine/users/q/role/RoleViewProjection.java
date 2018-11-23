@@ -30,7 +30,6 @@ import io.spine.users.c.group.RoleUnassignedFromGroup;
 import io.spine.users.c.role.RoleCreated;
 import io.spine.users.c.role.RoleDeleted;
 import io.spine.users.c.role.RoleParentChanged;
-import io.spine.users.c.role.RoleRenamed;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
 
@@ -56,11 +55,6 @@ public class RoleViewProjection extends Projection<RoleId, RoleView, RoleViewVBu
     @Subscribe
     public void on(RoleDeleted event) {
         setDeleted(true);
-    }
-
-    @Subscribe
-    public void on(RoleRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
     }
 
     @Subscribe

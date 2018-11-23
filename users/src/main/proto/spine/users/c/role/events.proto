@@ -53,19 +53,6 @@ message RoleDeleted {
     RoleId id = 1;
 }
 
-// A role was renamed.
-//
-message RoleRenamed {
-
-    RoleId id = 1;
-
-    // A new name of the role.
-    string new_name = 2 [(required) = true];
-
-    // An old name of the role.
-    string old_name = 3 [(required) = true];
-}
-
 // An entity the role belongs to was changed.
 //
 message RoleParentChanged {

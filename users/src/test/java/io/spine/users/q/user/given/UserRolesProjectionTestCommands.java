@@ -35,8 +35,6 @@ import io.spine.users.c.group.UnassignRoleFromGroup;
 import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 import io.spine.users.c.role.CreateRole;
 import io.spine.users.c.role.CreateRoleVBuilder;
-import io.spine.users.c.role.RenameRole;
-import io.spine.users.c.role.RenameRoleVBuilder;
 import io.spine.users.c.user.AssignRoleToUser;
 import io.spine.users.c.user.AssignRoleToUserVBuilder;
 import io.spine.users.c.user.CreateUser;
@@ -83,13 +81,6 @@ public class UserRolesProjectionTestCommands {
         return CreateRoleVBuilder.newBuilder()
                                  .setId(id)
                                  .setDisplayName(name)
-                                 .build();
-    }
-
-    public static RenameRole renameRole(RoleId id, String newName) {
-        return RenameRoleVBuilder.newBuilder()
-                                 .setId(id)
-                                 .setNewName(newName)
                                  .build();
     }
 

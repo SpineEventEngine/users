@@ -84,18 +84,6 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Assign
-    RoleRenamed handle(RenameRole command, CommandContext context) {
-        RoleRenamed event =
-                RoleRenamedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewName(command.getNewName())
-                        .setOldName(getState().getDisplayName())
-                        .build();
-        return event;
-    }
-
-    @Assign
     RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
         RoleParentChanged event =
                 RoleParentChangedVBuilder
@@ -118,11 +106,6 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Apply
     void on(RoleDeleted event) {
         setDeleted(true);
-    }
-
-    @Apply
-    void on(RoleRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
     }
 
     @Apply
