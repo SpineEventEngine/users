@@ -47,10 +47,8 @@ import static io.spine.users.q.group.GroupViewTestProjections.groupAfterCreation
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithChildGroups;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithRole;
 import static io.spine.users.q.group.GroupViewTestProjections.groupWithUserMember;
-import static io.spine.users.q.group.given.GroupViewTestEnv.expectedRoles;
 import static io.spine.users.q.group.given.GroupViewTestEnv.groupId;
 import static io.spine.users.q.group.given.GroupViewTestEnv.member;
-import static io.spine.users.q.group.given.GroupViewTestEnv.roleNamesEnrichment;
 import static io.spine.users.q.group.given.GroupViewTestEvents.externalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.internalGroupCreated;
 import static io.spine.users.q.group.given.GroupViewTestEvents.joinedParentGroup;
@@ -81,15 +79,8 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getOrgEntity(), state.getOrgEntity());
-                assertEquals(expectedRoles(message()), state.getRoleList());
                 assertFalse(state.getExternal());
             });
-        }
-
-        @Override
-        protected Enrichment enrichment() {
-            Enrichment enrichment = super.enrichment();
-            return enrichWith(enrichment, roleNamesEnrichment(message()));
         }
     }
 
@@ -108,15 +99,8 @@ class GroupViewProjectionTest {
                 assertEquals(message().getDisplayName(), state.getDisplayName());
                 assertEquals(message().getEmail(), state.getEmail());
                 assertEquals(message().getExternalDomain(), state.getExternalDomain());
-                assertEquals(expectedRoles(message()), state.getRoleList());
                 assertTrue(state.getExternal());
             });
-        }
-
-        @Override
-        protected Enrichment enrichment() {
-            Enrichment enrichment = super.enrichment();
-            return enrichWith(enrichment, roleNamesEnrichment(message()));
         }
     }
 

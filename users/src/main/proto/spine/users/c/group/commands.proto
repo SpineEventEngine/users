@@ -45,24 +45,21 @@ message CreateGroup {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles explicitly assigned to the group.
-    repeated RoleId role = 3;
-
     // A human-friendly description of a group.
-    string description = 4;
+    string description = 3;
 
     // An entity a group belongs to.
     oneof origin {
 
         // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 5;
+        OrganizationOrUnit org_entity = 4;
 
         // An external domain.
-        net.InternetDomain external_domain = 6;
+        net.InternetDomain external_domain = 5;
     }
 
     // An email address of the group, if applicable.
-    net.EmailAddress email = 7;
+    net.EmailAddress email = 6;
 }
 
 // Moves a group from one organization or orgunit to another.

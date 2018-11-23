@@ -48,7 +48,6 @@ import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
@@ -72,7 +71,6 @@ public class GroupTestCommands {
                                   .setDisplayName(groupName())
                                   .setEmail(groupEmail())
                                   .setOrgEntity(groupOrgEntityOrganization())
-                                  .addRole(groupRole())
                                   .setDescription(groupDescription())
                                   .build();
     }

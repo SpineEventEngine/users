@@ -41,7 +41,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 /**
- * A projection, which represents all roles of a user (both explicitly and implicitly assigned).
+ * A projection of all user roles (both explicitly and implicitly assigned).
  */
 public class UserRolesProjection extends Projection<UserId, UserRoles, UserRolesVBuilder> {
 

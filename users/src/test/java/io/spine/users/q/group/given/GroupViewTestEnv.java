@@ -36,14 +36,7 @@ import io.spine.users.RoleId;
 import io.spine.users.RoleIdVBuilder;
 import io.spine.users.RoleName;
 import io.spine.users.RoleNameVBuilder;
-import io.spine.users.RoleNamesVBuilder;
-import io.spine.users.c.group.GroupCreated;
-import io.spine.users.c.group.RoleNamesEnrichment;
-import io.spine.users.c.group.RoleNamesEnrichmentVBuilder;
 import io.spine.users.c.user.RoleInGroup;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -108,24 +101,6 @@ public class GroupViewTestEnv {
         return RoleNameVBuilder.newBuilder()
                                .setId(roleId)
                                .build();
-    }
-
-    public static List<RoleName> expectedRoles(GroupCreated message) {
-        return message.getRoles()
-                      .getIdList()
-                      .stream()
-                      .map(GroupViewTestEnv::roleName)
-                      .collect(Collectors.toList());
-    }
-
-    public static RoleNamesEnrichment roleNamesEnrichment(GroupCreated message) {
-        RoleNamesEnrichment enrichmentMessage = RoleNamesEnrichmentVBuilder
-                .newBuilder()
-                .setRoles(RoleNamesVBuilder.newBuilder()
-                                           .addAllName(expectedRoles(message))
-                                           .build())
-                .build();
-        return enrichmentMessage;
     }
 
     static InternetDomain externalDomain() {

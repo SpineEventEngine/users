@@ -26,7 +26,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdsVBuilder;
 import io.spine.users.c.organization.Organization;
 import io.spine.users.c.orgunit.OrgUnit;
 import io.spine.users.c.user.UserPart;
@@ -47,7 +46,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * including sub-groups.
  *
  * @see GroupMembershipPart for the part that handle group memberships
- * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass"}) // It is OK for an aggregate.
 public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, GroupRoot> {
@@ -68,9 +66,6 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 .setEmail(command.getEmail())
                 .setExternalDomain(command.getExternalDomain())
                 .setOrgEntity(command.getOrgEntity())
-                .setRoles(RoleIdsVBuilder.newBuilder()
-                                         .addAllId(command.getRoleList())
-                                         .build())
                 .setDescription(command.getDescription())
                 .build();
     }
@@ -165,8 +160,6 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
-               .addAllRole(event.getRoles()
-                                .getIdList())
                .setDescription(event.getDescription())
                .build();
 

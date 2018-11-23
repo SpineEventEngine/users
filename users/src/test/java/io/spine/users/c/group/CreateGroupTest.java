@@ -26,9 +26,6 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.c.group.given.GroupTestCommands.createGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
 @DisplayName("CreateGroup command should")
 class CreateGroupTest extends GroupCommandTest<CreateGroup> {
@@ -45,8 +42,6 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
             assertEquals(command.getId(), event.getId());
             assertEquals(command.getDisplayName(), event.getDisplayName());
             assertEquals(command.getEmail(), event.getEmail());
-            assertEquals(command.getRoleList(), event.getRoles()
-                                                     .getIdList());
             assertEquals(command.getOrgEntity(), event.getOrgEntity());
             assertEquals(command.getDescription(), event.getDescription());
         });
@@ -60,7 +55,6 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
             assertEquals(command.getId(), state.getId());
             assertEquals(command.getDisplayName(), state.getDisplayName());
             assertEquals(command.getEmail(), state.getEmail());
-            assertEquals(command.getRoleList(), state.getRoleList());
             assertEquals(command.getOrgEntity(), state.getOrgEntity());
             assertEquals(command.getDescription(), state.getDescription());
         });
