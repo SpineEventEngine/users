@@ -54,10 +54,7 @@ import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
 
 /**
  * Test commands for {@link UserPart}.
- *
- * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for a test command factory.
 public class UserTestCommands {
 
     /**
@@ -76,7 +73,6 @@ public class UserTestCommands {
                                  .setOrgEntity(userOrgEntity())
                                  .setPrimaryIdentity(googleIdentity())
                                  .setProfile(profile())
-                                 .addRole(adminRoleId())
                                  .setStatus(NOT_READY)
                                  .setNature(PERSON)
                                  .build();
@@ -99,9 +95,9 @@ public class UserTestCommands {
 
     public static LeaveGroup stopGroupMembership(UserId id) {
         return LeaveGroupVBuilder.newBuilder()
-                                          .setId(id)
-                                          .setGroupId(firstGroupId())
-                                          .build();
+                                 .setId(id)
+                                 .setGroupId(firstGroupId())
+                                 .build();
     }
 
     public static DeleteUser deleteUser(UserId id) {
@@ -126,18 +122,18 @@ public class UserTestCommands {
 
     public static AddSecondaryIdentity addAuthIdentity(UserId id) {
         return AddSecondaryIdentityVBuilder.newBuilder()
-                                               .setId(id)
-                                               .setIdentity(googleIdentity())
-                                               .build();
+                                           .setId(id)
+                                           .setIdentity(googleIdentity())
+                                           .build();
     }
 
     public static RemoveSecondaryIdentity removeAuthIdentity(UserId id) {
         Identity identity = googleIdentity();
         return RemoveSecondaryIdentityVBuilder.newBuilder()
-                                                  .setId(id)
-                                                  .setProviderId(identity.getProviderId())
-                                                  .setUserId(identity.getUserId())
-                                                  .build();
+                                              .setId(id)
+                                              .setProviderId(identity.getProviderId())
+                                              .setUserId(identity.getUserId())
+                                              .build();
     }
 
     public static ChangeUserStatus changeUserStatus(UserId id) {
@@ -149,9 +145,9 @@ public class UserTestCommands {
 
     public static ChangePrimaryIdentity changePrimaryIdentity(UserId id) {
         return ChangePrimaryIdentityVBuilder.newBuilder()
-                                                .setId(id)
-                                                .setIdentity(githubIdentity())
-                                                .build();
+                                            .setId(id)
+                                            .setIdentity(githubIdentity())
+                                            .build();
     }
 
     public static RenameUser renameUser(UserId id) {

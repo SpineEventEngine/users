@@ -65,7 +65,6 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                         .setId(command.getId())
                         .setDisplayName(command.getDisplayName())
                         .setPrimaryIdentity(command.getPrimaryIdentity())
-                        .addAllRole(command.getRoleList())
                         .setStatus(command.getStatus())
                         .setProfile(command.getProfile())
                         .setNature(command.getNature());
@@ -225,7 +224,6 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         builder.setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setPrimaryIdentity(event.getPrimaryIdentity())
-                    .addAllRole(event.getRoleList())
                     .setProfile(event.getProfile())
                     .setNature(event.getNature())
                     .setStatus(event.getStatus());
