@@ -22,11 +22,38 @@ package io.spine.users.c.role;
 
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.users.RoleId;
+import io.spine.users.RoleName;
+import io.spine.users.RoleNameVBuilder;
+
+import java.util.Optional;
+
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * The repository for {@linkplain RoleAggregate Roles}.
- *
- * @author Vladyslav Lubenskyi
  */
 public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAggregate> {
+
+    /**
+     * Finds the name of the role.
+     *
+     * @param id
+     *         the ID of the role to look up
+     * @return the role name with its ID
+     * @throws IllegalStateException
+     *         if a role doesn't exist
+     */
+    public RoleName findName(RoleId id) {
+        Optional<RoleAggregate> role = find(id);
+        if (!role.isPresent()) {
+            throw newIllegalStateException("Cannot find the role %s.", id.getValue());
+        }
+        String name = role.get()
+                          .getState()
+                          .getDisplayName();
+        return RoleNameVBuilder.newBuilder()
+                               .setId(id)
+                               .setName(name)
+                               .build();
+    }
 }
