@@ -55,7 +55,7 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     }
 
     @Subscribe
-    public void on(GroupCreated event, EventContext context) {
+    public void on(GroupCreated event) {
         boolean external = event.getOriginCase() == EXTERNAL_DOMAIN;
         GroupViewVBuilder builder = getBuilder();
         builder.setId(event.getId())
