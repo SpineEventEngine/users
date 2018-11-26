@@ -20,15 +20,14 @@
 
 package io.spine.users;
 
-import io.spine.server.aggregate.Aggregate;
 import io.spine.server.event.Enricher;
-import io.spine.users.c.role.Role;
 import io.spine.users.c.role.RoleAggregate;
 import io.spine.users.c.role.RoleAggregateRepository;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A factory of {@link Enricher} instances for the {@code Users} bounded context.
@@ -58,9 +57,12 @@ public class UsersEnricher {
 
     private static RoleName findName(RoleAggregateRepository repository, RoleId id) {
         Optional<RoleAggregate> role = repository.find(id);
-        String name = role.map(Aggregate::getState)
-                          .map(Role::getDisplayName)
-                          .orElse("");
+        if (!role.isPresent()) {
+            throw newIllegalStateException("Cannot find the role %s.", id.getValue());
+        }
+        String name = role.get()
+                          .getState()
+                          .getDisplayName();
         return RoleNameVBuilder.newBuilder()
                                .setId(id)
                                .setName(name)
