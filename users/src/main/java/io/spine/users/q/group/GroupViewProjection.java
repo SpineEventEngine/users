@@ -79,11 +79,12 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
 
     @Subscribe
     public void on(LeftParentGroup event) {
-        GroupId memberId = event.getId();
+        GroupId parentGroup = event.getId();
         GroupViewVBuilder builder = getBuilder();
-        List<GroupId> members = builder.getChildGroup();
-        if (members.contains(memberId)) {
-            builder.removeChildGroup(members.indexOf(memberId));
+        List<GroupId> groups = builder.getChildGroup();
+        int parentGroupIndex = groups.indexOf(parentGroup);
+        if (parentGroupIndex != -1) {
+            builder.removeChildGroup(parentGroupIndex);
         }
     }
 
@@ -122,8 +123,8 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
 
     private void removeMember(UserId member) {
         List<UserId> members = getBuilder().getUserMember();
-        if (members.contains(member)) {
-            int memberIndex = members.indexOf(member);
+        int memberIndex = members.indexOf(member);
+        if (memberIndex != -1) {
             getBuilder().removeUserMember(memberIndex);
         }
     }
