@@ -62,7 +62,7 @@ class RoleViewProjectionIntegrationTest {
     }
 
     @Test
-    @DisplayName("initialize state on RoleCreated")
+    @DisplayName("initialize state on role creation")
     void roleCreated() {
         RoleView expectedState = RoleViewVBuilder.newBuilder()
                                                  .setId(role)

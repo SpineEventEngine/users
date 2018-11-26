@@ -65,7 +65,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GroupViewProjectionTest {
 
     @Nested
-    @DisplayName("when internal GroupCreated")
+    @DisplayName("when internal group created")
     class OnInternalGroupCreated extends GroupViewTest<GroupCreated> {
 
         OnInternalGroupCreated() {
@@ -85,7 +85,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when external GroupCreated")
+    @DisplayName("when external group created")
     class OnExternalGroupCreated extends GroupViewTest<GroupCreated> {
 
         OnExternalGroupCreated() {
@@ -105,7 +105,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when a group LeftParentGroup")
+    @DisplayName("when a group lefts the parent group")
     class OnLeftParentGroup extends GroupViewTest<LeftParentGroup> {
 
         OnLeftParentGroup() {
@@ -123,7 +123,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when a group JoinedParentGroup")
+    @DisplayName("when a group joins the parent group")
     class OnJoinedParentGroup extends GroupViewTest<JoinedParentGroup> {
 
         OnJoinedParentGroup() {
@@ -142,7 +142,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when RoleAssignedToGroup")
+    @DisplayName("when a role assigned to a group")
     class OnRoleAssignedToGroup extends GroupViewTest<RoleAssignedToGroup> {
 
         OnRoleAssignedToGroup() {
@@ -174,7 +174,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when RoleUnassignedFromGroup")
+    @DisplayName("when a role is unassigned from a group")
     class OnRoleUnassignedFromGroup extends GroupViewTest<RoleUnassignedFromGroup> {
 
         OnRoleUnassignedFromGroup() {
@@ -191,7 +191,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when UserJoinedGroup")
+    @DisplayName("when a user joins a group")
     class OnUserJoinedGroup extends GroupViewTest<UserJoinedGroup> {
 
         OnUserJoinedGroup() {
@@ -208,7 +208,7 @@ class GroupViewProjectionTest {
     }
 
     @Nested
-    @DisplayName("when UserLeftGroup")
+    @DisplayName("when a user lefts a group")
     class OnUserLeftGroup extends GroupViewTest<UserLeftGroup> {
 
         OnUserLeftGroup() {
