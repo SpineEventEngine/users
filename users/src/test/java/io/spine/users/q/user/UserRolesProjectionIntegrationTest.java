@@ -83,8 +83,8 @@ class UserRolesProjectionIntegrationTest {
     }
 
     @Test
-    @DisplayName("have implicitly assigned roles")
-    void implicitlyAssignedRoles() {
+    @DisplayName("inherit group roles when joining a group")
+    void inheritAlreadyPresentGroupRoles() {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleDisplayName();
@@ -92,8 +92,25 @@ class UserRolesProjectionIntegrationTest {
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),
-                                        joinGroup(user, group),
                                         assignRoleToGroup(group, role))
+                      // Join a group after the role assigned.
+                      .receivesCommand(joinGroup(user, group))
+                      .assertThat(exactlyOne(expectedRoles));
+    }
+
+    @Test
+    @DisplayName("inherit a group role after its assignment")
+    void trackRoleChangesOfGroup() {
+        RoleId role = roleUuid();
+        GroupId group = groupUuid();
+        String roleName = roleDisplayName();
+        UserRoles expectedRoles = userWithRole(user, group, role, roleName);
+        boundedContext.receivesCommands(createUser(user),
+                                        createRole(role, roleName),
+                                        createGroup(group),
+                                        joinGroup(user, group))
+                      // Assign a role when a user already joined a group
+                      .receivesCommand(assignRoleToGroup(group, role))
                       .assertThat(exactlyOne(expectedRoles));
     }
 
