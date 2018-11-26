@@ -27,7 +27,7 @@ import io.spine.users.RoleNameVBuilder;
 
 import java.util.Optional;
 
-import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * The repository for {@linkplain RoleAggregate Roles}.
@@ -46,7 +46,7 @@ public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAgg
     public RoleName findName(RoleId id) {
         Optional<RoleAggregate> role = find(id);
         if (!role.isPresent()) {
-            throw newIllegalStateException("Cannot find the role %s.", id.getValue());
+            throw newIllegalArgumentException("Cannot find the role %s.", id.getValue());
         }
         String name = role.get()
                           .getState()

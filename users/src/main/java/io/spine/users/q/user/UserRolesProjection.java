@@ -94,21 +94,24 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeGroupRoles(GroupId groupId) {
-        removeRoles(role -> !role.getGroup()
+        retainRoles(role -> !role.getGroup()
                                  .equals(groupId));
     }
 
     private void removeRole(RoleId roleId) {
-        removeRoles(role -> !role.getName()
+        retainRoles(role -> !role.getName()
                                  .getId()
                                  .equals(roleId));
     }
 
-    private void removeRoles(Predicate<UserRole> keepRolesPredicate) {
+    /**
+     * Retains roles matching the predicate.
+     */
+    private void retainRoles(Predicate<UserRole> retainPredicate) {
         List<UserRole> remainingRoles = getBuilder()
                 .getRole()
                 .stream()
-                .filter(keepRolesPredicate)
+                .filter(retainPredicate)
                 .collect(toList());
         getBuilder().clearRole()
                     .addAllRole(remainingRoles);

@@ -57,7 +57,7 @@ message UserRole {
         // The role was explicitly assigned to the user.
         bool own = 2;
 
-        // The role was inherited from the group roles
+        // The role was inherited from the group roles.
         GroupId group = 3;
     }
 }
