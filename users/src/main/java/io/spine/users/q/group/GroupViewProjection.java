@@ -112,11 +112,12 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleName> updatedRoles = getBuilder().getRole()
-                                                  .stream()
-                                                  .filter(role -> !role.getId()
-                                                                       .equals(roleId))
-                                                  .collect(toList());
+        List<RoleName> updatedRoles = getBuilder()
+                .getRole()
+                .stream()
+                .filter(role -> !role.getId()
+                                     .equals(roleId))
+                .collect(toList());
         getBuilder().clearRole()
                     .addAllRole(updatedRoles);
     }

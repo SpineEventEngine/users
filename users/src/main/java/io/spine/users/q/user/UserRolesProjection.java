@@ -98,23 +98,24 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleName> updatedRoles = getBuilder().getRole()
-                                                  .stream()
-                                                  .filter(role -> !role.getId()
-                                                                       .equals(roleId))
-                                                  .collect(toList());
+        List<RoleName> updatedRoles = getBuilder()
+                .getRole()
+                .stream()
+                .filter(role -> !role.getId()
+                                     .equals(roleId))
+                .collect(toList());
         getBuilder().clearRole()
                     .addAllRole(updatedRoles);
 
     }
 
     private Optional<GroupRoles> findRoles(GroupId groupId) {
-        Optional<GroupRoles> record =
-                getBuilder().getGroupRole()
-                            .stream()
-                            .filter(roles -> roles.getGroup()
-                                                  .equals(groupId))
-                            .findFirst();
+        Optional<GroupRoles> record = getBuilder()
+                .getGroupRole()
+                .stream()
+                .filter(roles -> roles.getGroup()
+                                      .equals(groupId))
+                .findFirst();
         return record;
     }
 
