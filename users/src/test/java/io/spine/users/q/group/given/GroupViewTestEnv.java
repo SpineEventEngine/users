@@ -100,7 +100,12 @@ public class GroupViewTestEnv {
     public static RoleName roleName(RoleId roleId) {
         return RoleNameVBuilder.newBuilder()
                                .setId(roleId)
+                               .setName(roleName())
                                .build();
+    }
+
+    public static String roleName() {
+        return "A name of a role";
     }
 
     static InternetDomain externalDomain() {

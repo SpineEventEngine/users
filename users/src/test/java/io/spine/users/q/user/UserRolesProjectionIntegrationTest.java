@@ -129,6 +129,7 @@ class UserRolesProjectionIntegrationTest {
         @BeforeEach
         void setUp() {
             boundedContext.receivesCommands(createUser(user),
+                                            createRole(role, roleDisplayName()),
                                             createGroup(group),
                                             joinGroup(user, group),
                                             assignRoleToGroup(group, role));
