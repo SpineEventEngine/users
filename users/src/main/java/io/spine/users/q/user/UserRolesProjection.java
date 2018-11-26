@@ -36,7 +36,7 @@ import io.spine.users.c.user.UserLeftGroup;
 import io.spine.users.q.group.GroupView;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -61,19 +61,15 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     @Subscribe
     public void onUpdate(GroupView group) {
         removeGroupRoles(group.getId());
-        boolean groupHasRoles = !group.getRoleList()
-                                      .isEmpty();
-        if (groupHasRoles) {
-            GroupRoles updatedRoles = rolesOf(group);
-            getBuilder().addGroupRole(updatedRoles);
-        }
+        List<UserRole> updatedRoles = rolesFrom(group);
+        getBuilder().addAllRole(updatedRoles);
     }
 
     /**
      * Removes the roles for the left group.
      *
      * @implNote this subscription is required because {@link GroupView} update
-     *           won't be routed if a user left a group
+     *           won't be routed if the user left the group
      */
     @Subscribe
     public void on(UserLeftGroup event) {
@@ -83,8 +79,13 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
 
     @Subscribe
     public void on(RoleAssignedToUser event, EventContext context) {
-        RoleName role = roleEnrichment(context).getRoleName();
-        getBuilder().addRole(role);
+        RoleName name = roleEnrichment(context).getRoleName();
+        UserRole userRole = UserRoleVBuilder
+                .newBuilder()
+                .setName(name)
+                .setOwn(true)
+                .build();
+        getBuilder().addRole(userRole);
     }
 
     @Subscribe
@@ -93,44 +94,34 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeGroupRoles(GroupId groupId) {
-        Optional<GroupRoles> roles = findRoles(groupId);
-        roles.ifPresent(this::removeGroupRoles);
+        removeRoles(role -> !role.getGroup()
+                                 .equals(groupId));
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleName> updatedRoles = getBuilder()
+        removeRoles(role -> !role.getName()
+                                 .getId()
+                                 .equals(roleId));
+    }
+
+    private void removeRoles(Predicate<UserRole> keepRolesPredicate) {
+        List<UserRole> remainingRoles = getBuilder()
                 .getRole()
                 .stream()
-                .filter(role -> !role.getId()
-                                     .equals(roleId))
+                .filter(keepRolesPredicate)
                 .collect(toList());
         getBuilder().clearRole()
-                    .addAllRole(updatedRoles);
-
+                    .addAllRole(remainingRoles);
     }
 
-    private Optional<GroupRoles> findRoles(GroupId groupId) {
-        Optional<GroupRoles> record = getBuilder()
-                .getGroupRole()
-                .stream()
-                .filter(roles -> roles.getGroup()
-                                      .equals(groupId))
-                .findFirst();
-        return record;
-    }
-
-    private void removeGroupRoles(GroupRoles roles) {
-        int index = getBuilder().getGroupRole()
-                                .indexOf(roles);
-        getBuilder().removeGroupRole(index);
-    }
-
-    private static GroupRoles rolesOf(GroupView group) {
-        GroupRoles roles = GroupRolesVBuilder.newBuilder()
-                                             .setGroup(group.getId())
-                                             .addAllRole(group.getRoleList())
-                                             .build();
-        return roles;
+    private static List<UserRole> rolesFrom(GroupView group) {
+        List<RoleName> groupRoles = group.getRoleList();
+        return groupRoles.stream()
+                         .map(name -> UserRoleVBuilder.newBuilder()
+                                                      .setGroup(group.getId())
+                                                      .setName(name)
+                                                      .build())
+                         .collect(toList());
     }
 
     private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {

@@ -26,8 +26,8 @@ import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.RoleName;
 import io.spine.users.RoleNameVBuilder;
-import io.spine.users.q.user.GroupRoles;
-import io.spine.users.q.user.GroupRolesVBuilder;
+import io.spine.users.q.user.UserRole;
+import io.spine.users.q.user.UserRoleVBuilder;
 import io.spine.users.q.user.UserRoles;
 import io.spine.users.q.user.UserRolesVBuilder;
 
@@ -51,21 +51,27 @@ public class UserRolesProjectionTestEnv {
     }
 
     public static UserRoles userWithRole(UserId userId, RoleId roleId, String roleName) {
+        UserRole role = UserRoleVBuilder
+                .newBuilder()
+                .setOwn(true)
+                .setName(roleName(roleId, roleName))
+                .build();
         return UserRolesVBuilder.newBuilder()
                                 .setId(userId)
-                                .addRole(roleName(roleId, roleName))
+                                .addRole(role)
                                 .build();
     }
 
     public static UserRoles userWithRole(UserId userId, GroupId groupId,
                                          RoleId roleId, String roleName) {
-        GroupRoles expectedGroupRoles = GroupRolesVBuilder.newBuilder()
-                                                          .setGroup(groupId)
-                                                          .addRole(roleName(roleId, roleName))
-                                                          .build();
+        UserRole role = UserRoleVBuilder
+                .newBuilder()
+                .setGroup(groupId)
+                .setName(roleName(roleId, roleName))
+                .build();
         return UserRolesVBuilder.newBuilder()
                                 .setId(userId)
-                                .addGroupRole(expectedGroupRoles)
+                                .addRole(role)
                                 .build();
     }
 

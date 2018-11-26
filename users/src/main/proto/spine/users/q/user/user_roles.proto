@@ -42,20 +42,22 @@ message UserRoles {
     // The ID of the user.
     core.UserId id = 1;
 
-    // Roles explicitly assigned to the user.
-    repeated RoleName role = 2;
-
-    // Roles of the groups where the user is a member.
-    repeated GroupRoles group_role = 3;
+    // Explicitly and implicitly assigned roles.
+    repeated UserRole role = 2;
 }
 
-// Roles of a group.
+// A role of a user with its origin.
 //
-message GroupRoles {
+message UserRole {
 
-    // An ID of the group.
-    GroupId group = 1;
+    RoleName name = 1 [(required) = true, (valid) = true];
 
-    // The roles assigned to the group.
-    repeated RoleName role = 2;
+    oneof origin {
+
+        // The role was explicitly assigned to the user.
+        bool own = 2;
+
+        // The role was inherited from the group roles
+        GroupId group = 3;
+    }
 }
