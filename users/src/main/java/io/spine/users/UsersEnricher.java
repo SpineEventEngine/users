@@ -20,7 +20,6 @@
 
 package io.spine.users;
 
-import io.spine.core.EventContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.event.Enricher;
 import io.spine.users.c.role.Role;
@@ -28,7 +27,6 @@ import io.spine.users.c.role.RoleAggregate;
 import io.spine.users.c.role.RoleAggregateRepository;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -50,16 +48,12 @@ public class UsersEnricher {
      */
     public static Enricher create(RoleAggregateRepository roleAggregateRepository) {
         checkNotNull(roleAggregateRepository);
-        Enricher enricher = Enricher.newBuilder()
-                                    .add(RoleId.class, RoleName.class,
-                                         roleNameLookup(roleAggregateRepository))
-                                    .build();
+        Enricher enricher = Enricher
+                .newBuilder()
+                .add(RoleId.class, RoleName.class,
+                     (roleId, context) -> findName(roleAggregateRepository, roleId))
+                .build();
         return enricher;
-    }
-
-    private static BiFunction<RoleId, EventContext, RoleName>
-    roleNameLookup(RoleAggregateRepository repository) {
-        return (roleId, context) -> findName(repository, roleId);
     }
 
     private static RoleName findName(RoleAggregateRepository repository, RoleId id) {
