@@ -32,7 +32,6 @@ import io.spine.users.c.group.GroupRolesPropagationRepository;
 import io.spine.users.c.role.RoleAggregateRepository;
 import io.spine.users.c.user.UserMembershipPartRepository;
 import io.spine.users.c.user.UserPartRepository;
-import io.spine.users.q.group.GroupViewProjectionRepository;
 import io.spine.users.q.user.given.UserRolesProjectionTestEnv;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -182,7 +181,6 @@ class UserRolesProjectionIntegrationTest {
                                            roleAggregateRepository,
                                            new GroupPartRepository(),
                                            new GroupRolesPropagationRepository(),
-                                           new GroupViewProjectionRepository(),
                                            new UserRolesRepository());
     }
 }

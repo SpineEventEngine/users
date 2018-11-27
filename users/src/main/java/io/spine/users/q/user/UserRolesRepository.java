@@ -23,10 +23,8 @@ package io.spine.users.q.user;
 import com.google.common.collect.ImmutableSet;
 import io.spine.core.UserId;
 import io.spine.server.projection.ProjectionRepository;
-import io.spine.server.route.StateUpdateRouting;
 import io.spine.users.c.group.RoleDisinheritedByUser;
 import io.spine.users.c.group.RoleInheritedByUser;
-import io.spine.users.q.group.GroupView;
 
 /**
  * The repository for {@link UserRolesProjection}.
@@ -36,12 +34,7 @@ public class UserRolesRepository
 
     public UserRolesRepository() {
         super();
-        StateUpdateRouting<UserId> stateUpdateRouting = StateUpdateRouting
-                .<UserId>newInstance()
-                .route(GroupView.class,
-                       (state, context) -> ImmutableSet.copyOf(state.getUserMemberList()));
-        getEventRouting().routeEntityStateUpdates(stateUpdateRouting)
-                         .route(RoleInheritedByUser.class,
+        getEventRouting().route(RoleInheritedByUser.class,
                                 (event, context) -> ImmutableSet.of(event.getUserId()))
                          .route(RoleDisinheritedByUser.class,
                                 (event, context) -> ImmutableSet.of(event.getUserId()));

@@ -33,6 +33,7 @@ public class GroupRolesPropagationRepository
         extends ProcessManagerRepository<GroupId, GroupRolesPropagationPm, GroupRolesPropagation> {
 
     public GroupRolesPropagationRepository() {
+        super();
         getEventRouting().route(UserJoinedGroup.class,
                                 (event, context) -> ImmutableSet.of(event.getGroupId()))
                          .route(UserLeftGroup.class,
