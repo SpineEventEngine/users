@@ -33,7 +33,7 @@ import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
-import io.spine.users.c.role.RoleAssignmentEnrichment;
+import io.spine.users.c.role.RoleNameEnrichment;
 import io.spine.users.c.user.UserJoinedGroup;
 import io.spine.users.c.user.UserLeftGroup;
 
@@ -130,9 +130,9 @@ public class GroupViewProjection extends Projection<GroupId, GroupView, GroupVie
         }
     }
 
-    private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {
-        RoleAssignmentEnrichment enrichment =
-                Enrichments.getEnrichment(RoleAssignmentEnrichment.class, context)
+    private static RoleNameEnrichment roleEnrichment(EventContext context) {
+        RoleNameEnrichment enrichment =
+                Enrichments.getEnrichment(RoleNameEnrichment.class, context)
                            .orElseThrow(IllegalStateException::new);
         return enrichment;
     }

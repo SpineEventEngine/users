@@ -32,17 +32,14 @@ option java_multiple_files = true;
 
 import "spine/users/values.proto";
 
-// The enrichment for role-assignment events.
+// The enrichment to obtain a role name by its ID.
 //
-// Enriches an event with the name of a role.
-//
-message RoleAssignmentEnrichment {
-    option (enrichment_for) = "spine.users.c.group.RoleAssignedToGroup,"
+message RoleNameEnrichment {
+    option (enrichment_for) = "spine.users.c.user.RoleAssignedToUser,"
+                              "spine.users.c.group.RoleAssignedToGroup,"
                               "spine.users.c.group.RoleInheritedByUser";
 
     // The name of a role, which enriches an event.
-    //
-    // Role assignment happens not so often, so the enrichment won't harm the performance a lot.
     //
     RoleName role_name = 1 [(by) = "role_id"];
 }

@@ -31,8 +31,8 @@ import io.spine.users.c.group.JoinedParentGroup;
 import io.spine.users.c.group.LeftParentGroup;
 import io.spine.users.c.group.RoleAssignedToGroup;
 import io.spine.users.c.group.RoleUnassignedFromGroup;
-import io.spine.users.c.role.RoleAssignmentEnrichment;
-import io.spine.users.c.role.RoleAssignmentEnrichmentVBuilder;
+import io.spine.users.c.role.RoleNameEnrichment;
+import io.spine.users.c.role.RoleNameEnrichmentVBuilder;
 import io.spine.users.c.user.UserJoinedGroup;
 import io.spine.users.c.user.UserLeftGroup;
 import io.spine.users.q.group.given.GroupViewTestEnv;
@@ -159,10 +159,10 @@ class GroupViewProjectionTest {
 
         @Override
         protected Enrichment enrichment() {
-            RoleAssignmentEnrichment enrichmentMessage =
-                    RoleAssignmentEnrichmentVBuilder.newBuilder()
-                                                    .setRoleName(roleName())
-                                                    .build();
+            RoleNameEnrichment enrichmentMessage =
+                    RoleNameEnrichmentVBuilder.newBuilder()
+                                              .setRoleName(roleName())
+                                              .build();
             Enrichment enrichment = super.enrichment();
             return enrichWith(enrichment, enrichmentMessage);
         }

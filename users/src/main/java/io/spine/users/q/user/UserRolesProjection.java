@@ -29,7 +29,7 @@ import io.spine.users.RoleId;
 import io.spine.users.RoleName;
 import io.spine.users.c.group.RoleDisinheritedByUser;
 import io.spine.users.c.group.RoleInheritedByUser;
-import io.spine.users.c.role.RoleAssignmentEnrichment;
+import io.spine.users.c.role.RoleNameEnrichment;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
 import io.spine.users.c.user.UserCreated;
@@ -86,9 +86,9 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
                     .addAllRole(remainingRoles);
     }
 
-    private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {
-        RoleAssignmentEnrichment enrichment =
-                Enrichments.getEnrichment(RoleAssignmentEnrichment.class, context)
+    private static RoleNameEnrichment roleEnrichment(EventContext context) {
+        RoleNameEnrichment enrichment =
+                Enrichments.getEnrichment(RoleNameEnrichment.class, context)
                            .orElseThrow(IllegalStateException::new);
         return enrichment;
     }
