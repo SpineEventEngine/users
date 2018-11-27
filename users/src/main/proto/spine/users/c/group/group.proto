@@ -112,8 +112,8 @@ message GroupMembership {
 
 // A process of a group roles propagation.
 //
-// The roles, assigned to a `Group` are implicitly inherited by all members of the group,
-// including sub-groups.
+// The roles of a group are inherited or disinherited upon changes
+// of group roles and group members.
 //
 message GroupRolesPropagation {
     option (entity).kind = PROCESS_MANAGER;
