@@ -43,21 +43,5 @@ message UserRoles {
     core.UserId id = 1;
 
     // Explicitly and implicitly assigned roles.
-    repeated UserRole role = 2;
-}
-
-// A role of a user with its origin.
-//
-message UserRole {
-
-    RoleName name = 1 [(required) = true, (valid) = true];
-
-    oneof origin {
-
-        // The role was explicitly assigned to the user.
-        bool own = 2;
-
-        // The role was inherited from the group roles.
-        GroupId group = 3;
-    }
+    repeated RoleName role = 2;
 }

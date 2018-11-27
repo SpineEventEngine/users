@@ -37,8 +37,8 @@ import "spine/users/values.proto";
 // Enriches an event with the name of a role.
 //
 message RoleAssignmentEnrichment {
-    option (enrichment_for) = "spine.users.c.user.RoleAssignedToUser,"
-                              "spine.users.c.group.RoleAssignedToGroup";
+    option (enrichment_for) = "spine.users.c.group.RoleAssignedToGroup,"
+                              "spine.users.c.group.RoleInheritedByUser";
 
     // The name of a role, which enriches an event.
     //

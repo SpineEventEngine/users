@@ -25,18 +25,16 @@ import io.spine.core.EventContext;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
-import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.RoleName;
+import io.spine.users.c.group.RoleDisinheritedByUser;
+import io.spine.users.c.group.RoleInheritedByUser;
 import io.spine.users.c.role.RoleAssignmentEnrichment;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
 import io.spine.users.c.user.UserCreated;
-import io.spine.users.c.user.UserLeftGroup;
-import io.spine.users.q.group.GroupView;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -55,37 +53,21 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
         getBuilder().setId(userId);
     }
 
-    /**
-     * Updates roles of a group using the state update of {@link GroupView}.
-     */
     @Subscribe
-    public void onUpdate(GroupView group) {
-        removeGroupRoles(group.getId());
-        List<UserRole> updatedRoles = rolesFrom(group);
-        getBuilder().addAllRole(updatedRoles);
+    public void on(RoleInheritedByUser event, EventContext context) {
+        RoleName role = roleEnrichment(context).getRoleName();
+        getBuilder().addRole(role);
     }
 
-    /**
-     * Removes the roles for the left group.
-     *
-     * @implNote this subscription is required because {@link GroupView} update
-     *           won't be routed if the user left the group
-     */
     @Subscribe
-    public void on(UserLeftGroup event) {
-        GroupId groupId = event.getGroupId();
-        removeGroupRoles(groupId);
+    public void on(RoleDisinheritedByUser event) {
+        removeRole(event.getRoleId());
     }
 
     @Subscribe
     public void on(RoleAssignedToUser event, EventContext context) {
-        RoleName name = roleEnrichment(context).getRoleName();
-        UserRole userRole = UserRoleVBuilder
-                .newBuilder()
-                .setName(name)
-                .setOwn(true)
-                .build();
-        getBuilder().addRole(userRole);
+        RoleName role = roleEnrichment(context).getRoleName();
+        getBuilder().addRole(role);
     }
 
     @Subscribe
@@ -93,38 +75,15 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
         removeRole(event.getRoleId());
     }
 
-    private void removeGroupRoles(GroupId groupId) {
-        retainRoles(role -> !role.getGroup()
-                                 .equals(groupId));
-    }
-
     private void removeRole(RoleId roleId) {
-        retainRoles(role -> !role.getName()
-                                 .getId()
-                                 .equals(roleId));
-    }
-
-    /**
-     * Retains roles matching the predicate.
-     */
-    private void retainRoles(Predicate<UserRole> retainPredicate) {
-        List<UserRole> remainingRoles = getBuilder()
+        List<RoleName> remainingRoles = getBuilder()
                 .getRole()
                 .stream()
-                .filter(retainPredicate)
+                .filter(role -> !role.getId()
+                                     .equals(roleId))
                 .collect(toList());
         getBuilder().clearRole()
                     .addAllRole(remainingRoles);
-    }
-
-    private static List<UserRole> rolesFrom(GroupView group) {
-        List<RoleName> groupRoles = group.getRoleList();
-        return groupRoles.stream()
-                         .map(name -> UserRoleVBuilder.newBuilder()
-                                                      .setGroup(group.getId())
-                                                      .setName(name)
-                                                      .build())
-                         .collect(toList());
     }
 
     private static RoleAssignmentEnrichment roleEnrichment(EventContext context) {

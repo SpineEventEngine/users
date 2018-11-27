@@ -28,6 +28,7 @@ import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.UsersEnricher;
 import io.spine.users.c.group.GroupPartRepository;
+import io.spine.users.c.group.GroupRolesPropagationRepository;
 import io.spine.users.c.role.RoleAggregateRepository;
 import io.spine.users.c.user.UserMembershipPartRepository;
 import io.spine.users.c.user.UserPartRepository;
@@ -88,7 +89,7 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleDisplayName();
-        UserRoles expectedRoles = userWithRole(user, group, role, roleName);
+        UserRoles expectedRoles = userWithRole(user, role, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),
@@ -104,7 +105,7 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleDisplayName();
-        UserRoles expectedRoles = userWithRole(user, group, role, roleName);
+        UserRoles expectedRoles = userWithRole(user, role, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),
@@ -180,6 +181,7 @@ class UserRolesProjectionIntegrationTest {
                                            new UserMembershipPartRepository(),
                                            roleAggregateRepository,
                                            new GroupPartRepository(),
+                                           new GroupRolesPropagationRepository(),
                                            new GroupViewProjectionRepository(),
                                            new UserRolesRepository());
     }
