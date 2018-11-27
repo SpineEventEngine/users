@@ -32,6 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
@@ -111,6 +112,19 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
+// A role of a group was inherited by a user.
+//
+message RoleInheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the inherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user inherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}
+
 // A role assignment was removed from the group.
 //
 message RoleUnassignedFromGroup {
@@ -119,6 +133,19 @@ message RoleUnassignedFromGroup {
 
     // An ID of the unassigned role.
     RoleId role_id = 2 [(required) = true];
+}
+
+// A user disinherited the role of a group.
+//
+message RoleDisinheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the disinherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user disinherited the role.
+    core.UserId user_id = 3 [(required) = true];
 }
 
 // A group was renamed.

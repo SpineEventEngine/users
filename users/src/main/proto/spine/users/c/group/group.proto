@@ -32,6 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/values.proto";
 
@@ -107,4 +108,21 @@ message GroupMembership {
 
     // Other groups this group is a member of.
     repeated GroupId membership = 2;
+}
+
+// A process of a group roles propagation.
+//
+// The roles, assigned to a `Group` are implicitly inherited by all members of the group,
+// including sub-groups.
+//
+message GroupRolesPropagation {
+    option (entity).kind = PROCESS_MANAGER;
+
+    GroupId id = 1;
+
+    // A list of `User` members. Only direct members of the group are included.
+    repeated core.UserId user_member = 2;
+
+    // Roles explicitly assigned to a group.
+    repeated RoleId role = 3;
 }
