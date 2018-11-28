@@ -34,7 +34,6 @@ import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 
 // A new group was created.
 //

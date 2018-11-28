@@ -21,12 +21,10 @@
 package io.spine.users.q.user;
 
 import io.spine.core.UserId;
-import io.spine.server.event.Enricher;
 import io.spine.testing.server.ShardingReset;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.UsersEnricher;
 import io.spine.users.c.group.GroupPartRepository;
 import io.spine.users.c.group.GroupRolesPropagationRepository;
 import io.spine.users.c.role.RoleAggregateRepository;
@@ -75,7 +73,7 @@ class UserRolesProjectionIntegrationTest {
     void assignExplicitRoles() {
         RoleId roleId = roleUuid();
         String roleName = roleNameUuid();
-        UserRoles expectedRoles = userWithRole(user, roleId, roleName);
+        UserRoles expectedRoles = userWithRole(user, roleId);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(roleId, roleName),
                                         assignRoleToUser(user, roleId))
@@ -88,7 +86,7 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleNameUuid();
-        UserRoles expectedRoles = userWithRole(user, role, roleName);
+        UserRoles expectedRoles = userWithRole(user, role);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),
@@ -104,7 +102,7 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         String roleName = roleNameUuid();
-        UserRoles expectedRoles = userWithRole(user, role, roleName);
+        UserRoles expectedRoles = userWithRole(user, role);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
                                         createGroup(group),
@@ -173,12 +171,10 @@ class UserRolesProjectionIntegrationTest {
 
     /** The bounded context with repositories related to {@link UserRolesProjection}. */
     private static BlackBoxBoundedContext newBoundedContext() {
-        RoleAggregateRepository roleAggregateRepository = new RoleAggregateRepository();
-        Enricher enricher = UsersEnricher.create(roleAggregateRepository);
-        return BlackBoxBoundedContext.newInstance(enricher)
+        return BlackBoxBoundedContext.newInstance()
                                      .with(new UserPartRepository(),
                                            new UserMembershipPartRepository(),
-                                           roleAggregateRepository,
+                                           new RoleAggregateRepository(),
                                            new GroupPartRepository(),
                                            new GroupRolesPropagationRepository(),
                                            new UserRolesRepository());

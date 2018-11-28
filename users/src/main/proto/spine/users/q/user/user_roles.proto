@@ -32,7 +32,6 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 
 // All roles of a user (both explicitly and implicitly assigned).
 //
@@ -43,5 +42,5 @@ message UserRoles {
     core.UserId id = 1;
 
     // Explicitly and implicitly assigned roles.
-    repeated RoleName role = 2;
+    repeated RoleId role = 2;
 }

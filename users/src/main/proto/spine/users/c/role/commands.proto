@@ -31,7 +31,6 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 
 // Creates a role.
 //

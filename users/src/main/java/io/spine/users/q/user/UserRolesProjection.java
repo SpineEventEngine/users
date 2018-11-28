@@ -20,23 +20,15 @@
 
 package io.spine.users.q.user;
 
-import io.spine.core.Enrichments;
-import io.spine.core.EventContext;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
 import io.spine.users.RoleId;
-import io.spine.users.RoleName;
 import io.spine.users.c.group.RoleDisinheritedByUser;
 import io.spine.users.c.group.RoleInheritedByUser;
-import io.spine.users.c.role.RoleNameEnrichment;
 import io.spine.users.c.user.RoleAssignedToUser;
 import io.spine.users.c.user.RoleUnassignedFromUser;
 import io.spine.users.c.user.UserCreated;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * A projection of all user roles (both explicitly and implicitly assigned).
@@ -54,9 +46,9 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     @Subscribe
-    public void on(RoleInheritedByUser event, EventContext context) {
-        RoleName role = roleEnrichment(context).getRoleName();
-        getBuilder().addRole(role);
+    public void on(RoleInheritedByUser event) {
+        RoleId inheritedRole = event.getRoleId();
+        getBuilder().addRole(inheritedRole);
     }
 
     @Subscribe
@@ -65,9 +57,9 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     @Subscribe
-    public void on(RoleAssignedToUser event, EventContext context) {
-        RoleName role = roleEnrichment(context).getRoleName();
-        getBuilder().addRole(role);
+    public void on(RoleAssignedToUser event) {
+        RoleId assignedRole = event.getRoleId();
+        getBuilder().addRole(assignedRole);
     }
 
     @Subscribe
@@ -76,20 +68,8 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleName> remainingRoles = getBuilder()
-                .getRole()
-                .stream()
-                .filter(role -> !role.getId()
-                                     .equals(roleId))
-                .collect(toList());
-        getBuilder().clearRole()
-                    .addAllRole(remainingRoles);
-    }
-
-    private static RoleNameEnrichment roleEnrichment(EventContext context) {
-        RoleNameEnrichment enrichment =
-                Enrichments.getEnrichment(RoleNameEnrichment.class, context)
-                           .orElseThrow(IllegalStateException::new);
-        return enrichment;
+        int roleIndex = getBuilder().getRole()
+                                    .indexOf(roleId);
+        getBuilder().removeRole(roleIndex);
     }
 }
