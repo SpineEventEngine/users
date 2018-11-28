@@ -24,9 +24,9 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.c.role.RoleAggregate;
-import io.spine.users.c.role.RoleIds;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.given.GivenId.orgUnitUuid;
 import static io.spine.users.given.GivenId.organizationUuid;
 
@@ -42,7 +42,7 @@ public final class RoleTestEnv {
     }
 
     public static RoleId createRoleId() {
-        return RoleIds.roleId(roleParent(), newUuid());
+        return roleId(roleParent(), newUuid());
     }
 
     public static String roleName() {

@@ -38,12 +38,6 @@ message CreateRole {
     option (events) = "RoleCreated";
 
     RoleId id = 1;
-
-    // A name of a role to display on UI.
-    string display_name = 2 [(required) = true];
-
-    // An organization or organizational unit the role belongs to.
-    OrganizationOrUnit org_entity = 3;
 }
 
 // Deletes a role.
@@ -52,15 +46,4 @@ message DeleteRole {
     option (events) = "RoleDeleted";
 
     RoleId id = 1;
-}
-
-// Changes an entity the role belongs to.
-//
-message ChangeRoleParent {
-    option (events) = "RoleParentChanged";
-
-    RoleId id = 1;
-
-    // A new parent entity of the role.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }

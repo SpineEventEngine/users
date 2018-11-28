@@ -37,12 +37,6 @@ import "spine/users/identifiers.proto";
 message RoleCreated {
 
     RoleId id = 1;
-
-    // A name of the role to display on UI.
-    string display_name = 2 [(required) = true];
-
-    // An organization or organizational unit the role belongs to.
-    OrganizationOrUnit org_entity = 3;
 }
 
 // A role was deleted.
@@ -50,17 +44,4 @@ message RoleCreated {
 message RoleDeleted {
 
     RoleId id = 1;
-}
-
-// An entity the role belongs to was changed.
-//
-message RoleParentChanged {
-
-    RoleId id = 1;
-
-    // A new parent entity of the role.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
-
-    // The former parent entity of the role.
-    OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }

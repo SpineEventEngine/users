@@ -20,7 +20,6 @@
 
 package io.spine.users.c.role;
 
-import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -49,8 +48,6 @@ import io.spine.users.c.user.UserPart;
  * <p>Therefore, when carrying out role-based access control, consider that a
  * {@link UserPart User} and {@link GroupPart Group} aggregates have not only the roles
  * listed in their aggregate states, but effectively all the roles derived from parent groups.
- *
- * @author Vladyslav Lubenskyi
  */
 public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
@@ -62,19 +59,17 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Assign
-    RoleCreated handle(CreateRole command, CommandContext context) {
+    RoleCreated handle(CreateRole command) {
         RoleCreated event =
                 RoleCreatedVBuilder
                         .newBuilder()
                         .setId(command.getId())
-                        .setDisplayName(command.getDisplayName())
-                        .setOrgEntity(command.getOrgEntity())
                         .build();
         return event;
     }
 
     @Assign
-    RoleDeleted handle(DeleteRole command, CommandContext context) {
+    RoleDeleted handle(DeleteRole command) {
         RoleDeleted event =
                 RoleDeletedVBuilder
                         .newBuilder()
@@ -83,33 +78,17 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
         return event;
     }
 
-    @Assign
-    RoleParentChanged handle(ChangeRoleParent command, CommandContext context) {
-        RoleParentChanged event =
-                RoleParentChangedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewOrgEntity(command.getNewOrgEntity())
-                        .setOldOrgEntity(getState().getOrgEntity())
-                        .build();
-        return event;
-    }
-
     @Apply
     void on(RoleCreated event) {
-        getBuilder().setId(event.getId())
-                    .setDisplayName(event.getDisplayName())
-                    .setOrgEntity(event.getOrgEntity())
+        RoleId id = event.getId();
+        getBuilder().setId(id)
+                    .setDisplayName(id.getName())
+                    .setOrgEntity(id.getOrgEntity())
                     .build();
     }
 
     @Apply
     void on(RoleDeleted event) {
         setDeleted(true);
-    }
-
-    @Apply
-    void on(RoleParentChanged event) {
-        getBuilder().setOrgEntity(event.getNewOrgEntity());
     }
 }

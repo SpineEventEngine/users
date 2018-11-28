@@ -62,10 +62,9 @@ public class UserRolesProjectionTestCommands {
                                  .build();
     }
 
-    public static CreateRole createRole(RoleId id, String name) {
+    public static CreateRole createRole(RoleId id) {
         return CreateRoleVBuilder.newBuilder()
                                  .setId(id)
-                                 .setDisplayName(name)
                                  .build();
     }
 
