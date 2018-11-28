@@ -45,13 +45,13 @@ import static io.spine.users.given.GivenCommand.assignRoleToUser;
 import static io.spine.users.given.GivenCommand.unassignRoleFromGroup;
 import static io.spine.users.given.GivenCommand.unassignRoleFromUser;
 import static io.spine.users.given.GivenId.groupUuid;
-import static io.spine.users.given.GivenId.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createRole;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.createUser;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.joinGroup;
 import static io.spine.users.q.user.given.UserRolesProjectionTestCommands.leaveGroup;
-import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleDisplayName;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleNameUuid;
+import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userUuid;
 import static io.spine.users.q.user.given.UserRolesProjectionTestEnv.userWithRole;
 
@@ -74,7 +74,7 @@ class UserRolesProjectionIntegrationTest {
     @DisplayName("have explicitly assigned roles")
     void assignExplicitRoles() {
         RoleId roleId = roleUuid();
-        String roleName = roleDisplayName();
+        String roleName = roleNameUuid();
         UserRoles expectedRoles = userWithRole(user, roleId, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(roleId, roleName),
@@ -87,7 +87,7 @@ class UserRolesProjectionIntegrationTest {
     void inheritAlreadyPresentGroupRoles() {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
-        String roleName = roleDisplayName();
+        String roleName = roleNameUuid();
         UserRoles expectedRoles = userWithRole(user, role, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
@@ -103,7 +103,7 @@ class UserRolesProjectionIntegrationTest {
     void trackRoleChangesOfGroup() {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
-        String roleName = roleDisplayName();
+        String roleName = roleNameUuid();
         UserRoles expectedRoles = userWithRole(user, role, roleName);
         boundedContext.receivesCommands(createUser(user),
                                         createRole(role, roleName),
@@ -119,7 +119,7 @@ class UserRolesProjectionIntegrationTest {
     class UserWithRole {
 
         private final RoleId role = roleUuid();
-        private final String roleName = roleDisplayName();
+        private final String roleName = roleNameUuid();
 
         @BeforeEach
         void setUp() {
@@ -146,7 +146,7 @@ class UserRolesProjectionIntegrationTest {
         @BeforeEach
         void setUp() {
             boundedContext.receivesCommands(createUser(user),
-                                            createRole(role, roleDisplayName()),
+                                            createRole(role, roleNameUuid()),
                                             createGroup(group),
                                             joinGroup(user, group),
                                             assignRoleToGroup(group, role));

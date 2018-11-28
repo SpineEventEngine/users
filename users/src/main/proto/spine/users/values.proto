@@ -37,24 +37,6 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 import "spine/people/person_name.proto";
 
-// An organizational entity, either `Organization` or `OrgUnit`.
-//
-// It is used as a field in the entities (as well as related commands and events) that may belong to
-// either an organization or organizational unit.
-//
-message OrganizationOrUnit {
-
-    // A kind of an entity.
-    oneof kind {
-
-        // An orgunit.
-        users.OrgUnitId org_unit = 1;
-
-        // An organization.
-        users.OrganizationId organization = 2;
-    }
-}
-
 // A role with its name.
 //
 message RoleName {

@@ -22,10 +22,10 @@ package io.spine.users.given;
 
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
+import io.spine.users.OrgUnitId;
+import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -38,18 +38,14 @@ public class GivenId {
     private GivenId() {
     }
 
-    public static RoleId roleUuid() {
-        return roleId("role-" + newUuid());
-    }
-
-    public static RoleId roleId(String value) {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue(value)
-                             .build();
-    }
-
     public static OrganizationId organizationUuid() {
         return organizationId("org-" + newUuid());
+    }
+
+    public static OrgUnitId orgUnitUuid() {
+        return OrgUnitIdVBuilder.newBuilder()
+                                .setValue(newUuid())
+                                .build();
     }
 
     public static OrganizationId organizationId(String value) {

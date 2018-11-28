@@ -29,6 +29,8 @@ import io.spine.users.q.user.UserRoles;
 import io.spine.users.q.user.UserRolesVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.c.role.RoleIds.roleId;
+import static io.spine.users.given.GivenId.organizationUuid;
 
 public class UserRolesProjectionTestEnv {
 
@@ -60,7 +62,11 @@ public class UserRolesProjectionTestEnv {
                                .build();
     }
 
-    public static String roleDisplayName() {
+    public static String roleNameUuid() {
         return "Role-" + newUuid();
+    }
+
+    public static RoleId roleUuid() {
+        return roleId(organizationUuid(), roleNameUuid());
     }
 }

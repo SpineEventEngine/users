@@ -24,22 +24,18 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.OrgUnitId;
-import io.spine.users.OrgUnitIdVBuilder;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.group.GroupPart;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.c.role.RoleIds.roleId;
+import static io.spine.users.given.GivenId.orgUnitUuid;
+import static io.spine.users.given.GivenId.organizationId;
 
 /**
  * The environment for the {@link GroupPart} tests.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GroupTestEnv {
 
@@ -73,20 +69,18 @@ public class GroupTestEnv {
 
     public static OrganizationOrUnit groupOrgEntityOrganization() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                   .setOrganization(organization())
-                                   .build();
+                                         .setOrganization(organizationId("Space travel"))
+                                         .build();
     }
 
     public static OrganizationOrUnit groupParentOrgUnit() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                   .setOrgUnit(orgUnit())
-                                   .build();
+                                         .setOrgUnit(orgUnitUuid())
+                                         .build();
     }
 
     public static RoleId groupRole() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue("administrator")
-                             .build();
+        return roleId(groupOrgEntityOrganization(), "administrator");
     }
 
     public static String groupDescription() {
@@ -105,17 +99,5 @@ public class GroupTestEnv {
         return EmailAddressVBuilder.newBuilder()
                                    .setValue("developers-renamed-list@gmail.com")
                                    .build();
-    }
-
-    private static OrgUnitId orgUnit() {
-        return OrgUnitIdVBuilder.newBuilder()
-                                .setValue(newUuid())
-                                .build();
-    }
-
-    private static OrganizationId organization() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
     }
 }

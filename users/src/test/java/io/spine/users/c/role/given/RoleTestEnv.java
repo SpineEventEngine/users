@@ -20,22 +20,18 @@
 
 package io.spine.users.c.role.given;
 
-import io.spine.users.OrgUnitId;
-import io.spine.users.OrgUnitIdVBuilder;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.role.RoleAggregate;
+import io.spine.users.c.role.RoleIds;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.given.GivenId.orgUnitUuid;
+import static io.spine.users.given.GivenId.organizationUuid;
 
 /**
  * The environment for the {@link RoleAggregate} tests.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class RoleTestEnv {
 
@@ -46,40 +42,22 @@ public final class RoleTestEnv {
     }
 
     public static RoleId createRoleId() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
+        return RoleIds.roleId(roleParent(), newUuid());
     }
 
     public static String roleName() {
         return "github-contributor";
     }
 
-    public static String newRoleName() {
-        return "bitbucket-contributor";
-    }
-
     public static OrganizationOrUnit roleParent() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                   .setOrganization(organization())
-                                   .build();
+                                         .setOrganization(organizationUuid())
+                                         .build();
     }
 
     public static OrganizationOrUnit newRoleParent() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                   .setOrgUnit(orgUnit())
-                                   .build();
-    }
-
-    private static OrganizationId organization() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
-    }
-
-    private static OrgUnitId orgUnit() {
-        return OrgUnitIdVBuilder.newBuilder()
-                                .setValue(newUuid())
-                                .build();
+                                         .setOrgUnit(orgUnitUuid())
+                                         .build();
     }
 }

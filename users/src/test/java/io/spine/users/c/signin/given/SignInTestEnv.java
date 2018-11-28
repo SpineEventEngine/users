@@ -23,7 +23,6 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.signin.SignInFailureReason;
@@ -37,6 +36,7 @@ import java.util.Optional;
 
 import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.testing.server.entity.given.Given.aggregatePartOfClass;
+import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.UserNature.PERSON;
@@ -188,9 +188,7 @@ public final class SignInTestEnv {
     }
 
     private static RoleId adminRoleId() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue("admin_role")
-                             .build();
+        return roleId(orgEntity(), "admin_role");
     }
 
     private static OrganizationId organizationId() {

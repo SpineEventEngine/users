@@ -29,9 +29,6 @@ import static io.spine.users.given.GivenCommand.unassignRoleFromGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("UnassignRoleFromGroup command should")
 class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {
 
