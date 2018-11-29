@@ -7,11 +7,11 @@
 package io.spine.users.c.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
@@ -23,7 +23,6 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import io.spine.users.c.IdentityProviderBridge;
 import io.spine.users.c.IdentityProviderBridgeFactory;
 import io.spine.users.c.signin.SignInFailureReason;
@@ -37,6 +36,7 @@ import java.util.Optional;
 
 import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.testing.server.entity.given.Given.aggregatePartOfClass;
+import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.c.user.User.Status.NOT_READY;
 import static io.spine.users.c.user.UserNature.PERSON;
@@ -50,8 +50,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * The environment for the {@link SignInPm} tests.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class SignInTestEnv {
 
@@ -62,9 +60,7 @@ public final class SignInTestEnv {
     }
 
     public static UserId userId() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue("john.smith@example.com")
-                             .build();
+        return GivenUserId.of("john.smith@example.com");
     }
 
     public static UserPartRepository emptyUserRepo() {
@@ -192,9 +188,7 @@ public final class SignInTestEnv {
     }
 
     private static RoleId adminRoleId() {
-        return RoleIdVBuilder.newBuilder()
-                             .setValue("admin_role")
-                             .build();
+        return roleId(orgEntity(), "admin_role");
     }
 
     private static OrganizationId organizationId() {

@@ -19,12 +19,12 @@
  */
 
 /**
- * This package contains projections of {@link io.spine.users.c.group.GroupRoot Group aggregate}.
+ * This package contains factories of test values for Users bounded context.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.q.group;
+package io.spine.users.given;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

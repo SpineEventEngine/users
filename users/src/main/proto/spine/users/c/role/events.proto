@@ -31,19 +31,12 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 
 // A new role was created.
 //
 message RoleCreated {
 
     RoleId id = 1;
-
-    // A name of the role to display on UI.
-    string display_name = 2 [(required) = true];
-
-    // An organization or organizational unit the role belongs to.
-    OrganizationOrUnit org_entity = 3;
 }
 
 // A role was deleted.
@@ -51,30 +44,4 @@ message RoleCreated {
 message RoleDeleted {
 
     RoleId id = 1;
-}
-
-// A role was renamed.
-//
-message RoleRenamed {
-
-    RoleId id = 1;
-
-    // A new name of the role.
-    string new_name = 2 [(required) = true];
-
-    // An old name of the role.
-    string old_name = 3 [(required) = true];
-}
-
-// An entity the role belongs to was changed.
-//
-message RoleParentChanged {
-
-    RoleId id = 1;
-
-    // A new parent entity of the role.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
-
-    // The former parent entity of the role.
-    OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }

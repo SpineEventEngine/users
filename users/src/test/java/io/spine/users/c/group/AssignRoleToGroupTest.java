@@ -21,24 +21,20 @@
 package io.spine.users.c.group;
 
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.group.given.GroupTestCommands.assignRoleToGroup;
+import static io.spine.users.c.role.RoleIds.roleId;
+import static io.spine.users.given.GivenCommand.assignRoleToGroup;
+import static io.spine.users.given.GivenId.organizationUuid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("AssignRoleToGroup command should")
 class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
 
-    private static final RoleId NEW_ROLE = RoleIdVBuilder.newBuilder()
-                                                         .setValue(newUuid())
-                                                         .build();
+    private static final RoleId NEW_ROLE = roleId(organizationUuid(), newUuid());
 
     AssignRoleToGroupTest() {
         super(createMessage());

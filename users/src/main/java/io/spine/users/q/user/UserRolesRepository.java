@@ -18,35 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.q.group;
+package io.spine.users.q.user;
 
-import io.spine.users.GroupId;
-import io.spine.users.c.group.LeftParentGroup;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static io.spine.users.q.group.GroupViewTestProjections.groupWithMemberProjection;
-import static io.spine.users.q.group.given.GroupViewTestEvents.leftParentGroup;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.google.common.collect.ImmutableSet;
+import io.spine.core.UserId;
+import io.spine.server.projection.ProjectionRepository;
+import io.spine.users.c.group.RoleDisinheritedByUser;
+import io.spine.users.c.group.RoleInheritedByUser;
 
 /**
- * @author Vladyslav Lubenskyi
+ * The repository for {@link UserRolesProjection}.
  */
-@DisplayName("when a group LeftParentGroup")
-class LeftParentGroupTest extends GroupViewTest<LeftParentGroup> {
+public class UserRolesRepository
+        extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
-    LeftParentGroupTest() {
-        super(leftParentGroup(PROJECTION_ID));
-    }
-
-    @Test
-    @DisplayName("parent group should remove a member")
-    void testState() {
-        expectThat(groupWithMemberProjection(PROJECTION_ID)).hasState(state -> {
-            List<GroupId> membersList = state.getChildGroupsList();
-            assertTrue(membersList.isEmpty());
-        });
+    public UserRolesRepository() {
+        super();
+        getEventRouting().route(RoleInheritedByUser.class,
+                                (event, context) -> ImmutableSet.of(event.getUserId()))
+                         .route(RoleDisinheritedByUser.class,
+                                (event, context) -> ImmutableSet.of(event.getUserId()));
     }
 }

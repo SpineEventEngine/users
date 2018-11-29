@@ -32,8 +32,8 @@ option java_generate_equals_and_hash = true;
 
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 
 // A new group was created.
 //
@@ -44,24 +44,21 @@ message GroupCreated {
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // Roles explicitly assigned to the group.
-    repeated RoleId role = 3;
-
     // A human-friendly description of a group.
-    string description = 4;
+    string description = 3;
 
     // An entity a group belongs to.
     oneof origin {
 
         // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 5;
+        OrganizationOrUnit org_entity = 4;
 
         // An external domain.
-        net.InternetDomain external_domain = 6;
+        net.InternetDomain external_domain = 5;
     }
 
     // An email address of the group, if applicable.
-    net.EmailAddress email = 7;
+    net.EmailAddress email = 6;
 }
 
 // A group was moved to another organization or orgunit.
@@ -114,6 +111,19 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
+// A role of a group was inherited by a user.
+//
+message RoleInheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the inherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user inherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}
+
 // A role assignment was removed from the group.
 //
 message RoleUnassignedFromGroup {
@@ -122,6 +132,19 @@ message RoleUnassignedFromGroup {
 
     // An ID of the unassigned role.
     RoleId role_id = 2 [(required) = true];
+}
+
+// A user disinherited the role of a group.
+//
+message RoleDisinheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the disinherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user disinherited the role.
+    core.UserId user_id = 3 [(required) = true];
 }
 
 // A group was renamed.

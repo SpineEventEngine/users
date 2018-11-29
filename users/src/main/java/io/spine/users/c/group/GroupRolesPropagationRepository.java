@@ -18,33 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.c.group;
 
-import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
-import io.spine.users.RoleId;
-
-import static io.spine.users.c.role.given.RoleTestEnv.createRoleId;
+import com.google.common.collect.ImmutableSet;
+import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.users.GroupId;
+import io.spine.users.c.user.UserJoinedGroup;
+import io.spine.users.c.user.UserLeftGroup;
 
 /**
- * An implementation base for the {@link Role} aggregate command handler tests.
- *
- * @param <C>
- *         the type of the command being tested
- * @author Vladyslav Lubenskyi
+ * The repository for {@link GroupRolesPropagationPm}.
  */
-public class RoleCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
+public class GroupRolesPropagationRepository
+        extends ProcessManagerRepository<GroupId, GroupRolesPropagationPm, GroupRolesPropagation> {
 
-    static final RoleId ROLE_ID = createRoleId();
-
-    RoleCommandTest(C commandMessage) {
-        super(ROLE_ID, commandMessage);
-    }
-
-    @Override
-    protected Repository<RoleId, RoleAggregate> createRepository() {
-        return new RoleAggregateRepository();
+    public GroupRolesPropagationRepository() {
+        super();
+        getEventRouting().route(UserJoinedGroup.class,
+                                (event, context) -> ImmutableSet.of(event.getGroupId()))
+                         .route(UserLeftGroup.class,
+                                (event, context) -> ImmutableSet.of(event.getGroupId()));
     }
 }

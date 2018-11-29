@@ -22,7 +22,6 @@ syntax = "proto3";
 
 package spine.users;
 
-import "spine/core/user_id.proto";
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
@@ -31,6 +30,8 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "spine/core/user_id.proto";
+
 // A UUID of a user group.
 //
 message GroupId {
@@ -38,11 +39,15 @@ message GroupId {
     string value = 1;
 }
 
-// A UUID of a role.
+// An ID of a role.
 //
 message RoleId {
 
-    string value = 1;
+    // An organization or organizational unit the role belongs to.
+    OrganizationOrUnit org_entity = 1 [(required) = true];
+
+    // A name of the role.
+    string name = 2 [(required) = true];
 }
 
 // A UUID of an organization.
@@ -66,4 +71,23 @@ message OrgUnitId {
 message IdentityProviderId {
 
     string value = 1;
+}
+
+// An ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
+//
+// An `OrgUnit` is quite similar to an `Organization`, the major difference is that
+// an `Organization` has no parent. So, most of the interaction can be performed in
+// the same manner for both of them.
+//
+message OrganizationOrUnit {
+
+    // A kind of a node ID.
+    oneof kind {
+
+        // An `OrgUnit`.
+        users.OrgUnitId org_unit = 1;
+
+        // An `Organization`.
+        users.OrganizationId organization = 2;
+    }
 }

@@ -25,8 +25,6 @@ import io.spine.users.RoleId;
 
 /**
  * The repository for {@linkplain RoleAggregate Roles}.
- *
- * @author Vladyslav Lubenskyi
  */
 public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAggregate> {
 }

@@ -21,25 +21,14 @@
 package io.spine.users.c.role.given;
 
 import io.spine.users.RoleId;
-import io.spine.users.c.role.ChangeRoleParent;
-import io.spine.users.c.role.ChangeRoleParentVBuilder;
 import io.spine.users.c.role.CreateRole;
 import io.spine.users.c.role.CreateRoleVBuilder;
 import io.spine.users.c.role.DeleteRole;
 import io.spine.users.c.role.DeleteRoleVBuilder;
-import io.spine.users.c.role.RenameRole;
-import io.spine.users.c.role.RenameRoleVBuilder;
 import io.spine.users.c.role.RoleAggregate;
-
-import static io.spine.users.c.role.given.RoleTestEnv.newRoleName;
-import static io.spine.users.c.role.given.RoleTestEnv.newRoleParent;
-import static io.spine.users.c.role.given.RoleTestEnv.roleName;
-import static io.spine.users.c.role.given.RoleTestEnv.roleParent;
 
 /**
  * Test commands for {@link RoleAggregate}.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class RoleTestCommands {
 
@@ -52,8 +41,6 @@ public final class RoleTestCommands {
     public static CreateRole createRole(RoleId id) {
         return CreateRoleVBuilder.newBuilder()
                                  .setId(id)
-                                 .setOrgEntity(roleParent())
-                                 .setDisplayName(roleName())
                                  .build();
     }
 
@@ -61,19 +48,5 @@ public final class RoleTestCommands {
         return DeleteRoleVBuilder.newBuilder()
                                  .setId(id)
                                  .build();
-    }
-
-    public static RenameRole renameRole(RoleId id) {
-        return RenameRoleVBuilder.newBuilder()
-                                 .setId(id)
-                                 .setNewName(newRoleName())
-                                 .build();
-    }
-
-    public static ChangeRoleParent changeRoleParent(RoleId id) {
-        return ChangeRoleParentVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setNewOrgEntity(newRoleParent())
-                                       .build();
     }
 }

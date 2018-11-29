@@ -24,14 +24,11 @@ import io.spine.users.RoleId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.given.GroupTestCommands.unassignRoleFromGroup;
 import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.given.GivenCommand.unassignRoleFromGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("UnassignRoleFromGroup command should")
 class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {
 

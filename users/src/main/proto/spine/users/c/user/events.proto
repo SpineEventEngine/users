@@ -34,7 +34,6 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/values.proto";
 import "spine/users/c/user/user.proto";
 import "spine/users/person_profile.proto";
 import "spine/users/c/user/identity.proto";
@@ -51,30 +50,27 @@ message UserCreated {
     // A user name to be displayed on UI.
     string display_name = 3 [(required) = true];
 
-    // Roles explicitly assigned to the user.
-    repeated RoleId role = 4;
-
     // An email address of a user.
-    net.EmailAddress email = 5;
+    net.EmailAddress email = 4;
 
     // An entity a user belongs to.
     oneof origin {
 
         // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 6;
+        OrganizationOrUnit org_entity = 5;
 
         // An external domain.
-        net.InternetDomain external_domain = 7;
+        net.InternetDomain external_domain = 6;
     }
 
     // The primary identity of the user.
-    Identity primary_identity = 8;
+    Identity primary_identity = 7;
 
     // A user profile, if applicable.
-    PersonProfile profile = 9;
+    PersonProfile profile = 8;
 
     // The current status of the user.
-    User.Status status = 10 [(required) = true];
+    User.Status status = 9 [(required) = true];
 }
 
 // A user was moved to another organization or organizational unit.

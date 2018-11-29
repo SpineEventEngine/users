@@ -18,46 +18,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role.given;
+package io.spine.users.q.user.given;
 
-import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
+import io.spine.core.UserId;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.RoleId;
-import io.spine.users.c.role.RoleAggregate;
+import io.spine.users.q.user.UserRoles;
+import io.spine.users.q.user.UserRolesVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.c.role.RoleIds.roleId;
-import static io.spine.users.given.GivenId.orgUnitUuid;
 import static io.spine.users.given.GivenId.organizationUuid;
 
-/**
- * The environment for the {@link RoleAggregate} tests.
- */
-public final class RoleTestEnv {
+public class UserRolesProjectionTestEnv {
 
-    /**
-     * Prevents instantiation.
-     */
-    private RoleTestEnv() {
+    /** Prevents instantiation of this utility class. */
+    private UserRolesProjectionTestEnv() {
     }
 
-    public static RoleId createRoleId() {
-        return roleId(roleParent(), newUuid());
+    public static UserId userUuid() {
+        return GivenUserId.newUuid();
     }
 
-    public static String roleName() {
-        return "github-contributor";
+    public static UserRoles userWithoutRoles(UserId user) {
+        return UserRolesVBuilder.newBuilder()
+                                .setId(user)
+                                .build();
     }
 
-    public static OrganizationOrUnit roleParent() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrganization(organizationUuid())
-                                         .build();
+    public static UserRoles userWithRole(UserId userId, RoleId roleId) {
+        return UserRolesVBuilder.newBuilder()
+                                .setId(userId)
+                                .addRole(roleId)
+                                .build();
     }
 
-    public static OrganizationOrUnit newRoleParent() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(orgUnitUuid())
-                                         .build();
+    public static String roleNameUuid() {
+        return "Role-" + newUuid();
+    }
+
+    public static RoleId roleUuid() {
+        return roleId(organizationUuid(), roleNameUuid());
     }
 }

@@ -31,7 +31,7 @@ abstract class GroupCommandTest<C extends CommandMessage>
     }
 
     @Override
-    protected Repository<GroupId, GroupPart> createEntityRepository() {
+    protected Repository<GroupId, GroupPart> createRepository() {
         return new GroupPartRepository();
     }
 

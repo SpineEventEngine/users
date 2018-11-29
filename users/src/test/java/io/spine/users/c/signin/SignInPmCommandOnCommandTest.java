@@ -29,7 +29,7 @@ abstract class SignInPmCommandOnCommandTest<C extends CommandMessage>
     }
 
     @Override
-    protected Repository<UserId, SignInPm> createEntityRepository() {
+    protected Repository<UserId, SignInPm> createRepository() {
         return new SignInPmRepository(mock(IdentityProviderBridgeFactory.class),
                                       mock(UserPartRepository.class));
     }

@@ -18,32 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.q.group;
-
-import io.spine.base.EventMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.projection.ProjectionTest;
-import io.spine.users.GroupId;
-
-import static io.spine.users.q.group.given.GroupViewTestEnv.newGroupId;
-
 /**
- * The implementation base for testing event subscriptions in {@link GroupView}
- *
- * @param <M> the type of event being tested
- * @author Vladyslav Lubenskyi
+ * This package contains projections of {@link io.spine.users.c.user.UserRoot User aggregate}.
  */
-abstract class GroupViewTest<M extends EventMessage>
-        extends ProjectionTest<GroupId, M, GroupView, GroupViewProjection> {
 
-    protected static final GroupId PROJECTION_ID = newGroupId();
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.q.user;
 
-    protected GroupViewTest(M eventMessage) {
-        super(PROJECTION_ID, eventMessage);
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    @Override
-    protected Repository<GroupId, GroupViewProjection> createEntityRepository() {
-        return new GroupViewProjectionRepository();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

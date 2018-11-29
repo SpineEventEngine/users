@@ -20,6 +20,7 @@
 
 package io.spine.users.c.role;
 
+import io.spine.users.RoleId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,9 +28,6 @@ import static io.spine.users.c.role.TestRoleFactory.createEmptyAggregate;
 import static io.spine.users.c.role.given.RoleTestCommands.createRole;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("CreateRole command should")
 class CreateRoleTest extends RoleCommandTest<CreateRole> {
 
@@ -43,8 +41,6 @@ class CreateRoleTest extends RoleCommandTest<CreateRole> {
         CreateRole command = message();
         expectThat(createEmptyAggregate(ROLE_ID)).producesEvent(RoleCreated.class, event -> {
             assertEquals(command.getId(), event.getId());
-            assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getOrgEntity(), event.getOrgEntity());
         });
     }
 
@@ -52,10 +48,11 @@ class CreateRoleTest extends RoleCommandTest<CreateRole> {
     @DisplayName("create a role")
     void changeState() {
         CreateRole command = message();
+        RoleId roleId = command.getId();
         expectThat(createEmptyAggregate(ROLE_ID)).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
-            assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getOrgEntity(), state.getOrgEntity());
+            assertEquals(roleId, state.getId());
+            assertEquals(roleId.getName(), state.getDisplayName());
+            assertEquals(roleId.getOrgEntity(), state.getOrgEntity());
         });
     }
 

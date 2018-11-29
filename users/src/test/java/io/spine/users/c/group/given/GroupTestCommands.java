@@ -22,9 +22,6 @@ package io.spine.users.c.group.given;
 
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.AssignRoleToGroupVBuilder;
 import io.spine.users.c.group.ChangeGroupDescription;
 import io.spine.users.c.group.ChangeGroupDescriptionVBuilder;
 import io.spine.users.c.group.ChangeGroupEmail;
@@ -41,14 +38,11 @@ import io.spine.users.c.group.MoveGroup;
 import io.spine.users.c.group.MoveGroupVBuilder;
 import io.spine.users.c.group.RenameGroup;
 import io.spine.users.c.group.RenameGroupVBuilder;
-import io.spine.users.c.group.UnassignRoleFromGroup;
-import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
 
 import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.groupName;
 import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupDescription;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
@@ -72,7 +66,6 @@ public class GroupTestCommands {
                                   .setDisplayName(groupName())
                                   .setEmail(groupEmail())
                                   .setOrgEntity(groupOrgEntityOrganization())
-                                  .addRole(groupRole())
                                   .setDescription(groupDescription())
                                   .build();
     }
@@ -104,20 +97,6 @@ public class GroupTestCommands {
                                        .setId(groupId)
                                        .setParentGroupId(upperGroupId)
                                        .build();
-    }
-
-    public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
-        return AssignRoleToGroupVBuilder.newBuilder()
-                                        .setId(groupId)
-                                        .setRoleId(roleId)
-                                        .build();
-    }
-
-    public static UnassignRoleFromGroup unassignRoleFromGroup(GroupId groupId, RoleId roleId) {
-        return UnassignRoleFromGroupVBuilder.newBuilder()
-                                            .setId(groupId)
-                                            .setRoleId(roleId)
-                                            .build();
     }
 
     public static RenameGroup renameGroup(GroupId id) {

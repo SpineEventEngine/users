@@ -20,10 +20,6 @@
 
 package io.spine.users.c.orgunit.given;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Int64Value;
-import io.spine.core.UserId;
-import io.spine.core.UserIdVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
@@ -33,12 +29,9 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.c.orgunit.OrgUnitAggregate;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.protobuf.AnyPacker.pack;
 
 /**
  * The environment for the {@link OrgUnitAggregate} tests.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class OrgUnitTestEnv {
 
@@ -52,12 +45,6 @@ public final class OrgUnitTestEnv {
         return OrgUnitId.newBuilder()
                         .setValue(newUuid())
                         .build();
-    }
-
-    public static UserId orgUnitOwner() {
-        return UserIdVBuilder.newBuilder()
-                             .setValue(newUuid())
-                             .build();
     }
 
     public static String orgUnitName() {
@@ -80,29 +67,21 @@ public final class OrgUnitTestEnv {
                                      .build();
     }
 
-    public static String orgUnitAttributeName() {
-        return "org-attribute-name-1";
-    }
-
-    public static Any orgUnitAttributeValue() {
-        return pack(Int64Value.of(271));
-    }
-
     public static OrganizationOrUnit orgUnitParentEntity() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                           .setOrgUnit(organization())
-                                           .build();
+                                         .setOrgUnit(organization())
+                                         .build();
     }
 
     public static OrganizationOrUnit newOrgUnitParentEntity() {
         return OrganizationOrUnitVBuilder.newBuilder()
-                                           .setOrgUnit(createOrgUnitId())
-                                           .build();
+                                         .setOrgUnit(createOrgUnitId())
+                                         .build();
     }
 
     private static OrgUnitId organization() {
         return OrgUnitIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
+                                .setValue(newUuid())
+                                .build();
     }
 }

@@ -163,8 +163,7 @@ subprojects {
     }
 
     apply from: "$rootDir/config/gradle/test-output.gradle"
-
-
+    apply from: deps.scripts.javadocOptions
 
     javadoc {
         source = sourceSets.main.allJava

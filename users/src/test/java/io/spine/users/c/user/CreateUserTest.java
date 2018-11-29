@@ -31,7 +31,6 @@ class CreateUserTest extends UserPartCommandTest<CreateUser> {
             assertEquals(message().getPrimaryIdentity(), event.getPrimaryIdentity());
             assertEquals(message().getOrgEntity(), event.getOrgEntity());
             assertEquals(message().getStatus(), event.getStatus());
-            assertEquals(message().getRole(0), event.getRole(0));
             assertEquals(message().getNature(), event.getNature());
         });
     }
@@ -45,7 +44,6 @@ class CreateUserTest extends UserPartCommandTest<CreateUser> {
             assertEquals(message().getPrimaryIdentity(), state.getPrimaryIdentity());
             assertEquals(message().getOrgEntity(), state.getOrgEntity());
             assertEquals(message().getStatus(), state.getStatus());
-            assertEquals(message().getRole(0), state.getRole(0));
             assertEquals(message().getNature(), state.getNature());
         });
     }
