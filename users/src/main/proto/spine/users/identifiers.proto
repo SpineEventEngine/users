@@ -73,20 +73,21 @@ message IdentityProviderId {
     string value = 1;
 }
 
-// An organizational entity, either `Organization` or `OrgUnit`.
+// An ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
 //
-// It is used as a field in the entities (as well as related commands and events) that may belong to
-// either an organization or organizational unit.
+// An `OrgUnit` is quite similar to an `Organization`, the major difference is that
+// an `Organization` has no parent. So, most of the interaction can be performed in
+// the same manner for both of them.
 //
 message OrganizationOrUnit {
 
-    // A kind of an entity.
+    // A kind of a node ID.
     oneof kind {
 
-        // An orgunit.
+        // An `OrgUnit`.
         users.OrgUnitId org_unit = 1;
 
-        // An organization.
+        // An `Organization`.
         users.OrganizationId organization = 2;
     }
 }
