@@ -109,10 +109,11 @@ message GroupMembership {
     repeated GroupId membership = 2;
 }
 
-// A process of a group roles propagation.
+// A process manager stating facts of the group roles propagation.
 //
-// The roles of a group are inherited or disinherited upon changes
-// of group roles and group members.
+// The roles, assigned to a `Group` are implicitly inherited by all group members.
+// This process manager, it its turn, explicitly states the fact of the propagation.
+// So, entities interested in implicitly inherited roles can listen to these statements (events).
 //
 message GroupRolesPropagation {
     option (entity).kind = PROCESS_MANAGER;

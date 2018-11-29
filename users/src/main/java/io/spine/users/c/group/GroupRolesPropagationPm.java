@@ -34,7 +34,9 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
- * A process of a group roles propagation to its members.
+ * A process manager performing the propagation of group roles.
+ *
+ * <p>The process manager emits events, which explicitly state the fact of a role propagation.
  */
 public class GroupRolesPropagationPm
         extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagationVBuilder> {
