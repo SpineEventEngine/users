@@ -164,7 +164,7 @@ class UserRolesProjectionIntegrationTest {
 
     /** The bounded context with repositories related to {@link io.spine.users.user.UserRolesProjection}. */
     private static BlackBoxBoundedContext newBoundedContext() {
-        return BlackBoxBoundedContext.newInstance()
+        return BlackBoxBoundedContext.singleTenant()
                                      .with(new UserPartRepository(),
                                            new UserMembershipPartRepository(),
                                            new RoleAggregateRepository(),
