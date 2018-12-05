@@ -20,8 +20,6 @@
 
 package io.spine.users;
 
-import io.spine.users.IdentityProviderId;
-
 import java.util.Optional;
 
 /**

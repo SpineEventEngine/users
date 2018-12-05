@@ -18,12 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.event.GroupCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.group.given.GroupTestCommands.createGroup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
 @DisplayName("CreateGroup command should")

@@ -18,27 +18,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization.given;
+package io.spine.users.organization.given;
 
 import io.spine.users.OrganizationId;
-import io.spine.users.c.organization.ChangeOrganizationDomain;
-import io.spine.users.c.organization.ChangeOrganizationDomainVBuilder;
-import io.spine.users.c.organization.ChangeOrganizationTenant;
-import io.spine.users.c.organization.ChangeOrganizationTenantVBuilder;
-import io.spine.users.c.organization.CreateOrganization;
-import io.spine.users.c.organization.CreateOrganizationVBuilder;
-import io.spine.users.c.organization.DeleteOrganization;
-import io.spine.users.c.organization.DeleteOrganizationVBuilder;
-import io.spine.users.c.organization.OrganizationAggregate;
-import io.spine.users.c.organization.RenameOrganization;
-import io.spine.users.c.organization.RenameOrganizationVBuilder;
+import io.spine.users.organization.OrganizationAggregate;
+import io.spine.users.organization.command.ChangeOrganizationDomain;
+import io.spine.users.organization.command.ChangeOrganizationDomainVBuilder;
+import io.spine.users.organization.command.ChangeOrganizationTenant;
+import io.spine.users.organization.command.ChangeOrganizationTenantVBuilder;
+import io.spine.users.organization.command.CreateOrganization;
+import io.spine.users.organization.command.CreateOrganizationVBuilder;
+import io.spine.users.organization.command.DeleteOrganization;
+import io.spine.users.organization.command.DeleteOrganizationVBuilder;
+import io.spine.users.organization.command.RenameOrganization;
+import io.spine.users.organization.command.RenameOrganizationVBuilder;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgDomain;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.newOrgTenant;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgNewName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
+import static io.spine.users.organization.given.OrganizationTestEnv.newOrgDomain;
+import static io.spine.users.organization.given.OrganizationTestEnv.newOrgTenant;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgDomain;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgName;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgNewName;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgTenant;
 
 /**
  * Test commands for {@link OrganizationAggregate}.

@@ -4,15 +4,15 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
-import io.spine.users.c.signin.SignIn.Status;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.signin.SignIn.Status;
+import io.spine.users.user.UserPart;
 
-import static io.spine.users.c.signin.given.SignInTestEnv.identity;
-import static io.spine.users.c.signin.given.SignInTestEnv.userId;
+import static io.spine.users.signin.given.SignInTestEnv.identity;
+import static io.spine.users.signin.given.SignInTestEnv.userId;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.

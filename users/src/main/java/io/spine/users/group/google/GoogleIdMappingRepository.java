@@ -21,12 +21,12 @@
 package io.spine.users.group.google;
 
 import io.spine.server.projection.ProjectionRepository;
-import io.spine.users.google.GoogleIdMappingViewId;
-import io.spine.users.google.GoogleIdMappingViewIdVBuilder;
-import io.spine.users.google.c.group.GoogleGroupCreated;
+import io.spine.users.GoogleIdMappingViewId;
+import io.spine.users.GoogleIdMappingViewIdVBuilder;
+import io.spine.users.google.group.event.GoogleGroupCreated;
 
 import static com.google.common.collect.ImmutableSet.of;
-import static io.spine.users.google.GoogleIdMappingViewId.Value.SINGLETON;
+import static io.spine.users.GoogleIdMappingViewId.Value.SINGLETON;
 
 /**
  * The repository for {@link GoogleIdMappingProjection}.
@@ -46,8 +46,7 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
     /**
      * {@inheritDoc}
      *
-     * <p>Sets up the event routing for {@link io.spine.users.google.c.group.GoogleGroupCreated}
-     * events.
+     * <p>Sets up the event routing for {@link GoogleGroupCreated} events.
      */
     @Override
     public void onRegistered() {

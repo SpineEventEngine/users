@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.orgunit;
 
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.users.OrgUnitId;

@@ -18,13 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.RoleId;
 
-import static io.spine.users.c.role.given.RoleTestEnv.roleName;
-import static io.spine.users.c.role.given.RoleTestEnv.roleParent;
+import static io.spine.users.role.given.RoleTestEnv.roleName;
+import static io.spine.users.role.given.RoleTestEnv.roleParent;
 
 /**
  * A factory for creating test {@linkplain RoleAggregate Role aggregates}.

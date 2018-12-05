@@ -20,8 +20,7 @@
 
 package io.spine.users;
 
-import io.spine.users.Identity;
-import io.spine.users.PersonProfile;
+import io.spine.users.user.Identity;
 
 /**
  * A bridge to an authentication identity provider.

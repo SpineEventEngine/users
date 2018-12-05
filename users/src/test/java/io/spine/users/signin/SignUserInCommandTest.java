@@ -4,26 +4,30 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
-import io.spine.users.c.signin.given.SignInTestEnv;
-import io.spine.users.c.user.CreateUser;
+import io.spine.users.signin.command.FinishSignIn;
+import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.signin.given.SignInTestEnv;
+import io.spine.users.user.command.CreateUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
-import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
-import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
-import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
-import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
-import static io.spine.users.c.signin.given.SignInTestCommands.signInCommand;
-import static io.spine.users.c.signin.given.SignInTestEnv.mockActiveIdentityProvider;
-import static io.spine.users.c.signin.given.SignInTestEnv.mockEmptyIdentityProvider;
-import static io.spine.users.c.signin.given.SignInTestEnv.mockEmptyProviderFactory;
-import static io.spine.users.c.signin.given.SignInTestEnv.mockSuspendedIdentityProvider;
-import static io.spine.users.c.signin.given.SignInTestEnv.noIdentityUserRepo;
-import static io.spine.users.c.signin.given.SignInTestEnv.nonEmptyUserRepo;
+import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
+import static io.spine.users.signin.SignInFailureReason.UNKNOWN_IDENTITY;
+import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
+import static io.spine.users.signin.TestProcManFactory.createEmptyProcMan;
+import static io.spine.users.signin.given.SignInTestCommands.signInCommand;
+import static io.spine.users.signin.given.SignInTestEnv.mockActiveIdentityProvider;
+import static io.spine.users.signin.given.SignInTestEnv.mockEmptyIdentityProvider;
+import static io.spine.users.signin.given.SignInTestEnv.mockEmptyProviderFactory;
+import static io.spine.users.signin.given.SignInTestEnv.mockSuspendedIdentityProvider;
+import static io.spine.users.signin.given.SignInTestEnv.noIdentityUserRepo;
+import static io.spine.users.signin.given.SignInTestEnv.nonEmptyUserRepo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * @author Vladyslav Lubenskyi

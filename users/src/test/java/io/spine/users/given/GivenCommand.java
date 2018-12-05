@@ -23,14 +23,14 @@ package io.spine.users.given;
 import io.spine.core.UserId;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.AssignRoleToGroupVBuilder;
-import io.spine.users.c.group.UnassignRoleFromGroup;
-import io.spine.users.c.group.UnassignRoleFromGroupVBuilder;
-import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.AssignRoleToUserVBuilder;
-import io.spine.users.c.user.UnassignRoleFromUser;
-import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
+import io.spine.users.group.command.AssignRoleToGroup;
+import io.spine.users.group.command.AssignRoleToGroupVBuilder;
+import io.spine.users.group.command.UnassignRoleFromGroup;
+import io.spine.users.group.command.UnassignRoleFromGroupVBuilder;
+import io.spine.users.user.command.AssignRoleToUser;
+import io.spine.users.user.command.AssignRoleToUserVBuilder;
+import io.spine.users.user.command.UnassignRoleFromUser;
+import io.spine.users.user.command.UnassignRoleFromUserVBuilder;
 
 /**
  * Factory methods for creating of test commands.

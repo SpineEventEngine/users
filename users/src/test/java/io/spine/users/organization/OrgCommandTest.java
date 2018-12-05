@@ -4,14 +4,14 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.organization;
 
 import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.OrganizationId;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.createOrganizationId;
+import static io.spine.users.organization.given.OrganizationTestEnv.createOrganizationId;
 
 /**
  * An implementation base for the {@link Organization} aggregate command handler tests.

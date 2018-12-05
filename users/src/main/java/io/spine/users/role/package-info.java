@@ -19,13 +19,12 @@
  */
 
 /**
- * This package contains classes and interfaces related to
- * {@link io.spine.users.c.role.RoleAggregate Role aggregate}.
+ * This package contains classes and interfaces related to roles.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

@@ -18,15 +18,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.core.UserId;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.c.user.UserJoinedGroup;
-import io.spine.users.c.user.UserLeftGroup;
+import io.spine.users.group.event.RoleAssignedToGroup;
+import io.spine.users.group.event.RoleDisinheritedByUser;
+import io.spine.users.group.event.RoleInheritedByUser;
+import io.spine.users.group.event.RoleInheritedByUserVBuilder;
+import io.spine.users.group.event.RoleUnassignedFromGroup;
+import io.spine.users.user.event.UserJoinedGroup;
+import io.spine.users.user.event.UserLeftGroup;
 
 import java.util.Collection;
 import java.util.List;

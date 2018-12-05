@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.users.RoleId;

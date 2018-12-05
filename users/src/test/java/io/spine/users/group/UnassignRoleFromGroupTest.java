@@ -18,14 +18,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.users.RoleId;
+import io.spine.users.group.command.UnassignRoleFromGroup;
+import io.spine.users.group.event.RoleUnassignedFromGroup;
+import io.spine.users.group.rejection.Rejections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.given.GivenCommand.unassignRoleFromGroup;
+import static io.spine.users.group.given.GroupTestEnv.groupRole;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DisplayName("UnassignRoleFromGroup command should")
 class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {

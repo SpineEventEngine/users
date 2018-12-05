@@ -4,18 +4,22 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
+import io.spine.users.signin.command.FinishSignIn;
+import io.spine.users.signin.event.SignInFailed;
+import io.spine.users.signin.event.SignInSuccessful;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
-import static io.spine.users.c.signin.TestProcManFactory.nonEmptyProcMan;
-import static io.spine.users.c.signin.given.SignInTestCommands.finishSignInSuccessfully;
-import static io.spine.users.c.signin.given.SignInTestCommands.finishSignInUnsuccessfully;
-import static io.spine.users.c.signin.given.SignInTestEnv.failureReason;
-import static io.spine.users.c.signin.given.SignInTestEnv.userId;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.signin.TestProcManFactory.nonEmptyProcMan;
+import static io.spine.users.signin.given.SignInTestCommands.finishSignInSuccessfully;
+import static io.spine.users.signin.given.SignInTestCommands.finishSignInUnsuccessfully;
+import static io.spine.users.signin.given.SignInTestEnv.failureReason;
+import static io.spine.users.signin.given.SignInTestEnv.userId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

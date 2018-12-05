@@ -18,17 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role.given;
+package io.spine.users.role.given;
 
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.c.role.RoleAggregate;
+import io.spine.users.role.RoleAggregate;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.given.GivenId.orgUnitUuid;
 import static io.spine.users.given.GivenId.organizationUuid;
+import static io.spine.users.role.RoleIds.roleId;
 
 /**
  * The environment for the {@link RoleAggregate} tests.

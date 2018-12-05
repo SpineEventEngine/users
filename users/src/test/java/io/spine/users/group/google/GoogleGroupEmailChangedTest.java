@@ -20,12 +20,14 @@
 
 package io.spine.users.group.google;
 
-import io.spine.users.c.group.ChangeGroupEmail;
+import io.spine.users.google.group.event.GoogleGroupEmailChanged;
+import io.spine.users.group.command.ChangeGroupEmail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.group.google.GoogleGroupTestPms.emptyPm;
 import static io.spine.users.group.google.given.GoogleGroupTestEvents.googleGroupEmailChanged;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit.given;
+package io.spine.users.orgunit.given;
 
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
@@ -26,7 +26,7 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.OrganizationOrUnitVBuilder;
-import io.spine.users.c.orgunit.OrgUnitAggregate;
+import io.spine.users.orgunit.OrgUnitAggregate;
 
 import static io.spine.base.Identifier.newUuid;
 

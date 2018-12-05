@@ -23,8 +23,8 @@ package io.spine.users.user;
 import com.google.common.collect.ImmutableSet;
 import io.spine.core.UserId;
 import io.spine.server.projection.ProjectionRepository;
-import io.spine.users.c.group.RoleDisinheritedByUser;
-import io.spine.users.c.group.RoleInheritedByUser;
+import io.spine.users.group.event.RoleDisinheritedByUser;
+import io.spine.users.group.event.RoleInheritedByUser;
 
 /**
  * The repository for {@link UserRolesProjection}.

@@ -22,7 +22,7 @@ package io.spine.users.group.google;
 
 import io.spine.server.aggregate.AggregatePartRepository;
 import io.spine.users.GroupId;
-import io.spine.users.c.group.GroupRoot;
+import io.spine.users.group.GroupRoot;
 
 /**
  * The repository for {@link GoogleGroupPart}.

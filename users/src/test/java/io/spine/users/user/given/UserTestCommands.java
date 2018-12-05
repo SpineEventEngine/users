@@ -4,53 +4,53 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user.given;
+package io.spine.users.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.Identity;
-import io.spine.users.c.user.AddSecondaryIdentity;
-import io.spine.users.c.user.AddSecondaryIdentityVBuilder;
-import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.AssignRoleToUserVBuilder;
-import io.spine.users.c.user.ChangePrimaryIdentity;
-import io.spine.users.c.user.ChangePrimaryIdentityVBuilder;
-import io.spine.users.c.user.ChangeUserStatus;
-import io.spine.users.c.user.ChangeUserStatusVBuilder;
-import io.spine.users.c.user.CreateUser;
-import io.spine.users.c.user.CreateUserVBuilder;
-import io.spine.users.c.user.DeleteUser;
-import io.spine.users.c.user.DeleteUserVBuilder;
-import io.spine.users.c.user.JoinGroup;
-import io.spine.users.c.user.JoinGroupVBuilder;
-import io.spine.users.c.user.LeaveGroup;
-import io.spine.users.c.user.LeaveGroupVBuilder;
-import io.spine.users.c.user.MoveUser;
-import io.spine.users.c.user.MoveUserVBuilder;
-import io.spine.users.c.user.RemoveSecondaryIdentity;
-import io.spine.users.c.user.RemoveSecondaryIdentityVBuilder;
-import io.spine.users.c.user.RenameUser;
-import io.spine.users.c.user.RenameUserVBuilder;
-import io.spine.users.c.user.UnassignRoleFromUser;
-import io.spine.users.c.user.UnassignRoleFromUserVBuilder;
-import io.spine.users.c.user.UpdatePersonProfile;
-import io.spine.users.c.user.UpdatePersonProfileVBuilder;
-import io.spine.users.c.user.User.Status;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.user.Identity;
+import io.spine.users.user.User.Status;
+import io.spine.users.user.UserPart;
+import io.spine.users.user.command.AddSecondaryIdentity;
+import io.spine.users.user.command.AddSecondaryIdentityVBuilder;
+import io.spine.users.user.command.AssignRoleToUser;
+import io.spine.users.user.command.AssignRoleToUserVBuilder;
+import io.spine.users.user.command.ChangePrimaryIdentity;
+import io.spine.users.user.command.ChangePrimaryIdentityVBuilder;
+import io.spine.users.user.command.ChangeUserStatus;
+import io.spine.users.user.command.ChangeUserStatusVBuilder;
+import io.spine.users.user.command.CreateUser;
+import io.spine.users.user.command.CreateUserVBuilder;
+import io.spine.users.user.command.DeleteUser;
+import io.spine.users.user.command.DeleteUserVBuilder;
+import io.spine.users.user.command.JoinGroup;
+import io.spine.users.user.command.JoinGroupVBuilder;
+import io.spine.users.user.command.LeaveGroup;
+import io.spine.users.user.command.LeaveGroupVBuilder;
+import io.spine.users.user.command.MoveUser;
+import io.spine.users.user.command.MoveUserVBuilder;
+import io.spine.users.user.command.RemoveSecondaryIdentity;
+import io.spine.users.user.command.RemoveSecondaryIdentityVBuilder;
+import io.spine.users.user.command.RenameUser;
+import io.spine.users.user.command.RenameUserVBuilder;
+import io.spine.users.user.command.UnassignRoleFromUser;
+import io.spine.users.user.command.UnassignRoleFromUserVBuilder;
+import io.spine.users.user.command.UpdatePersonProfile;
+import io.spine.users.user.command.UpdatePersonProfileVBuilder;
 
-import static io.spine.users.c.user.RoleInGroup.MEMBER;
-import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserNature.PERSON;
-import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.editorRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.firstGroupId;
-import static io.spine.users.c.user.given.UserTestEnv.githubIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.newProfile;
-import static io.spine.users.c.user.given.UserTestEnv.newUserDisplayName;
-import static io.spine.users.c.user.given.UserTestEnv.newUserOrgEntity;
-import static io.spine.users.c.user.given.UserTestEnv.profile;
-import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
-import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
+import static io.spine.users.user.RoleInGroup.MEMBER;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.UserNature.PERSON;
+import static io.spine.users.user.given.UserTestEnv.adminRoleId;
+import static io.spine.users.user.given.UserTestEnv.editorRoleId;
+import static io.spine.users.user.given.UserTestEnv.firstGroupId;
+import static io.spine.users.user.given.UserTestEnv.githubIdentity;
+import static io.spine.users.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.user.given.UserTestEnv.newProfile;
+import static io.spine.users.user.given.UserTestEnv.newUserDisplayName;
+import static io.spine.users.user.given.UserTestEnv.newUserOrgEntity;
+import static io.spine.users.user.given.UserTestEnv.profile;
+import static io.spine.users.user.given.UserTestEnv.userDisplayName;
+import static io.spine.users.user.given.UserTestEnv.userOrgEntity;
 
 /**
  * Test commands for {@link UserPart}.

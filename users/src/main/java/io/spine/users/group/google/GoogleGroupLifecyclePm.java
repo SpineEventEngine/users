@@ -25,13 +25,20 @@ import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationId;
-import io.spine.users.c.group.ChangeGroupDescription;
-import io.spine.users.c.group.ChangeGroupEmail;
-import io.spine.users.c.group.CreateGroup;
-import io.spine.users.c.group.DeleteGroup;
-import io.spine.users.c.group.JoinParentGroup;
-import io.spine.users.c.group.LeaveParentGroup;
-import io.spine.users.c.group.RenameGroup;
+import io.spine.users.google.group.event.GoogleGroupCreated;
+import io.spine.users.google.group.event.GoogleGroupDeleted;
+import io.spine.users.google.group.event.GoogleGroupDescriptionChanged;
+import io.spine.users.google.group.event.GoogleGroupEmailChanged;
+import io.spine.users.google.group.event.GoogleGroupJoinedParentGroup;
+import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
+import io.spine.users.google.group.event.GoogleGroupRenamed;
+import io.spine.users.group.command.ChangeGroupDescription;
+import io.spine.users.group.command.ChangeGroupEmail;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.command.DeleteGroup;
+import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.command.RenameGroup;
 
 import java.util.Optional;
 

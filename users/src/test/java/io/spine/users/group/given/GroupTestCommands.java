@@ -18,34 +18,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group.given;
+package io.spine.users.group.given;
 
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.c.group.ChangeGroupDescription;
-import io.spine.users.c.group.ChangeGroupDescriptionVBuilder;
-import io.spine.users.c.group.ChangeGroupEmail;
-import io.spine.users.c.group.ChangeGroupEmailVBuilder;
-import io.spine.users.c.group.CreateGroup;
-import io.spine.users.c.group.CreateGroupVBuilder;
-import io.spine.users.c.group.DeleteGroup;
-import io.spine.users.c.group.DeleteGroupVBuilder;
-import io.spine.users.c.group.GroupPart;
-import io.spine.users.c.group.JoinParentGroup;
-import io.spine.users.c.group.LeaveParentGroup;
-import io.spine.users.c.group.LeaveParentGroupVBuilder;
-import io.spine.users.c.group.MoveGroup;
-import io.spine.users.c.group.MoveGroupVBuilder;
-import io.spine.users.c.group.RenameGroup;
-import io.spine.users.c.group.RenameGroupVBuilder;
+import io.spine.users.group.GroupPart;
+import io.spine.users.group.command.ChangeGroupDescription;
+import io.spine.users.group.command.ChangeGroupDescriptionVBuilder;
+import io.spine.users.group.command.ChangeGroupEmail;
+import io.spine.users.group.command.ChangeGroupEmailVBuilder;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.command.CreateGroupVBuilder;
+import io.spine.users.group.command.DeleteGroup;
+import io.spine.users.group.command.DeleteGroupVBuilder;
+import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.command.LeaveParentGroupVBuilder;
+import io.spine.users.group.command.MoveGroup;
+import io.spine.users.group.command.MoveGroupVBuilder;
+import io.spine.users.group.command.RenameGroup;
+import io.spine.users.group.command.RenameGroupVBuilder;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
-import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
-import static io.spine.users.c.group.given.GroupTestEnv.groupName;
-import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupDescription;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupEmail;
-import static io.spine.users.c.group.given.GroupTestEnv.newGroupName;
+import static io.spine.users.group.given.GroupTestEnv.groupDescription;
+import static io.spine.users.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.group.given.GroupTestEnv.groupName;
+import static io.spine.users.group.given.GroupTestEnv.groupOrgEntityOrganization;
+import static io.spine.users.group.given.GroupTestEnv.newGroupDescription;
+import static io.spine.users.group.given.GroupTestEnv.newGroupEmail;
+import static io.spine.users.group.given.GroupTestEnv.newGroupName;
 
 /**
  * Test commands for {@link GroupPart}.

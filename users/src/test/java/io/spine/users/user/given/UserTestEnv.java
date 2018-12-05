@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user.given;
+package io.spine.users.user.given;
 
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
@@ -14,10 +14,8 @@ import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.Identity;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
-import io.spine.users.IdentityVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
@@ -27,10 +25,12 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.user.Identity;
+import io.spine.users.user.IdentityVBuilder;
+import io.spine.users.user.UserPart;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.role.RoleIds.roleId;
+import static io.spine.users.role.RoleIds.roleId;
 
 /**
  * The environment for the {@link UserPart} tests.

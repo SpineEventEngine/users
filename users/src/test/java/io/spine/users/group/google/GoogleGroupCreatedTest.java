@@ -20,7 +20,8 @@
 
 package io.spine.users.group.google;
 
-import io.spine.users.c.group.CreateGroup;
+import io.spine.users.google.group.event.GoogleGroupCreated;
+import io.spine.users.group.command.CreateGroup;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,6 +30,8 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.group.google.GoogleGroupTestPms.emptyPm;
 import static io.spine.users.group.google.given.GoogleGroupTestEvents.externalGoogleGroupCreated;
 import static io.spine.users.group.google.given.GoogleGroupTestEvents.internalGoogleGroupCreated;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi

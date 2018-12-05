@@ -4,18 +4,18 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.testing.server.entity.given.Given;
 
-import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserNature.PERSON;
-import static io.spine.users.c.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
-import static io.spine.users.c.user.given.UserTestEnv.profile;
-import static io.spine.users.c.user.given.UserTestEnv.userDisplayName;
-import static io.spine.users.c.user.given.UserTestEnv.userId;
-import static io.spine.users.c.user.given.UserTestEnv.userOrgEntity;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.UserNature.PERSON;
+import static io.spine.users.user.given.UserTestEnv.adminRoleId;
+import static io.spine.users.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.user.given.UserTestEnv.profile;
+import static io.spine.users.user.given.UserTestEnv.userDisplayName;
+import static io.spine.users.user.given.UserTestEnv.userId;
+import static io.spine.users.user.given.UserTestEnv.userOrgEntity;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.

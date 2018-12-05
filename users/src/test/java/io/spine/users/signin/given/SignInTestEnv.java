@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin.given;
+package io.spine.users.signin.given;
 
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
@@ -12,10 +12,10 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.Identity;
+import io.spine.users.IdentityProviderBridge;
+import io.spine.users.IdentityProviderBridgeFactory;
 import io.spine.users.IdentityProviderId;
 import io.spine.users.IdentityProviderIdVBuilder;
-import io.spine.users.IdentityVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
@@ -23,24 +23,24 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.c.IdentityProviderBridge;
-import io.spine.users.c.IdentityProviderBridgeFactory;
-import io.spine.users.c.signin.SignInFailureReason;
-import io.spine.users.c.signin.SignInPm;
-import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserPart;
-import io.spine.users.c.user.UserPartRepository;
-import io.spine.users.c.user.UserVBuilder;
+import io.spine.users.signin.SignInFailureReason;
+import io.spine.users.signin.SignInPm;
+import io.spine.users.user.Identity;
+import io.spine.users.user.IdentityVBuilder;
+import io.spine.users.user.User;
+import io.spine.users.user.UserPart;
+import io.spine.users.user.UserPartRepository;
+import io.spine.users.user.UserVBuilder;
 
 import java.util.Optional;
 
 import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.testing.server.entity.given.Given.aggregatePartOfClass;
-import static io.spine.users.c.role.RoleIds.roleId;
-import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
-import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.UserNature.PERSON;
-import static io.spine.users.c.user.UserRoot.getForTest;
+import static io.spine.users.role.RoleIds.roleId;
+import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.UserNature.PERSON;
+import static io.spine.users.user.UserRoot.getForTest;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;

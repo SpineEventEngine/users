@@ -18,13 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
+import io.spine.users.role.command.DeleteRole;
+import io.spine.users.role.event.RoleDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.role.TestRoleFactory.createAggregate;
-import static io.spine.users.c.role.given.RoleTestCommands.deleteRole;
+import static io.spine.users.role.TestRoleFactory.createAggregate;
+import static io.spine.users.role.given.RoleTestCommands.deleteRole;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi

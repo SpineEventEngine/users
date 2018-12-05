@@ -23,12 +23,12 @@ package io.spine.users.user.given;
 import io.spine.core.UserId;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.RoleId;
-import io.spine.users.q.user.UserRoles;
-import io.spine.users.q.user.UserRolesVBuilder;
+import io.spine.users.user.UserRoles;
+import io.spine.users.user.UserRolesVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.given.GivenId.organizationUuid;
+import static io.spine.users.role.RoleIds.roleId;
 
 public class UserRolesProjectionTestEnv {
 

@@ -24,7 +24,9 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.AggregateRoot;
 import io.spine.server.aggregate.Apply;
 import io.spine.users.GroupId;
-import io.spine.users.c.group.GroupRoot;
+import io.spine.users.google.group.event.GoogleGroupAliasesChanged;
+import io.spine.users.google.group.event.GoogleGroupCreated;
+import io.spine.users.group.GroupRoot;
 
 /**
  * A Google Group part.

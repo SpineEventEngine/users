@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
@@ -12,8 +12,8 @@ import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.user.TestUserFactory.createUserPart;
-import static io.spine.users.c.user.given.UserTestEnv.userId;
+import static io.spine.users.user.TestUserFactory.createUserPart;
+import static io.spine.users.user.given.UserTestEnv.userId;
 
 /**
  * An implementation base for the {@link User} aggregate command handler tests.

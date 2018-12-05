@@ -24,11 +24,11 @@ import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.RoleDisinheritedByUser;
-import io.spine.users.c.group.RoleInheritedByUser;
-import io.spine.users.c.user.RoleAssignedToUser;
-import io.spine.users.c.user.RoleUnassignedFromUser;
-import io.spine.users.c.user.UserCreated;
+import io.spine.users.group.event.RoleDisinheritedByUser;
+import io.spine.users.group.event.RoleInheritedByUser;
+import io.spine.users.user.event.RoleAssignedToUser;
+import io.spine.users.user.event.RoleUnassignedFromUser;
+import io.spine.users.user.event.UserCreated;
 
 /**
  * A projection of all user roles (both explicitly and implicitly assigned).

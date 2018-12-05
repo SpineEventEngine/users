@@ -18,14 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role.given;
+package io.spine.users.role.given;
 
 import io.spine.users.RoleId;
-import io.spine.users.c.role.CreateRole;
-import io.spine.users.c.role.CreateRoleVBuilder;
-import io.spine.users.c.role.DeleteRole;
-import io.spine.users.c.role.DeleteRoleVBuilder;
-import io.spine.users.c.role.RoleAggregate;
+import io.spine.users.role.RoleAggregate;
+import io.spine.users.role.command.CreateRole;
+import io.spine.users.role.command.CreateRoleVBuilder;
+import io.spine.users.role.command.DeleteRole;
+import io.spine.users.role.command.DeleteRoleVBuilder;
 
 /**
  * Test commands for {@link RoleAggregate}.

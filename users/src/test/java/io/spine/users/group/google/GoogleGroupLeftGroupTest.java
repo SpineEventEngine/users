@@ -20,12 +20,14 @@
 
 package io.spine.users.group.google;
 
-import io.spine.users.c.group.LeaveParentGroup;
+import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
+import io.spine.users.group.command.LeaveParentGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.group.google.GoogleGroupTestPms.emptyPm;
 import static io.spine.users.group.google.given.GoogleGroupTestEvents.googleGroupLeftParentGroup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

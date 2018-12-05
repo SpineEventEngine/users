@@ -18,13 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.orgunit;
 
+import io.spine.users.orgunit.command.DeleteOrgUnit;
+import io.spine.users.orgunit.event.OrgUnitDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.orgunit.TestOrgUnitFactory.createAggregate;
-import static io.spine.users.c.orgunit.given.OrgUnitTestCommands.deleteOrgUnit;
+import static io.spine.users.orgunit.TestOrgUnitFactory.createAggregate;
+import static io.spine.users.orgunit.given.OrgUnitTestCommands.deleteOrgUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi

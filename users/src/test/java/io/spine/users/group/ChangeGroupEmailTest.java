@@ -18,13 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.net.EmailAddress;
+import io.spine.users.group.command.ChangeGroupEmail;
+import io.spine.users.group.event.GroupEmailChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.given.GroupTestCommands.changeGroupEmail;
+import static io.spine.users.group.given.GroupTestCommands.changeGroupEmail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

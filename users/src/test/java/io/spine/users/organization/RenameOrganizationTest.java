@@ -18,13 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.organization;
 
+import io.spine.users.organization.command.RenameOrganization;
+import io.spine.users.organization.event.OrganizationRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.organization.TestOrganizationFactory.createAggregate;
-import static io.spine.users.c.organization.given.OrganizationTestCommands.renameOrganization;
+import static io.spine.users.organization.TestOrganizationFactory.createAggregate;
+import static io.spine.users.organization.given.OrganizationTestCommands.renameOrganization;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

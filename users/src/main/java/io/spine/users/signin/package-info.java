@@ -20,12 +20,12 @@
 
 /**
  * This package contains classes and interfaces related to
- * {@link io.spine.users.c.signin.SignIn SignIn} process manager.
+ * {@link io.spine.users.signin.SignIn SignIn} process manager.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

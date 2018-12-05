@@ -18,14 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.users.GroupId;
+import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.event.JoinedParentGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.group.given.GroupTestCommands.joinParentGroup;
-import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.group.given.GroupTestCommands.joinParentGroup;
+import static io.spine.users.group.given.GroupTestEnv.createGroupId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi

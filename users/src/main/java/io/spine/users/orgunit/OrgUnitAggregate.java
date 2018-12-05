@@ -18,14 +18,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.orgunit;
 
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrgUnitId;
-import io.spine.users.c.organization.OrganizationAggregate;
+import io.spine.users.organization.OrganizationAggregate;
+import io.spine.users.orgunit.command.ChangeOrgUnitDomain;
+import io.spine.users.orgunit.command.CreateOrgUnit;
+import io.spine.users.orgunit.command.DeleteOrgUnit;
+import io.spine.users.orgunit.command.MoveOrgUnit;
+import io.spine.users.orgunit.command.RenameOrgUnit;
+import io.spine.users.orgunit.event.OrgUnitCreated;
+import io.spine.users.orgunit.event.OrgUnitCreatedVBuilder;
+import io.spine.users.orgunit.event.OrgUnitDeleted;
+import io.spine.users.orgunit.event.OrgUnitDeletedVBuilder;
+import io.spine.users.orgunit.event.OrgUnitDomainChanged;
+import io.spine.users.orgunit.event.OrgUnitDomainChangedVBuilder;
+import io.spine.users.orgunit.event.OrgUnitMoved;
+import io.spine.users.orgunit.event.OrgUnitMovedVBuilder;
+import io.spine.users.orgunit.event.OrgUnitRenamed;
+import io.spine.users.orgunit.event.OrgUnitRenamedVBuilder;
 
 /**
  * An organizational unit (aka orgunit).

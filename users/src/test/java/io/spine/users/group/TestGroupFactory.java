@@ -18,16 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 
-import static io.spine.users.c.group.given.GroupTestEnv.groupDescription;
-import static io.spine.users.c.group.given.GroupTestEnv.groupEmail;
-import static io.spine.users.c.group.given.GroupTestEnv.groupName;
-import static io.spine.users.c.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.c.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.group.given.GroupTestEnv.groupDescription;
+import static io.spine.users.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.group.given.GroupTestEnv.groupName;
+import static io.spine.users.group.given.GroupTestEnv.groupOrgEntityOrganization;
+import static io.spine.users.group.given.GroupTestEnv.groupRole;
 
 /**
  * A factory for creating test {@linkplain GroupPart Group aggregates}.

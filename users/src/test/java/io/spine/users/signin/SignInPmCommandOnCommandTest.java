@@ -4,14 +4,14 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnCommandTest;
-import io.spine.users.c.IdentityProviderBridgeFactory;
-import io.spine.users.c.user.UserPartRepository;
+import io.spine.users.IdentityProviderBridgeFactory;
+import io.spine.users.user.UserPartRepository;
 
 import static org.mockito.Mockito.mock;
 

@@ -4,14 +4,17 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
+import io.spine.users.user.command.ChangeUserStatus;
+import io.spine.users.user.event.UserStatusChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.User.Status.NOT_READY;
-import static io.spine.users.c.user.User.Status.SUSPENDED;
-import static io.spine.users.c.user.given.UserTestCommands.changeUserStatus;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.User.Status.SUSPENDED;
+import static io.spine.users.user.given.UserTestCommands.changeUserStatus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

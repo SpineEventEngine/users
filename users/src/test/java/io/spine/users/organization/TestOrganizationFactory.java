@@ -18,14 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.organization;
 
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.OrganizationId;
 
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgDomain;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgName;
-import static io.spine.users.c.organization.given.OrganizationTestEnv.orgTenant;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgDomain;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgName;
+import static io.spine.users.organization.given.OrganizationTestEnv.orgTenant;
 
 /**
  * A factory for creating test {@linkplain OrganizationAggregate Organization aggregates}.

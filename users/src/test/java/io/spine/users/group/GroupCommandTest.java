@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
@@ -12,8 +12,8 @@ import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.GroupId;
 
 import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.c.group.TestGroupFactory.createGroupPart;
-import static io.spine.users.c.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.group.TestGroupFactory.createGroupPart;
+import static io.spine.users.group.given.GroupTestEnv.createGroupId;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.

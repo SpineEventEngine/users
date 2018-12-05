@@ -4,19 +4,19 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin.given;
+package io.spine.users.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.Identity;
-import io.spine.users.c.signin.FinishSignIn;
-import io.spine.users.c.signin.FinishSignInVBuilder;
-import io.spine.users.c.signin.SignInPm;
-import io.spine.users.c.signin.SignUserIn;
-import io.spine.users.c.signin.SignUserInVBuilder;
-import io.spine.users.c.signin.SignUserOut;
-import io.spine.users.c.signin.SignUserOutVBuilder;
+import io.spine.users.signin.SignInPm;
+import io.spine.users.signin.command.FinishSignIn;
+import io.spine.users.signin.command.FinishSignInVBuilder;
+import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.signin.command.SignUserInVBuilder;
+import io.spine.users.signin.command.SignUserOut;
+import io.spine.users.signin.command.SignUserOutVBuilder;
+import io.spine.users.user.Identity;
 
-import static io.spine.users.c.signin.given.SignInTestEnv.failureReason;
+import static io.spine.users.signin.given.SignInTestEnv.failureReason;
 
 /**
  * Test commands for {@link SignInPm}.

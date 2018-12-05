@@ -19,13 +19,12 @@
  */
 
 /**
- * This package contains classes and interfaces related to
- * {@link io.spine.users.c.orgunit.OrgUnitAggregate OrgUnit} aggregate.
+ * This package contains classes and interfaces related to organizational units.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.c.orgunit;
+package io.spine.users.orgunit;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

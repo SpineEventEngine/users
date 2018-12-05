@@ -4,19 +4,25 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
-import io.spine.users.c.group.GroupRoot;
-import io.spine.users.c.user.UserMembership.UserMembershipRecord;
+import io.spine.users.group.GroupRoot;
+import io.spine.users.user.UserMembership.UserMembershipRecord;
+import io.spine.users.user.command.JoinGroup;
+import io.spine.users.user.command.LeaveGroup;
+import io.spine.users.user.event.UserJoinedGroup;
+import io.spine.users.user.event.UserJoinedGroupVBuilder;
+import io.spine.users.user.event.UserLeftGroup;
+import io.spine.users.user.event.UserLeftGroupVBuilder;
 
 import java.util.Optional;
 
-import static io.spine.users.c.user.RoleInGroup.MEMBER;
+import static io.spine.users.user.RoleInGroup.MEMBER;
 
 /**
  * A user membership in multiple {@linkplain GroupRoot groups}, a part of {@linkplain UserRoot User}

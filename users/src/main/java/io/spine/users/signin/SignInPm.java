@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
 import io.spine.core.CommandContext;
 import io.spine.core.EventContext;
@@ -13,28 +13,39 @@ import io.spine.server.command.Assign;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.users.Identity;
+import io.spine.users.IdentityProviderBridge;
+import io.spine.users.IdentityProviderBridgeFactory;
 import io.spine.users.PersonProfile;
-import io.spine.users.c.IdentityProviderBridge;
-import io.spine.users.c.IdentityProviderBridgeFactory;
-import io.spine.users.c.user.CreateUser;
-import io.spine.users.c.user.CreateUserVBuilder;
-import io.spine.users.c.user.User;
-import io.spine.users.c.user.UserCreated;
-import io.spine.users.c.user.UserPart;
-import io.spine.users.c.user.UserPartRepository;
+import io.spine.users.signin.command.FinishSignIn;
+import io.spine.users.signin.command.FinishSignInVBuilder;
+import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.signin.command.SignUserInVBuilder;
+import io.spine.users.signin.command.SignUserOut;
+import io.spine.users.signin.event.SignInFailed;
+import io.spine.users.signin.event.SignInFailedVBuilder;
+import io.spine.users.signin.event.SignInSuccessful;
+import io.spine.users.signin.event.SignInSuccessfulVBuilder;
+import io.spine.users.signin.event.SignOutCompleted;
+import io.spine.users.signin.event.SignOutCompletedVBuilder;
+import io.spine.users.user.Identity;
+import io.spine.users.user.User;
+import io.spine.users.user.UserPart;
+import io.spine.users.user.UserPartRepository;
+import io.spine.users.user.command.CreateUser;
+import io.spine.users.user.command.CreateUserVBuilder;
+import io.spine.users.user.event.UserCreated;
 
 import java.util.Optional;
 
 import static io.spine.server.tuple.EitherOf2.withA;
 import static io.spine.server.tuple.EitherOf2.withB;
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
-import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
-import static io.spine.users.c.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
-import static io.spine.users.c.signin.SignInFailureReason.UNKNOWN_IDENTITY;
-import static io.spine.users.c.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static io.spine.users.c.user.User.Status.ACTIVE;
-import static io.spine.users.c.user.UserNature.PERSON;
+import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
+import static io.spine.users.signin.SignInFailureReason.UNKNOWN_IDENTITY;
+import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
+import static io.spine.users.user.User.Status.ACTIVE;
+import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 

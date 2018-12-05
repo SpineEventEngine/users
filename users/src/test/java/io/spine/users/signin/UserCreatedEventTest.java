@@ -4,17 +4,19 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
-import io.spine.users.c.signin.given.SignInTestEnv;
-import io.spine.users.c.user.UserCreated;
+import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.signin.given.SignInTestEnv;
+import io.spine.users.user.event.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
-import static io.spine.users.c.signin.SignIn.Status.COMPLETED;
-import static io.spine.users.c.signin.TestProcManFactory.nonEmptyProcMan;
-import static io.spine.users.c.signin.given.SignInTestEvents.userCreated;
+import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
+import static io.spine.users.signin.SignIn.Status.COMPLETED;
+import static io.spine.users.signin.TestProcManFactory.nonEmptyProcMan;
+import static io.spine.users.signin.given.SignInTestEvents.userCreated;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

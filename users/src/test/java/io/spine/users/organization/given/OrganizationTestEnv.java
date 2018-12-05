@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization.given;
+package io.spine.users.organization.given;
 
 import io.spine.core.TenantId;
 import io.spine.core.TenantIdVBuilder;
@@ -28,7 +28,7 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
-import io.spine.users.c.organization.OrganizationAggregate;
+import io.spine.users.organization.OrganizationAggregate;
 
 import static io.spine.base.Identifier.newUuid;
 

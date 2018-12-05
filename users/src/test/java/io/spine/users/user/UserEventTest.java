@@ -4,14 +4,14 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateEventReactionTest;
 
-import static io.spine.users.c.user.given.UserTestEnv.userId;
+import static io.spine.users.user.given.UserTestEnv.userId;
 
 /**
  * An implementation base for the {@link User} aggregate event reactors tests.

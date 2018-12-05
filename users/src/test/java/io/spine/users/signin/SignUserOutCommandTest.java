@@ -4,14 +4,17 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
+import io.spine.users.signin.command.SignUserOut;
+import io.spine.users.signin.event.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.signin.TestProcManFactory.createEmptyProcMan;
-import static io.spine.users.c.signin.given.SignInTestCommands.signOutCommand;
-import static io.spine.users.c.signin.given.SignInTestEnv.userId;
+import static io.spine.users.signin.TestProcManFactory.createEmptyProcMan;
+import static io.spine.users.signin.given.SignInTestCommands.signOutCommand;
+import static io.spine.users.signin.given.SignInTestEnv.userId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

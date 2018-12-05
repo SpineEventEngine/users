@@ -18,14 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import io.spine.base.CommandMessage;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.RoleId;
 
-import static io.spine.users.c.role.given.RoleTestEnv.createRoleId;
+import static io.spine.users.role.given.RoleTestEnv.createRoleId;
 
 /**
  * An implementation base for the {@link Role} aggregate command handler tests.

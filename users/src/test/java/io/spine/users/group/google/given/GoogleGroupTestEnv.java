@@ -24,9 +24,9 @@ import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
+import io.spine.users.GoogleGroupId;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.google.GoogleGroupId;
 import io.spine.users.group.google.GoogleGroupLifecyclePm;
 
 import static io.spine.base.Identifier.newUuid;

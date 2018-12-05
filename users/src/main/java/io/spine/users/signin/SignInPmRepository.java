@@ -4,12 +4,12 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin;
+package io.spine.users.signin;
 
 import io.spine.core.UserId;
 import io.spine.server.procman.ProcessManagerRepository;
-import io.spine.users.c.IdentityProviderBridgeFactory;
-import io.spine.users.c.user.UserPartRepository;
+import io.spine.users.IdentityProviderBridgeFactory;
+import io.spine.users.user.UserPartRepository;
 
 /**
  * The repository for {@link SignInPm}.

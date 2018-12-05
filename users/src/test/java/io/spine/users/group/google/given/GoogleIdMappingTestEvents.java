@@ -20,8 +20,8 @@
 
 package io.spine.users.group.google.given;
 
-import io.spine.users.google.c.group.GoogleGroupCreated;
-import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupCreated;
+import io.spine.users.google.group.event.GoogleGroupCreatedVBuilder;
 
 import static io.spine.users.group.google.given.GoogleIdMappingTestEnv.domain;
 import static io.spine.users.group.google.given.GoogleIdMappingTestEnv.email;

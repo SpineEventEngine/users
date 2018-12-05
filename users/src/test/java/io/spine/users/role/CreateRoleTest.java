@@ -18,14 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import io.spine.users.RoleId;
+import io.spine.users.role.command.CreateRole;
+import io.spine.users.role.event.RoleCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.role.TestRoleFactory.createEmptyAggregate;
-import static io.spine.users.c.role.given.RoleTestCommands.createRole;
+import static io.spine.users.role.TestRoleFactory.createEmptyAggregate;
+import static io.spine.users.role.given.RoleTestCommands.createRole;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("CreateRole command should")
 class CreateRoleTest extends RoleCommandTest<CreateRole> {

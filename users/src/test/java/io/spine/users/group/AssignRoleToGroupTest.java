@@ -18,16 +18,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.users.RoleId;
+import io.spine.users.group.command.AssignRoleToGroup;
+import io.spine.users.group.event.RoleAssignedToGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.c.role.RoleIds.roleId;
 import static io.spine.users.given.GivenCommand.assignRoleToGroup;
 import static io.spine.users.given.GivenId.organizationUuid;
+import static io.spine.users.role.RoleIds.roleId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("AssignRoleToGroup command should")
 class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {

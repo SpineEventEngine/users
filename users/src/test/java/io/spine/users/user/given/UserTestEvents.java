@@ -4,16 +4,16 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user.given;
+package io.spine.users.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.c.signin.SignInSuccessful;
-import io.spine.users.c.signin.SignInSuccessfulVBuilder;
-import io.spine.users.c.signin.SignOutCompleted;
-import io.spine.users.c.signin.SignOutCompletedVBuilder;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.signin.event.SignInSuccessful;
+import io.spine.users.signin.event.SignInSuccessfulVBuilder;
+import io.spine.users.signin.event.SignOutCompleted;
+import io.spine.users.signin.event.SignOutCompletedVBuilder;
+import io.spine.users.user.UserPart;
 
-import static io.spine.users.c.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.user.given.UserTestEnv.googleIdentity;
 
 /**
  * Test events for {@link UserPart}.

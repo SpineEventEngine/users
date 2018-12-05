@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
@@ -12,18 +12,53 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.Identity;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.Group;
-import io.spine.users.c.organization.Organization;
-import io.spine.users.c.orgunit.OrgUnit;
-import io.spine.users.c.role.Role;
+import io.spine.users.group.Group;
+import io.spine.users.organization.Organization;
+import io.spine.users.orgunit.OrgUnit;
+import io.spine.users.role.Role;
+import io.spine.users.user.command.AddSecondaryIdentity;
+import io.spine.users.user.command.AssignRoleToUser;
+import io.spine.users.user.command.ChangePrimaryIdentity;
+import io.spine.users.user.command.ChangeUserStatus;
+import io.spine.users.user.command.CreateUser;
+import io.spine.users.user.command.DeleteUser;
+import io.spine.users.user.command.MoveUser;
+import io.spine.users.user.command.RemoveSecondaryIdentity;
+import io.spine.users.user.command.RenameUser;
+import io.spine.users.user.command.UnassignRoleFromUser;
+import io.spine.users.user.command.UpdatePersonProfile;
+import io.spine.users.user.event.PersonProfileUpdated;
+import io.spine.users.user.event.PersonProfileUpdatedVBuilder;
+import io.spine.users.user.event.PrimaryIdentityChanged;
+import io.spine.users.user.event.PrimaryIdentityChangedVBuilder;
+import io.spine.users.user.event.RoleAssignedToUser;
+import io.spine.users.user.event.RoleAssignedToUserVBuilder;
+import io.spine.users.user.event.RoleUnassignedFromUser;
+import io.spine.users.user.event.RoleUnassignedFromUserVBuilder;
+import io.spine.users.user.event.SecondaryIdentityAdded;
+import io.spine.users.user.event.SecondaryIdentityAddedVBuilder;
+import io.spine.users.user.event.SecondaryIdentityRemoved;
+import io.spine.users.user.event.SecondaryIdentityRemovedVBuilder;
+import io.spine.users.user.event.UserCreated;
+import io.spine.users.user.event.UserCreatedVBuilder;
+import io.spine.users.user.event.UserDeleted;
+import io.spine.users.user.event.UserDeletedVBuilder;
+import io.spine.users.user.event.UserMoved;
+import io.spine.users.user.event.UserMovedVBuilder;
+import io.spine.users.user.event.UserRenamed;
+import io.spine.users.user.event.UserRenamedVBuilder;
+import io.spine.users.user.event.UserStatusChanged;
+import io.spine.users.user.event.UserStatusChangedVBuilder;
+import io.spine.users.user.rejection.CannotMoveExternalUser;
+import io.spine.users.user.rejection.IdentityDoesNotExist;
+import io.spine.users.user.rejection.RoleIsNotAssignedToUser;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static io.spine.users.c.user.User.OriginCase.EXTERNAL_DOMAIN;
+import static io.spine.users.user.User.OriginCase.EXTERNAL_DOMAIN;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -36,8 +71,8 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * {@link UnassignRoleFromUser} commands).
  *
  * <p>However, if a user share its functions and functional roles with a number of other users it
- * can also join one or more {@link Group groups} (please see {@link JoinGroup} and
- * {@link LeaveGroup} commands).
+ * can also join one or more {@link Group groups} (please see {@code JoinGroup} and
+ * {@code LeaveGroup} commands).
  *
  * <h3>Organizational Structure</h3>
  *

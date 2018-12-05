@@ -4,13 +4,16 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.users.OrganizationOrUnit;
+import io.spine.users.user.command.MoveUser;
+import io.spine.users.user.event.UserMoved;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.UserTestCommands.moveUser;
+import static io.spine.users.user.given.UserTestCommands.moveUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

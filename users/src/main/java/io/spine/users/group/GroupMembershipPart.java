@@ -18,13 +18,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
+import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.event.JoinedParentGroup;
+import io.spine.users.group.event.JoinedParentGroupVBuilder;
+import io.spine.users.group.event.LeftParentGroup;
+import io.spine.users.group.event.LeftParentGroupVBuilder;
+import io.spine.users.group.rejection.GroupsCannotFormCycles;
 
 import java.util.List;
 

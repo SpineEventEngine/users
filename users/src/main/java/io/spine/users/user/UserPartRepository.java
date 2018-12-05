@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePartRepository;

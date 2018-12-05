@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.spine.core.UserId;

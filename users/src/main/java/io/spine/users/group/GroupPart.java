@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
@@ -26,13 +26,39 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.c.organization.Organization;
-import io.spine.users.c.orgunit.OrgUnit;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.group.command.AssignRoleToGroup;
+import io.spine.users.group.command.ChangeGroupDescription;
+import io.spine.users.group.command.ChangeGroupEmail;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.command.DeleteGroup;
+import io.spine.users.group.command.MoveGroup;
+import io.spine.users.group.command.RenameGroup;
+import io.spine.users.group.command.UnassignRoleFromGroup;
+import io.spine.users.group.event.GroupCreated;
+import io.spine.users.group.event.GroupCreatedVBuilder;
+import io.spine.users.group.event.GroupDeleted;
+import io.spine.users.group.event.GroupDeletedVBuilder;
+import io.spine.users.group.event.GroupDescriptionChanged;
+import io.spine.users.group.event.GroupDescriptionChangedVBuilder;
+import io.spine.users.group.event.GroupEmailChanged;
+import io.spine.users.group.event.GroupEmailChangedVBuilder;
+import io.spine.users.group.event.GroupMoved;
+import io.spine.users.group.event.GroupMovedVBuilder;
+import io.spine.users.group.event.GroupRenamed;
+import io.spine.users.group.event.GroupRenamedVBuilder;
+import io.spine.users.group.event.RoleAssignedToGroup;
+import io.spine.users.group.event.RoleAssignedToGroupVBuilder;
+import io.spine.users.group.event.RoleUnassignedFromGroup;
+import io.spine.users.group.event.RoleUnassignedFromGroupVBuilder;
+import io.spine.users.group.rejection.CannotMoveExternalGroup;
+import io.spine.users.group.rejection.RoleIsNotAssignedToGroup;
+import io.spine.users.organization.Organization;
+import io.spine.users.orgunit.OrgUnit;
+import io.spine.users.user.UserPart;
 
 import java.util.List;
 
-import static io.spine.users.c.group.Group.OriginCase.EXTERNAL_DOMAIN;
+import static io.spine.users.group.Group.OriginCase.EXTERNAL_DOMAIN;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**

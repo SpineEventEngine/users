@@ -19,13 +19,12 @@
  */
 
 /**
- * This package contains classes and interfaces related to
- * {@link io.spine.users.c.group.GroupRoot Group} aggregate.
+ * This package contains classes and interfaces related to groups.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

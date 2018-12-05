@@ -4,12 +4,15 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
+import io.spine.users.user.command.JoinGroup;
+import io.spine.users.user.event.UserJoinedGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.UserTestCommands.startGroupMembership;
+import static io.spine.users.user.given.UserTestCommands.startGroupMembership;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("JoinGroup command should")
 class JoinGroupTest extends UserMembershipCommandTest<JoinGroup> {

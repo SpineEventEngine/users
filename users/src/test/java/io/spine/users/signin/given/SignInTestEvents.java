@@ -4,18 +4,18 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.signin.given;
+package io.spine.users.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.c.signin.SignInPm;
-import io.spine.users.c.user.UserCreated;
-import io.spine.users.c.user.UserCreatedVBuilder;
+import io.spine.users.signin.SignInPm;
+import io.spine.users.user.event.UserCreated;
+import io.spine.users.user.event.UserCreatedVBuilder;
 
-import static io.spine.users.c.signin.given.SignInTestEnv.displayName;
-import static io.spine.users.c.signin.given.SignInTestEnv.identity;
-import static io.spine.users.c.signin.given.SignInTestEnv.profile;
-import static io.spine.users.c.user.User.Status.ACTIVE;
-import static io.spine.users.c.user.UserNature.PERSON;
+import static io.spine.users.signin.given.SignInTestEnv.displayName;
+import static io.spine.users.signin.given.SignInTestEnv.identity;
+import static io.spine.users.signin.given.SignInTestEnv.profile;
+import static io.spine.users.user.User.Status.ACTIVE;
+import static io.spine.users.user.UserNature.PERSON;
 
 /**
  * Test events for {@link SignInPm}.

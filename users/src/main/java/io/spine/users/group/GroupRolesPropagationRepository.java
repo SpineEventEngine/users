@@ -18,13 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.group;
+package io.spine.users.group;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.users.GroupId;
-import io.spine.users.c.user.UserJoinedGroup;
-import io.spine.users.c.user.UserLeftGroup;
+import io.spine.users.user.event.UserJoinedGroup;
+import io.spine.users.user.event.UserLeftGroup;
 
 /**
  * The repository for {@link GroupRolesPropagationPm}.

@@ -21,22 +21,22 @@
 package io.spine.users.group.google.given;
 
 import io.spine.users.GroupId;
-import io.spine.users.google.c.group.GoogleGroupAliasesChanged;
-import io.spine.users.google.c.group.GoogleGroupAliasesChangedVBuilder;
-import io.spine.users.google.c.group.GoogleGroupCreated;
-import io.spine.users.google.c.group.GoogleGroupCreatedVBuilder;
-import io.spine.users.google.c.group.GoogleGroupDeleted;
-import io.spine.users.google.c.group.GoogleGroupDeletedVBuilder;
-import io.spine.users.google.c.group.GoogleGroupDescriptionChanged;
-import io.spine.users.google.c.group.GoogleGroupDescriptionChangedVBuilder;
-import io.spine.users.google.c.group.GoogleGroupEmailChanged;
-import io.spine.users.google.c.group.GoogleGroupEmailChangedVBuilder;
-import io.spine.users.google.c.group.GoogleGroupJoinedParentGroup;
-import io.spine.users.google.c.group.GoogleGroupJoinedParentGroupVBuilder;
-import io.spine.users.google.c.group.GoogleGroupLeftParentGroup;
-import io.spine.users.google.c.group.GoogleGroupLeftParentGroupVBuilder;
-import io.spine.users.google.c.group.GoogleGroupRenamed;
-import io.spine.users.google.c.group.GoogleGroupRenamedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupAliasesChanged;
+import io.spine.users.google.group.event.GoogleGroupAliasesChangedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupCreated;
+import io.spine.users.google.group.event.GoogleGroupCreatedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupDeleted;
+import io.spine.users.google.group.event.GoogleGroupDeletedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupDescriptionChanged;
+import io.spine.users.google.group.event.GoogleGroupDescriptionChangedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupEmailChanged;
+import io.spine.users.google.group.event.GoogleGroupEmailChangedVBuilder;
+import io.spine.users.google.group.event.GoogleGroupJoinedParentGroup;
+import io.spine.users.google.group.event.GoogleGroupJoinedParentGroupVBuilder;
+import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
+import io.spine.users.google.group.event.GoogleGroupLeftParentGroupVBuilder;
+import io.spine.users.google.group.event.GoogleGroupRenamed;
+import io.spine.users.google.group.event.GoogleGroupRenamedVBuilder;
 import io.spine.users.group.google.GoogleGroupLifecyclePm;
 
 import static io.spine.users.group.google.given.GoogleGroupTestEnv.alias;

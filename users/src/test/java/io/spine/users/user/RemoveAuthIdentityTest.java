@@ -4,13 +4,17 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
-import io.spine.users.Identity;
+import io.spine.users.user.command.RemoveSecondaryIdentity;
+import io.spine.users.user.event.SecondaryIdentityRemoved;
+import io.spine.users.user.rejection.Rejections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.UserTestCommands.removeAuthIdentity;
+import static io.spine.users.user.given.UserTestCommands.removeAuthIdentity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("RemoveSecondaryIdentity command should")
 class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity> {

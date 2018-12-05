@@ -22,17 +22,18 @@ package io.spine.users.group.google;
 
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.projection.ProjectionTest;
+import io.spine.users.GoogleIdMappingViewId;
+import io.spine.users.GoogleIdMappingViewIdVBuilder;
 import io.spine.users.GroupId;
-import io.spine.users.google.GoogleIdMappingViewId;
-import io.spine.users.google.GoogleIdMappingViewIdVBuilder;
-import io.spine.users.google.c.group.GoogleGroupCreated;
+import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.given.GoogleIdMappingTestEvents;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static io.spine.users.google.GoogleIdMappingViewId.Value.SINGLETON;
+import static io.spine.users.GoogleIdMappingViewId.Value.SINGLETON;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

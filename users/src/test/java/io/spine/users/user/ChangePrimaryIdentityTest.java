@@ -4,12 +4,15 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
+import io.spine.users.user.command.ChangePrimaryIdentity;
+import io.spine.users.user.event.PrimaryIdentityChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.UserTestCommands.changePrimaryIdentity;
+import static io.spine.users.user.given.UserTestCommands.changePrimaryIdentity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Vladyslav Lubenskyi

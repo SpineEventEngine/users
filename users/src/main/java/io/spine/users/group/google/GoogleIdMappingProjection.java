@@ -22,9 +22,9 @@ package io.spine.users.group.google;
 
 import io.spine.core.Subscribe;
 import io.spine.server.projection.Projection;
-import io.spine.users.google.GoogleGroupId;
-import io.spine.users.google.GoogleIdMappingViewId;
-import io.spine.users.google.c.group.GoogleGroupCreated;
+import io.spine.users.GoogleGroupId;
+import io.spine.users.GoogleIdMappingViewId;
+import io.spine.users.google.group.event.GoogleGroupCreated;
 
 import static io.spine.users.group.google.GoogleIdMappingRepository.PROJECTION_ID;
 

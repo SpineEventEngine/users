@@ -18,23 +18,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.role;
+package io.spine.users.role;
 
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
-import io.spine.users.c.group.AssignRoleToGroup;
-import io.spine.users.c.group.GroupPart;
-import io.spine.users.c.user.AssignRoleToUser;
-import io.spine.users.c.user.UserPart;
+import io.spine.users.group.GroupPart;
+import io.spine.users.role.command.CreateRole;
+import io.spine.users.role.command.DeleteRole;
+import io.spine.users.role.event.RoleCreated;
+import io.spine.users.role.event.RoleCreatedVBuilder;
+import io.spine.users.role.event.RoleDeleted;
+import io.spine.users.role.event.RoleDeletedVBuilder;
+import io.spine.users.user.UserPart;
 
 /**
  * A role that can be assigned to {@linkplain UserPart users} and
  * {@linkplain GroupPart groups}, to perform access control.
  *
  * <p>Roles are assigned to {@link UserPart users} and {@link GroupPart groups} directly
- * and explicitly (please see {@link AssignRoleToUser} and {@link AssignRoleToGroup} commands).
+ * and explicitly (please see {@code AssignRoleToUser} and {@code AssignRoleToGroup} commands).
  *
  * <p>A role exists in the scope of an organization or an orgunit, therefore it can be assigned
  * only to those users and groups that are in the same organization and/or orgunit

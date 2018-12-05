@@ -18,27 +18,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit.given;
+package io.spine.users.orgunit.given;
 
 import io.spine.users.OrgUnitId;
-import io.spine.users.c.orgunit.ChangeOrgUnitDomain;
-import io.spine.users.c.orgunit.ChangeOrgUnitDomainVBuilder;
-import io.spine.users.c.orgunit.CreateOrgUnit;
-import io.spine.users.c.orgunit.CreateOrgUnitVBuilder;
-import io.spine.users.c.orgunit.DeleteOrgUnit;
-import io.spine.users.c.orgunit.DeleteOrgUnitVBuilder;
-import io.spine.users.c.orgunit.MoveOrgUnit;
-import io.spine.users.c.orgunit.MoveOrgUnitVBuilder;
-import io.spine.users.c.orgunit.OrgUnitAggregate;
-import io.spine.users.c.orgunit.RenameOrgUnit;
-import io.spine.users.c.orgunit.RenameOrgUnitVBuilder;
+import io.spine.users.orgunit.OrgUnitAggregate;
+import io.spine.users.orgunit.command.ChangeOrgUnitDomain;
+import io.spine.users.orgunit.command.ChangeOrgUnitDomainVBuilder;
+import io.spine.users.orgunit.command.CreateOrgUnit;
+import io.spine.users.orgunit.command.CreateOrgUnitVBuilder;
+import io.spine.users.orgunit.command.DeleteOrgUnit;
+import io.spine.users.orgunit.command.DeleteOrgUnitVBuilder;
+import io.spine.users.orgunit.command.MoveOrgUnit;
+import io.spine.users.orgunit.command.MoveOrgUnitVBuilder;
+import io.spine.users.orgunit.command.RenameOrgUnit;
+import io.spine.users.orgunit.command.RenameOrgUnitVBuilder;
 
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.newOrgUnitParentEntity;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewDomain;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitNewName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.newOrgUnitParentEntity;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitName;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitNewDomain;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitNewName;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
 
 /**
  * Test commands for {@link OrgUnitAggregate}.

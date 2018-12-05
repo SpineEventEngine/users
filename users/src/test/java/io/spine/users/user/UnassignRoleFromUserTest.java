@@ -4,12 +4,17 @@
  * Use is subject to license terms.
  */
 
-package io.spine.users.c.user;
+package io.spine.users.user;
 
+import io.spine.users.user.command.UnassignRoleFromUser;
+import io.spine.users.user.event.RoleUnassignedFromUser;
+import io.spine.users.user.rejection.Rejections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.c.user.given.UserTestCommands.unassignRoleFromUser;
+import static io.spine.users.user.given.UserTestCommands.unassignRoleFromUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Vladyslav Lubenskyi

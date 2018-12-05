@@ -18,14 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.orgunit;
+package io.spine.users.orgunit;
 
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.OrgUnitId;
 
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitName;
-import static io.spine.users.c.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitDomain;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitName;
+import static io.spine.users.orgunit.given.OrgUnitTestEnv.orgUnitParentEntity;
 
 /**
  * A factory for creating test {@linkplain OrgUnitAggregate OrgUnit aggregates}.

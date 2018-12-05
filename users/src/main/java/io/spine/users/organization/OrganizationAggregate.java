@@ -18,14 +18,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.c.organization;
+package io.spine.users.organization;
 
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrganizationId;
-import io.spine.users.c.orgunit.OrgUnit;
+import io.spine.users.organization.command.ChangeOrganizationDomain;
+import io.spine.users.organization.command.ChangeOrganizationTenant;
+import io.spine.users.organization.command.CreateOrganization;
+import io.spine.users.organization.command.DeleteOrganization;
+import io.spine.users.organization.command.RenameOrganization;
+import io.spine.users.organization.event.OrganizationCreated;
+import io.spine.users.organization.event.OrganizationCreatedVBuilder;
+import io.spine.users.organization.event.OrganizationDeleted;
+import io.spine.users.organization.event.OrganizationDeletedVBuilder;
+import io.spine.users.organization.event.OrganizationDomainChanged;
+import io.spine.users.organization.event.OrganizationDomainChangedVBuilder;
+import io.spine.users.organization.event.OrganizationRenamed;
+import io.spine.users.organization.event.OrganizationRenamedVBuilder;
+import io.spine.users.organization.event.OrganizationTenantChanged;
+import io.spine.users.organization.event.OrganizationTenantChangedVBuilder;
+import io.spine.users.orgunit.OrgUnit;
 
 /**
  * An organization of a tenant, the topmost entity in organizational structure.
