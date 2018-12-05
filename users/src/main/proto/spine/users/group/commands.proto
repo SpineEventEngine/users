@@ -1,0 +1,161 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.group";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/net/email_address.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
+
+// Creates a group.
+//
+message CreateGroup {
+    option (events) = "GroupCreated";
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // A human-friendly description of a group.
+    string description = 3;
+
+    // An entity a group belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 4;
+
+        // An external domain.
+        net.InternetDomain external_domain = 5;
+    }
+
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 6;
+}
+
+// Moves a group from one organization or orgunit to another.
+//
+message MoveGroup {
+    option (events) = "GroupMoved";
+    option (rejections) = "CannotMoveExternalGroup";
+
+    GroupId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
+}
+
+// Deletes a group.
+//
+message DeleteGroup {
+    option (events) = "GroupDeleted";
+
+    GroupId id = 1;
+}
+
+// Joins a parent group.
+//
+message JoinParentGroup {
+    option (events) = "JoinedParentGroup";
+    option (rejections) = "GroupsCannotFormCycles";
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// Leaves a parent group.
+//
+message LeaveParentGroup {
+    option (events) = "LeftParentGroup";
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// Assigns a role to the group.
+//
+message AssignRoleToGroup {
+    option (events) = "RoleAssignedToGroup";
+
+    GroupId id = 1;
+
+    // An ID of the role to assign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// Removes a role assignment from the group.
+//
+message UnassignRoleFromGroup {
+    option (events) = "RoleUnassignedFromGroup";
+    option (rejections) = "RoleIsNotAssignedToGroup";
+
+    GroupId id = 1;
+
+    // An ID of the role to unassign.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// Renames a group.
+//
+message RenameGroup {
+    option (events) = "GroupRenamed";
+
+    GroupId id = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+}
+
+// Changes a group email address.
+//
+message ChangeGroupEmail {
+    option (events) = "GroupEmailChanged";
+
+    GroupId id = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
+}
+
+// Changes a description of a group.
+//
+message ChangeGroupDescription {
+    option (events) = "GroupDescriptionChanged";
+
+    GroupId id = 1;
+
+    // A new human-friendly description of a group.
+    string description = 2 [(required) = true];
+}

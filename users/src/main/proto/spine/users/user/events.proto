@@ -1,0 +1,203 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.user";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/user/user.proto";
+import "spine/users/person_profile.proto";
+import "spine/users/user/identity.proto";
+
+// A new user was created.
+//
+message UserCreated {
+
+    core.UserId id = 1;
+
+    // A kind of user: a person or a machine.
+    UserNature nature = 2 [(required) = true];
+
+    // A user name to be displayed on UI.
+    string display_name = 3 [(required) = true];
+
+    // An email address of a user.
+    net.EmailAddress email = 4;
+
+    // An entity a user belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 5;
+
+        // An external domain.
+        net.InternetDomain external_domain = 6;
+    }
+
+    // The primary identity of the user.
+    Identity primary_identity = 7;
+
+    // A user profile, if applicable.
+    PersonProfile profile = 8;
+
+    // The current status of the user.
+    User.Status status = 9 [(required) = true];
+}
+
+// A user was moved to another organization or organizational unit.
+//
+message UserMoved {
+
+    core.UserId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
+
+    // A former parent entity in the organizational structure.
+    OrganizationOrUnit old_org_entity = 3 [(required) = true];
+}
+
+// A user joined a group.
+//
+message UserJoinedGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
+
+    // A role of a user in the group.
+    RoleInGroup role = 3 [(required) = true];
+}
+
+// A user left a group.
+//
+message UserLeftGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
+}
+
+// A user was deleted.
+//
+message UserDeleted {
+
+    core.UserId id = 1;
+}
+
+// A role was assigned to a user.
+//
+message RoleAssignedToUser {
+
+    core.UserId id = 1;
+
+    // An ID of the assigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// A role assignment was removed from a user.
+//
+message RoleUnassignedFromUser {
+
+    core.UserId id = 1;
+
+    // An ID of the unassigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// The status of a user was changed.
+//
+message UserStatusChanged {
+
+    core.UserId id = 1;
+
+    // An old status.
+    User.Status old_status = 2 [(required) = true];
+
+    // A new status.
+    User.Status new_status = 3 [(required) = true];
+}
+
+// A new secondary identity was added.
+//
+message SecondaryIdentityAdded {
+
+    core.UserId id = 1;
+
+    // A new secondary identity.
+    Identity identity = 2 [(required) = true];
+}
+
+// A secondary identity was removed.
+//
+message SecondaryIdentityRemoved {
+
+    core.UserId id = 1;
+
+    // The removed identity.
+    Identity identity = 2 [(required) = true];
+}
+
+// The primary identity was changed.
+//
+message PrimaryIdentityChanged {
+
+    core.UserId id = 1;
+
+    // A new primary identity.
+    Identity identity = 2 [(required) = true];
+}
+
+// A user was renamed.
+//
+message UserRenamed {
+
+    core.UserId id = 1;
+
+    // A new name of a user.
+    string new_name = 2 [(required) = true];
+
+    // An old name of a user.
+    string old_name = 3 [(required) = true];
+}
+
+// A user profile was updated.
+//
+message PersonProfileUpdated {
+
+    core.UserId id = 1;
+
+    // An updated version of the profile.
+    PersonProfile updated_profile = 2 [(required) = true];
+}
