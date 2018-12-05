@@ -70,9 +70,10 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * assigned multiple {@link Role Roles} (please see {@link AssignRoleToUser} and
  * {@link UnassignRoleFromUser} commands).
  *
- * <p>However, if a user share its functions and functional roles with a number of other users it
- * can also join one or more {@link Group groups} (please see {@code JoinGroup} and
- * {@code LeaveGroup} commands).
+ * <p>However, if a user share its functions and functional roles with
+ * a number of other users it can also join one or more {@link Group groups}
+ * (please see {@link io.spine.users.user.command.JoinGroup JoinGroup} and
+ * {@link io.spine.users.user.command.LeaveGroup LeaveGroup} commands).
  *
  * <h3>Organizational Structure</h3>
  *

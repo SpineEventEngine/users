@@ -38,7 +38,8 @@ import io.spine.users.user.UserPart;
  * {@linkplain GroupPart groups}, to perform access control.
  *
  * <p>Roles are assigned to {@link UserPart users} and {@link GroupPart groups} directly
- * and explicitly (please see {@code AssignRoleToUser} and {@code AssignRoleToGroup} commands).
+ * and explicitly (please see {@link io.spine.users.user.command.AssignRoleToUser AssignRoleToUser}
+ * and {@link io.spine.users.group.command.AssignRoleToGroup AssignRoleToGroup} commands).
  *
  * <p>A role exists in the scope of an organization or an orgunit, therefore it can be assigned
  * only to those users and groups that are in the same organization and/or orgunit
