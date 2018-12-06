@@ -19,12 +19,12 @@
  */
 
 /**
- * This package contains the server-side of {@code Users} bounded context.
+ * This package contains the {@code Users} bounded context.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.server;
+package io.spine.users;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 
