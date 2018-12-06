@@ -18,16 +18,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.users.GroupId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * Test {@link GoogleGroupLifecyclePm Google Group process managers}.
+ *
+ * @author Vladyslav Lubenskyi
  */
+public class GoogleGroupTestPms {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    /**
+     * Prevents instantiation.
+     */
+    private GoogleGroupTestPms() {
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Creates empty process manager in the default state.
+     *
+     * @param id and ID of the process manager
+     */
+    static GoogleGroupLifecyclePm emptyPm(GroupId id) {
+        return new GoogleGroupLifecyclePm(id);
+    }
+}

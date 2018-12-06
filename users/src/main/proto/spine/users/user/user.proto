@@ -1,0 +1,198 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.user;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.user";
+option java_outer_classname = "UserProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "google/protobuf/timestamp.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/person_profile.proto";
+import "spine/users/user/identity.proto";
+
+// A user of the application, either a person or machine.
+//
+// ## Roles
+//
+// To reflect a user's functions and functional roles in the organization, the user can be assigned
+// multiple `Role`s (please see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
+//
+// ## Organizational Structure
+//
+// A user is a leaf in the hierarchical structure of the organization. It can have either
+// a single `Organization` or single `OrgUnit` as a parent organizational entity.
+//
+message User {
+    option (entity).kind = AGGREGATE;
+
+    core.UserId id = 1;
+
+    // Nature of a user: a person or machine.
+    UserNature nature = 2 [(required) = true];
+
+    // A user name to be displayed on UI.
+    string display_name = 3 [(required) = true];
+
+    // Roles explicitly assigned to the user.
+    repeated RoleId role = 4;
+
+    // An email address of a user.
+    net.EmailAddress email = 5;
+
+    // An entity a user belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 6;
+
+        // An external domain.
+        net.InternetDomain external_domain = 7;
+    }
+
+    // General profile information for a user, if applicable.
+    PersonProfile profile = 8;
+
+    // The current status of a user.
+    Status status = 9 [(required) = true];
+
+    // The primary user identity.
+    //
+    // The primary identity and its provider are used as a single source of truth about a user:
+    //  - to get a user profile;
+    //  - to check whether a user account is active;
+    //  - etc.
+    //
+    // A user without the primary identity can't authenticate and therefore perform any actions.
+    // This is only applicable for users from external domains.
+    //
+    Identity primary_identity = 10;
+
+    // Secondary identities of a user; used solely for authentication.
+    repeated Identity secondary_identity = 11;
+
+    // A moment in time when a user was created.
+    google.protobuf.Timestamp when_created = 12;
+
+    // A status of a user.
+    //
+    enum Status {
+
+        // The default value.
+        US_UNKNOWN = 0;
+
+        // A user is created but not yet ready to work.
+        //
+        // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
+        //
+        NOT_READY = 1;
+
+        // A user is active and ready to work.
+        ACTIVE = 2;
+
+        // A user is suspended by an identity provider.
+        SUSPENDED = 3;
+
+        // A user is external and its status is unknown.
+        UNAVAILABLE = 4;
+    }
+}
+
+// A user membership in multiple groups, a part of `User` aggregate.
+//
+// If a `User` shares its functions and roles with a number of other users they can join
+// one or more `Group`s (please see `JoinGroup`, `LeaveGroup` commands).
+//
+message UserMembership {
+    option (entity).kind = AGGREGATE;
+
+    core.UserId id = 1;
+
+    // The group memberships of a `User`.
+    repeated UserMembershipRecord membership = 2;
+
+    // A single record about a membership in the aggregate part.
+    //
+    message UserMembershipRecord {
+
+        // An ID of a group.
+        GroupId group_id = 1 [(required) = true];
+
+        // A role of a user in the group.
+        RoleInGroup role = 2 [(required) = true];
+    }
+}
+
+// All roles of a user (both explicitly and implicitly assigned).
+//
+message UserRoles {
+    option (entity).kind = PROJECTION;
+
+    // The ID of the user.
+    core.UserId id = 1;
+
+    // Explicitly and implicitly assigned roles.
+    repeated RoleId role = 2;
+}
+
+// A role of the `User` as a member of the group.
+//
+// This role defines whether a user is a regular member or can manage the group.
+//
+enum RoleInGroup {
+
+    // The default value.
+    RIG_UNKNOWN = 0;
+
+    // A regular member of a group: can't add or remove members, rename the group, etc.
+    MEMBER = 1;
+
+    // A privileged member with permissions to manage the group.
+    PRIVILEGED = 2;
+}
+
+// The fundamental kind of `User`.
+//
+enum UserNature {
+
+    // The default value.
+    UN_UNKNOWN = 0;
+
+    // A `User` represents a person and acts on behalf of this person.
+    PERSON = 1;
+
+    // A `User` is a machine, a service account, which acts on behalf of an inanimate entity
+    // such as a printer, a CRON job, a bot.
+    //
+    MACHINE = 2;
+
+    // A user is external and its nature is unknown.
+    UNAVAILABLE = 3;
+}

@@ -18,16 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.orgunit;
+
+import io.spine.base.CommandMessage;
+import io.spine.server.entity.Repository;
+import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
+import io.spine.users.server.orgunit.given.OrgUnitTestEnv;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * An implementation base for the {@link OrgUnit} aggregate command handler tests.
+ *
+ * @param <C> the type of the command being tested
+ * @author Vladyslav Lubenskyi
  */
+abstract class OrgUnitCommandTest<C extends CommandMessage>
+        extends AggregateCommandTest<OrgUnitId, C, OrgUnit, OrgUnitAggregate> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    static final OrgUnitId ORG_UNIT_ID = OrgUnitTestEnv.createOrgUnitId();
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+    OrgUnitCommandTest(C commandMessage) {
+        super(ORG_UNIT_ID, commandMessage);
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    protected Repository<OrgUnitId, OrgUnitAggregate> createRepository() {
+        return new OrgUnitAggregateRepository();
+    }
+}

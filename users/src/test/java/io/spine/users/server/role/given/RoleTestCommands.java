@@ -18,16 +18,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.role.given;
+
+import io.spine.users.RoleId;
+import io.spine.users.role.command.CreateRole;
+import io.spine.users.role.command.CreateRoleVBuilder;
+import io.spine.users.role.command.DeleteRole;
+import io.spine.users.role.command.DeleteRoleVBuilder;
+import io.spine.users.server.role.RoleAggregate;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * Test commands for {@link RoleAggregate}.
  */
+public final class RoleTestCommands {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    /**
+     * Prevents instantiation.
+     */
+    private RoleTestCommands() {
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+    public static CreateRole createRole(RoleId id) {
+        return CreateRoleVBuilder.newBuilder()
+                                 .setId(id)
+                                 .build();
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    public static DeleteRole deleteRole(RoleId id) {
+        return DeleteRoleVBuilder.newBuilder()
+                                 .setId(id)
+                                 .build();
+    }
+}

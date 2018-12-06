@@ -18,16 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.role;
+
+import io.spine.server.aggregate.AggregateRepository;
+import io.spine.users.RoleId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@linkplain RoleAggregate Roles}.
  */
-
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+public class RoleAggregateRepository extends AggregateRepository<RoleId, RoleAggregate> {
+}

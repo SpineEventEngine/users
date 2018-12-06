@@ -1,0 +1,128 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.group";
+option java_outer_classname = "GroupProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/net/internet_domain.proto";
+import "spine/net/email_address.proto";
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+
+// A `Group` is a way to group users by their common functions and functional roles inside of
+// an organization or organizational unit.
+//
+// The roles, assigned to a `Group` are implicitly inherited by all members of the group,
+// including sub-groups.
+//
+// ## Usage Example
+//
+// For example, a software development department of a company may well have the following groups:
+//
+// * Developers
+//      ```
+//      {
+//          display_name: "Developers",
+//          email: "developers@department.company.com",
+//          role: ["github-contributor", "test-server-admin"],
+//      }
+//      ```
+// * Support Engineers
+//      ```
+//      {
+//          display_name: "Support Team",
+//          email: "support@department.company.com",
+//          role: ["bugtracker-contributor"],
+//      }
+//      ```
+//
+message Group {
+    option (entity).kind = AGGREGATE;
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // An email address of the group if applicable.
+    //
+    // The email address may be used to send messages to all the group members.
+    //
+    net.EmailAddress email = 3;
+
+    // A human-friendly description of a group.
+    string description = 4;
+
+    // An entity a group belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 5;
+
+        // An external domain.
+        net.InternetDomain external_domain = 6;
+    }
+
+    // Roles explicitly assigned to the group.
+    repeated RoleId role = 7;
+}
+
+// A group's membership in other groups, a part of the `Group` aggregate.
+//
+// It is forbidden for groups to directly or indirectly join themselves; in other words,
+// all nested group memberships must always form an acyclic graph.
+//
+// Please see `JoinParentGroup` and `LeaveParentGroup` commands.
+//
+message GroupMembership {
+    option (entity).kind = AGGREGATE;
+
+    GroupId id = 1;
+
+    // Other groups this group is a member of.
+    repeated GroupId membership = 2;
+}
+
+// A process manager stating facts of the group roles propagation.
+//
+// The roles, assigned to a `Group` are implicitly inherited by all group members.
+// This process manager, it its turn, explicitly states the fact of the propagation.
+// So, entities interested in implicitly inherited roles can listen to these statements (events).
+//
+message GroupRolesPropagation {
+    option (entity).kind = PROCESS_MANAGER;
+
+    GroupId id = 1;
+
+    // A list of `User` members. Only direct members of the group are included.
+    repeated core.UserId user_member = 2;
+
+    // Roles explicitly assigned to a group.
+    repeated RoleId role = 3;
+}

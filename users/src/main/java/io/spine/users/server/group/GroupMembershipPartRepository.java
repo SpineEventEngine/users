@@ -18,16 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group;
+
+import io.spine.server.aggregate.AggregatePartRepository;
+import io.spine.users.GroupId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@link GroupMembershipPart GroupMembership} aggregate part.
+ *
+ * @author Vladyslav Lubenskyi
  */
-
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+public class GroupMembershipPartRepository
+        extends AggregatePartRepository<GroupId, GroupMembershipPart, GroupRoot> {
+}

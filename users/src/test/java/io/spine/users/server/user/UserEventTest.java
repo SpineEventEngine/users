@@ -18,16 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.user;
+
+import io.spine.base.EventMessage;
+import io.spine.core.UserId;
+import io.spine.server.entity.Repository;
+import io.spine.testing.server.aggregate.AggregateEventReactionTest;
+import io.spine.users.user.User;
+
+import static io.spine.users.server.user.given.UserTestEnv.userId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * An implementation base for the {@link User} aggregate event reactors tests.
+ *
+ * @param <E> the type of the event being tested
+ * @author Vladyslav Lubenskyi
  */
+abstract class UserEventTest<E extends EventMessage>
+        extends AggregateEventReactionTest<UserId, E, User, UserPart> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    protected static final UserId USER_ID = userId();
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+    UserEventTest(E eventMessage) {
+        super(USER_ID, eventMessage);
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    protected Repository<UserId, UserPart> createRepository() {
+        return new UserPartRepository();
+    }
+}
