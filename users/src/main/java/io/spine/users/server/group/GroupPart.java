@@ -188,8 +188,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
-               .setDescription(event.getDescription())
-               .build();
+               .setDescription(event.getDescription());
 
         switch (event.getOriginCase()) {
             case ORG_ENTITY:

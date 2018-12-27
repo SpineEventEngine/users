@@ -43,9 +43,6 @@ import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("SignInPm should, when SignUserIn")
 class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
 
@@ -76,8 +73,8 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
                     assertEquals(message().getId(), command.getId());
                     assertEquals(message().getIdentity(), command.getPrimaryIdentity());
                 })
-                .hasState(
-                        state -> assertEquals(AWAITING_USER_AGGREGATE_CREATION, state.getStatus()));
+                .hasState(state -> assertEquals(AWAITING_USER_AGGREGATE_CREATION,
+                                                state.getStatus()));
     }
 
     @Test
@@ -135,7 +132,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     @Test
     @DisplayName("fail if there is no identity provider")
     void failIfNoProvider() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = TestProcManFactory.withIdentity(entityId(), TestProcManFactory.identityProviderId("invalid"));
         emptyProcMan.setUserRepository(noIdentityUserRepo());
         emptyProcMan.setIdentityProviderFactory(mockEmptyProviderFactory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {

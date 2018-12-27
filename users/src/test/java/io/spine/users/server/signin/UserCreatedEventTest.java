@@ -32,9 +32,6 @@ import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATI
 import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("SignInPM should, when UserCreated")
 public class UserCreatedEventTest
         extends SignInPmEventTest<UserCreated> {

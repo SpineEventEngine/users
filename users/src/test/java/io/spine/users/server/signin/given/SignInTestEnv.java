@@ -127,19 +127,20 @@ public final class SignInTestEnv {
     }
 
     public static Identity identity() {
-        return IdentityVBuilder.newBuilder()
-                               .setDisplayName("j.s@google.com")
-                               .setProviderId(googleProviderId())
-                               .setUserId("123543")
-                               .build();
+        return identity("123543", googleProviderId(), "j.s@google.com");
     }
 
     public static Identity secondaryIdentity() {
-        return IdentityVBuilder.newBuilder()
-                               .setDisplayName("s.j@google.com")
-                               .setProviderId(googleProviderId())
-                               .setUserId("6987")
-                               .build();
+        return identity("6987", googleProviderId(), "s.j@google.com");
+    }
+
+    public static Identity identity(String id, IdentityProviderId identityProviderId, String name) {
+        return IdentityVBuilder
+                .newBuilder()
+                .setUserId(id)
+                .setDisplayName(name)
+                .setProviderId(identityProviderId)
+                .build();
     }
 
     public static SignInFailureReason failureReason() {
