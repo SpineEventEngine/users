@@ -25,6 +25,7 @@ import io.spine.users.server.signin.SignInPm;
 import io.spine.users.user.event.UserCreated;
 import io.spine.users.user.event.UserCreatedVBuilder;
 
+import static io.spine.net.InternetDomains.valueOf;
 import static io.spine.users.server.signin.given.SignInTestEnv.displayName;
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.profile;
@@ -33,8 +34,6 @@ import static io.spine.users.user.UserNature.PERSON;
 
 /**
  * Test events for {@link SignInPm}.
- *
- * @author Vladyslav Lubenskyi
  */
 public final class SignInTestEvents {
 
@@ -52,6 +51,7 @@ public final class SignInTestEvents {
                                   .setDisplayName(displayName())
                                   .setPrimaryIdentity(identity())
                                   .setNature(PERSON)
+                                  .setExternalDomain(valueOf("teamvdev.com"))
                                   .build();
     }
 }

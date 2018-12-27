@@ -26,12 +26,11 @@ import io.spine.users.signin.event.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.signin.TestProcManFactory.identityProviderId;
+import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("SignInPm should, when SignUserOut")
 class SignUserOutCommandTest extends SignInPmCommandTest<SignUserOut> {
 
@@ -42,11 +41,11 @@ class SignUserOutCommandTest extends SignInPmCommandTest<SignUserOut> {
     @Test
     @DisplayName("generate SignOutCompleted event")
     void failProcess() {
-        SignInPm emptyProcMan = TestProcManFactory.createEmptyProcMan(entityId());
+        SignInPm emptyProcMan = withIdentity(entityId(), identityProviderId("google.com"));
 
-        expectThat(emptyProcMan).producesEvent(SignOutCompleted.class, command -> {
-            assertEquals(message().getId(), command.getId());
-        });
+        expectThat(emptyProcMan)
+                .producesEvent(SignOutCompleted.class,
+                               command -> assertEquals(message().getId(), command.getId()));
     }
 
     private static SignUserOut command() {

@@ -21,7 +21,6 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
-import io.spine.testing.server.ShardingReset;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
@@ -34,7 +33,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.spine.testing.server.blackbox.verify.state.VerifyState.exactlyOne;
 import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
@@ -54,7 +52,6 @@ import static io.spine.users.server.user.given.UserRolesProjectionTestEnv.userWi
 /**
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
  */
-@ExtendWith(ShardingReset.class)
 @DisplayName("UserRolesProjection should")
 class UserRolesProjectionIntegrationTest {
 

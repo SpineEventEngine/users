@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
 @DisplayName("CreateGroup command should")
 class CreateGroupTest extends GroupCommandTest<CreateGroup> {
 

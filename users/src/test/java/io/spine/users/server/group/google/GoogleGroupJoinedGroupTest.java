@@ -44,7 +44,6 @@ class GoogleGroupJoinedGroupTest extends GoogleGroupLifecycleEventTest<GoogleGro
         expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(JoinParentGroup.class, command -> {
             assertEquals(GROUP_ID, command.getId());
             assertEquals(message().getNewParentId(), command.getParentGroupId());
-
         });
     }
 }

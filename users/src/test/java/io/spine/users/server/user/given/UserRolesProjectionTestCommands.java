@@ -30,6 +30,7 @@ import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.CreateGroupVBuilder;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.CreateRoleVBuilder;
+import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.RoleInGroup;
 import io.spine.users.user.User;
 import io.spine.users.user.UserNature;
@@ -72,6 +73,9 @@ public class UserRolesProjectionTestCommands {
         return CreateGroupVBuilder.newBuilder()
                                   .setId(groupId)
                                   .setDisplayName("group " + groupId.getValue())
+                                  .setEmail(GroupTestEnv.groupEmail())
+                                  .setOrgEntity(GroupTestEnv.groupOrgEntityOrganization())
+                                  .setDescription(GroupTestEnv.groupDescription())
                                   .build();
     }
 

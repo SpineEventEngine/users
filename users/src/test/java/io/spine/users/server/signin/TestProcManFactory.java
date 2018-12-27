@@ -22,13 +22,16 @@ package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
+import io.spine.users.IdentityProviderId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignIn.Status;
 import io.spine.users.signin.SignInVBuilder;
+import io.spine.users.user.Identity;
 
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
+import static io.spine.users.signin.SignIn.Status.SIS_UNKNOWN;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.
@@ -46,19 +49,40 @@ final class TestProcManFactory {
     /**
      * Creates a new instance of the process manager with the default state.
      */
-    public static SignInPm createEmptyProcMan(UserId id) {
+    static SignInPm createEmptyProcMan(UserId id) {
         return new SignInPm(id);
     }
 
-    public static SignInPm nonEmptyProcMan(Status status) {
-        SignIn state = SignInVBuilder.newBuilder()
-                                     .setId(userId())
-                                     .setIdentity(identity())
-                                     .setStatus(status)
-                                     .build();
+    static SignInPm nonEmptyProcMan(Status status) {
+        SignIn state = signIn(userId(), identity(), status);
         return Given.processManagerOfClass(SignInPm.class)
                     .withId(userId())
                     .withState(state)
                     .build();
+    }
+
+    static SignInPm withIdentity(UserId id, IdentityProviderId identityProviderId) {
+        Identity identity = identity(id.getValue(), identityProviderId, "Test User");
+        SignIn state = signIn(id, identity, SIS_UNKNOWN);
+        return Given.processManagerOfClass(SignInPm.class)
+                    .withId(id)
+                    .withState(state)
+                    .build();
+    }
+
+    private static SignIn signIn(UserId id, Identity identity, Status status) {
+        return SignInVBuilder
+                .newBuilder()
+                .setId(id)
+                .setIdentity(identity)
+                .setStatus(status)
+                .build();
+    }
+
+    static IdentityProviderId identityProviderId(String id) {
+        return IdentityProviderId
+                .newBuilder()
+                .setValue(id)
+                .build();
     }
 }

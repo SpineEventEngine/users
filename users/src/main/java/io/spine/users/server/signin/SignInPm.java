@@ -229,6 +229,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                 .setPrimaryIdentity(identity)
                 .setProfile(profile)
                 .setStatus(ACTIVE)
+                .setExternalDomain(identity.getDomain())
                 .setNature(PERSON)
                 .build();
     }
