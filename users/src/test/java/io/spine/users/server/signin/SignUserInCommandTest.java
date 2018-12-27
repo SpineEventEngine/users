@@ -28,6 +28,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.signin.TestProcManFactory.createEmptyProcMan;
+import static io.spine.users.server.signin.TestProcManFactory.identityProviderId;
+import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
 import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
 import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveIdentityProvider;
 import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyIdentityProvider;
@@ -84,9 +86,10 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
         emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
 
-        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
-            assertEquals(message().getId(), command.getId());
-        }).hasState(state -> assertEquals(COMPLETED, state.getStatus()));
+        expectThat(emptyProcMan)
+                .producesCommand(FinishSignIn.class,
+                                 command -> assertEquals(message().getId(), command.getId()))
+                .hasState(state -> assertEquals(COMPLETED, state.getStatus()));
     }
 
     @Test
@@ -132,7 +135,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     @Test
     @DisplayName("fail if there is no identity provider")
     void failIfNoProvider() {
-        SignInPm emptyProcMan = TestProcManFactory.withIdentity(entityId(), TestProcManFactory.identityProviderId("invalid"));
+        SignInPm emptyProcMan = withIdentity(entityId(), identityProviderId("invalid"));
         emptyProcMan.setUserRepository(noIdentityUserRepo());
         emptyProcMan.setIdentityProviderFactory(mockEmptyProviderFactory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
