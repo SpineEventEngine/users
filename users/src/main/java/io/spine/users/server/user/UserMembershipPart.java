@@ -93,7 +93,6 @@ public class UserMembershipPart
     void on(UserLeftGroup event) {
         Optional<UserMembershipRecord> membership = findMembership(event.getGroupId());
         membership.ifPresent(this::removeMembership);
-        getBuilder().setId(getId());
     }
 
     private void removeMembership(UserMembershipRecord record) {
