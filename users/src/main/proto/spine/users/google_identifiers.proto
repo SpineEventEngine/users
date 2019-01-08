@@ -22,7 +22,6 @@ syntax = "proto3";
 
 package spine.users;
 
-import "spine/core/user_id.proto";
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
