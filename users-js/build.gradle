@@ -46,7 +46,7 @@ configurations {
 
 dependencies {
     protobuf project(':users')
-    // TODO:2018-06-23:dmytro.dashenkov: Migrate to the `implementation` config when resolved:
+    //TODO:2019-01-29:dmytro.grankin: Migrate to the `implementation` config when resolved:
     // todo https://github.com/google/protobuf-gradle-plugin/issues/242
     // todo Spine issue: https://github.com/SpineEventEngine/base/issues/126
     compile group: 'io.spine', name: 'spine-server', version: spineVersion
@@ -54,6 +54,8 @@ dependencies {
 
 ext {
     genProtoBaseDir = "$projectDir"
+    genProtoMain = "$genProtoBaseDir/main/js"
+    genProtoTest = "$genProtoBaseDir/test/js"
 }
 
 /**
@@ -74,7 +76,7 @@ protobuf {
     generateProtoTasks {
         all().each { final task ->
             task.builtins {
-                // Do not use java builtin output in this project.
+                // Do not compile to Java.
                 remove java
 
                 // For information on JavaScript code generation please see
@@ -92,8 +94,30 @@ protobuf {
 }
 
 protoJs {
+    mainGenProtoDir = genProtoMain
+    testGenProtoDir = genProtoTest
+
     generateParsersTask().dependsOn compileProtoToJs
+}
+
+sourceSets {
+    main {
+        java.srcDirs = []
+        proto.srcDirs = []
+        resources.srcDirs = []
+    }
+    test {
+        java.srcDirs = []
+        proto.srcDirs = []
+        resources.srcDirs = []
+    }
+}
+
+clean {
+    delete genProtoMain
+    delete genProtoTest
 }
 
 // Prevent building the JS project as a Java module.
 compileJava.enabled = false
+compileTestJava.enabled = false
