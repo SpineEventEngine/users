@@ -18,26 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+ext {
+    genProtoBaseDir = "$projectDir"
+    genProtoMain = "$genProtoBaseDir/main/js"
+    genProtoTest = "$genProtoBaseDir/test/js"
+}
+
 apply plugin: 'com.google.protobuf'
 apply plugin: 'io.spine.tools.proto-js-plugin'
 // Apply `java` plugin to make `protobuf` configuration working.
 apply plugin: 'java'
-
-buildscript {
-
-    apply from: "$rootDir/config/gradle/dependencies.gradle"
-
-    repositories {
-        maven { url = repos.gradlePlugins }
-        maven { url = repos.spine }
-        maven { url = repos.spineSnapshots }
-    }
-
-    dependencies {
-        classpath deps.build.gradlePlugins.protobuf
-        classpath "io.spine.tools:spine-proto-js-plugin:$spineBaseVersion"
-    }
-}
 
 configurations {
     // Don't generate JS files for Protobufs from Spine Server.
@@ -50,12 +40,6 @@ dependencies {
     // todo https://github.com/google/protobuf-gradle-plugin/issues/242
     // todo Spine issue: https://github.com/SpineEventEngine/base/issues/126
     compile group: 'io.spine', name: 'spine-server', version: spineVersion
-}
-
-ext {
-    genProtoBaseDir = "$projectDir"
-    genProtoMain = "$genProtoBaseDir/main/js"
-    genProtoTest = "$genProtoBaseDir/test/js"
 }
 
 /**
@@ -111,6 +95,11 @@ sourceSets {
         proto.srcDirs = []
         resources.srcDirs = []
     }
+}
+
+idea.module {
+    excludeDirs += file("$projectDir/main")
+    excludeDirs += file("$projectDir/test")
 }
 
 clean {

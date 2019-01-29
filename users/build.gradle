@@ -91,3 +91,8 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from ("$projectDir/build/docs/javadoc")
     classifier "javadoc"
 }
+
+idea.module {
+    generatedSourceDirs += file(generatedJavaDir)
+    testSourceDirs += file(generatedTestJavaDir)
+}

@@ -40,11 +40,14 @@ buildscript {
         classpath deps.build.gradlePlugins.protobuf
         classpath "io.spine.tools:spine-model-compiler:$spineBaseVersion"
         classpath "io.spine.tools:spine-model-verifier:$spineBaseVersion"
+        classpath "io.spine.tools:spine-proto-js-plugin:$spineBaseVersion"
     }
 
     configurations.all({
         resolutionStrategy {
             force deps.build.guava
+            //TODO:2019-01-29:dmytro.grankin: remove the force dependency after v1.0 release.
+            force "io.spine:spine-base:$spineBaseVersion"
         }
     })
 }
@@ -129,11 +132,6 @@ subprojects {
         whenMerged { final module ->
             module.dependencies*.exported = true
         }
-    }
-
-    idea.module {
-        generatedSourceDirs += file(generatedJavaDir)
-        testSourceDirs += file(generatedTestJavaDir)
     }
 
     idea {
