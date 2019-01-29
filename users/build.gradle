@@ -17,9 +17,31 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-group = 'io.spine'
+
+apply plugin: 'java-library'
+apply plugin: spineProtobufPluginId
+apply plugin: 'com.google.protobuf'
 
 dependencies {
+    implementation deps.build.guava
+    implementation deps.build.checkerAnnotations
+    implementation deps.build.errorProneAnnotations
+    implementation deps.build.slf4j
+
+    compile group: 'io.spine', name: 'spine-server', version: spineVersion
+
+    // Use jdk14 bindings for test purposes only.
+    testImplementation deps.test.slf4j
+    testImplementation deps.test.hamcrest
+    testImplementation deps.test.mockito
+    testImplementation deps.test.guavaTestlib
+    testImplementation deps.test.junit5Api
+    testImplementation deps.test.junit5Runner
+
+    testCompile("io.spine:spine-testutil-server:${spineVersion}") {
+        // We are using JUnit 5.x instead of 4.x dependency of Spine testing framework.
+        exclude group: 'junit'
+    }
 }
 
 configurations {
@@ -28,5 +50,44 @@ configurations {
     testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
 }
 
-apply plugin: 'java'
-apply plugin: 'com.google.protobuf'
+sourceSets {
+    main {
+        proto.srcDirs "$sourcesRootDir/main/proto"
+        java.srcDirs generatedJavaDir, "$sourcesRootDir/main/java", generatedSpineDir
+        resources.srcDirs "$generatedRootDir/main/resources"
+    }
+    test {
+        proto.srcDirs "$sourcesRootDir/test/proto"
+        java.srcDirs generatedTestJavaDir, "$sourcesRootDir/test/java", generatedTestSpineDir
+        resources.srcDirs "$generatedRootDir/test/resources"
+    }
+}
+
+/* Uncomment this block if you need to display console output during the Gradle build.*/
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+}
+
+apply from: "$rootDir/config/gradle/test-output.gradle"
+apply from: deps.scripts.javadocOptions
+
+javadoc {
+    source = sourceSets.main.allJava
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
+task testOutputJar(type: Jar) {
+    from sourceSets.test.output
+    classifier "test"
+}
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from ("$projectDir/build/docs/javadoc")
+    classifier "javadoc"
+}
