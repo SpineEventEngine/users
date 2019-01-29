@@ -39,8 +39,17 @@ buildscript {
     }
 }
 
+configurations {
+    // Don't generate JS files for Protobufs from Spine Server.
+    protobuf.exclude group: 'io.spine', module: 'spine-server'
+}
+
 dependencies {
     protobuf project(':users')
+    // TODO:2018-06-23:dmytro.dashenkov: Migrate to the `implementation` config when resolved:
+    // todo https://github.com/google/protobuf-gradle-plugin/issues/242
+    // todo Spine issue: https://github.com/SpineEventEngine/base/issues/126
+    compile group: 'io.spine', name: 'spine-server', version: spineVersion
 }
 
 ext {
