@@ -35,4 +35,6 @@ ext {
     spineBaseVersion = SPINE_VERSION
     spineVersion = SPINE_VERSION
     versionToPublish = '1.0.0-SNAPSHOT'
+    // Have a different version for JS since NPM doesn't allow to publish the same version twice.
+    versionToPublishJs = '1.0.0-SNAPSHOT'
 }

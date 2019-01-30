@@ -18,16 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-ext {
-    genProtoBaseDir = "$projectDir"
-    genProtoMain = "$genProtoBaseDir/main/js"
-    genProtoTest = "$genProtoBaseDir/test/js"
-}
-
-apply plugin: 'com.google.protobuf'
-apply plugin: 'io.spine.tools.proto-js-plugin'
 // Apply `java` plugin to make `protobuf` configuration working.
 apply plugin: 'java'
+
+apply from: "$projectDir/scripts/js.gradle"
 
 configurations {
     // Don't generate JS files for Protobufs from Spine Server.
@@ -40,48 +34,6 @@ dependencies {
     // todo https://github.com/google/protobuf-gradle-plugin/issues/242
     // todo Spine issue: https://github.com/SpineEventEngine/base/issues/126
     compile group: 'io.spine', name: 'spine-server', version: spineVersion
-}
-
-/**
- * Compiles Protobuf sources into JavaScript.
- *
- * <p>This is a lifecycle task. It performs no action but triggers all the tasks which perform
- * the compilation.
- */
-task compileProtoToJs {
-    description = "Compiles Protobuf sources into JavaScript."
-}
-
-protobuf {
-    generatedFilesBaseDir = genProtoBaseDir
-    protoc {
-        artifact = deps.build.protoc
-    }
-    generateProtoTasks {
-        all().each { final task ->
-            task.builtins {
-                // Do not compile to Java.
-                remove java
-
-                // For information on JavaScript code generation please see
-                // https://github.com/google/protobuf/blob/master/js/README.md
-                js {
-                    option "import_style=commonjs"
-                }
-
-                task.generateDescriptorSet = true
-                task.descriptorSetOptions.path = "${projectDir}/build/descriptors/${task.sourceSet.name}/known_types.desc"
-            }
-            compileProtoToJs.dependsOn task
-        }
-    }
-}
-
-protoJs {
-    mainGenProtoDir = genProtoMain
-    testGenProtoDir = genProtoTest
-
-    generateParsersTask().dependsOn compileProtoToJs
 }
 
 sourceSets {
@@ -98,8 +50,9 @@ sourceSets {
 }
 
 idea.module {
-    excludeDirs += file("$projectDir/main")
-    excludeDirs += file("$projectDir/test")
+    excludeDirs += file(genProtoMain)
+    excludeDirs += file(genProtoTest)
+    excludeDirs += file(nodeModulesDir)
 }
 
 clean {

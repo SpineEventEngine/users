@@ -1,0 +1,198 @@
+/*
+ * Copyright 2019, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * This build script contains a Gradle plugin for JavaScript modules.
+ *
+ * <p>The plugin configures NPM tools execution and connects the JS assembly
+ * with the Gradle execution process.
+ *
+ * <p>The plugin defines tasks for:
+ * <ul>
+ *     <li>downloading NPM dependencies -                   {@code installDependencies};
+ *     <li>compile Protobuf into JavaScript -               {@code compileProtoToJs};
+ *     <li>publishing NPM artifacts into the NPM registry - {@code publishJs};
+ *     <li>linking the module to the local NPM registry -   {@code link}
+ * </ul>
+ *
+ * <p>Most of the tasks launch a separate process which runs an NPM CLI command, so it's necessary
+ * that the NPM command line tool is installed.
+ *
+ * <p>In order to publish the NPM module, it is required that the {@code NPM_TOKEN} environment
+ * variable is set to a valid NPM auth token. If the token is not set, a dummy value is added to
+ * the NPM execution process, which is sufficient for the local development.
+ */
+
+apply from: "$projectDir/scripts/npm-cli.gradle"
+apply from: "$projectDir/scripts/update-package-version.gradle"
+
+apply plugin: 'com.google.protobuf'
+apply plugin: 'io.spine.tools.proto-js-plugin'
+
+ext {
+    JAVA_SCRIPT_TASK_GROUP = 'JavaScript'
+
+    workDirectory = "$projectDir"
+    publicationDirectory = "$buildDir/npm-publication/"
+    genProtoBaseDir = projectDir
+    genProtoMain = "$genProtoBaseDir/main/js"
+    genProtoTest = "$genProtoBaseDir/test/js"
+    nodeModulesDir = "$projectDir/node_modules"
+
+    npm = { final String... command ->
+        ext.executeNpm(workDirectory as File, command)
+    }
+}
+
+/**
+ * Compiles Protobuf sources into JavaScript.
+ *
+ * <p>This is a lifecycle task. It performs no action but triggers all the tasks which perform
+ * the compilation.
+ */
+task compileProtoToJs {
+    description = "Compiles Protobuf sources into JavaScript."
+}
+
+/**
+ * Cleans old module dependencies.
+ */
+task cleanOldDependencies {
+    doLast {
+        delete nodeModulesDir
+    }
+}
+
+/**
+ * Installs the module dependencies using the `npm install` command.
+ */
+task installDependencies {
+    group = JAVA_SCRIPT_TASK_GROUP
+    description = 'Installs the JavaScript dependencies.'
+
+    inputs.files "$projectDir/package.json"
+    outputs.files nodeModulesDir
+
+    dependsOn compileProtoToJs
+
+    doLast {
+        npm 'install'
+    }
+}
+
+/**
+ * Assembles the JS sources.
+ *
+ * This task is an analog of `build` for JS.
+ *
+ * To include a task into the JS build, depend `buildJs` onto that task.
+ */
+task buildJs {
+    group = JAVA_SCRIPT_TASK_GROUP
+    description = "Assembles the JavaScript source files."
+
+    dependsOn installDependencies
+}
+
+/**
+ * Copies the NPM publication files into a temporary directory which they are published from.
+ */
+task prepareJsPublication(type: Copy) {
+    group = JAVA_SCRIPT_TASK_GROUP
+    description = 'Prepares the NPM package for publish.'
+
+    from projectDir, {
+        include 'package.json'
+        include '.npmrc'
+    }
+
+    from genProtoMain, {
+        include '**'
+    }
+
+    into publicationDirectory
+
+    dependsOn buildJs
+}
+
+/**
+ * Publishes the NPM package locally with `npm link`.
+ */
+task link {
+    group = JAVA_SCRIPT_TASK_GROUP
+    description = "Publishes the NPM package locally."
+
+    doLast {
+        executeNpm(publicationDirectory as File, 'link')
+    }
+
+    dependsOn prepareJsPublication
+}
+
+/**
+ * Publishes the NPM package with `npm publish`.
+ */
+task publishJs {
+    group = JAVA_SCRIPT_TASK_GROUP
+    description = 'Publishes the NPM package.'
+
+    doLast {
+        executeNpm(publicationDirectory as File, 'publish')
+    }
+
+    dependsOn prepareJsPublication
+}
+
+protobuf {
+    generatedFilesBaseDir = genProtoBaseDir
+    protoc {
+        artifact = deps.build.protoc
+    }
+    generateProtoTasks {
+        all().each { final task ->
+            task.builtins {
+                // Do not compile to Java.
+                remove java
+
+                // For information on JavaScript code generation please see
+                // https://github.com/google/protobuf/blob/master/js/README.md
+                js {
+                    option "import_style=commonjs"
+                }
+
+                task.generateDescriptorSet = true
+                task.descriptorSetOptions.path = "${projectDir}/build/descriptors/${task.sourceSet.name}/known_types.desc"
+            }
+            compileProtoToJs.dependsOn task
+        }
+    }
+}
+
+protoJs {
+    mainGenProtoDir = genProtoMain
+    testGenProtoDir = genProtoTest
+
+    generateParsersTask().dependsOn compileProtoToJs
+    installDependencies.dependsOn generateParsersTask()
+}
+
+build.dependsOn buildJs
+clean.dependsOn cleanOldDependencies
+publish.dependsOn publishJs
