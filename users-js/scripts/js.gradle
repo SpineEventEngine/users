@@ -45,6 +45,9 @@ apply from: "$projectDir/scripts/update-package-version.gradle"
 
 apply plugin: 'com.google.protobuf'
 apply plugin: 'io.spine.tools.proto-js-plugin'
+//TODO:2019-01-30:dmytro.grankin: Don't apply model compiler after fix
+// of https://github.com/SpineEventEngine/base/issues/306
+apply plugin: spineModelCompilerId
 
 ext {
     JAVA_SCRIPT_TASK_GROUP = 'JavaScript'
@@ -168,8 +171,12 @@ protobuf {
     generateProtoTasks {
         all().each { final task ->
             task.builtins {
-                // Do not compile to Java.
-                remove java
+                
+               //TODO:2019-01-30:dmytro.grankin: Disable compilation to Java after fix
+               // of https://github.com/SpineEventEngine/base/issues/306
+                
+               // Do not compile to Java.
+               // remove java
 
                 // For information on JavaScript code generation please see
                 // https://github.com/google/protobuf/blob/master/js/README.md

@@ -19,7 +19,7 @@
 //
 
 apply plugin: 'java-library'
-apply plugin: spineProtobufPluginId
+apply plugin: spineModelCompilerId
 apply plugin: 'com.google.protobuf'
 
 dependencies {
