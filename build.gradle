@@ -18,22 +18,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-buildscript {
+buildscript { final scriptHandler ->
     apply from: "$rootDir/version.gradle"
     apply from: "$rootDir/config/gradle/dependencies.gradle"
 
-    repositories {
-        jcenter()
-        google()
-
-        maven { url = repos.gradlePlugins }
-
-        mavenCentral()
-        mavenLocal()
-        maven { url = repos.spine }
-        maven { url = repos.spineSnapshots }
-    }
-
+    defaultRepositories(scriptHandler)
     dependencies {
         classpath deps.build.guava
         classpath deps.build.gradlePlugins.errorProne
@@ -43,11 +32,12 @@ buildscript {
         classpath "io.spine.tools:spine-proto-js-plugin:$spineBaseVersion"
     }
 
+    forceConfiguration(scriptHandler)
     configurations.all({
         resolutionStrategy {
-            force deps.build.guava
             //TODO:2019-01-29:dmytro.grankin: remove the force dependency after v1.0 release.
             force "io.spine:spine-base:$spineBaseVersion"
+            force "io.spine:spine-time:$spineVersion"
         }
     })
 }
@@ -75,6 +65,7 @@ ext {
 
 subprojects {
 
+    forceConfiguration(project)
     configurations {
         // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
         runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
@@ -82,8 +73,9 @@ subprojects {
 
         all {
             resolutionStrategy {
-                force deps.build.guava
-                force deps.test.guavaTestlib
+                //TODO:2019-01-29:dmytro.grankin: remove the force dependency after v1.0 release.
+                force "io.spine:spine-base:$spineBaseVersion"
+                force "io.spine:spine-time:$spineVersion"
             }
         }
     }
@@ -107,23 +99,7 @@ subprojects {
     apply plugin: 'com.google.protobuf'
     apply plugin: 'maven-publish'
 
-    // Set Java home to point to JDK7 in gradle.properties file.
-    //
-    // For Mac OS X, it looks like this:
-    //
-    // # suppress inspection "UnusedProperty"
-    // org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/
-
-    repositories {
-        jcenter()
-        google()
-        maven { url = repos.gradlePlugins }
-        mavenCentral()
-        mavenLocal()
-
-        maven { url = repos.spine }
-        maven { url = repos.spineSnapshots }
-    }
+    defaultRepositories(project)
 
     idea.module.iml {
         beforeMerged { final module ->
