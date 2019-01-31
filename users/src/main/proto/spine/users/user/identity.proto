@@ -25,29 +25,28 @@ package spine.users;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.user";
+option java_outer_classname = "IdentityProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// An identity of a user.
 //
-// This message is used for displaying user information on UI.
-//
-// Contents of this message are usually obtained from authentication providers.
-//
-message PersonProfile {
+message Identity {
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    // A user identifier as specified by the authentication provider.
+    string user_id = 1 [(required) = true];
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
+    // A unique identifier of the authentication provider.
+    IdentityProviderId provider_id = 2 [(required) = true];
 
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // A user's name to display on UI.
+    string display_name = 3 [(required) = true];
+
+    // A domain of the user, if applicable.
+    net.InternetDomain domain = 4;
 }

@@ -18,16 +18,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.users.GroupId;
+import io.spine.users.group.google.GoogleGroupLifecycle;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@link GoogleGroupLifecyclePm}.
+ *
+ * @author Vladyslav Lubenskyi
  */
-
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+public class GoogleGroupLifecyclePmRepository
+        extends ProcessManagerRepository<GroupId, GoogleGroupLifecyclePm, GoogleGroupLifecycle> {
+}

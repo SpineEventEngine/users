@@ -18,16 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group;
+
+import com.google.common.collect.ImmutableSet;
+import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.users.GroupId;
+import io.spine.users.group.GroupRolesPropagation;
+import io.spine.users.user.event.UserJoinedGroup;
+import io.spine.users.user.event.UserLeftGroup;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@link GroupRolesPropagationPm}.
  */
+public class GroupRolesPropagationRepository
+        extends ProcessManagerRepository<GroupId, GroupRolesPropagationPm, GroupRolesPropagation> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    public GroupRolesPropagationRepository() {
+        super();
+        getEventRouting().route(UserJoinedGroup.class,
+                                (event, context) -> ImmutableSet.of(event.getGroupId()))
+                         .route(UserLeftGroup.class,
+                                (event, context) -> ImmutableSet.of(event.getGroupId()));
+    }
+}

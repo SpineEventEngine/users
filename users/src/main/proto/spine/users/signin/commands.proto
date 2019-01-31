@@ -20,34 +20,51 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.signin;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.signin.command";
+option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/core/user_id.proto";
+import "spine/users/user/identity.proto";
+import "spine/users/signin/values.proto";
 
-// General profile information of a user.
+// Starts the sign-in process.
 //
-// This message is used for displaying user information on UI.
+message SignUserIn {
+
+    core.UserId id = 1;
+
+    // A user identity to sign-in with.
+    Identity identity = 2 [(required) = true];
+}
+
+// Signs a user out.
 //
-// Contents of this message are usually obtained from authentication providers.
+message SignUserOut {
+    option (events) = "SignOutCompleted";
+
+    core.UserId id = 1;
+}
+
+// Finishes the sign-in process.
 //
-message PersonProfile {
+// This command is used internally by the process manager and must not be used by the client.
+//
+message FinishSignIn {
+    option (internal_type) = true;
+    option (events) = "SignInSuccessful, SignInFailed";
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    core.UserId id = 1;
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
+    // Indicates if the sign-in was successful or not.
+    bool successful = 2;
 
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // Indicates why the sign-in failed, if applicable.
+    SignInFailureReason failure_reason = 3;
 }

@@ -20,34 +20,28 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.role;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.role.event";
+option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// A new role was created.
 //
-// This message is used for displaying user information on UI.
+message RoleCreated {
+
+    RoleId id = 1;
+}
+
+// A role was deleted.
 //
-// Contents of this message are usually obtained from authentication providers.
-//
-message PersonProfile {
+message RoleDeleted {
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
-
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
-
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    RoleId id = 1;
 }

@@ -1,0 +1,187 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.group;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.group.event";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/net/email_address.proto";
+import "spine/net/internet_domain.proto";
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+
+// A new group was created.
+//
+message GroupCreated {
+
+    GroupId id = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // A human-friendly description of a group.
+    string description = 3;
+
+    // An entity a group belongs to.
+    oneof origin {
+
+        // An organization or orgunit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 4;
+
+        // An external domain.
+        net.InternetDomain external_domain = 5;
+    }
+
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 6;
+}
+
+// A group was moved to another organization or orgunit.
+//
+message GroupMoved {
+
+    GroupId id = 1;
+
+    // A new parent entity in the organizational structure.
+    OrganizationOrUnit new_org_entity = 2 [(required) = true];
+
+    // The former parent entity in the organizational structure.
+    OrganizationOrUnit old_org_entity = 3 [(required) = true];
+}
+
+// A group joined a parent group, that is, became a member of another group.
+//
+message JoinedParentGroup {
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// A group left a parent group.
+//
+message LeftParentGroup {
+
+    GroupId id = 1;
+
+    // An ID of the parent group.
+    GroupId parent_group_id = 2 [(required) = true];
+}
+
+// A new group was deleted.
+//
+message GroupDeleted {
+
+    GroupId id = 1;
+}
+
+// A role was assigned to the group.
+//
+message RoleAssignedToGroup {
+
+    GroupId id = 1;
+
+    // An ID of the assigned role.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// A role of a group was inherited by a user.
+//
+message RoleInheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the inherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user inherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}
+
+// A role assignment was removed from the group.
+//
+message RoleUnassignedFromGroup {
+
+    GroupId id = 1;
+
+    // An ID of the unassigned role.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// A user disinherited the role of a group.
+//
+message RoleDisinheritedByUser {
+
+    GroupId id = 1;
+
+    // An ID of the disinherited role.
+    RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user disinherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}
+
+// A group was renamed.
+//
+message GroupRenamed {
+
+    GroupId id = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+
+    // An old name.
+    string old_name = 3 [(required) = true];
+}
+
+// A group email address was changed.
+//
+message GroupEmailChanged {
+
+    GroupId id = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
+
+    // An old email address of the group.
+    net.EmailAddress old_email = 3 [(required) = true];
+}
+
+// A group description changed.
+//
+message GroupDescriptionChanged {
+
+    GroupId id = 1;
+
+    // A new human-friendly description of a group.
+    string new_description = 2 [(required) = true];
+
+    // An old human-friendly description of a group.
+    string old_description = 3 [(required) = true];
+}

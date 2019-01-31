@@ -20,34 +20,38 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.orgunit;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.orgunit";
+option java_outer_classname = "OrganizationalUnitProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// An organizational unit (aka orgunit).
 //
-// This message is used for displaying user information on UI.
+// An orgunit is the part of the `Organization` or a larger `OrgUnit` that aggregates users
+// and groups.
 //
-// Contents of this message are usually obtained from authentication providers.
+// It is forbidden to include an organizational unit into itself directly or indirectly. In other
+// words, the organizational structure must always be an acyclic graph.
 //
-message PersonProfile {
+message OrgUnit {
+    option (entity).kind = AGGREGATE;
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    OrgUnitId id = 1;
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
+    // A name of an orgunit to be displayed on UI.
+    string display_name = 2 [(required) = true];
 
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // A parent entity in the organizational structure.
+    OrganizationOrUnit parent_entity = 3 [(required) = true];
+
+    // An internet domain of the orgunit.
+    net.InternetDomain domain = 4;
 }

@@ -18,16 +18,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.testing.server.entity.given.Given;
+import io.spine.users.GroupId;
+import io.spine.users.group.google.GoogleGroupLifecycle;
+import io.spine.users.group.google.GoogleGroupLifecycleVBuilder;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * Test {@link GoogleGroupLifecyclePm Google Group process managers}.
  */
+public class GoogleGroupTestPms {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    /**
+     * Prevents instantiation.
+     */
+    private GoogleGroupTestPms() {
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+    /**
+     * Creates empty process manager in the default state.
+     *
+     * @param id and ID of the process manager
+     */
+    static GoogleGroupLifecyclePm emptyPm(GroupId id) {
+        return Given.processManagerOfClass(GoogleGroupLifecyclePm.class)
+                    .withState(lifecycle(id))
+                    .build();
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    private static GoogleGroupLifecycle lifecycle(GroupId id) {
+        return GoogleGroupLifecycleVBuilder
+                .newBuilder()
+                .setId(id)
+                .build();
+    }
+}

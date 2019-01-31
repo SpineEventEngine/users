@@ -20,34 +20,48 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.user;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
-option java_multiple_files = true;
+option java_package = "io.spine.users.user.rejection";
+option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/core/user_id.proto";
+import "spine/net/internet_domain.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// The rejection to accessing an identity that doesn't exist.
 //
-// This message is used for displaying user information on UI.
+message IdentityDoesNotExist {
+
+    core.UserId id = 1;
+
+    // A user identity that wasn't found.
+    IdentityProviderId provider_id = 2 [(required) = true];
+
+    // A unique identifier of the authentication provider.
+    string user_id = 3 [(required) = true];
+}
+
+// The rejection to removing a role that isn't assigned to a user.
 //
-// Contents of this message are usually obtained from authentication providers.
+message RoleIsNotAssignedToUser {
+
+    core.UserId id = 1;
+
+    // An ID of a role.
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The rejection to moving an external user.
 //
-message PersonProfile {
+message CannotMoveExternalUser {
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    core.UserId id = 1;
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
-
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // An external domain the user belongs to.
+    net.InternetDomain external_domain = 2 [(required) = true];
 }

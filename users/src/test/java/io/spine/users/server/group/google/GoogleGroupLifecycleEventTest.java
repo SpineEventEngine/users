@@ -18,16 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.base.EventMessage;
+import io.spine.server.entity.Repository;
+import io.spine.testing.server.procman.PmCommandOnEventTest;
+import io.spine.users.GroupId;
+import io.spine.users.group.google.GoogleGroupLifecycle;
+
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.
+ *
+ * @param <E> an event being tested
+ * @author Vladyslav Lubenskyi
  */
+abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
+        extends PmCommandOnEventTest<GroupId, E, GoogleGroupLifecycle, GoogleGroupLifecyclePm> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    protected static final GroupId GROUP_ID = newGroupId();
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+    GoogleGroupLifecycleEventTest(E eventMessage) {
+        super(GROUP_ID, eventMessage);
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    protected Repository<GroupId, GoogleGroupLifecyclePm> createRepository() {
+        return new GoogleGroupLifecyclePmRepository();
+    }
+}

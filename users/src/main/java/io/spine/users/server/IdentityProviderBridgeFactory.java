@@ -18,16 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server;
+
+import io.spine.users.IdentityProviderId;
+
+import java.util.Optional;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * A factory for creating {@link IdentityProviderBridge identity provider bridges}.
+ *
+ * @author Vladyslav Lubenskyi
  */
+public abstract class IdentityProviderBridgeFactory {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Obtains or creates a {@link IdentityProviderBridge bridge} to communicate with
+     * an authentication identity provider.
+     *
+     * @param id a unique identifier of the identity provider
+     * @return {@link IdentityProviderBridge} if the requested identity provider is supported,
+     * {@code Optional.empty()} otherwise
+     */
+    public abstract Optional<IdentityProviderBridge> get(IdentityProviderId id);
+}
