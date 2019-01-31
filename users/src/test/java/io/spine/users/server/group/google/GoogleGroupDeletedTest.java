@@ -18,16 +18,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.users.google.group.event.GoogleGroupDeleted;
+import io.spine.users.group.command.DeleteGroup;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupDeleted;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * @author Vladyslav Lubenskyi
  */
+@DisplayName("GoogleGroupPm should, when GoogleGroupDeleted")
+class GoogleGroupDeletedTest extends GoogleGroupLifecycleEventTest<GoogleGroupDeleted> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    GoogleGroupDeletedTest() {
+        super(googleGroupDeleted(GROUP_ID));
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Test
+    @DisplayName("translate it to DeleteGroup command")
+    void testBeTranslated() {
+        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(DeleteGroup.class, command -> {
+            assertEquals(GROUP_ID, command.getId());
+        });
+    }
+}

@@ -18,16 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.user;
+
+import com.google.common.annotations.VisibleForTesting;
+import io.spine.core.UserId;
+import io.spine.server.BoundedContext;
+import io.spine.server.aggregate.AggregateRoot;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The {@link User} aggregate root.
+ *
+ * @author Vladyslav Lubenskyi
  */
+public class UserRoot extends AggregateRoot<UserId> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    /**
+     * @see AggregateRoot#AggregateRoot(BoundedContext, Object)
+     */
+    UserRoot(BoundedContext boundedContext, UserId id) {
+        super(boundedContext, id);
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * A test method to obtain obtains a new {@link UserRoot}.
+     */
+    @VisibleForTesting
+    public static UserRoot getForTest(BoundedContext boundedContext, UserId id) {
+        return new UserRoot(boundedContext, id);
+    }
+}

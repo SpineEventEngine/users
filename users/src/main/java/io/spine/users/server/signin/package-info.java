@@ -19,15 +19,14 @@
  */
 
 /**
- * This package contains the {@code Users} bounded context.
+ * This package contains classes and interfaces related to
+ * {@link io.spine.users.signin.SignIn SignIn} process manager.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+package io.spine.users.server.signin;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;

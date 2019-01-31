@@ -19,15 +19,13 @@
  */
 
 /**
- * This package contains the {@code Users} bounded context.
+ * This package contains classes and interfaces related to Google Groups.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+package io.spine.users.server.group.google;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;

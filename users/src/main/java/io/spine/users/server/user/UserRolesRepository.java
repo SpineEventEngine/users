@@ -18,16 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.user;
+
+import com.google.common.collect.ImmutableSet;
+import io.spine.core.UserId;
+import io.spine.server.projection.ProjectionRepository;
+import io.spine.users.group.event.RoleDisinheritedByUser;
+import io.spine.users.group.event.RoleInheritedByUser;
+import io.spine.users.user.UserRoles;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@link UserRolesProjection}.
  */
+public class UserRolesRepository
+        extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    public UserRolesRepository() {
+        super();
+        getEventRouting().route(RoleInheritedByUser.class,
+                                (event, context) -> ImmutableSet.of(event.getUserId()))
+                         .route(RoleDisinheritedByUser.class,
+                                (event, context) -> ImmutableSet.of(event.getUserId()));
+    }
+}

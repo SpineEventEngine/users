@@ -20,34 +20,38 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.organization;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.organization";
+option java_outer_classname = "OrganizationProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/net/internet_domain.proto";
+import "spine/core/tenant_id.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// An organization of a tenant.
 //
-// This message is used for displaying user information on UI.
+// The topmost entity in the organizational structure.
 //
-// Contents of this message are usually obtained from authentication providers.
+// An organization aggregates users and groups directly or in the hierarchy of organizational units
+// (`OrgUnit`).
 //
-message PersonProfile {
+message Organization {
+    option (entity).kind = AGGREGATE;
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    OrganizationId id = 1;
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
+    // A name of the organization to display on UI.
+    string display_name = 2 [(required) = true];
 
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // A domain of the organization.
+    net.InternetDomain domain = 3;
+
+    // A tenant associated with the organization.
+    core.TenantId tenant = 4 [(required) = true];
 }

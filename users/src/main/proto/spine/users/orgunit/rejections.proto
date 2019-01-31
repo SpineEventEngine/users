@@ -20,34 +20,23 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.orgunit;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
-option java_multiple_files = true;
+option java_package = "io.spine.users.orgunit.rejection";
+option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/users/identifiers.proto";
 
-// General profile information of a user.
+// The rejection is generated when a change to an organizational structure forms a cycle.
 //
-// This message is used for displaying user information on UI.
-//
-// Contents of this message are usually obtained from authentication providers.
-//
-message PersonProfile {
+message OrgUnitsCannotFormCycles {
 
-    // An email address of the user.
-    net.EmailAddress email = 1;
+    OrgUnitId id = 1;
 
-    // A name of the person, if applicable.
-    people.PersonName name = 2;
-
-    // The URL to the user's profile picture, if applicable.
-    net.Url avatar = 3;
+    // An orgunit that closes a cycle.
+    OrgUnitId closing_org_unit = 2 [(required) = true];
 }

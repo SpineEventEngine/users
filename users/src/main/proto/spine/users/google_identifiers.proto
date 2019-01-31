@@ -26,68 +26,32 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.users";
-option java_outer_classname = "IdentifiersProto";
+option java_outer_classname = "GoogleIdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/core/user_id.proto";
-
-// A UUID of a user group.
+// An identifier of a Google Group.
 //
-message GroupId {
+// Every `GoogleGroupId` has the corresponding `GroupId`.
+//
+message GoogleGroupId {
 
-    string value = 1;
+    // The value of the ID.
+    string value = 1 [(required) = true];
 }
 
-// An ID of a role.
+// A singleton identifier of the `GoogleIdMappingView` projection.
 //
-message RoleId {
+message GoogleIdMappingViewId {
 
-    // An organization or organizational unit the role belongs to.
-    OrganizationOrUnit org_entity = 1 [(required) = true];
+    Value value = 1 [(required) = true];
 
-    // A name of the role.
-    string name = 2 [(required) = true];
-}
+    // A single possible value of the ID.
+    //
+    enum Value {
 
-// A UUID of an organization.
-//
-message OrganizationId {
+        GMV_UNKNOWN = 0;
 
-    string value = 1;
-}
-
-// A UUID of an organizational unit.
-//
-message OrgUnitId {
-
-    string value = 1;
-}
-
-// A string-based identifier of an authentication identity provider.
-//
-// For example, "google.com", "active-directory.mycompany.co.uk".
-//
-message IdentityProviderId {
-
-    string value = 1;
-}
-
-// An ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
-//
-// An `OrgUnit` is quite similar to an `Organization`, the major difference is that
-// an `Organization` has no parent. So, most of the interaction can be performed in
-// the same manner for both of them.
-//
-message OrganizationOrUnit {
-
-    // A kind of a node ID.
-    oneof kind {
-
-        // An `OrgUnit`.
-        users.OrgUnitId org_unit = 1;
-
-        // An `Organization`.
-        users.OrganizationId organization = 2;
+        SINGLETON = 1;
     }
 }

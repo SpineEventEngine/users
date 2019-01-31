@@ -1,0 +1,90 @@
+//
+// Copyright 2018, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.signin;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.signin";
+option java_outer_classname = "BasicSignInProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/user/identity.proto";
+import "spine/users/signin/values.proto";
+
+// The process of a user sign-in..
+//
+// This process manager covers a straightforward sign-in scenario:
+//
+// 1. `SignUserIn` command initializes the sign-in process.
+// 2. If a `User` aggregate with the given ID already exists all checks pass the `SignInSuccessful`
+//    event is generated in response.
+// 3. Otherwise, the process manager creates a `User` aggregate and then attempts to `SignUserIn`
+//    again.
+//
+// To sign a user in, the process manager ensures the following:
+//
+// 1. an identity provider is aware of the given identity;
+// 2. an identity provider authorize the user to sign in (e.g. the opposite would be if the user
+//    account was suspended);
+// 3. the given identity is associated with the user (please see `AddAuthIdentity`
+//    command).
+//
+// If one of the checks fails, the process is completed immediately with `SignInFailed` event.
+//
+message SignIn {
+    option (entity).kind = PROCESS_MANAGER;
+
+    core.UserId id = 1;
+
+    // The current status of the process.
+    Status status = 2;
+
+    // A user identity used to sign in.
+    Identity identity = 3 [(required) = true];
+
+    // A reason why the process failed, if applicable.
+    SignInFailureReason failure_reason = 4;
+
+    // A status of the sign-in process.
+    //
+    enum Status {
+
+        SIS_UNKNOWN = 0;
+
+        // Indicates that the process manager is waiting until a `User` aggregate is created.
+        //
+        // If there is no `User` aggregate for the given `core.UserId` the process manager
+        // creates it in the first instance, and then attempt to sign the user in.
+        //
+        AWAITING_USER_AGGREGATE_CREATION = 1;
+
+        // Indicates that the user was successfully signed-in.
+        COMPLETED = 2;
+
+        // The sign-in process failed.
+        FAILED = 3;
+    }
+}

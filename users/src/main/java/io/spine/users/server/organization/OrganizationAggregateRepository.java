@@ -18,16 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.organization;
+
+import io.spine.server.aggregate.AggregateRepository;
+import io.spine.users.OrganizationId;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * The repository for {@link OrganizationAggregate organizations}.
+ *
+ * @author Vladyslav Lubenskyi
  */
-
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+public class OrganizationAggregateRepository
+        extends AggregateRepository<OrganizationId, OrganizationAggregate> {
+}

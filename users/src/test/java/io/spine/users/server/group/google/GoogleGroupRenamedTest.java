@@ -18,16 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server.group.google;
+
+import io.spine.users.google.group.event.GoogleGroupRenamed;
+import io.spine.users.group.command.RenameGroup;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupRenamed;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * This package contains the {@code Users} bounded context.
+ * @author Vladyslav Lubenskyi
  */
+@DisplayName("GoogleGroupPm should, when GoogleGroupRenamed")
+class GoogleGroupRenamedTest extends GoogleGroupLifecycleEventTest<GoogleGroupRenamed> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-@BoundedContext("Users")
-package io.spine.users;
+    GoogleGroupRenamedTest() {
+        super(googleGroupRenamed(GROUP_ID));
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Test
+    @DisplayName("translate it to RenameGroup command")
+    void testBeTranslated() {
+        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(RenameGroup.class, command -> {
+            assertEquals(GROUP_ID, command.getId());
+            assertEquals(message().getDisplayName(), command.getNewName());
+        });
+    }
+}
