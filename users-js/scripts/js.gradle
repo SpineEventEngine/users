@@ -171,11 +171,9 @@ protobuf {
     generateProtoTasks {
         all().each { final task ->
             task.builtins {
-                
-               //TODO:2019-01-30:dmytro.grankin: Disable compilation to Java after fix
-               // of https://github.com/SpineEventEngine/base/issues/306
-                
                // Do not compile to Java.
+               //TODO:2019-01-30:dmytro.grankin: Disable compilation to Java after fix
+               //todo: of https://github.com/SpineEventEngine/base/issues/306
                // remove java
 
                 // For information on JavaScript code generation please see
