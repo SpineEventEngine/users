@@ -33,13 +33,6 @@ buildscript { final scriptHandler ->
     }
 
     forceConfiguration(scriptHandler)
-    configurations.all({
-        resolutionStrategy {
-            //TODO:2019-01-29:dmytro.grankin: remove the force dependency after v1.0 release.
-            force "io.spine:spine-base:$spineBaseVersion"
-            force "io.spine:spine-time:$spineVersion"
-        }
-    })
 }
 
 allprojects {
@@ -70,14 +63,6 @@ subprojects {
         // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
         runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
         testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
-
-        all {
-            resolutionStrategy {
-                //TODO:2019-01-29:dmytro.grankin: remove the force dependency after v1.0 release.
-                force "io.spine:spine-base:$spineBaseVersion"
-                force "io.spine:spine-time:$spineVersion"
-            }
-        }
     }
 
     project.ext {
