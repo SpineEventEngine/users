@@ -40,8 +40,7 @@
  * the NPM execution process, which is sufficient for the local development.
  */
 
-apply from: "$projectDir/scripts/npm-cli.gradle"
-apply from: "$projectDir/scripts/update-package-version.gradle"
+apply from: deps.scripts.js
 
 apply plugin: 'com.google.protobuf'
 apply plugin: 'io.spine.tools.proto-js-plugin'
@@ -49,66 +48,11 @@ apply plugin: 'io.spine.tools.proto-js-plugin'
 ext {
     JAVA_SCRIPT_TASK_GROUP = 'JavaScript'
 
-    workDirectory = "$projectDir"
     publicationDirectory = "$buildDir/npm-publication/"
     genProtoBaseDir = projectDir
     genProtoMain = "$genProtoBaseDir/main/js"
     genProtoTest = "$genProtoBaseDir/test/js"
     nodeModulesDir = "$projectDir/node_modules"
-
-    npm = { final String... command ->
-        ext.executeNpm(workDirectory as File, command)
-    }
-}
-
-/**
- * Compiles Protobuf sources into JavaScript.
- *
- * <p>This is a lifecycle task. It performs no action but triggers all the tasks which perform
- * the compilation.
- */
-task compileProtoToJs {
-    description = "Compiles Protobuf sources into JavaScript."
-}
-
-/**
- * Cleans old module dependencies.
- */
-task cleanOldDependencies {
-    doLast {
-        delete nodeModulesDir
-    }
-}
-
-/**
- * Installs the module dependencies using the `npm install` command.
- */
-task installDependencies {
-    group = JAVA_SCRIPT_TASK_GROUP
-    description = 'Installs the JavaScript dependencies.'
-
-    inputs.files "$projectDir/package.json"
-    outputs.files nodeModulesDir
-
-    dependsOn compileProtoToJs
-
-    doLast {
-        npm 'install'
-    }
-}
-
-/**
- * Assembles the JS sources.
- *
- * This task is an analog of `build` for JS.
- *
- * To include a task into the JS build, depend `buildJs` onto that task.
- */
-task buildJs {
-    group = JAVA_SCRIPT_TASK_GROUP
-    description = "Assembles the JavaScript source files."
-
-    dependsOn installDependencies
 }
 
 /**
@@ -193,6 +137,4 @@ protoJs {
     installDependencies.dependsOn generateParsersTask()
 }
 
-build.dependsOn buildJs
-clean.dependsOn cleanOldDependencies
 publish.dependsOn publishJs
