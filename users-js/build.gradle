@@ -49,17 +49,6 @@ sourceSets {
     }
 }
 
-idea.module {
-    excludeDirs += file(genProtoMain)
-    excludeDirs += file(genProtoTest)
-    excludeDirs += file(nodeModulesDir)
-}
-
-clean {
-    delete genProtoMain
-    delete genProtoTest
-}
-
 // Prevent building the JS project as a Java module.
 compileJava.enabled = false
 compileTestJava.enabled = false
