@@ -30,7 +30,7 @@ apply plugin: 'com.google.protobuf'
 apply plugin: 'io.spine.tools.proto-js-plugin'
 
 ext {
-    genProtoBaseDir = projectDir
+    genProtoBaseDir = "$projectDir/generated"
     genProtoMain = "$genProtoBaseDir/main/js"
     genProtoTest = "$genProtoBaseDir/test/js"
 }
@@ -58,9 +58,6 @@ protobuf {
     generateProtoTasks {
         all().each { final task ->
             task.builtins {
-               // Do not compile to Java.
-                remove java
-
                 // For information on JavaScript code generation please see
                 // https://github.com/google/protobuf/blob/master/js/README.md
                 js {
@@ -80,14 +77,4 @@ protoJs {
     testGenProtoDir = genProtoTest
 
     generateParsersTask().dependsOn compileProtoToJs
-}
-
-idea.module {
-    excludeDirs += file(genProtoMain)
-    excludeDirs += file(genProtoTest)
-}
-
-clean {
-    delete genProtoMain
-    delete genProtoTest
 }
