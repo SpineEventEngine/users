@@ -48,19 +48,15 @@ apply plugin: 'io.spine.tools.proto-js-plugin'
 ext {
     JAVA_SCRIPT_TASK_GROUP = 'JavaScript'
 
-    publicationDirectory = "$buildDir/npm-publication/"
     genProtoBaseDir = projectDir
     genProtoMain = "$genProtoBaseDir/main/js"
     genProtoTest = "$genProtoBaseDir/test/js"
-    nodeModulesDir = "$projectDir/node_modules"
 }
 
 /**
- * Copies the NPM publication files into a temporary directory which they are published from.
+ * Defines files to copy by the task.
  */
-task prepareJsPublication(type: Copy) {
-    group = JAVA_SCRIPT_TASK_GROUP
-    description = 'Prepares the NPM package for publish.'
+prepareJsPublication {
 
     from (projectDir) {
         include 'package.json'
@@ -70,38 +66,6 @@ task prepareJsPublication(type: Copy) {
     from (genProtoMain) {
         include '**'
     }
-
-    into publicationDirectory
-
-    dependsOn buildJs
-}
-
-/**
- * Publishes the NPM package locally with `npm link`.
- */
-task link {
-    group = JAVA_SCRIPT_TASK_GROUP
-    description = "Publishes the NPM package locally."
-
-    doLast {
-        executeNpm(publicationDirectory as File, 'link')
-    }
-
-    dependsOn prepareJsPublication
-}
-
-/**
- * Publishes the NPM package with `npm publish`.
- */
-task publishJs {
-    group = JAVA_SCRIPT_TASK_GROUP
-    description = 'Publishes the NPM package.'
-
-    doLast {
-        executeNpm(publicationDirectory as File, 'publish')
-    }
-
-    dependsOn prepareJsPublication
 }
 
 protobuf {
@@ -134,7 +98,4 @@ protoJs {
     testGenProtoDir = genProtoTest
 
     generateParsersTask().dependsOn compileProtoToJs
-    installDependencies.dependsOn generateParsersTask()
 }
-
-publish.dependsOn publishJs
