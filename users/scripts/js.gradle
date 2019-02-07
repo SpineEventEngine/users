@@ -77,4 +77,5 @@ protoJs {
     testGenProtoDir = genProtoTest
 
     generateParsersTask().dependsOn compileProtoToJs
+    buildJs.dependsOn generateParsersTask() 
 }
