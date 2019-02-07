@@ -19,9 +19,17 @@
  */
 
 /**
- * The script declares tasks required to build a JavaScript module.
+ * A script configuring the build of a JavaScript module, which is going to be published to NPM.
+ * 
+ * <p>In particular, the script brings tasks to:
+ * <ol>
+ *     <li>Install NPM dependencies. 
+ *     <li>Compile Protobuf sources to JavaScript. 
+ *     <li>Update the version in `package.json` depending on the `versionToPublishJs` property. 
+ *     <li>Clean up the build output of a JavaScript module. 
+ * </ol>
  *
- * <p>Extends and configures tasks from `config` submodule.
+ * <p>The script is based on other scripts from `config` submodule.
  */
 
 apply from: deps.scripts.npmPublishTasks
