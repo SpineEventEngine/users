@@ -1,6 +1,6 @@
 {
   "name": "spine-users",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "0.12.0",
   "license": "Apache-2.0",
   "description": "Generated Protocol Buffer types for Spine Users library",
   "homepage": "https://spine.io",
