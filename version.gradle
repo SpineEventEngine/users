@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, TeamDev. All rights reserved.
+ * Copyright 2019, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -35,4 +35,6 @@ ext {
     spineBaseVersion = SPINE_VERSION
     spineVersion = SPINE_VERSION
     versionToPublish = SPINE_VERSION
+    // Have a different version for JS since NPM doesn't allow to publish the same version twice.
+    versionToPublishJs = '0.12.8'
 }

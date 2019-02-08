@@ -1,3 +1,5 @@
 rootProject.name = 'spine-users'
 
-include 'users'
+include(
+        'users'
+) 

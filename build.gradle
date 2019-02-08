@@ -1,5 +1,5 @@
 //
-// Copyright 2018, TeamDev. All rights reserved.
+// Copyright 2019, TeamDev. All rights reserved.
 //
 // Redistribution and use in source and/or binary forms, with or without
 // modification, must retain the above copyright notice and the following
@@ -18,35 +18,21 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-buildscript {
+buildscript { final scriptHandler ->
     apply from: "$rootDir/version.gradle"
     apply from: "$rootDir/config/gradle/dependencies.gradle"
 
-    repositories {
-        jcenter()
-        google()
-
-        maven { url = repos.gradlePlugins }
-
-        mavenCentral()
-        mavenLocal()
-        maven { url = repos.spine }
-        maven { url = repos.spineSnapshots }
-    }
-
+    defaultRepositories(scriptHandler)
     dependencies {
         classpath deps.build.guava
         classpath deps.build.gradlePlugins.errorProne
         classpath deps.build.gradlePlugins.protobuf
         classpath "io.spine.tools:spine-model-compiler:$spineBaseVersion"
         classpath "io.spine.tools:spine-model-verifier:$spineBaseVersion"
+        classpath "io.spine.tools:spine-proto-js-plugin:$spineBaseVersion"
     }
 
-    configurations.all({
-        resolutionStrategy {
-            force deps.build.guava
-        }
-    })
+    forceConfiguration(scriptHandler)
 }
 
 allprojects {
@@ -72,17 +58,11 @@ ext {
 
 subprojects {
 
+    forceConfiguration(project)
     configurations {
         // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
         runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
         testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
-
-        all {
-            resolutionStrategy {
-                force deps.build.guava
-                force deps.test.guavaTestlib
-            }
-        }
     }
 
     project.ext {
@@ -98,35 +78,19 @@ subprojects {
         generatedSpineDir = "$generatedRootDir/main/spine"
         generatedTestSpineDir = "$generatedRootDir/test/spine"
 
-        spineProtobufPluginId = 'io.spine.tools.spine-model-compiler'
+        spineModelCompilerId = 'io.spine.tools.spine-model-compiler'
     }
 
     apply plugin: 'com.google.protobuf'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-    apply plugin: spineProtobufPluginId
+    apply plugin: spineModelCompilerId
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    // Set Java home to point to JDK7 in gradle.properties file.
-    //
-    // For Mac OS X, it looks like this:
-    //
-    // # suppress inspection "UnusedProperty"
-    // org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/
-
-    repositories {
-        jcenter()
-        google()
-        maven { url = repos.gradlePlugins }
-        mavenCentral()
-        mavenLocal()
-
-        maven { url = repos.spine }
-        maven { url = repos.spineSnapshots }
-    }
+    defaultRepositories(project)
 
     dependencies {
         implementation deps.build.guava
@@ -170,7 +134,7 @@ subprojects {
         }
     }
 
-    apply from: "$rootDir/config/gradle/test-output.gradle"
+    apply from: deps.scripts.testOutput
     apply from: deps.scripts.javadocOptions
 
     javadoc {
@@ -179,17 +143,17 @@ subprojects {
 
     task sourceJar(type: Jar) {
         from sourceSets.main.allJava
-        classifier "sources"
+        archiveClassifier.set("sources")
     }
 
     task testOutputJar(type: Jar) {
         from sourceSets.test.output
-        classifier "test"
+        archiveClassifier.set("test")
     }
 
     task javadocJar(type: Jar, dependsOn: 'javadoc') {
         from ("$projectDir/build/docs/javadoc")
-        classifier "javadoc"
+        archiveClassifier.set("javadoc")
     }
 
     idea.module.iml {
