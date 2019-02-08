@@ -1,6 +1,6 @@
 {
   "name": "spine-users",
-  "version": "0.12.0",
+  "version": "0.12.8",
   "license": "Apache-2.0",
   "description": "Generated Protocol Buffer types for Spine Users library",
   "homepage": "https://spine.io",
@@ -13,9 +13,14 @@
     "email": "spine-developers@teamdev.com"
   },
   "scripts": {},
+  "peerDependencies": {
+    "spine-web": "0.12.*"
+  },
   "dependencies": {
     "google-protobuf": "^3.6.0",
-    "base64-js": "^1.3.0",
-    "spine-web": "0.12.6"
+    "base64-js": "^1.3.0"
+  },
+  "devDependencies": {
+    "spine-web": "0.12.8"
   }
 }

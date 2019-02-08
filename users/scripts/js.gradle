@@ -48,13 +48,19 @@ ext {
  */
 prepareJsPublication {
 
-    from (projectDir) {
-        include 'package.json'
-        include '.npmrc'
-    }
+    doLast {
+        copy {
+            from (projectDir) {
+                include 'package.json'
+                include '.npmrc'
+            }
 
-    from (genProtoMain) {
-        include '**'
+            from (genProtoMain) {
+                include '**'
+            }
+
+            into publicationDirectory
+        }
     }
 }
 
