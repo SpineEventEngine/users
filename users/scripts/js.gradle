@@ -78,8 +78,9 @@ protobuf {
                     option "import_style=commonjs"
                 }
 
+                final def descriptorName = "${project.group}_${project.name}_${project.version}.desc"
                 task.generateDescriptorSet = true
-                task.descriptorSetOptions.path = "${projectDir}/build/descriptors/${task.sourceSet.name}/known_types.desc"
+                task.descriptorSetOptions.path = "${projectDir}/build/descriptors/${task.sourceSet.name}/${descriptorName}"
             }
             compileProtoToJs.dependsOn task
         }
