@@ -22,7 +22,7 @@ package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
 import io.spine.server.procman.ProcessManagerRepository;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
 
@@ -34,9 +34,9 @@ import io.spine.users.signin.SignIn;
 public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInPm, SignIn> {
 
     private final UserPartRepository userRepository;
-    private final IdentityProviderBridgeFactory identityProviderFactory;
+    private final DirectoryFactory identityProviderFactory;
 
-    public SignInPmRepository(IdentityProviderBridgeFactory identityProviderFactory,
+    public SignInPmRepository(DirectoryFactory identityProviderFactory,
                               UserPartRepository userRepository) {
         super();
         this.identityProviderFactory = identityProviderFactory;
@@ -47,7 +47,7 @@ public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInP
     protected SignInPm findOrCreate(UserId id) {
         SignInPm processManager = super.findOrCreate(id);
         processManager.setUserRepository(userRepository);
-        processManager.setIdentityProviderFactory(identityProviderFactory);
+        processManager.setDirectoryFactory(identityProviderFactory);
         return processManager;
     }
 }

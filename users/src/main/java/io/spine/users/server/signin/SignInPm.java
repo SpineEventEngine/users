@@ -20,16 +20,14 @@
 
 package io.spine.users.server.signin;
 
-import io.spine.core.CommandContext;
-import io.spine.core.EventContext;
 import io.spine.core.UserId;
 import io.spine.server.command.Assign;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.users.PersonProfile;
-import io.spine.users.server.IdentityProviderBridge;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.Directory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
@@ -82,7 +80,7 @@ import static java.util.Optional.of;
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- *     <li>an {@linkplain IdentityProviderBridge identity provider} is aware of the given
+ *     <li>an {@linkplain Directory identity provider} is aware of the given
  *         authentication identity;
  *     <li>an identity provider authorize the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
@@ -98,7 +96,7 @@ import static java.util.Optional.of;
 public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     private UserPartRepository userRepository;
-    private IdentityProviderBridgeFactory identityProviders;
+    private DirectoryFactory directories;
 
     /**
      * @see ProcessManager#ProcessManager(Object)
@@ -107,8 +105,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         super(id);
     }
 
-    void setIdentityProviderFactory(IdentityProviderBridgeFactory identityProviderFactory) {
-        this.identityProviders = identityProviderFactory;
+    void setDirectoryFactory(DirectoryFactory directoryFactory) {
+        this.directories = directoryFactory;
     }
 
     void setUserRepository(UserPartRepository userRepository) {
@@ -116,30 +114,29 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Command
-    EitherOf2<FinishSignIn, CreateUser> handle(SignUserIn command, CommandContext context) {
+    EitherOf2<FinishSignIn, CreateUser> handle(SignUserIn command) {
         UserId id = command.getId();
         Identity identity = command.getIdentity();
-        Optional<IdentityProviderBridge> identityProviderOptional =
-                identityProviders.get(identity.getProviderId());
-
-        if (!identityProviderOptional.isPresent()) {
+        Optional<Directory> directoryOptional =
+                directories.get(identity.getProviderId());
+        if (!directoryOptional.isPresent()) {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
         SignInVBuilder builder = getBuilder().setId(id)
                                              .setIdentity(identity);
-        IdentityProviderBridge identityProvider = identityProviderOptional.get();
-        if (!identityProvider.hasIdentity(identity)) {
+        Directory directory = directoryOptional.get();
+        if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
         }
-        if (!identityProvider.isSignInAllowed(identity)) {
+        if (!directory.isSignInAllowed(identity)) {
             return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
         Optional<UserPart> user = userRepository.find(id);
         if (!user.isPresent()) {
             builder.setStatus(AWAITING_USER_AGGREGATE_CREATION);
-            return withB(createUser(identityProvider));
+            return withB(createUser(directory));
         }
         if (!identityBelongsToUser(user.get(), identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
@@ -150,7 +147,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Command
-    Optional<SignUserIn> on(UserCreated event, EventContext context) {
+    Optional<SignUserIn> on(UserCreated event) {
         if (awaitsUserCreation()) {
             return of(signIn(getBuilder().getIdentity()));
         }
@@ -158,8 +155,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Assign
-    EitherOf2<SignInSuccessful, SignInFailed> handle(FinishSignIn command,
-                                                     CommandContext context) {
+    EitherOf2<SignInSuccessful, SignInFailed> handle(FinishSignIn command) {
         UserId id = command.getId();
         Identity identity = getBuilder().getIdentity();
         if (command.getSuccessful()) {
@@ -171,11 +167,11 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     @Assign
-    SignOutCompleted handle(SignUserOut command, CommandContext context) {
+    SignOutCompleted handle(SignUserOut command) {
         return signOutCompleted(command.getId());
     }
 
-    private CreateUser createUser(IdentityProviderBridge identityProvider) {
+    private CreateUser createUser(Directory identityProvider) {
         PersonProfile profile = identityProvider.fetchProfile(getBuilder().getIdentity());
         return createUser(getBuilder().getIdentity(), profile);
     }

@@ -24,33 +24,32 @@ import io.spine.users.PersonProfile;
 import io.spine.users.user.Identity;
 
 /**
- * A bridge to an authentication identity provider.
+ * A user identity management system.
  *
  * <p>The {@code Users} bounded context is a framework solution and thus relies upon the third-party
- * authentication providers supplied by the particular application.
+ * authentication supplied by the particular application.
  *
- * <p>For {@code Users}, an authentication provider serves as a data source and the single
- * source of truth about {@linkplain Identity user authentication identities}.
+ * <p>For {@code Users}, a directory serves as a data source and the single source of truth about
+ * {@linkplain Identity user authentication identities}.
  *
- * <p>This interface may be used both for application's own and remote identity
- * providers. For example:
+ * <p>This interface may be used both for application's own and remote user data sources.
+ * For example:
  *
  * <ul>
  *     <li>Spring Security;
  *     <li>Google Directory API;
  *     <li>Active Directory.
  * </ul>
- *
- * @author Vladyslav Lubenskyi
  */
-public interface IdentityProviderBridge {
+public interface Directory {
 
     /**
-     * Checks whether an identity provider is aware of the given identity.
+     * Checks whether the directory is aware of the given identity.
      *
-     * @param identity an authentication identity to check
-     * @return {@code true} if the given identity is indeed provided by the provider,
-     * {@code false} otherwise
+     * @param identity
+     *         an authentication identity to check
+     * @return {@code true} if the given identity is known to this directory,
+     *         {@code false} otherwise
      */
     boolean hasIdentity(Identity identity);
 
@@ -60,7 +59,8 @@ public interface IdentityProviderBridge {
      * <p>For example, the specific implementation may check if an associated user account is still
      * active or has a permission to sign-in.
      *
-     * @param identity an authentication identity to check
+     * @param identity
+     *         an authentication identity to check
      * @return {@code true} if the given identity is allowed to sign-in, {@code false} otherwise
      */
     boolean isSignInAllowed(Identity identity);
@@ -68,8 +68,9 @@ public interface IdentityProviderBridge {
     /**
      * Fetches the profile of the user associated with the given identity.
      *
-     * @param identity an identity of the user
-     * @return a user profile
+     * @param identity
+     *         an identity of the user
+     * @return the user profile
      */
     PersonProfile fetchProfile(Identity identity);
 }

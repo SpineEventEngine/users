@@ -18,34 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.signin;
+package io.spine.users.server;
 
-import io.spine.base.EventMessage;
-import io.spine.core.UserId;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnEventTest;
-import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.user.UserPartRepository;
-import io.spine.users.signin.SignIn;
+import io.spine.users.IdentityProviderId;
 
-import static org.mockito.Mockito.mock;
+import java.util.Optional;
 
 /**
- * An implementation base for the {@link SignInPm} event reactors tests.
- *
- * @param <E> the type of the event being tested
- * @author Vladyslav Lubenskyi
+ * A factory for creating {@link Directory} instances.
  */
-abstract class SignInPmEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<UserId, E, SignIn, SignInPm> {
+@FunctionalInterface
+public interface DirectoryFactory {
 
-    SignInPmEventTest(UserId processManagerId, E eventMessage) {
-        super(processManagerId, eventMessage);
-    }
-
-    @Override
-    protected Repository<UserId, SignInPm> createRepository() {
-        return new SignInPmRepository(mock(DirectoryFactory.class),
-                                      mock(UserPartRepository.class));
-    }
+    /**
+     * Obtains or creates a {@link Directory bridge} to communicate with
+     * an authentication identity provider.
+     *
+     * @param id a unique identifier of the identity provider
+     * @return {@link Directory} if the requested identity provider is supported,
+     * {@code Optional.empty()} otherwise
+     */
+    Optional<Directory> get(IdentityProviderId id);
 }

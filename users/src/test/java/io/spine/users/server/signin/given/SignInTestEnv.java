@@ -35,8 +35,8 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.server.IdentityProviderBridge;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.Directory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.signin.SignInPm;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserPartRepository;
@@ -98,32 +98,32 @@ public final class SignInTestEnv {
         return mock;
     }
 
-    public static IdentityProviderBridgeFactory mockActiveIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockActiveDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.isSignInAllowed(any())).thenReturn(true);
         when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockSuspendedIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockSuspendedDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockEmptyIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockEmptyDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(false);
         when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(PersonProfile.getDefaultInstance());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockEmptyProviderFactory() {
-        return new TestIdentityProviderFactory(null);
+    public static DirectoryFactory mockEmptyDirectoryFactory() {
+        return new TestDirectoryFactory(null);
     }
 
     public static Identity identity() {
@@ -228,18 +228,18 @@ public final class SignInTestEnv {
     /**
      * A factory that always returns a single identity provider.
      */
-    static class TestIdentityProviderFactory extends IdentityProviderBridgeFactory {
+    static class TestDirectoryFactory implements DirectoryFactory {
 
-        private final IdentityProviderBridge provider;
+        private final Directory directory;
 
-        private TestIdentityProviderFactory(IdentityProviderBridge provider) {
+        private TestDirectoryFactory(Directory directory) {
             super();
-            this.provider = provider;
+            this.directory = directory;
         }
 
         @Override
-        public Optional<IdentityProviderBridge> get(IdentityProviderId id) {
-            return ofNullable(provider);
+        public Optional<Directory> get(IdentityProviderId id) {
+            return ofNullable(directory);
         }
     }
 }
