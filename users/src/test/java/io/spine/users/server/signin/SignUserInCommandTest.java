@@ -28,7 +28,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.signin.TestProcManFactory.createEmptyProcMan;
-import static io.spine.users.server.signin.TestProcManFactory.identityProviderId;
+import static io.spine.users.server.signin.TestProcManFactory.directoryId;
 import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
 import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
 import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveDirectory;
@@ -135,7 +135,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     @Test
     @DisplayName("fail if there is no identity provider")
     void failIfNoProvider() {
-        SignInPm emptyProcMan = withIdentity(entityId(), identityProviderId("invalid"));
+        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("invalid"));
         emptyProcMan.setUserRepository(noIdentityUserRepo());
         emptyProcMan.setDirectoryFactory(mockEmptyDirectoryFactory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {

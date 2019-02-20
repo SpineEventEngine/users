@@ -176,7 +176,7 @@ message RemoveSecondaryIdentity {
     string user_id = 2 [(required) = true];
 
     // A unique identifier of the authentication provider.
-    IdentityProviderId provider_id = 3 [(required) = true];
+    DirectoryId provider_id = 3 [(required) = true];
 }
 
 // Changes the primary identity.

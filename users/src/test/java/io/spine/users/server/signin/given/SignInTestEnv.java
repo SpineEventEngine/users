@@ -26,8 +26,8 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.IdentityProviderId;
-import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.DirectoryId;
+import io.spine.users.DirectoryIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
@@ -134,12 +134,12 @@ public final class SignInTestEnv {
         return identity("6987", googleProviderId(), "s.j@google.com");
     }
 
-    public static Identity identity(String id, IdentityProviderId identityProviderId, String name) {
+    public static Identity identity(String id, DirectoryId directoryId, String name) {
         return IdentityVBuilder
                 .newBuilder()
                 .setUserId(id)
                 .setDisplayName(name)
-                .setProviderId(identityProviderId)
+                .setProviderId(directoryId)
                 .build();
     }
 
@@ -158,10 +158,10 @@ public final class SignInTestEnv {
                                     .build();
     }
 
-    static IdentityProviderId googleProviderId() {
-        return IdentityProviderIdVBuilder.newBuilder()
-                                         .setValue("gmail.com")
-                                         .build();
+    static DirectoryId googleProviderId() {
+        return DirectoryIdVBuilder.newBuilder()
+                                  .setValue("gmail.com")
+                                  .build();
     }
 
     private static UserPart normalUserPart() {
@@ -238,7 +238,7 @@ public final class SignInTestEnv {
         }
 
         @Override
-        public Optional<Directory> get(IdentityProviderId id) {
+        public Optional<Directory> get(DirectoryId id) {
             return ofNullable(directory);
         }
     }

@@ -28,8 +28,8 @@ import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.GroupIdVBuilder;
-import io.spine.users.IdentityProviderId;
-import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.DirectoryId;
+import io.spine.users.DirectoryIdVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
@@ -127,14 +127,14 @@ public class UserTestEnv {
         return roleId(userOrgEntity(), "editor_role");
     }
 
-    private static IdentityProviderId googleProviderId() {
-        return IdentityProviderIdVBuilder.newBuilder()
+    private static DirectoryId googleProviderId() {
+        return DirectoryIdVBuilder.newBuilder()
                                          .setValue("gmail.com")
                                          .build();
     }
 
-    private static IdentityProviderId githubPoviderId() {
-        return IdentityProviderIdVBuilder.newBuilder()
+    private static DirectoryId githubPoviderId() {
+        return DirectoryIdVBuilder.newBuilder()
                                          .setValue("github.com")
                                          .build();
     }

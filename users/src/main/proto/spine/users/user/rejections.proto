@@ -40,7 +40,7 @@ message IdentityDoesNotExist {
     core.UserId id = 1;
 
     // A user identity that wasn't found.
-    IdentityProviderId provider_id = 2 [(required) = true];
+    DirectoryId provider_id = 2 [(required) = true];
 
     // A unique identifier of the authentication provider.
     string user_id = 3 [(required) = true];

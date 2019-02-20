@@ -64,11 +64,11 @@ message OrgUnitId {
     string value = 1;
 }
 
-// A string-based identifier of an authentication identity provider.
+// A string-based identifier of a directory service.
 //
 // For example, "google.com", "active-directory.mycompany.co.uk".
 //
-message IdentityProviderId {
+message DirectoryId {
 
     string value = 1;
 }

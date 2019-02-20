@@ -20,7 +20,7 @@
 
 package io.spine.users.server;
 
-import io.spine.users.IdentityProviderId;
+import io.spine.users.DirectoryId;
 
 import java.util.Optional;
 
@@ -31,12 +31,11 @@ import java.util.Optional;
 public interface DirectoryFactory {
 
     /**
-     * Obtains or creates a {@link Directory bridge} to communicate with
-     * an authentication identity provider.
+     * Obtains or creates a {@link Directory} instance to communicate with a user management system.
      *
-     * @param id a unique identifier of the identity provider
-     * @return {@link Directory} if the requested identity provider is supported,
-     * {@code Optional.empty()} otherwise
+     * @param id a unique identifier of the directory
+     * @return {@link Directory} if the requested directory is supported,
+     *         {@code Optional.empty()} otherwise
      */
-    Optional<Directory> get(IdentityProviderId id);
+    Optional<Directory> get(DirectoryId id);
 }
