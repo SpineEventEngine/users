@@ -32,7 +32,6 @@ option java_generate_equals_and_hash = true;
 
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
-import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 
 // A `Group` is a way to group users by their common functions and functional roles inside of
