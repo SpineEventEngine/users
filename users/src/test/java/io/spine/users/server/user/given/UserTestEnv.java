@@ -106,7 +106,7 @@ public class UserTestEnv {
     public static Identity googleIdentity() {
         return IdentityVBuilder.newBuilder()
                                .setDisplayName("j.s@google.com")
-                               .setProviderId(googleProviderId())
+                               .setDirectoryId(googleDirectoryId())
                                .setUserId(USER_UUID)
                                .build();
     }
@@ -118,7 +118,7 @@ public class UserTestEnv {
     static Identity githubIdentity() {
         return IdentityVBuilder.newBuilder()
                                .setDisplayName("j.s@github.com")
-                               .setProviderId(githubPoviderId())
+                               .setDirectoryId(githubDirectoryId())
                                .setUserId(USER_UUID)
                                .build();
     }
@@ -127,13 +127,13 @@ public class UserTestEnv {
         return roleId(userOrgEntity(), "editor_role");
     }
 
-    private static DirectoryId googleProviderId() {
+    private static DirectoryId googleDirectoryId() {
         return DirectoryIdVBuilder.newBuilder()
                                          .setValue("gmail.com")
                                          .build();
     }
 
-    private static DirectoryId githubPoviderId() {
+    private static DirectoryId githubDirectoryId() {
         return DirectoryIdVBuilder.newBuilder()
                                          .setValue("github.com")
                                          .build();

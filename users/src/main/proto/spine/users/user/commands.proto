@@ -172,11 +172,11 @@ message RemoveSecondaryIdentity {
 
     core.UserId id = 1;
 
-    // A user identifier as specified by the authentication provider.
+    // A user identifier as specified by the directory service.
     string user_id = 2 [(required) = true];
 
-    // A unique identifier of the authentication provider.
-    DirectoryId provider_id = 3 [(required) = true];
+    // A unique identifier of the directory service.
+    DirectoryId directory_id = 3 [(required) = true];
 }
 
 // Changes the primary identity.

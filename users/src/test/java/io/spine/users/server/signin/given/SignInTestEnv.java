@@ -127,11 +127,11 @@ public final class SignInTestEnv {
     }
 
     public static Identity identity() {
-        return identity("123543", googleProviderId(), "j.s@google.com");
+        return identity("123543", googleDirectoryId(), "j.s@google.com");
     }
 
     public static Identity secondaryIdentity() {
-        return identity("6987", googleProviderId(), "s.j@google.com");
+        return identity("6987", googleDirectoryId(), "s.j@google.com");
     }
 
     public static Identity identity(String id, DirectoryId directoryId, String name) {
@@ -139,7 +139,7 @@ public final class SignInTestEnv {
                 .newBuilder()
                 .setUserId(id)
                 .setDisplayName(name)
-                .setProviderId(directoryId)
+                .setDirectoryId(directoryId)
                 .build();
     }
 
@@ -158,7 +158,7 @@ public final class SignInTestEnv {
                                     .build();
     }
 
-    static DirectoryId googleProviderId() {
+    static DirectoryId googleDirectoryId() {
         return DirectoryIdVBuilder.newBuilder()
                                   .setValue("gmail.com")
                                   .build();
@@ -226,7 +226,7 @@ public final class SignInTestEnv {
     }
 
     /**
-     * A factory that always returns a single identity provider.
+     * A factory that always returns a single directory service.
      */
     static class TestDirectoryFactory implements DirectoryFactory {
 

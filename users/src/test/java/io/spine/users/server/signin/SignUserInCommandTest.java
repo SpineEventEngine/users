@@ -120,7 +120,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     }
 
     @Test
-    @DisplayName("fail if identity provider is not aware of given identity")
+    @DisplayName("fail if directory is not aware of given identity")
     void failIfUnknownIdentity() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(noIdentityUserRepo());
@@ -133,8 +133,8 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     }
 
     @Test
-    @DisplayName("fail if there is no identity provider")
-    void failIfNoProvider() {
+    @DisplayName("fail if there is no directory")
+    void failIfNoDirectory() {
         SignInPm emptyProcMan = withIdentity(entityId(), directoryId("invalid"));
         emptyProcMan.setUserRepository(noIdentityUserRepo());
         emptyProcMan.setDirectoryFactory(mockEmptyDirectoryFactory());

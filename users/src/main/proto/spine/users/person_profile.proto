@@ -38,7 +38,7 @@ import "spine/people/person_name.proto";
 //
 // This message is used for displaying user information on UI.
 //
-// Contents of this message are usually obtained from authentication providers.
+// Contents of this message are usually obtained from a directory service.
 //
 message PersonProfile {
 

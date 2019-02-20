@@ -80,9 +80,8 @@ import static java.util.Optional.of;
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- *     <li>an {@linkplain Directory identity provider} is aware of the given
- *         authentication identity;
- *     <li>an identity provider authorize the user to sign in (e.g. the opposite would be if the user
+ *     <li>a {@linkplain Directory} is aware of the given authentication identity;
+ *     <li>the directory authorizes the user to sign in (e.g. the opposite would be if the user
  *         account was suspended);
  *     <li>the given authentication identity is associated with the user (that is, serves as the
  *         primary or a secondary authentication identity).
@@ -118,7 +117,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         UserId id = command.getId();
         Identity identity = command.getIdentity();
         Optional<Directory> directoryOptional =
-                directories.get(identity.getProviderId());
+                directories.get(identity.getDirectoryId());
         if (!directoryOptional.isPresent()) {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
@@ -171,8 +170,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         return signOutCompleted(command.getId());
     }
 
-    private CreateUser createUser(Directory identityProvider) {
-        PersonProfile profile = identityProvider.fetchProfile(getBuilder().getIdentity());
+    private CreateUser createUser(Directory directory) {
+        PersonProfile profile = directory.fetchProfile(getBuilder().getIdentity());
         return createUser(getBuilder().getIdentity(), profile);
     }
 

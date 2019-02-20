@@ -145,7 +145,7 @@ public class UserTestCommands {
         Identity identity = googleIdentity();
         return RemoveSecondaryIdentityVBuilder.newBuilder()
                                               .setId(id)
-                                              .setProviderId(identity.getProviderId())
+                                              .setDirectoryId(identity.getDirectoryId())
                                               .setUserId(identity.getUserId())
                                               .build();
     }
