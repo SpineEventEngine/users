@@ -120,7 +120,7 @@ public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
 
     private Optional<OrganizationId> organizationByDomain(InternetDomain domain) {
         // TODO:2018-09-27:vladyslav.lubenskyi: implement this look up when Organization
-        // projection is ready
+        //  projection is ready
         return empty();
     }
 
