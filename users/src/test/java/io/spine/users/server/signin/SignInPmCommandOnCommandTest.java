@@ -24,7 +24,7 @@ import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.procman.PmCommandOnCommandTest;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
 
@@ -45,7 +45,7 @@ abstract class SignInPmCommandOnCommandTest<C extends CommandMessage>
 
     @Override
     protected Repository<UserId, SignInPm> createRepository() {
-        return new SignInPmRepository(mock(IdentityProviderBridgeFactory.class),
+        return new SignInPmRepository(mock(DirectoryFactory.class),
                                       mock(UserPartRepository.class));
     }
 }

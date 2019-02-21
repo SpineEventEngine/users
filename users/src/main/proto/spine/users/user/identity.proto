@@ -37,11 +37,11 @@ import "spine/users/identifiers.proto";
 //
 message Identity {
 
-    // A user identifier as specified by the authentication provider.
+    // A user identifier as specified by the user directory.
     string user_id = 1 [(required) = true];
 
-    // A unique identifier of the authentication provider.
-    IdentityProviderId provider_id = 2 [(required) = true];
+    // A unique identifier of the user directory.
+    DirectoryId directory_id = 2 [(required) = true];
 
     // A user's name to display on UI.
     string display_name = 3 [(required) = true];

@@ -38,10 +38,10 @@ message IdentityDoesNotExist {
 
     core.UserId id = 1;
 
-    // A user identity that wasn't found.
-    IdentityProviderId provider_id = 2 [(required) = true];
+    // A unique identifier of the user directory.
+    DirectoryId directory_id = 2 [(required) = true];
 
-    // A unique identifier of the authentication provider.
+    // A user identity that wasn't found.
     string user_id = 3 [(required) = true];
 }
 

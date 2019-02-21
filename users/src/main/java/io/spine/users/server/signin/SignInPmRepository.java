@@ -22,9 +22,11 @@ package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
 import io.spine.server.procman.ProcessManagerRepository;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The repository for {@link SignInPm}.
@@ -34,20 +36,20 @@ import io.spine.users.signin.SignIn;
 public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInPm, SignIn> {
 
     private final UserPartRepository userRepository;
-    private final IdentityProviderBridgeFactory identityProviderFactory;
+    private final DirectoryFactory directoryFactory;
 
-    public SignInPmRepository(IdentityProviderBridgeFactory identityProviderFactory,
+    public SignInPmRepository(DirectoryFactory directoryFactory,
                               UserPartRepository userRepository) {
         super();
-        this.identityProviderFactory = identityProviderFactory;
-        this.userRepository = userRepository;
+        this.directoryFactory = checkNotNull(directoryFactory);
+        this.userRepository = checkNotNull(userRepository);
     }
 
     @Override
     protected SignInPm findOrCreate(UserId id) {
         SignInPm processManager = super.findOrCreate(id);
         processManager.setUserRepository(userRepository);
-        processManager.setIdentityProviderFactory(identityProviderFactory);
+        processManager.setDirectoryFactory(directoryFactory);
         return processManager;
     }
 }

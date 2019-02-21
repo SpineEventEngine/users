@@ -26,8 +26,8 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.IdentityProviderId;
-import io.spine.users.IdentityProviderIdVBuilder;
+import io.spine.users.DirectoryId;
+import io.spine.users.DirectoryIdVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
@@ -35,8 +35,8 @@ import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
 import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.server.IdentityProviderBridge;
-import io.spine.users.server.IdentityProviderBridgeFactory;
+import io.spine.users.server.Directory;
+import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.signin.SignInPm;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserPartRepository;
@@ -98,48 +98,48 @@ public final class SignInTestEnv {
         return mock;
     }
 
-    public static IdentityProviderBridgeFactory mockActiveIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockActiveDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.isSignInAllowed(any())).thenReturn(true);
         when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockSuspendedIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockSuspendedDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(true);
         when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockEmptyIdentityProvider() {
-        IdentityProviderBridge mock = mock(IdentityProviderBridge.class);
+    public static DirectoryFactory mockEmptyDirectory() {
+        Directory mock = mock(Directory.class);
         when(mock.hasIdentity(any())).thenReturn(false);
         when(mock.isSignInAllowed(any())).thenReturn(false);
         when(mock.fetchProfile(any())).thenReturn(PersonProfile.getDefaultInstance());
-        return new TestIdentityProviderFactory(mock);
+        return new TestDirectoryFactory(mock);
     }
 
-    public static IdentityProviderBridgeFactory mockEmptyProviderFactory() {
-        return new TestIdentityProviderFactory(null);
+    public static DirectoryFactory mockEmptyDirectoryFactory() {
+        return new TestDirectoryFactory(null);
     }
 
     public static Identity identity() {
-        return identity("123543", googleProviderId(), "j.s@google.com");
+        return identity("123543", googleDirectoryId(), "j.s@google.com");
     }
 
     public static Identity secondaryIdentity() {
-        return identity("6987", googleProviderId(), "s.j@google.com");
+        return identity("6987", googleDirectoryId(), "s.j@google.com");
     }
 
-    public static Identity identity(String id, IdentityProviderId identityProviderId, String name) {
+    public static Identity identity(String id, DirectoryId directoryId, String name) {
         return IdentityVBuilder
                 .newBuilder()
                 .setUserId(id)
                 .setDisplayName(name)
-                .setProviderId(identityProviderId)
+                .setDirectoryId(directoryId)
                 .build();
     }
 
@@ -158,10 +158,10 @@ public final class SignInTestEnv {
                                     .build();
     }
 
-    static IdentityProviderId googleProviderId() {
-        return IdentityProviderIdVBuilder.newBuilder()
-                                         .setValue("gmail.com")
-                                         .build();
+    static DirectoryId googleDirectoryId() {
+        return DirectoryIdVBuilder.newBuilder()
+                                  .setValue("gmail.com")
+                                  .build();
     }
 
     private static UserPart normalUserPart() {
@@ -226,20 +226,20 @@ public final class SignInTestEnv {
     }
 
     /**
-     * A factory that always returns a single identity provider.
+     * A factory that always returns a single user directory.
      */
-    static class TestIdentityProviderFactory extends IdentityProviderBridgeFactory {
+    static class TestDirectoryFactory implements DirectoryFactory {
 
-        private final IdentityProviderBridge provider;
+        private final Directory directory;
 
-        private TestIdentityProviderFactory(IdentityProviderBridge provider) {
+        private TestDirectoryFactory(Directory directory) {
             super();
-            this.provider = provider;
+            this.directory = directory;
         }
 
         @Override
-        public Optional<IdentityProviderBridge> get(IdentityProviderId id) {
-            return ofNullable(provider);
+        public Optional<Directory> get(DirectoryId id) {
+            return ofNullable(directory);
         }
     }
 }

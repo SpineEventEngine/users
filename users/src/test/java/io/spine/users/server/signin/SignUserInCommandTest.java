@@ -28,13 +28,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.signin.TestProcManFactory.createEmptyProcMan;
-import static io.spine.users.server.signin.TestProcManFactory.identityProviderId;
+import static io.spine.users.server.signin.TestProcManFactory.directoryId;
 import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
 import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveIdentityProvider;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyIdentityProvider;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyProviderFactory;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockSuspendedIdentityProvider;
+import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveDirectory;
+import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyDirectory;
+import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyDirectoryFactory;
+import static io.spine.users.server.signin.given.SignInTestEnv.mockSuspendedDirectory;
 import static io.spine.users.server.signin.given.SignInTestEnv.noIdentityUserRepo;
 import static io.spine.users.server.signin.given.SignInTestEnv.nonEmptyUserRepo;
 import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
@@ -57,7 +57,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void initialize() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
         expectThat(emptyProcMan).hasState(state -> {
             assertEquals(message().getId(), state.getId());
             assertEquals(message().getIdentity(), state.getIdentity());
@@ -69,7 +69,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void createUser() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
         expectThat(emptyProcMan)
                 .producesCommand(CreateUser.class, command -> {
                     assertEquals(message().getId(), command.getId());
@@ -84,7 +84,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void finishProcess() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
 
         expectThat(emptyProcMan)
                 .producesCommand(FinishSignIn.class,
@@ -97,7 +97,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void failProcess() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockSuspendedIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockSuspendedDirectory());
 
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
@@ -111,7 +111,7 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     void failIfNoIdentity() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockActiveIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertFalse(command.getSuccessful());
@@ -120,11 +120,11 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     }
 
     @Test
-    @DisplayName("fail if identity provider is not aware of given identity")
+    @DisplayName("fail if directory is not aware of given identity")
     void failIfUnknownIdentity() {
         SignInPm emptyProcMan = createEmptyProcMan(entityId());
         emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockEmptyIdentityProvider());
+        emptyProcMan.setDirectoryFactory(mockEmptyDirectory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertFalse(command.getSuccessful());
@@ -133,11 +133,11 @@ class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
     }
 
     @Test
-    @DisplayName("fail if there is no identity provider")
-    void failIfNoProvider() {
-        SignInPm emptyProcMan = withIdentity(entityId(), identityProviderId("invalid"));
+    @DisplayName("fail if there is no directory")
+    void failIfNoDirectory() {
+        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("invalid"));
         emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setIdentityProviderFactory(mockEmptyProviderFactory());
+        emptyProcMan.setDirectoryFactory(mockEmptyDirectoryFactory());
         expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
             assertEquals(message().getId(), command.getId());
             assertFalse(command.getSuccessful());

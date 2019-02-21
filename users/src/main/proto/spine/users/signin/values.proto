@@ -37,16 +37,16 @@ enum SignInFailureReason {
     // Default value.
     SIFR_UNDEFINED = 0;
 
-    // Indicates that an identity provider is not aware of the given identity or the identity
+    // Indicates that a user directory is not aware of the given identity or the identity
     // is not associated with the given `User`.
     //
     UNKNOWN_IDENTITY = 1;
 
-    // Indicates that the requested identity is not supported and the corresponding identity
-    // provider can't be found.
+    // Indicates that the requested identity is not supported and the corresponding directory
+    // can't be found.
     //
     UNSUPPORTED_IDENTITY = 2;
 
-    // Indicates that this identity is not authorized to sign-in by the identity provider.
+    // Indicates that this identity is not authorized to sign-in by the user directory.
     SIGN_IN_NOT_AUTHORIZED = 3;
 }

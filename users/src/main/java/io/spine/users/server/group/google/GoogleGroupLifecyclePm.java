@@ -118,9 +118,10 @@ public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
         return commands().changeDescription(event);
     }
 
-    private Optional<OrganizationId> organizationByDomain(InternetDomain domain) {
+    private Optional<OrganizationId>
+    organizationByDomain(@SuppressWarnings("PMD.UnusedFormalParameter") InternetDomain domain) {
         // TODO:2018-09-27:vladyslav.lubenskyi: implement this look up when Organization
-        // projection is ready
+        //  projection is ready
         return empty();
     }
 

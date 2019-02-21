@@ -26,7 +26,7 @@ import io.spine.users.signin.event.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.signin.TestProcManFactory.identityProviderId;
+import static io.spine.users.server.signin.TestProcManFactory.directoryId;
 import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +41,7 @@ class SignUserOutCommandTest extends SignInPmCommandTest<SignUserOut> {
     @Test
     @DisplayName("generate SignOutCompleted event")
     void failProcess() {
-        SignInPm emptyProcMan = withIdentity(entityId(), identityProviderId("google.com"));
+        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("google.com"));
 
         expectThat(emptyProcMan)
                 .producesEvent(SignOutCompleted.class,

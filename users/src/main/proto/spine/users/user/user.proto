@@ -84,7 +84,8 @@ message User {
 
     // The primary user identity.
     //
-    // The primary identity and its provider are used as a single source of truth about a user:
+    // The primary identity and its provider (i.e. the user directory to which the identity
+    // belongs) are used as a single source of truth about a user:
     //  - to get a user profile;
     //  - to check whether a user account is active;
     //  - etc.
@@ -116,7 +117,7 @@ message User {
         // A user is active and ready to work.
         ACTIVE = 2;
 
-        // A user is suspended by an identity provider.
+        // A user is suspended by a user directory.
         SUSPENDED = 3;
 
         // A user is external and its status is unknown.

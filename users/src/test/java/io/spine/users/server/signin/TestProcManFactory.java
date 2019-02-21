@@ -22,7 +22,7 @@ package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.entity.given.Given;
-import io.spine.users.IdentityProviderId;
+import io.spine.users.DirectoryId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignIn.Status;
@@ -61,8 +61,8 @@ final class TestProcManFactory {
                     .build();
     }
 
-    static SignInPm withIdentity(UserId id, IdentityProviderId identityProviderId) {
-        Identity identity = identity(id.getValue(), identityProviderId, "Test User");
+    static SignInPm withIdentity(UserId id, DirectoryId directoryId) {
+        Identity identity = identity(id.getValue(), directoryId, "Test User");
         SignIn state = signIn(id, identity, SIS_UNKNOWN);
         return Given.processManagerOfClass(SignInPm.class)
                     .withId(id)
@@ -79,8 +79,8 @@ final class TestProcManFactory {
                 .build();
     }
 
-    static IdentityProviderId identityProviderId(String id) {
-        return IdentityProviderId
+    static DirectoryId directoryId(String id) {
+        return DirectoryId
                 .newBuilder()
                 .setValue(id)
                 .build();
