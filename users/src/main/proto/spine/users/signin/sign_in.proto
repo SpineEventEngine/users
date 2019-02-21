@@ -47,7 +47,7 @@ import "spine/users/signin/values.proto";
 // To sign a user in, the process manager ensures the following:
 //
 // 1. a user directory is aware of the given identity;
-// 2. a user directory authorizes the user to sign in (the opposite would be if the user account
+// 2. a user directory authorizes the user to sign-in (the opposite would be if the user account
 //    was suspended);
 // 3. the given identity is associated with the user (see `AddAuthIdentity` command).
 //
@@ -61,7 +61,7 @@ message SignIn {
     // The current status of the process.
     Status status = 2;
 
-    // A user identity used to sign in.
+    // A user identity used to sign-in.
     Identity identity = 3 [(required) = true];
 
     // A reason why the process failed, if applicable.

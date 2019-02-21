@@ -81,7 +81,7 @@ import static java.util.Optional.of;
  *
  * <ul>
  *     <li>a {@linkplain Directory} is aware of the given authentication identity;
- *     <li>the directory authorizes the user to sign in (e.g. the opposite would be if the user
+ *     <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
  *         account was suspended);
  *     <li>the given authentication identity is associated with the user (that is, serves as the
  *         primary or a secondary authentication identity).
