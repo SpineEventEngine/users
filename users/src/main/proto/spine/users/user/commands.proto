@@ -172,10 +172,10 @@ message RemoveSecondaryIdentity {
 
     core.UserId id = 1;
 
-    // A user identifier as specified by the directory service.
+    // A user identifier as specified by the user directory.
     string user_id = 2 [(required) = true];
 
-    // A unique identifier of the directory service.
+    // A unique identifier of the user directory.
     DirectoryId directory_id = 3 [(required) = true];
 }
 

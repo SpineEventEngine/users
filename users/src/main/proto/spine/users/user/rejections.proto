@@ -39,7 +39,7 @@ message IdentityDoesNotExist {
 
     core.UserId id = 1;
 
-    // A unique identifier of the directory service.
+    // A unique identifier of the user directory.
     DirectoryId directory_id = 2 [(required) = true];
 
     // A user identity that wasn't found.

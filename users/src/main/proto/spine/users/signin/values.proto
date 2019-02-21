@@ -37,7 +37,7 @@ enum SignInFailureReason {
     // Default value.
     SIFR_UNDEFINED = 0;
 
-    // Indicates that a directory service is not aware of the given identity or the identity
+    // Indicates that a user directory is not aware of the given identity or the identity
     // is not associated with the given `User`.
     //
     UNKNOWN_IDENTITY = 1;
@@ -47,6 +47,6 @@ enum SignInFailureReason {
     //
     UNSUPPORTED_IDENTITY = 2;
 
-    // Indicates that this identity is not authorized to sign-in by the directory service.
+    // Indicates that this identity is not authorized to sign-in by the user directory.
     SIGN_IN_NOT_AUTHORIZED = 3;
 }

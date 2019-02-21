@@ -226,7 +226,7 @@ public final class SignInTestEnv {
     }
 
     /**
-     * A factory that always returns a single directory service.
+     * A factory that always returns a single user directory.
      */
     static class TestDirectoryFactory implements DirectoryFactory {
 

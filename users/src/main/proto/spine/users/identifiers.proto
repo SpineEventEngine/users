@@ -64,7 +64,7 @@ message OrgUnitId {
     string value = 1;
 }
 
-// A string-based identifier of a directory service.
+// A string-based identifier of a user directory.
 //
 // For example, "google.com", "active-directory.mycompany.co.uk".
 //
