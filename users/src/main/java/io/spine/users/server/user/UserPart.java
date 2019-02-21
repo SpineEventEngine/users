@@ -372,9 +372,9 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         return identity -> {
             boolean idMatches = identity.getUserId()
                                         .equals(command.getUserId());
-            boolean providerMatches = identity.getProviderId()
-                                              .equals(command.getProviderId());
-            return idMatches && providerMatches;
+            boolean directoryMatches = identity.getDirectoryId()
+                                               .equals(command.getDirectoryId());
+            return idMatches && directoryMatches;
         };
     }
 
@@ -383,7 +383,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         return IdentityDoesNotExist
                 .newBuilder()
                 .setId(command.getId())
-                .setProviderId(command.getProviderId())
+                .setDirectoryId(command.getDirectoryId())
                 .setUserId(command.getUserId())
                 .build();
     }

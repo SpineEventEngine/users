@@ -18,26 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.users.server.signin.given;
 
-import io.spine.users.IdentityProviderId;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-import java.util.Optional;
-
-/**
- * A factory for creating {@link IdentityProviderBridge identity provider bridges}.
- *
- * @author Vladyslav Lubenskyi
- */
-public abstract class IdentityProviderBridgeFactory {
-
-    /**
-     * Obtains or creates a {@link IdentityProviderBridge bridge} to communicate with
-     * an authentication identity provider.
-     *
-     * @param id a unique identifier of the identity provider
-     * @return {@link IdentityProviderBridge} if the requested identity provider is supported,
-     * {@code Optional.empty()} otherwise
-     */
-    public abstract Optional<IdentityProviderBridge> get(IdentityProviderId id);
-}
+import javax.annotation.ParametersAreNonnullByDefault;

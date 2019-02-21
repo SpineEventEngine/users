@@ -45,7 +45,7 @@ class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity
         expectThat(aggregate).producesEvent(SecondaryIdentityRemoved.class, event -> {
             assertEquals(message().getId(), event.getId());
             Identity eventIdentity = event.getIdentity();
-            assertEquals(message().getProviderId(), eventIdentity.getProviderId());
+            assertEquals(message().getDirectoryId(), eventIdentity.getDirectoryId());
             assertEquals(message().getUserId(), eventIdentity.getUserId());
         });
     }

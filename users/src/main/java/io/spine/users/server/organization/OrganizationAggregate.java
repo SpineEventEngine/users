@@ -52,12 +52,11 @@ import io.spine.users.orgunit.OrgUnit;
  *
  * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, OrganizationVBuilder> {
 
     /**
-     * @see OrganizationAggregate#OrganizationAggregate(OrganizationId)
+     * @see Aggregate#Aggregate(Object)
      */
     OrganizationAggregate(OrganizationId id) {
         super(id);

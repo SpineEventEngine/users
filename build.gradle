@@ -84,8 +84,10 @@ subprojects {
     apply plugin: 'com.google.protobuf'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
-
     apply plugin: spineModelCompilerId
+    
+    apply plugin: 'pmd'
+    apply from: deps.scripts.pmd
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
