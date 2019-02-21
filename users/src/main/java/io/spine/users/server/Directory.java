@@ -35,7 +35,7 @@ import io.spine.users.user.Identity;
  * <p>This interface may be used both for application's own and remote user data sources.
  * For example:
  *
- * <ul
+ * <ul>
  *     <li>Spring Security;
  *     <li>Google Directory API;
  *     <li>Active Directory.
