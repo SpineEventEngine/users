@@ -24,7 +24,7 @@ import io.spine.users.PersonProfile;
 import io.spine.users.user.Identity;
 
 /**
- * A user identity management system.
+ * A facade above a source of information about users of a system.
  *
  * <p>The {@code Users} bounded context is a framework solution and thus relies upon the third-party
  * authentication supplied by the particular application.
@@ -35,7 +35,7 @@ import io.spine.users.user.Identity;
  * <p>This interface may be used both for application's own and remote user data sources.
  * For example:
  *
- * <ul>
+ * <ul
  *     <li>Spring Security;
  *     <li>Google Directory API;
  *     <li>Active Directory.
