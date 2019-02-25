@@ -30,7 +30,7 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import public "spine/core/user_id.proto";
+import "spine/core/user_id.proto";
 
 // A UUID of a user group.
 //
