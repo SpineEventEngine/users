@@ -37,9 +37,10 @@ import io.spine.users.role.event.RoleDeletedVBuilder;
  * A role that can be assigned to {@linkplain io.spine.users.server.user.UserPart users} and
  * {@linkplain io.spine.users.server.group.GroupPart groups}, to perform access control.
  *
- * <p>Roles are assigned to {@link io.spine.users.server.user.UserPart users} and {@link io.spine.users.server.group.GroupPart groups} directly
- * and explicitly (please see {@link io.spine.users.user.command.AssignRoleToUser AssignRoleToUser}
- * and {@link io.spine.users.group.command.AssignRoleToGroup AssignRoleToGroup} commands).
+ * <p>Roles are assigned to {@link io.spine.users.server.user.UserPart users} and
+ * {@link io.spine.users.server.group.GroupPart groups} directly and explicitly (please see
+ * {@link io.spine.users.user.command.AssignRoleToUser AssignRoleToUser} and
+ * {@link io.spine.users.group.command.AssignRoleToGroup AssignRoleToGroup} commands).
  *
  * <p>A role exists in the scope of an organization or an orgunit, therefore it can be assigned
  * only to those users and groups that are in the same organization and/or orgunit
@@ -47,13 +48,14 @@ import io.spine.users.role.event.RoleDeletedVBuilder;
  *
  * <h3>Access Control</h3>
  *
- * The roles assigned to a {@linkplain io.spine.users.server.group.GroupPart group} are recursively propagated to all
- * members of the group. This propagation is implicit and is not reflected in aggregate states.
+ * The roles assigned to a {@linkplain io.spine.users.server.group.GroupPart group} are recursively
+ * propagated to all members of the group. This propagation is implicit and is not reflected in
+ * aggregate states.
  *
  * <p>Therefore, when carrying out role-based access control, consider that a
- * {@link io.spine.users.server.user.UserPart User} and {@link io.spine.users.server.group.GroupPart Group}
- * aggregates have not only the roles listed in their aggregate states,
- * but effectively all the roles derived from parent groups.
+ * {@link io.spine.users.server.user.UserPart User} and {@link io.spine.users.server.group.GroupPart
+ * Group} aggregates have not only the roles listed in their aggregate states, but effectively all
+ * the roles derived from parent groups.
  */
 public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
@@ -87,7 +89,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Apply
     void on(RoleCreated event) {
         RoleId id = event.getId();
-        getBuilder().setId(id)
+        builder().setId(id)
                     .setDisplayName(id.getName())
                     .setOrgEntity(id.getOrgEntity())
                     .build();

@@ -46,7 +46,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup> {
     @DisplayName("produce GroupMoved event")
     void produceEvent() {
         GroupPart aggregate = createPartWithState();
-        OrganizationOrUnit oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.state()
                                                 .getOrgEntity();
         expectThat(aggregate).producesEvent(GroupMoved.class, event -> {
             assertEquals(message().getId(), event.getId());

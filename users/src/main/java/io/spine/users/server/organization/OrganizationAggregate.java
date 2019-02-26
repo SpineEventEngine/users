@@ -92,7 +92,7 @@ public class OrganizationAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewName(command.getNewName())
-                        .setOldName(getState().getDisplayName())
+                        .setOldName(state().getDisplayName())
                         .build();
         return event;
     }
@@ -104,7 +104,7 @@ public class OrganizationAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewDomain(command.getNewDomain())
-                        .setOldDomain(getState().getDomain())
+                        .setOldDomain(state().getDomain())
                         .build();
         return event;
     }
@@ -116,14 +116,14 @@ public class OrganizationAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewTenant(command.getNewTenant())
-                        .setOldTenant(getState().getTenant())
+                        .setOldTenant(state().getTenant())
                         .build();
         return event;
     }
 
     @Apply
     void on(OrganizationCreated event) {
-        getBuilder().setId(event.getId())
+        builder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
                     .setTenant(event.getTenant());
@@ -136,16 +136,16 @@ public class OrganizationAggregate
 
     @Apply
     void on(OrganizationRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
+        builder().setDisplayName(event.getNewName());
     }
 
     @Apply
     void on(OrganizationDomainChanged event) {
-        getBuilder().setDomain(event.getNewDomain());
+        builder().setDomain(event.getNewDomain());
     }
 
     @Apply
     void on(OrganizationTenantChanged event) {
-        getBuilder().setTenant(event.getNewTenant());
+        builder().setTenant(event.getNewTenant());
     }
 }

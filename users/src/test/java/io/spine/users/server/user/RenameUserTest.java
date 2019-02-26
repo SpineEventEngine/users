@@ -42,7 +42,7 @@ class RenameUserTest extends UserPartCommandTest<RenameUser> {
     @DisplayName("generate UserRenamed event")
     void generateEvent() {
         UserPart aggregate = createPartWithState();
-        String oldName = aggregate.getState()
+        String oldName = aggregate.state()
                                   .getDisplayName();
         expectThat(aggregate).producesEvent(UserRenamed.class, event -> {
             assertEquals(message().getId(), event.getId());

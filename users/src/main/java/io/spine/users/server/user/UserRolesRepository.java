@@ -35,9 +35,9 @@ public class UserRolesRepository
 
     public UserRolesRepository() {
         super();
-        getEventRouting().route(RoleInheritedByUser.class,
-                                (event, context) -> ImmutableSet.of(event.getUserId()))
-                         .route(RoleDisinheritedByUser.class,
-                                (event, context) -> ImmutableSet.of(event.getUserId()));
+        eventRouting().route(RoleInheritedByUser.class,
+                             (event, context) -> ImmutableSet.of(event.getUserId()))
+                      .route(RoleDisinheritedByUser.class,
+                             (event, context) -> ImmutableSet.of(event.getUserId()));
     }
 }

@@ -44,13 +44,13 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     @Subscribe
     public void on(UserCreated event) {
         UserId userId = event.getId();
-        getBuilder().setId(userId);
+        builder().setId(userId);
     }
 
     @Subscribe
     public void on(RoleInheritedByUser event) {
         RoleId inheritedRole = event.getRoleId();
-        getBuilder().addRole(inheritedRole);
+        builder().addRole(inheritedRole);
     }
 
     @Subscribe
@@ -61,7 +61,7 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     @Subscribe
     public void on(RoleAssignedToUser event) {
         RoleId assignedRole = event.getRoleId();
-        getBuilder().addRole(assignedRole);
+        builder().addRole(assignedRole);
     }
 
     @Subscribe
@@ -70,8 +70,8 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeRole(RoleId roleId) {
-        int roleIndex = getBuilder().getRole()
-                                    .indexOf(roleId);
-        getBuilder().removeRole(roleIndex);
+        int roleIndex = builder().getRole()
+                                 .indexOf(roleId);
+        builder().removeRole(roleIndex);
     }
 }

@@ -42,7 +42,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup> {
     @DisplayName("produce GroupRenamed event")
     void produceEvent() {
         GroupPart aggregate = createPartWithState();
-        String oldName = aggregate.getState()
+        String oldName = aggregate.state()
                                   .getDisplayName();
         expectThat(aggregate).producesEvent(GroupRenamed.class, event -> {
             assertEquals(message().getId(), event.getId());

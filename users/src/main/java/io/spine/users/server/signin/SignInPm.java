@@ -122,7 +122,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
-        SignInVBuilder builder = getBuilder().setId(id)
+        SignInVBuilder builder = builder().setId(id)
                                              .setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
@@ -148,7 +148,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     @Command
     Optional<SignUserIn> on(UserCreated event) {
         if (awaitsUserCreation()) {
-            return of(signIn(getBuilder().getIdentity()));
+            return of(signIn(builder().getIdentity()));
         }
         return empty();
     }
@@ -156,7 +156,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     @Assign
     EitherOf2<SignInSuccessful, SignInFailed> handle(FinishSignIn command) {
         UserId id = command.getId();
-        Identity identity = getBuilder().getIdentity();
+        Identity identity = builder().getIdentity();
         if (command.getSuccessful()) {
             return withA(signInSuccessful(id, identity));
         } else {
@@ -171,16 +171,16 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     private CreateUser createUser(Directory directory) {
-        PersonProfile profile = directory.fetchProfile(getBuilder().getIdentity());
-        return createUser(getBuilder().getIdentity(), profile);
+        PersonProfile profile = directory.fetchProfile(builder().getIdentity());
+        return createUser(builder().getIdentity(), profile);
     }
 
     private boolean awaitsUserCreation() {
-        return getBuilder().getStatus() == AWAITING_USER_AGGREGATE_CREATION;
+        return builder().getStatus() == AWAITING_USER_AGGREGATE_CREATION;
     }
 
     private static boolean identityBelongsToUser(UserPart user, Identity identity) {
-        User userState = user.getState();
+        User userState = user.state();
         if (userState.getPrimaryIdentity()
                      .equals(identity)) {
             return true;
@@ -192,7 +192,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignInVBuilder
                 .newBuilder()
-                .setId(getId())
+                .setId(id())
                 .setSuccessful(false)
                 .setFailureReason(failureReason)
                 .build();
@@ -201,7 +201,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     FinishSignIn finishSuccessfully() {
         return FinishSignInVBuilder
                 .newBuilder()
-                .setId(getId())
+                .setId(id())
                 .setSuccessful(true)
                 .build();
     }
@@ -209,7 +209,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     SignUserIn signIn(Identity identity) {
         return SignUserInVBuilder
                 .newBuilder()
-                .setId(getId())
+                .setId(id())
                 .setIdentity(identity)
                 .build();
     }
@@ -219,7 +219,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
                                     .getValue();
         return CreateUserVBuilder
                 .newBuilder()
-                .setId(getId())
+                .setId(id())
                 .setDisplayName(displayName)
                 .setPrimaryIdentity(identity)
                 .setProfile(profile)

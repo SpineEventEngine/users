@@ -43,7 +43,7 @@ class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail> {
     @DisplayName("produce GroupEmailChanged event")
     void produceEvent() {
         GroupPart aggregate = createPartWithState();
-        EmailAddress oldEmail = aggregate.getState()
+        EmailAddress oldEmail = aggregate.state()
                                          .getEmail();
         expectThat(aggregate).producesEvent(GroupEmailChanged.class, event -> {
             assertEquals(message().getId(), event.getId());

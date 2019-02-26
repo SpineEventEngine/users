@@ -42,7 +42,7 @@ class RenameOrgUnitTest extends OrgUnitCommandTest<RenameOrgUnit> {
     @DisplayName("produce OrgUnitRenamed event")
     void produceEvent() {
         OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-        String oldName = aggregate.getState()
+        String oldName = aggregate.state()
                                   .getDisplayName();
         expectThat(aggregate).producesEvent(OrgUnitRenamed.class, event -> {
             assertEquals(message().getId(), event.getId());

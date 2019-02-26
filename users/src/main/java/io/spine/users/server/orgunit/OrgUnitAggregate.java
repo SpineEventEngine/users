@@ -96,7 +96,7 @@ public class OrgUnitAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewParentEntity(command.getNewParentEntity())
-                        .setOldParentEntity(getState().getParentEntity())
+                        .setOldParentEntity(state().getParentEntity())
                         .build();
         return event;
     }
@@ -108,7 +108,7 @@ public class OrgUnitAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewName(command.getNewName())
-                        .setOldName(getState().getDisplayName())
+                        .setOldName(state().getDisplayName())
                         .build();
         return event;
     }
@@ -120,14 +120,14 @@ public class OrgUnitAggregate
                         .newBuilder()
                         .setId(command.getId())
                         .setNewDomain(command.getNewDomain())
-                        .setOldDomain(getState().getDomain())
+                        .setOldDomain(state().getDomain())
                         .build();
         return event;
     }
 
     @Apply
     void on(OrgUnitCreated event) {
-        getBuilder().setId(event.getId())
+        builder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
                     .setParentEntity(event.getParentEntity());
@@ -140,16 +140,16 @@ public class OrgUnitAggregate
 
     @Apply
     void on(OrgUnitMoved event) {
-        getBuilder().setParentEntity(event.getNewParentEntity());
+        builder().setParentEntity(event.getNewParentEntity());
     }
 
     @Apply
     void on(OrgUnitRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
+        builder().setDisplayName(event.getNewName());
     }
 
     @Apply
     void on(OrgUnitDomainChanged event) {
-        getBuilder().setDomain(event.getNewDomain());
+        builder().setDomain(event.getNewDomain());
     }
 }

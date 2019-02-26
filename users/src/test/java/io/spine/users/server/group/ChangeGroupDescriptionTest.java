@@ -42,7 +42,7 @@ class ChangeGroupDescriptionTest extends GroupCommandTest<ChangeGroupDescription
     @DisplayName("produce GroupDescriptionChanged event")
     void produceEvent() {
         GroupPart aggregate = createPartWithState();
-        String oldDescription = aggregate.getState()
+        String oldDescription = aggregate.state()
                                          .getDescription();
         expectThat(aggregate).producesEvent(GroupDescriptionChanged.class, event -> {
             assertEquals(message().getId(), event.getId());

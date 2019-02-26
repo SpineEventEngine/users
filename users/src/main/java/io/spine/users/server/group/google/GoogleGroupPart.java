@@ -53,14 +53,14 @@ public class GoogleGroupPart
 
     @Apply(allowImport = true)
     void on(GoogleGroupCreated event) {
-        getBuilder().setId(event.getId())
-                    .setGoogleId(event.getGoogleId())
-                    .addAllAlias(event.getAliasList());
+        builder().setId(event.getId())
+                 .setGoogleId(event.getGoogleId())
+                 .addAllAlias(event.getAliasList());
     }
 
     @Apply(allowImport = true)
     void on(GoogleGroupAliasesChanged event) {
-        getBuilder().clearAlias()
-                    .addAllAlias(event.getNewAliasList());
+        builder().clearAlias()
+                 .addAllAlias(event.getNewAliasList());
     }
 }

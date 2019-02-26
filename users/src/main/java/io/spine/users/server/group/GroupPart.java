@@ -100,18 +100,18 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Assign
     GroupMoved handle(MoveGroup command) throws CannotMoveExternalGroup {
-        if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
+        if (state().getOriginCase() == EXTERNAL_DOMAIN) {
             throw CannotMoveExternalGroup
                     .newBuilder()
                     .setId(command.getId())
-                    .setExternalDomain(getState().getExternalDomain())
+                    .setExternalDomain(state().getExternalDomain())
                     .build();
         }
         return GroupMovedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .setNewOrgEntity(command.getNewOrgEntity())
-                .setOldOrgEntity(getState().getOrgEntity())
+                .setOldOrgEntity(state().getOrgEntity())
                 .build();
     }
 
@@ -135,12 +135,12 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     RoleUnassignedFromGroup handle(UnassignRoleFromGroup command)
             throws RoleIsNotAssignedToGroup {
-        List<RoleId> roles = getState().getRoleList();
+        List<RoleId> roles = state().getRoleList();
         RoleId roleId = command.getRoleId();
         if (!roles.contains(roleId)) {
             throw RoleIsNotAssignedToGroup
                     .newBuilder()
-                    .setId(getId())
+                    .setId(id())
                     .setRoleId(roleId)
                     .build();
         }
@@ -157,7 +157,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 .newBuilder()
                 .setId(command.getId())
                 .setNewName(command.getNewName())
-                .setOldName(getState().getDisplayName())
+                .setOldName(state().getDisplayName())
                 .build();
 
     }
@@ -168,7 +168,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 .newBuilder()
                 .setId(command.getId())
                 .setNewEmail(command.getNewEmail())
-                .setOldEmail(getState().getEmail())
+                .setOldEmail(state().getEmail())
                 .build();
     }
 
@@ -178,13 +178,13 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                 .newBuilder()
                 .setId(command.getId())
                 .setNewDescription(command.getDescription())
-                .setOldDescription(getState().getDescription())
+                .setOldDescription(state().getDescription())
                 .build();
     }
 
     @Apply
     void on(GroupCreated event) {
-        GroupVBuilder builder = getBuilder();
+        GroupVBuilder builder = builder();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
@@ -205,7 +205,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Apply
     void on(GroupMoved event) {
-        getBuilder().setOrgEntity(event.getNewOrgEntity());
+        builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
@@ -215,13 +215,13 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Apply
     void on(RoleAssignedToGroup event) {
-        getBuilder().addRole(event.getRoleId());
+        builder().addRole(event.getRoleId());
     }
 
     @Apply
     void on(RoleUnassignedFromGroup event) {
         RoleId roleId = event.getRoleId();
-        GroupVBuilder builder = getBuilder();
+        GroupVBuilder builder = builder();
         List<RoleId> roles = builder.getRole();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
@@ -231,16 +231,16 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Apply
     void on(GroupRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
+        builder().setDisplayName(event.getNewName());
     }
 
     @Apply
     void on(GroupEmailChanged event) {
-        getBuilder().setEmail(event.getNewEmail());
+        builder().setEmail(event.getNewEmail());
     }
 
     @Apply
     void on(GroupDescriptionChanged event) {
-        getBuilder().setDescription(event.getNewDescription());
+        builder().setDescription(event.getNewDescription());
     }
 }

@@ -35,9 +35,9 @@ public class GroupRolesPropagationRepository
 
     public GroupRolesPropagationRepository() {
         super();
-        getEventRouting().route(UserJoinedGroup.class,
-                                (event, context) -> ImmutableSet.of(event.getGroupId()))
-                         .route(UserLeftGroup.class,
-                                (event, context) -> ImmutableSet.of(event.getGroupId()));
+        eventRouting().route(UserJoinedGroup.class,
+                             (event, context) -> ImmutableSet.of(event.getGroupId()))
+                      .route(UserLeftGroup.class,
+                             (event, context) -> ImmutableSet.of(event.getGroupId()));
     }
 }

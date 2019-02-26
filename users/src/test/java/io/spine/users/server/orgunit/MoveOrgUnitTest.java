@@ -43,7 +43,7 @@ class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit> {
     @DisplayName("produce OrgUnitMoved event")
     void produceEvent() {
         OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-        OrganizationOrUnit oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.state()
                                                   .getParentEntity();
         expectThat(aggregate).producesEvent(OrgUnitMoved.class, event -> {
             assertEquals(message().getId(), event.getId());
