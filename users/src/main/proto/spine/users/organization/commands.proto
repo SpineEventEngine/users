@@ -37,7 +37,6 @@ import "spine/users/identifiers.proto";
 // Creates an organization.
 //
 message CreateOrganization {
-    option (events) = "OrganizationCreated";
 
     OrganizationId id = 1;
 
@@ -54,7 +53,6 @@ message CreateOrganization {
 // Deletes an organization.
 //
 message DeleteOrganization {
-    option (events) = "OrganizationDeleted";
 
     OrganizationId id = 1;
 }
@@ -62,7 +60,6 @@ message DeleteOrganization {
 // Renames an organization.
 //
 message RenameOrganization {
-    option (events) = "OrganizationRenamed";
 
     OrganizationId id = 1;
 
@@ -73,7 +70,6 @@ message RenameOrganization {
 // Changes an organization domain.
 //
 message ChangeOrganizationDomain {
-    option (events) = "OrganizationDomainChanged";
 
     OrganizationId id = 1;
 
@@ -84,7 +80,6 @@ message ChangeOrganizationDomain {
 // Changes an organization tenant.
 //
 message ChangeOrganizationTenant {
-    option (events) = "OrganizationTenantChanged";
 
     OrganizationId id = 1;
 

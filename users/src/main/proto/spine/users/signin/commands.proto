@@ -47,7 +47,6 @@ message SignUserIn {
 // Signs a user out.
 //
 message SignUserOut {
-    option (events) = "SignOutCompleted";
 
     core.UserId id = 1;
 }
@@ -58,7 +57,6 @@ message SignUserOut {
 //
 message FinishSignIn {
     option (internal_type) = true;
-    option (events) = "SignInSuccessful, SignInFailed";
 
     core.UserId id = 1;
 
