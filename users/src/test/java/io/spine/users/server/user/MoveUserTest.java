@@ -43,7 +43,7 @@ class MoveUserTest extends UserPartCommandTest<MoveUser> {
     @DisplayName("generate UserMoved event")
     void generateEvent() {
         UserPart aggregate = createPartWithState();
-        OrganizationOrUnit oldParent = aggregate.getState()
+        OrganizationOrUnit oldParent = aggregate.state()
                                                   .getOrgEntity();
         expectThat(aggregate).producesEvent(UserMoved.class, event -> {
             assertEquals(message().getId(), event.getId());

@@ -43,7 +43,7 @@ class ChangeOrganizationTenantTest extends OrgCommandTest<ChangeOrganizationTena
     @DisplayName("produce OrganizationTenantChanged event")
     void produceEvent() {
         OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        TenantId oldTenant = aggregate.getState()
+        TenantId oldTenant = aggregate.state()
                                       .getTenant();
         expectThat(aggregate).producesEvent(OrganizationTenantChanged.class, event -> {
             assertEquals(message().getId(), event.getId());

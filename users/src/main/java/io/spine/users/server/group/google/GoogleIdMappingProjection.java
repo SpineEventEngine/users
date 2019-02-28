@@ -51,7 +51,7 @@ public class GoogleIdMappingProjection
     @Subscribe
     public void on(GoogleGroupCreated event) {
         GoogleGroupId googleId = event.getGoogleId();
-        getBuilder().setId(GoogleIdMappingRepository.PROJECTION_ID)
+        builder().setId(GoogleIdMappingRepository.PROJECTION_ID)
                     .putGroups(googleId.getValue(), event.getId());
     }
 }

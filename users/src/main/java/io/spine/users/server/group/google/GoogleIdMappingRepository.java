@@ -52,6 +52,6 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
     @Override
     public void onRegistered() {
         super.onRegistered();
-        getEventRouting().route(GoogleGroupCreated.class, (event, context) -> of(PROJECTION_ID));
+        eventRouting().route(GoogleGroupCreated.class, (event, context) -> of(PROJECTION_ID));
     }
 }

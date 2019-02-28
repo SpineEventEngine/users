@@ -41,7 +41,6 @@ import "spine/users/user/identity.proto";
 // Creates a new user.
 //
 message CreateUser {
-    option (events) = "UserCreated";
 
     core.UserId id = 1;
 
@@ -77,8 +76,6 @@ message CreateUser {
 // Moves a user from one organization or organizational unit to another.
 //
 message MoveUser {
-    option (events) = "UserMoved";
-    option (rejections) = "CannotMoveExternalUser";
 
     core.UserId id = 1;
 
@@ -89,7 +86,6 @@ message MoveUser {
 // Joins a group.
 //
 message JoinGroup {
-    option (events) = "UserJoinedGroup";
 
     core.UserId id = 1;
 
@@ -103,7 +99,6 @@ message JoinGroup {
 // Leaves a group.
 //
 message LeaveGroup {
-    option (events) = "UserLeftGroup";
 
     core.UserId id = 1;
 
@@ -114,7 +109,6 @@ message LeaveGroup {
 // Deletes a user.
 //
 message DeleteUser {
-    option (events) = "UserDeleted";
 
     core.UserId id = 1;
 }
@@ -122,7 +116,6 @@ message DeleteUser {
 // Assigns a role to a user.
 //
 message AssignRoleToUser {
-    option (events) = "RoleAssignedToUser";
 
     core.UserId id = 1;
 
@@ -133,8 +126,6 @@ message AssignRoleToUser {
 // Removes a role assignment from a user.
 //
 message UnassignRoleFromUser {
-    option (events) = "RoleUnassignedFromUser";
-    option (rejections) = "RoleIsNotAssignedToUser";
 
     core.UserId id = 1;
 
@@ -145,7 +136,6 @@ message UnassignRoleFromUser {
 // Changes the user status.
 //
 message ChangeUserStatus {
-    option (events) = "UserStatusChanged";
 
     core.UserId id = 1;
 
@@ -156,7 +146,6 @@ message ChangeUserStatus {
 // Adds a new secondary identity to the user.
 //
 message AddSecondaryIdentity {
-    option (events) = "SecondaryIdentityAdded";
 
     core.UserId id = 1;
 
@@ -167,8 +156,6 @@ message AddSecondaryIdentity {
 // Removes a secondary identity of the user.
 //
 message RemoveSecondaryIdentity {
-    option (events) = "SecondaryIdentityRemoved";
-    option (rejections) = "IdentityDoesNotExist";
 
     core.UserId id = 1;
 
@@ -182,7 +169,6 @@ message RemoveSecondaryIdentity {
 // Changes the primary identity.
 //
 message ChangePrimaryIdentity {
-    option (events) = "PrimaryIdentityChanged";
 
     core.UserId id = 1;
 
@@ -193,7 +179,6 @@ message ChangePrimaryIdentity {
 // Renames a user.
 //
 message RenameUser {
-    option (events) = "UserRenamed";
 
     core.UserId id = 1;
 
@@ -204,7 +189,6 @@ message RenameUser {
 // Updates a user profile.
 //
 message UpdatePersonProfile {
-    option (events) = "PersonProfileUpdated";
 
     core.UserId id = 1;
 

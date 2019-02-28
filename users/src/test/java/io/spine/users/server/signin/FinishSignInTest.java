@@ -41,8 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 
 @DisplayName("SignInPm should")
-@SuppressWarnings("InnerClassMayBeStatic")
-        // JUnit doesn't support static classes.
+@SuppressWarnings("InnerClassMayBeStatic") // JUnit doesn't support static classes.
 class FinishSignInTest {
 
     @Nested
@@ -58,7 +57,7 @@ class FinishSignInTest {
         void generatesEvent() {
             SignInPm procMan = nonEmptyProcMan(COMPLETED);
             expectThat(procMan).producesEvent(SignInSuccessful.class, event -> {
-                SignIn state = procMan.getState();
+                SignIn state = procMan.state();
                 assertEquals(state.getId(), event.getId());
                 assertEquals(state.getIdentity(), event.getIdentity());
             });
@@ -78,7 +77,7 @@ class FinishSignInTest {
         void generatesEvent() {
             SignInPm procMan = nonEmptyProcMan(COMPLETED);
             expectThat(procMan).producesEvent(SignInFailed.class, event -> {
-                SignIn state = procMan.getState();
+                SignIn state = procMan.state();
                 assertEquals(state.getId(), event.getId());
                 assertEquals(state.getIdentity(), event.getIdentity());
                 assertEquals(failureReason(), event.getFailureReason());

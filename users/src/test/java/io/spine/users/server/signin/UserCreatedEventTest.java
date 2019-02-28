@@ -53,7 +53,7 @@ public class UserCreatedEventTest
         SignInPm emptyProcMan = nonEmptyProcMan(AWAITING_USER_AGGREGATE_CREATION);
         expectThat(emptyProcMan).producesCommand(SignUserIn.class, command -> {
             assertEquals(message().getId(), command.getId());
-            assertEquals(emptyProcMan.getState()
+            assertEquals(emptyProcMan.state()
                                      .getIdentity(), command.getIdentity());
         });
     }

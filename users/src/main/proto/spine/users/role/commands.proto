@@ -35,7 +35,6 @@ import "spine/users/identifiers.proto";
 // Creates a role.
 //
 message CreateRole {
-    option (events) = "RoleCreated";
 
     RoleId id = 1;
 }
@@ -43,7 +42,6 @@ message CreateRole {
 // Deletes a role.
 //
 message DeleteRole {
-    option (events) = "RoleDeleted";
 
     RoleId id = 1;
 }

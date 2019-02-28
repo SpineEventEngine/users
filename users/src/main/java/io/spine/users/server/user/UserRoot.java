@@ -26,7 +26,7 @@ import io.spine.server.BoundedContext;
 import io.spine.server.aggregate.AggregateRoot;
 
 /**
- * The {@link User} aggregate root.
+ * The {@link io.spine.users.user.User} aggregate root.
  *
  * @author Vladyslav Lubenskyi
  */
@@ -40,7 +40,7 @@ public class UserRoot extends AggregateRoot<UserId> {
     }
 
     /**
-     * A test method to obtain obtains a new {@link UserRoot}.
+     * A test method to obtain obtains a new {@code UserRoot}.
      */
     @VisibleForTesting
     public static UserRoot getForTest(BoundedContext boundedContext, UserId id) {

@@ -56,7 +56,7 @@ public class GroupRolesPropagationPm
     Collection<RoleInheritedByUser> on(UserJoinedGroup event) {
         UserId newMember = event.getId();
         GroupId groupId = event.getGroupId();
-        getBuilder().setId(groupId)
+        builder().setId(groupId)
                     .addUserMember(newMember);
         List<RoleInheritedByUser> commands = roles()
                 .stream()
@@ -81,7 +81,7 @@ public class GroupRolesPropagationPm
     Collection<RoleInheritedByUser> on(RoleAssignedToGroup event) {
         RoleId assignedRole = event.getRoleId();
         GroupId groupId = event.getId();
-        getBuilder().setId(groupId)
+        builder().setId(groupId)
                     .addRole(assignedRole);
         List<RoleInheritedByUser> commands = members()
                 .stream()
@@ -103,26 +103,26 @@ public class GroupRolesPropagationPm
     }
 
     private void removeMember(UserId member) {
-        List<UserId> members = getBuilder().getUserMember();
+        List<UserId> members = builder().getUserMember();
         int memberIndex = members.indexOf(member);
-        getBuilder().removeUserMember(memberIndex);
+        builder().removeUserMember(memberIndex);
     }
 
     private void removeRole(RoleId role) {
-        List<RoleId> roles = getBuilder().getRole();
+        List<RoleId> roles = builder().getRole();
         int roleIndex = roles.indexOf(role);
-        getBuilder().removeRole(roleIndex);
+        builder().removeRole(roleIndex);
     }
 
     private List<UserId> members() {
-        return getBuilder().getUserMember();
+        return builder().getUserMember();
     }
 
     /**
      * Obtains the roles currently assigned to the group.
      */
     private List<RoleId> roles() {
-        return getBuilder().getRole();
+        return builder().getRole();
     }
 
     private static RoleInheritedByUser roleInherited(GroupId group,

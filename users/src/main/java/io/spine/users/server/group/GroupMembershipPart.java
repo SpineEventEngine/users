@@ -83,7 +83,7 @@ public class GroupMembershipPart
 
     @Apply
     void on(JoinedParentGroup event) {
-        getBuilder().addMembership(event.getParentGroupId());
+        builder().addMembership(event.getParentGroupId());
     }
 
     @Apply
@@ -97,7 +97,7 @@ public class GroupMembershipPart
     }
 
     private void removeMembership(GroupId parentGroup) {
-        GroupMembershipVBuilder builder = getBuilder();
+        GroupMembershipVBuilder builder = builder();
         List<GroupId> memberships = builder.getMembership();
         if (memberships.contains(parentGroup)) {
             int index = memberships.indexOf(parentGroup);

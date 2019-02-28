@@ -43,7 +43,7 @@ class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDoma
     @DisplayName("produce OrganizationDomainChanged event")
     void produceEvent() {
         OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        InternetDomain oldDomain = aggregate.getState()
+        InternetDomain oldDomain = aggregate.state()
                                             .getDomain();
         expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
             assertEquals(message().getId(), event.getId());

@@ -84,8 +84,8 @@ public class UserMembershipPart
                         .setGroupId(event.getGroupId())
                         .setRole(event.getRole())
                         .build();
-        getBuilder()
-                .setId(getId())
+        builder()
+                .setId(id())
                 .addMembership(membershipRecord);
     }
 
@@ -96,14 +96,14 @@ public class UserMembershipPart
     }
 
     private void removeMembership(UserMembershipRecord record) {
-        int index = getBuilder().getMembership()
+        int index = builder().getMembership()
                                 .indexOf(record);
-        getBuilder().removeMembership(index);
+        builder().removeMembership(index);
     }
 
     private Optional<UserMembershipRecord> findMembership(GroupId groupId) {
         Optional<UserMembershipRecord> record =
-                getBuilder().getMembership()
+                builder().getMembership()
                             .stream()
                             .filter(membership -> membership.getGroupId()
                                                             .equals(groupId))

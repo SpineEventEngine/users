@@ -44,7 +44,7 @@ class ChangeOrgUnitDomainTest extends OrgUnitCommandTest<ChangeOrgUnitDomain> {
     @DisplayName("produce OrgUnitDomainChanged event")
     void produceEvent() {
         OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
-        InternetDomain oldDomain = aggregate.getState()
+        InternetDomain oldDomain = aggregate.state()
                                             .getDomain();
         expectThat(aggregate).producesEvent(OrgUnitDomainChanged.class, event -> {
             assertEquals(message().getId(), event.getId());

@@ -138,11 +138,11 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Assign
     UserMoved handle(MoveUser command, CommandContext context) throws CannotMoveExternalUser {
-        if (getState().getOriginCase() == EXTERNAL_DOMAIN) {
+        if (state().getOriginCase() == EXTERNAL_DOMAIN) {
             throw CannotMoveExternalUser
                     .newBuilder()
                     .setId(command.getId())
-                    .setExternalDomain(getState().getExternalDomain())
+                    .setExternalDomain(state().getExternalDomain())
                     .build();
         }
         UserMoved event =
@@ -150,7 +150,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                         .newBuilder()
                         .setId(command.getId())
                         .setNewOrgEntity(command.getNewOrgEntity())
-                        .setOldOrgEntity(getState().getOrgEntity())
+                        .setOldOrgEntity(state().getOrgEntity())
                         .build();
         return event;
     }
@@ -179,12 +179,12 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     @Assign
     RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context)
             throws RoleIsNotAssignedToUser {
-        List<RoleId> roles = getState().getRoleList();
+        List<RoleId> roles = state().getRoleList();
         RoleId roleId = command.getRoleId();
         if (!roles.contains(roleId)) {
             throw RoleIsNotAssignedToUser
                     .newBuilder()
-                    .setId(getId())
+                    .setId(id())
                     .setRoleId(roleId)
                     .build();
         }
@@ -204,7 +204,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                         .newBuilder()
                         .setId(command.getId())
                         .setNewStatus(command.getStatus())
-                        .setOldStatus(getState().getStatus())
+                        .setOldStatus(state().getStatus())
                         .build();
         return event;
     }
@@ -255,7 +255,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                         .newBuilder()
                         .setId(command.getId())
                         .setNewName(command.getNewName())
-                        .setOldName(getState().getDisplayName())
+                        .setOldName(state().getDisplayName())
                         .build();
         return event;
     }
@@ -273,7 +273,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(UserCreated event) {
-        UserVBuilder builder = getBuilder();
+        UserVBuilder builder = builder();
         builder.setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setPrimaryIdentity(event.getPrimaryIdentity())
@@ -297,7 +297,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(UserMoved event) {
-        getBuilder().setOrgEntity(event.getNewOrgEntity());
+        builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
@@ -307,7 +307,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(RoleAssignedToUser event) {
-        getBuilder().addRole(event.getRoleId());
+        builder().addRole(event.getRoleId());
     }
 
     @Apply
@@ -317,12 +317,12 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(UserStatusChanged event) {
-        getBuilder().setStatus(event.getNewStatus());
+        builder().setStatus(event.getNewStatus());
     }
 
     @Apply
     void on(SecondaryIdentityAdded event) {
-        getBuilder().addSecondaryIdentity(event.getIdentity());
+        builder().addSecondaryIdentity(event.getIdentity());
     }
 
     @Apply
@@ -332,39 +332,39 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     void on(PrimaryIdentityChanged event) {
-        getBuilder().setPrimaryIdentity(event.getIdentity());
+        builder().setPrimaryIdentity(event.getIdentity());
     }
 
     @Apply
     void on(UserRenamed event) {
-        getBuilder().setDisplayName(event.getNewName());
+        builder().setDisplayName(event.getNewName());
     }
 
     @Apply
     void on(PersonProfileUpdated event) {
-        getBuilder().setProfile(event.getUpdatedProfile());
+        builder().setProfile(event.getUpdatedProfile());
     }
 
     private Optional<Identity> findAuthIdentity(RemoveSecondaryIdentity command) {
-        return getState().getSecondaryIdentityList()
-                         .stream()
-                         .filter(identityMatcher(command))
-                         .findFirst();
+        return state().getSecondaryIdentityList()
+                      .stream()
+                      .filter(identityMatcher(command))
+                      .findFirst();
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleId> roles = getBuilder().getRole();
+        List<RoleId> roles = builder().getRole();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
-            getBuilder().removeRole(index);
+            builder().removeRole(index);
         }
     }
 
     private void removeIdentity(Identity identity) {
-        List<Identity> identities = getBuilder().getSecondaryIdentity();
+        List<Identity> identities = builder().getSecondaryIdentity();
         if (identities.contains(identity)) {
             int index = identities.indexOf(identity);
-            getBuilder().removeSecondaryIdentity(index);
+            builder().removeSecondaryIdentity(index);
         }
     }
 
