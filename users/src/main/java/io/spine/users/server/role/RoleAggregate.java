@@ -96,7 +96,8 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Apply
-    private void on(RoleDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    RoleDeleted event) {
         setDeleted(true);
     }
 }

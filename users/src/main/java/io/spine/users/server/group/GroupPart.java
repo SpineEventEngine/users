@@ -75,7 +75,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  *
  * @see GroupMembershipPart for the part that handle group memberships
  */
-@SuppressWarnings({"OverlyCoupledClass"}) // It is OK for an aggregate.
+@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, GroupRoot> {
 
     /**
@@ -209,7 +209,8 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Apply
-    private void on(GroupDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    GroupDeleted event) {
         setDeleted(true);
     }
 

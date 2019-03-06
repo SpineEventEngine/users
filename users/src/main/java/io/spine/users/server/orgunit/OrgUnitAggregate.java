@@ -134,7 +134,8 @@ public class OrgUnitAggregate
     }
 
     @Apply
-    private void on(OrgUnitDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    OrgUnitDeleted event) {
         setDeleted(true);
     }
 

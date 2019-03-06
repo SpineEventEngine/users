@@ -130,7 +130,8 @@ public class OrganizationAggregate
     }
 
     @Apply
-    private void on(OrganizationDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    OrganizationDeleted event) {
         setDeleted(true);
     }
 

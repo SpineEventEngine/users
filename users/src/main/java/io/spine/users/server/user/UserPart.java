@@ -301,7 +301,8 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     @Apply
-    private void on(UserDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    UserDeleted event) {
         setDeleted(true);
     }
 
