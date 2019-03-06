@@ -46,7 +46,7 @@ import io.spine.users.role.event.RoleDeletedVBuilder;
  * only to those users and groups that are in the same organization and/or orgunit
  * (or their child orgunits).
  *
- * <h3>Access Control</h3>
+ * <h1>Access Control</h1>
  *
  * The roles assigned to a {@linkplain io.spine.users.server.group.GroupPart group} are recursively
  * propagated to all members of the group. This propagation is implicit and is not reflected in
