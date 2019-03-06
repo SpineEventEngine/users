@@ -272,7 +272,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     @Apply
-    void on(UserCreated event) {
+    private void on(UserCreated event) {
         UserVBuilder builder = builder();
         builder.setId(event.getId())
                     .setDisplayName(event.getDisplayName())
@@ -296,52 +296,52 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     @Apply
-    void on(UserMoved event) {
+    private void on(UserMoved event) {
         builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
-    void on(UserDeleted event) {
+    private void on(UserDeleted event) {
         setDeleted(true);
     }
 
     @Apply
-    void on(RoleAssignedToUser event) {
+    private void on(RoleAssignedToUser event) {
         builder().addRole(event.getRoleId());
     }
 
     @Apply
-    void on(RoleUnassignedFromUser event) {
+    private void on(RoleUnassignedFromUser event) {
         removeRole(event.getRoleId());
     }
 
     @Apply
-    void on(UserStatusChanged event) {
+    private void on(UserStatusChanged event) {
         builder().setStatus(event.getNewStatus());
     }
 
     @Apply
-    void on(SecondaryIdentityAdded event) {
+    private void on(SecondaryIdentityAdded event) {
         builder().addSecondaryIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(SecondaryIdentityRemoved event) {
+    private void on(SecondaryIdentityRemoved event) {
         removeIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(PrimaryIdentityChanged event) {
+    private void on(PrimaryIdentityChanged event) {
         builder().setPrimaryIdentity(event.getIdentity());
     }
 
     @Apply
-    void on(UserRenamed event) {
+    private void on(UserRenamed event) {
         builder().setDisplayName(event.getNewName());
     }
 
     @Apply
-    void on(PersonProfileUpdated event) {
+    private void on(PersonProfileUpdated event) {
         builder().setProfile(event.getUpdatedProfile());
     }
 

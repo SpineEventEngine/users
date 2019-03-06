@@ -183,7 +183,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Apply
-    void on(GroupCreated event) {
+    private void on(GroupCreated event) {
         GroupVBuilder builder = builder();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
@@ -204,22 +204,22 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Apply
-    void on(GroupMoved event) {
+    private void on(GroupMoved event) {
         builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply
-    void on(GroupDeleted event) {
+    private void on(GroupDeleted event) {
         setDeleted(true);
     }
 
     @Apply
-    void on(RoleAssignedToGroup event) {
+    private void on(RoleAssignedToGroup event) {
         builder().addRole(event.getRoleId());
     }
 
     @Apply
-    void on(RoleUnassignedFromGroup event) {
+    private void on(RoleUnassignedFromGroup event) {
         RoleId roleId = event.getRoleId();
         GroupVBuilder builder = builder();
         List<RoleId> roles = builder.getRole();
@@ -230,17 +230,17 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     }
 
     @Apply
-    void on(GroupRenamed event) {
+    private void on(GroupRenamed event) {
         builder().setDisplayName(event.getNewName());
     }
 
     @Apply
-    void on(GroupEmailChanged event) {
+    private void on(GroupEmailChanged event) {
         builder().setEmail(event.getNewEmail());
     }
 
     @Apply
-    void on(GroupDescriptionChanged event) {
+    private void on(GroupDescriptionChanged event) {
         builder().setDescription(event.getNewDescription());
     }
 }

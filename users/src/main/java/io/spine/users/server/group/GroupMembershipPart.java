@@ -82,12 +82,12 @@ public class GroupMembershipPart
     }
 
     @Apply
-    void on(JoinedParentGroup event) {
+    private void on(JoinedParentGroup event) {
         builder().addMembership(event.getParentGroupId());
     }
 
     @Apply
-    void on(LeftParentGroup event) {
+    private void on(LeftParentGroup event) {
         removeMembership(event.getParentGroupId());
     }
 

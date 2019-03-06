@@ -126,7 +126,7 @@ public class OrgUnitAggregate
     }
 
     @Apply
-    void on(OrgUnitCreated event) {
+    private void on(OrgUnitCreated event) {
         builder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
@@ -134,22 +134,22 @@ public class OrgUnitAggregate
     }
 
     @Apply
-    void on(OrgUnitDeleted event) {
+    private void on(OrgUnitDeleted event) {
         setDeleted(true);
     }
 
     @Apply
-    void on(OrgUnitMoved event) {
+    private void on(OrgUnitMoved event) {
         builder().setParentEntity(event.getNewParentEntity());
     }
 
     @Apply
-    void on(OrgUnitRenamed event) {
+    private void on(OrgUnitRenamed event) {
         builder().setDisplayName(event.getNewName());
     }
 
     @Apply
-    void on(OrgUnitDomainChanged event) {
+    private void on(OrgUnitDomainChanged event) {
         builder().setDomain(event.getNewDomain());
     }
 }

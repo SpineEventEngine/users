@@ -87,7 +87,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Apply
-    void on(RoleCreated event) {
+    private void on(RoleCreated event) {
         RoleId id = event.getId();
         builder().setId(id)
                     .setDisplayName(id.getName())
@@ -96,7 +96,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Apply
-    void on(RoleDeleted event) {
+    private void on(RoleDeleted event) {
         setDeleted(true);
     }
 }
