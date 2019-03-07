@@ -122,7 +122,7 @@ public class OrganizationAggregate
     }
 
     @Apply
-    void on(OrganizationCreated event) {
+    private void on(OrganizationCreated event) {
         builder().setId(event.getId())
                     .setDisplayName(event.getDisplayName())
                     .setDomain(event.getDomain())
@@ -130,22 +130,23 @@ public class OrganizationAggregate
     }
 
     @Apply
-    void on(OrganizationDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    OrganizationDeleted event) {
         setDeleted(true);
     }
 
     @Apply
-    void on(OrganizationRenamed event) {
+    private void on(OrganizationRenamed event) {
         builder().setDisplayName(event.getNewName());
     }
 
     @Apply
-    void on(OrganizationDomainChanged event) {
+    private void on(OrganizationDomainChanged event) {
         builder().setDomain(event.getNewDomain());
     }
 
     @Apply
-    void on(OrganizationTenantChanged event) {
+    private void on(OrganizationTenantChanged event) {
         builder().setTenant(event.getNewTenant());
     }
 }

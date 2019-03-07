@@ -46,11 +46,9 @@ import io.spine.users.role.event.RoleDeletedVBuilder;
  * only to those users and groups that are in the same organization and/or orgunit
  * (or their child orgunits).
  *
- * <h3>Access Control</h3>
- *
- * The roles assigned to a {@linkplain io.spine.users.server.group.GroupPart group} are recursively
- * propagated to all members of the group. This propagation is implicit and is not reflected in
- * aggregate states.
+ * <p><b>Access Control.</b> The roles assigned to
+ * a {@linkplain io.spine.users.server.group.GroupPart group} are recursively propagated to all
+ * members of the group. This propagation is implicit and is not reflected in aggregate states.
  *
  * <p>Therefore, when carrying out role-based access control, consider that a
  * {@link io.spine.users.server.user.UserPart User} and {@link io.spine.users.server.group.GroupPart
@@ -87,7 +85,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Apply
-    void on(RoleCreated event) {
+    private void on(RoleCreated event) {
         RoleId id = event.getId();
         builder().setId(id)
                     .setDisplayName(id.getName())
@@ -96,7 +94,8 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     }
 
     @Apply
-    void on(RoleDeleted event) {
+    private void on(@SuppressWarnings("unused") // Event data is not required.
+                    RoleDeleted event) {
         setDeleted(true);
     }
 }

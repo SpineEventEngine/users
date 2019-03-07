@@ -41,8 +41,8 @@ class GoogleGroupDeletedTest extends GoogleGroupLifecycleEventTest<GoogleGroupDe
     @Test
     @DisplayName("translate it to DeleteGroup command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(DeleteGroup.class, command -> {
-            assertEquals(GROUP_ID, command.getId());
-        });
+        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID))
+                .producesCommand(DeleteGroup.class,
+                                 command -> assertEquals(GROUP_ID, command.getId()));
     }
 }

@@ -42,30 +42,30 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     @Subscribe
-    public void on(UserCreated event) {
+    void on(UserCreated event) {
         UserId userId = event.getId();
         builder().setId(userId);
     }
 
     @Subscribe
-    public void on(RoleInheritedByUser event) {
+    void on(RoleInheritedByUser event) {
         RoleId inheritedRole = event.getRoleId();
         builder().addRole(inheritedRole);
     }
 
     @Subscribe
-    public void on(RoleDisinheritedByUser event) {
+    void on(RoleDisinheritedByUser event) {
         removeRole(event.getRoleId());
     }
 
     @Subscribe
-    public void on(RoleAssignedToUser event) {
+    void on(RoleAssignedToUser event) {
         RoleId assignedRole = event.getRoleId();
         builder().addRole(assignedRole);
     }
 
     @Subscribe
-    public void on(RoleUnassignedFromUser event) {
+    void on(RoleUnassignedFromUser event) {
         removeRole(event.getRoleId());
     }
 
