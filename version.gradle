@@ -36,5 +36,5 @@ ext {
     spineVersion = SPINE_VERSION
     versionToPublish = SPINE_VERSION
     // Have a different version for JS since NPM doesn't allow to publish the same version twice.
-    versionToPublishJs = '0.15.0'
+    versionToPublishJs = '0.15.1'
 }
