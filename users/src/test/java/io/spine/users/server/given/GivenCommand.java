@@ -24,13 +24,9 @@ import io.spine.core.UserId;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.group.command.AssignRoleToGroup;
-import io.spine.users.group.command.AssignRoleToGroupVBuilder;
 import io.spine.users.group.command.UnassignRoleFromGroup;
-import io.spine.users.group.command.UnassignRoleFromGroupVBuilder;
 import io.spine.users.user.command.AssignRoleToUser;
-import io.spine.users.user.command.AssignRoleToUserVBuilder;
 import io.spine.users.user.command.UnassignRoleFromUser;
-import io.spine.users.user.command.UnassignRoleFromUserVBuilder;
 
 /**
  * Factory methods for creating of test commands.
@@ -42,30 +38,34 @@ public class GivenCommand {
     }
 
     public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
-        return AssignRoleToUserVBuilder.newBuilder()
-                                       .setId(userId)
-                                       .setRoleId(roleId)
-                                       .build();
+        return AssignRoleToUser
+                .vBuilder()
+                .setId(userId)
+                .setRoleId(roleId)
+                .build();
     }
 
     public static UnassignRoleFromUser unassignRoleFromUser(UserId userId, RoleId roleId) {
-        return UnassignRoleFromUserVBuilder.newBuilder()
-                                           .setId(userId)
-                                           .setRoleId(roleId)
-                                           .build();
+        return UnassignRoleFromUser
+                .vBuilder()
+                .setId(userId)
+                .setRoleId(roleId)
+                .build();
     }
 
     public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
-        return AssignRoleToGroupVBuilder.newBuilder()
-                                        .setId(groupId)
-                                        .setRoleId(roleId)
-                                        .build();
+        return AssignRoleToGroup
+                .vBuilder()
+                .setId(groupId)
+                .setRoleId(roleId)
+                .build();
     }
 
     public static UnassignRoleFromGroup unassignRoleFromGroup(GroupId groupId, RoleId roleId) {
-        return UnassignRoleFromGroupVBuilder.newBuilder()
-                                            .setId(groupId)
-                                            .setRoleId(roleId)
-                                            .build();
+        return UnassignRoleFromGroup
+                .vBuilder()
+                .setId(groupId)
+                .setRoleId(roleId)
+                .build();
     }
 }

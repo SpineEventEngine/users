@@ -19,6 +19,3 @@
 //
 
 apply from: "$projectDir/scripts/js.gradle"
-
-dependencies {
-}

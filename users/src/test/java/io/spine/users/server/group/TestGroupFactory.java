@@ -24,7 +24,6 @@ import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
-import io.spine.users.group.GroupMembershipVBuilder;
 import io.spine.users.group.GroupVBuilder;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
@@ -61,14 +60,14 @@ final class TestGroupFactory {
      * Creates a new instance of the {@link GroupPart} with the filled state.
      */
     static GroupPart createGroupPart(GroupRoot root) {
-        return groupPart(groupState(root.getId()).build(), root);
+        return groupPart(groupState(root.getId()), root);
     }
 
     /**
      * Creates a new instance of the {@link GroupMembershipPart} with the filled state.
      */
     static GroupMembershipPart createMembershipPart(GroupRoot root) {
-        return membershipPart(membershipState(root.getId()).build(), root);
+        return membershipPart(membershipState(root.getId()), root);
     }
 
     private static GroupPart groupPart(Group state, GroupRoot root) {
@@ -87,18 +86,22 @@ final class TestGroupFactory {
                     .build();
     }
 
-    private static GroupVBuilder groupState(GroupId id) {
-        return GroupVBuilder.newBuilder()
-                            .setId(id)
-                            .setOrgEntity(groupOrgEntityOrganization())
-                            .setDisplayName(groupName())
-                            .setEmail(groupEmail())
-                            .setDescription(groupDescription())
-                            .addRole(groupRole());
+    private static Group groupState(GroupId id) {
+        return GroupVBuilder
+                .newBuilder()
+                .setId(id)
+                .setOrgEntity(groupOrgEntityOrganization())
+                .setDisplayName(groupName())
+                .setEmail(groupEmail())
+                .setDescription(groupDescription())
+                .addRole(groupRole())
+                .build();
     }
 
-    private static GroupMembershipVBuilder membershipState(GroupId id) {
-        return GroupMembershipVBuilder.newBuilder()
-                                      .setId(id);
+    private static GroupMembership membershipState(GroupId id) {
+        return GroupMembership
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 }

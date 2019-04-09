@@ -22,7 +22,6 @@ package io.spine.users.server.group.google;
 
 import io.spine.server.projection.ProjectionRepository;
 import io.spine.users.GoogleIdMappingViewId;
-import io.spine.users.GoogleIdMappingViewIdVBuilder;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleIdMappingView;
 
@@ -39,8 +38,8 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
                                                                     GoogleIdMappingView> {
 
     static final GoogleIdMappingViewId PROJECTION_ID =
-            GoogleIdMappingViewIdVBuilder
-                    .newBuilder()
+            GoogleIdMappingViewId
+                    .vBuilder()
                     .setValue(SINGLETON)
                     .build();
 

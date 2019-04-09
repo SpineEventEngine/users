@@ -21,7 +21,6 @@
 package io.spine.users.server.role.given;
 
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.server.given.GivenId;
 import io.spine.users.server.role.RoleAggregate;
@@ -49,14 +48,16 @@ public final class RoleTestEnv {
     }
 
     public static OrganizationOrUnit roleParent() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrganization(GivenId.organizationUuid())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrganization(GivenId.organizationUuid())
+                .build();
     }
 
     public static OrganizationOrUnit newRoleParent() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(GivenId.orgUnitUuid())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrgUnit(GivenId.orgUnitUuid())
+                .build();
     }
 }

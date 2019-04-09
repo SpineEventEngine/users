@@ -21,11 +21,8 @@
 package io.spine.users.server.given;
 
 import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
 import io.spine.users.OrgUnitId;
-import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -43,15 +40,17 @@ public class GivenId {
     }
 
     public static OrgUnitId orgUnitUuid() {
-        return OrgUnitIdVBuilder.newBuilder()
-                                .setValue(newUuid())
-                                .build();
+        return OrgUnitId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static OrganizationId organizationId(String value) {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(value)
-                                     .build();
+        return OrganizationId
+                .vBuilder()
+                .setValue(value)
+                .build();
     }
 
     public static GroupId groupUuid() {
@@ -59,8 +58,9 @@ public class GivenId {
     }
 
     private static GroupId groupId(String value) {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(value)
-                              .build();
+        return GroupId
+                .vBuilder()
+                .setValue(value)
+                .build();
     }
 }

@@ -61,9 +61,10 @@ final class TestRoleFactory {
     }
 
     private static RoleVBuilder state(RoleId id) {
-        return RoleVBuilder.newBuilder()
-                           .setId(id)
-                           .setDisplayName(RoleTestEnv.roleName())
-                           .setOrgEntity(RoleTestEnv.roleParent());
+        return Role
+                .vBuilder()
+                .setId(id)
+                .setDisplayName(RoleTestEnv.roleName())
+                .setOrgEntity(RoleTestEnv.roleParent());
     }
 }

@@ -33,15 +33,10 @@ import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.command.DeleteOrganization;
 import io.spine.users.organization.command.RenameOrganization;
 import io.spine.users.organization.event.OrganizationCreated;
-import io.spine.users.organization.event.OrganizationCreatedVBuilder;
 import io.spine.users.organization.event.OrganizationDeleted;
-import io.spine.users.organization.event.OrganizationDeletedVBuilder;
 import io.spine.users.organization.event.OrganizationDomainChanged;
-import io.spine.users.organization.event.OrganizationDomainChangedVBuilder;
 import io.spine.users.organization.event.OrganizationRenamed;
-import io.spine.users.organization.event.OrganizationRenamedVBuilder;
 import io.spine.users.organization.event.OrganizationTenantChanged;
-import io.spine.users.organization.event.OrganizationTenantChangedVBuilder;
 import io.spine.users.orgunit.OrgUnit;
 
 /**
@@ -64,69 +59,64 @@ public class OrganizationAggregate
 
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {
-        OrganizationCreated event =
-                OrganizationCreatedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setDisplayName(command.getDisplayName())
-                        .setDomain(command.getDomain())
-                        .setTenant(command.getTenant())
-                        .build();
+        OrganizationCreated event = OrganizationCreated
+                .vBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
         return event;
     }
 
     @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
-        OrganizationDeleted event =
-                OrganizationDeletedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .build();
+        OrganizationDeleted event = OrganizationDeleted
+                .vBuilder()
+                .setId(command.getId())
+                .build();
         return event;
     }
 
     @Assign
     OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
-        OrganizationRenamed event =
-                OrganizationRenamedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewName(command.getNewName())
-                        .setOldName(state().getDisplayName())
-                        .build();
+        OrganizationRenamed event = OrganizationRenamed
+                .vBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(state().getDisplayName())
+                .build();
         return event;
     }
 
     @Assign
     OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
-        OrganizationDomainChanged event =
-                OrganizationDomainChangedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewDomain(command.getNewDomain())
-                        .setOldDomain(state().getDomain())
-                        .build();
+        OrganizationDomainChanged event = OrganizationDomainChanged
+                .vBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .setOldDomain(state().getDomain())
+                .build();
         return event;
     }
 
     @Assign
     OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
-        OrganizationTenantChanged event =
-                OrganizationTenantChangedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewTenant(command.getNewTenant())
-                        .setOldTenant(state().getTenant())
-                        .build();
+        OrganizationTenantChanged event = OrganizationTenantChanged
+                .vBuilder()
+                .setId(command.getId())
+                .setNewTenant(command.getNewTenant())
+                .setOldTenant(state().getTenant())
+                .build();
         return event;
     }
 
     @Apply
     private void on(OrganizationCreated event) {
         builder().setId(event.getId())
-                    .setDisplayName(event.getDisplayName())
-                    .setDomain(event.getDomain())
-                    .setTenant(event.getTenant());
+                 .setDisplayName(event.getDisplayName())
+                 .setDomain(event.getDomain())
+                 .setTenant(event.getTenant());
     }
 
     @Apply

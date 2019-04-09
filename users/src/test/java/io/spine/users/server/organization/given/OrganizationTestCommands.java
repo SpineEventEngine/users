@@ -22,15 +22,10 @@ package io.spine.users.server.organization.given;
 
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
-import io.spine.users.organization.command.ChangeOrganizationDomainVBuilder;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
-import io.spine.users.organization.command.ChangeOrganizationTenantVBuilder;
 import io.spine.users.organization.command.CreateOrganization;
-import io.spine.users.organization.command.CreateOrganizationVBuilder;
 import io.spine.users.organization.command.DeleteOrganization;
-import io.spine.users.organization.command.DeleteOrganizationVBuilder;
 import io.spine.users.organization.command.RenameOrganization;
-import io.spine.users.organization.command.RenameOrganizationVBuilder;
 import io.spine.users.server.organization.OrganizationAggregate;
 
 /**
@@ -47,39 +42,44 @@ public final class OrganizationTestCommands {
     }
 
     public static CreateOrganization createOrganization(OrganizationId id) {
-        return CreateOrganizationVBuilder.newBuilder()
-                                         .setId(id)
-                                         .setDisplayName(OrganizationTestEnv.orgName())
-                                         .setDomain(OrganizationTestEnv.orgDomain())
-                                         .setTenant(OrganizationTestEnv.orgTenant())
-                                         .build();
+        return CreateOrganization
+                .vBuilder()
+                .setId(id)
+                .setDisplayName(OrganizationTestEnv.orgName())
+                .setDomain(OrganizationTestEnv.orgDomain())
+                .setTenant(OrganizationTestEnv.orgTenant())
+                .build();
 
     }
 
     public static DeleteOrganization deleteOrganization(OrganizationId id) {
-        return DeleteOrganizationVBuilder.newBuilder()
-                                         .setId(id)
-                                         .build();
+        return DeleteOrganization
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 
     public static ChangeOrganizationDomain changeOrganizationDomain(OrganizationId id) {
-        return ChangeOrganizationDomainVBuilder.newBuilder()
-                                               .setId(id)
-                                               .setNewDomain(OrganizationTestEnv.newOrgDomain())
-                                               .build();
+        return ChangeOrganizationDomain
+                .vBuilder()
+                .setId(id)
+                .setNewDomain(OrganizationTestEnv.newOrgDomain())
+                .build();
     }
 
     public static ChangeOrganizationTenant changeOrganizationTenant(OrganizationId id) {
-        return ChangeOrganizationTenantVBuilder.newBuilder()
-                                               .setId(id)
-                                               .setNewTenant(OrganizationTestEnv.newOrgTenant())
-                                               .build();
+        return ChangeOrganizationTenant
+                .vBuilder()
+                .setId(id)
+                .setNewTenant(OrganizationTestEnv.newOrgTenant())
+                .build();
     }
 
     public static RenameOrganization renameOrganization(OrganizationId id) {
-        return RenameOrganizationVBuilder.newBuilder()
-                                         .setId(id)
-                                         .setNewName(OrganizationTestEnv.orgNewName())
-                                         .build();
+        return RenameOrganization
+                .vBuilder()
+                .setId(id)
+                .setNewName(OrganizationTestEnv.orgNewName())
+                .build();
     }
 }

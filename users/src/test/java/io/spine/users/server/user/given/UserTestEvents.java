@@ -23,9 +23,7 @@ package io.spine.users.server.user.given;
 import io.spine.core.UserId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.event.SignInSuccessful;
-import io.spine.users.signin.event.SignInSuccessfulVBuilder;
 import io.spine.users.signin.event.SignOutCompleted;
-import io.spine.users.signin.event.SignOutCompletedVBuilder;
 
 /**
  * Test events for {@link UserPart}.
@@ -41,15 +39,17 @@ public class UserTestEvents {
     }
 
     public static SignInSuccessful signInSuccessful(UserId id) {
-        return SignInSuccessfulVBuilder.newBuilder()
-                                       .setId(id)
-                                       .setIdentity(UserTestEnv.googleIdentity())
-                                       .build();
+        return SignInSuccessful
+                .vBuilder()
+                .setId(id)
+                .setIdentity(UserTestEnv.googleIdentity())
+                .build();
     }
 
     public static SignOutCompleted signOutCompleted(UserId id) {
-        return SignOutCompletedVBuilder.newBuilder()
-                                       .setId(id)
-                                       .build();
+        return SignOutCompleted
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 }

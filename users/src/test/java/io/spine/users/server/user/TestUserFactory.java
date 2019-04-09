@@ -23,8 +23,6 @@ package io.spine.users.server.user;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.user.User;
 import io.spine.users.user.UserMembership;
-import io.spine.users.user.UserMembershipVBuilder;
-import io.spine.users.user.UserVBuilder;
 
 import static io.spine.users.server.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
@@ -52,14 +50,14 @@ final class TestUserFactory {
      * Creates a new instance of the {@link UserPart} with the filled state.
      */
     static UserPart createUserPart(UserRoot root) {
-        return userPart(userPartState().build(), root);
+        return userPart(userPartState(), root);
     }
 
     /**
      * Creates a new instance of the {@link UserMembershipPart} with the filled state.
      */
     static UserMembershipPart createMembershipPart(UserRoot root) {
-        return membershipPart(membershipState().build(), root);
+        return membershipPart(membershipState(), root);
     }
 
     private static UserPart userPart(User state, UserRoot root) {
@@ -78,22 +76,26 @@ final class TestUserFactory {
                     .build();
     }
 
-    private static UserVBuilder userPartState() {
-        return UserVBuilder.newBuilder()
-                           .setId(userId())
-                           .setOrgEntity(userOrgEntity())
-                           .setDisplayName(userDisplayName())
-                           .setPrimaryIdentity(googleIdentity())
-                           .setProfile(profile())
-                           .setStatus(NOT_READY)
-                           .addSecondaryIdentity(googleIdentity())
-                           .setNature(PERSON)
-                           .addRole(adminRoleId());
+    private static User userPartState() {
+        return User
+                .vBuilder()
+                .setId(userId())
+                .setOrgEntity(userOrgEntity())
+                .setDisplayName(userDisplayName())
+                .setPrimaryIdentity(googleIdentity())
+                .setProfile(profile())
+                .setStatus(NOT_READY)
+                .addSecondaryIdentity(googleIdentity())
+                .setNature(PERSON)
+                .addRole(adminRoleId())
+                .build();
     }
 
-    private static UserMembershipVBuilder membershipState() {
-        return UserMembershipVBuilder.newBuilder()
-                                     .setId(userId());
+    private static UserMembership membershipState() {
+        return UserMembership
+                .vBuilder()
+                .setId(userId())
+                .build();
     }
 
     static UserMembershipPart createEmptyMembershipPart(UserRoot root) {

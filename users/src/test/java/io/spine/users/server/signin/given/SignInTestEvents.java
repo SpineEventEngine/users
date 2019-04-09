@@ -23,7 +23,6 @@ package io.spine.users.server.signin.given;
 import io.spine.core.UserId;
 import io.spine.users.server.signin.SignInPm;
 import io.spine.users.user.event.UserCreated;
-import io.spine.users.user.event.UserCreatedVBuilder;
 
 import static io.spine.net.InternetDomains.valueOf;
 import static io.spine.users.server.signin.given.SignInTestEnv.displayName;
@@ -44,14 +43,15 @@ public final class SignInTestEvents {
     }
 
     public static UserCreated userCreated(UserId id) {
-        return UserCreatedVBuilder.newBuilder()
-                                  .setId(id)
-                                  .setProfile(profile())
-                                  .setStatus(ACTIVE)
-                                  .setDisplayName(displayName())
-                                  .setPrimaryIdentity(identity())
-                                  .setNature(PERSON)
-                                  .setExternalDomain(valueOf("teamvdev.com"))
-                                  .build();
+        return UserCreated
+                .vBuilder()
+                .setId(id)
+                .setProfile(profile())
+                .setStatus(ACTIVE)
+                .setDisplayName(displayName())
+                .setPrimaryIdentity(identity())
+                .setNature(PERSON)
+                .setExternalDomain(valueOf("teamvdev.com"))
+                .build();
     }
 }

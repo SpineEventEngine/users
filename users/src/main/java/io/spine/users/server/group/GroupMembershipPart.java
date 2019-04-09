@@ -30,9 +30,7 @@ import io.spine.users.group.GroupMembershipVBuilder;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;
-import io.spine.users.group.event.JoinedParentGroupVBuilder;
 import io.spine.users.group.event.LeftParentGroup;
-import io.spine.users.group.event.LeftParentGroupVBuilder;
 import io.spine.users.group.rejection.GroupsCannotFormCycles;
 
 import java.util.List;
@@ -55,7 +53,8 @@ public class GroupMembershipPart
     /**
      * Creates a new instance of the aggregate part.
      *
-     * @param root a root of the aggregate to which this part belongs
+     * @param root
+     *         a root of the aggregate to which this part belongs
      */
     GroupMembershipPart(GroupRoot root) {
         super(root);
@@ -65,8 +64,8 @@ public class GroupMembershipPart
     JoinedParentGroup handle(JoinParentGroup command, CommandContext context)
             throws GroupsCannotFormCycles {
         ensureNoCycles(command);
-        return JoinedParentGroupVBuilder
-                .newBuilder()
+        return JoinedParentGroup
+                .vBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
                 .build();
@@ -74,8 +73,8 @@ public class GroupMembershipPart
 
     @Assign
     LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
-        return LeftParentGroupVBuilder
-                .newBuilder()
+        return LeftParentGroup
+                .vBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
                 .build();

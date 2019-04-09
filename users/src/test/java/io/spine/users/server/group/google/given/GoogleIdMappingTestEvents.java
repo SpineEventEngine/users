@@ -21,7 +21,6 @@
 package io.spine.users.server.group.google.given;
 
 import io.spine.users.google.group.event.GoogleGroupCreated;
-import io.spine.users.google.group.event.GoogleGroupCreatedVBuilder;
 
 import static io.spine.users.server.group.google.given.GoogleIdMappingTestEnv.domain;
 import static io.spine.users.server.group.google.given.GoogleIdMappingTestEnv.email;
@@ -41,12 +40,13 @@ public class GoogleIdMappingTestEvents {
     }
 
     public static GoogleGroupCreated googleGroupCreated() {
-        return GoogleGroupCreatedVBuilder.newBuilder()
-                                         .setId(groupId())
-                                         .setDisplayName(googleGroupDisplayName())
-                                         .setDomain(domain())
-                                         .setGoogleId(googleId())
-                                         .setEmail(email())
-                                         .build();
+        return GoogleGroupCreated
+                .vBuilder()
+                .setId(groupId())
+                .setDisplayName(googleGroupDisplayName())
+                .setDomain(domain())
+                .setGoogleId(googleId())
+                .setEmail(email())
+                .build();
     }
 }

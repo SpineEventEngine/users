@@ -33,15 +33,10 @@ import io.spine.users.orgunit.command.DeleteOrgUnit;
 import io.spine.users.orgunit.command.MoveOrgUnit;
 import io.spine.users.orgunit.command.RenameOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitCreated;
-import io.spine.users.orgunit.event.OrgUnitCreatedVBuilder;
 import io.spine.users.orgunit.event.OrgUnitDeleted;
-import io.spine.users.orgunit.event.OrgUnitDeletedVBuilder;
 import io.spine.users.orgunit.event.OrgUnitDomainChanged;
-import io.spine.users.orgunit.event.OrgUnitDomainChangedVBuilder;
 import io.spine.users.orgunit.event.OrgUnitMoved;
-import io.spine.users.orgunit.event.OrgUnitMovedVBuilder;
 import io.spine.users.orgunit.event.OrgUnitRenamed;
-import io.spine.users.orgunit.event.OrgUnitRenamedVBuilder;
 import io.spine.users.server.organization.OrganizationAggregate;
 
 /**
@@ -68,69 +63,64 @@ public class OrgUnitAggregate
 
     @Assign
     OrgUnitCreated handle(CreateOrgUnit command, CommandContext context) {
-        OrgUnitCreated event =
-                OrgUnitCreatedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setDisplayName(command.getDisplayName())
-                        .setDomain(command.getDomain())
-                        .setParentEntity(command.getParentEntity())
-                        .build();
+        OrgUnitCreated event = OrgUnitCreated
+                .vBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setParentEntity(command.getParentEntity())
+                .build();
         return event;
     }
 
     @Assign
     OrgUnitDeleted handle(DeleteOrgUnit command, CommandContext context) {
-        OrgUnitDeleted event =
-                OrgUnitDeletedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .build();
+        OrgUnitDeleted event = OrgUnitDeleted
+                .vBuilder()
+                .setId(command.getId())
+                .build();
         return event;
     }
 
     @Assign
     OrgUnitMoved handle(MoveOrgUnit command, CommandContext context) {
-        OrgUnitMoved event =
-                OrgUnitMovedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewParentEntity(command.getNewParentEntity())
-                        .setOldParentEntity(state().getParentEntity())
-                        .build();
+        OrgUnitMoved event = OrgUnitMoved
+                .vBuilder()
+                .setId(command.getId())
+                .setNewParentEntity(command.getNewParentEntity())
+                .setOldParentEntity(state().getParentEntity())
+                .build();
         return event;
     }
 
     @Assign
     OrgUnitRenamed handle(RenameOrgUnit command, CommandContext context) {
-        OrgUnitRenamed event =
-                OrgUnitRenamedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewName(command.getNewName())
-                        .setOldName(state().getDisplayName())
-                        .build();
+        OrgUnitRenamed event = OrgUnitRenamed
+                .vBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .setOldName(state().getDisplayName())
+                .build();
         return event;
     }
 
     @Assign
     OrgUnitDomainChanged handle(ChangeOrgUnitDomain command, CommandContext context) {
-        OrgUnitDomainChanged event =
-                OrgUnitDomainChangedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setNewDomain(command.getNewDomain())
-                        .setOldDomain(state().getDomain())
-                        .build();
+        OrgUnitDomainChanged event = OrgUnitDomainChanged
+                .vBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .setOldDomain(state().getDomain())
+                .build();
         return event;
     }
 
     @Apply
     private void on(OrgUnitCreated event) {
         builder().setId(event.getId())
-                    .setDisplayName(event.getDisplayName())
-                    .setDomain(event.getDomain())
-                    .setParentEntity(event.getParentEntity());
+                 .setDisplayName(event.getDisplayName())
+                 .setDomain(event.getDomain())
+                 .setParentEntity(event.getParentEntity());
     }
 
     @Apply

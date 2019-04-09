@@ -34,20 +34,14 @@ import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.signin.SignInVBuilder;
 import io.spine.users.signin.command.FinishSignIn;
-import io.spine.users.signin.command.FinishSignInVBuilder;
 import io.spine.users.signin.command.SignUserIn;
-import io.spine.users.signin.command.SignUserInVBuilder;
 import io.spine.users.signin.command.SignUserOut;
 import io.spine.users.signin.event.SignInFailed;
-import io.spine.users.signin.event.SignInFailedVBuilder;
 import io.spine.users.signin.event.SignInSuccessful;
-import io.spine.users.signin.event.SignInSuccessfulVBuilder;
 import io.spine.users.signin.event.SignOutCompleted;
-import io.spine.users.signin.event.SignOutCompletedVBuilder;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.CreateUser;
-import io.spine.users.user.command.CreateUserVBuilder;
 import io.spine.users.user.event.UserCreated;
 
 import java.util.Optional;
@@ -123,7 +117,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         }
 
         SignInVBuilder builder = builder().setId(id)
-                                             .setIdentity(identity);
+                                          .setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
@@ -190,8 +184,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     FinishSignIn finishWithError(SignInFailureReason failureReason) {
-        return FinishSignInVBuilder
-                .newBuilder()
+        return FinishSignIn
+                .vBuilder()
                 .setId(id())
                 .setSuccessful(false)
                 .setFailureReason(failureReason)
@@ -199,16 +193,16 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     FinishSignIn finishSuccessfully() {
-        return FinishSignInVBuilder
-                .newBuilder()
+        return FinishSignIn
+                .vBuilder()
                 .setId(id())
                 .setSuccessful(true)
                 .build();
     }
 
     SignUserIn signIn(Identity identity) {
-        return SignUserInVBuilder
-                .newBuilder()
+        return SignUserIn
+                .vBuilder()
                 .setId(id())
                 .setIdentity(identity)
                 .build();
@@ -217,8 +211,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     CreateUser createUser(Identity identity, PersonProfile profile) {
         String displayName = profile.getEmail()
                                     .getValue();
-        return CreateUserVBuilder
-                .newBuilder()
+        return CreateUser
+                .vBuilder()
                 .setId(id())
                 .setDisplayName(displayName)
                 .setPrimaryIdentity(identity)
@@ -230,17 +224,16 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     SignInSuccessful signInSuccessful(UserId id, Identity identity) {
-        return SignInSuccessfulVBuilder
-                .newBuilder()
+        return SignInSuccessful
+                .vBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .build();
     }
 
-    SignInFailed signInFailed(UserId id, Identity identity,
-                              SignInFailureReason reason) {
-        return SignInFailedVBuilder
-                .newBuilder()
+    SignInFailed signInFailed(UserId id, Identity identity, SignInFailureReason reason) {
+        return SignInFailed
+                .vBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .setFailureReason(reason)
@@ -248,8 +241,8 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     }
 
     SignOutCompleted signOutCompleted(UserId id) {
-        return SignOutCompletedVBuilder
-                .newBuilder()
+        return SignOutCompleted
+                .vBuilder()
                 .setId(id)
                 .build();
     }

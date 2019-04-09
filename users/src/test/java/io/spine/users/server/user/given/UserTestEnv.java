@@ -26,22 +26,15 @@ import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
 import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
 import io.spine.users.DirectoryId;
-import io.spine.users.DirectoryIdVBuilder;
+import io.spine.users.GroupId;
 import io.spine.users.OrgUnitId;
-import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.PersonProfile;
-import io.spine.users.PersonProfileVBuilder;
 import io.spine.users.RoleId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.user.Identity;
-import io.spine.users.user.IdentityVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.server.role.RoleIds.roleId;
@@ -64,9 +57,10 @@ public class UserTestEnv {
     }
 
     public static GroupId firstGroupId() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue("fisrt_group@example.com")
-                              .build();
+        return GroupId
+                .vBuilder()
+                .setValue("fisrt_group@example.com")
+                .build();
     }
 
     public static String userDisplayName() {
@@ -78,37 +72,42 @@ public class UserTestEnv {
     }
 
     public static PersonProfile profile() {
-        return PersonProfileVBuilder.newBuilder()
-                                    .setName(personName())
-                                    .setEmail(email())
-                                    .build();
+        return PersonProfile
+                .vBuilder()
+                .setName(personName())
+                .setEmail(email())
+                .build();
     }
 
     public static PersonProfile newProfile() {
-        return PersonProfileVBuilder.newBuilder()
-                                    .setName(newPersonName())
-                                    .setEmail(newEmail())
-                                    .build();
+        return PersonProfile
+                .vBuilder()
+                .setName(newPersonName())
+                .setEmail(newEmail())
+                .build();
     }
 
     public static OrganizationOrUnit userOrgEntity() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrganization(organizationId())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrganization(organizationId())
+                .build();
     }
 
     static OrganizationOrUnit newUserOrgEntity() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(orgUnitId())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrgUnit(orgUnitId())
+                .build();
     }
 
     public static Identity googleIdentity() {
-        return IdentityVBuilder.newBuilder()
-                               .setDisplayName("j.s@google.com")
-                               .setDirectoryId(googleDirectoryId())
-                               .setUserId(USER_UUID)
-                               .build();
+        return Identity
+                .vBuilder()
+                .setDisplayName("j.s@google.com")
+                .setDirectoryId(googleDirectoryId())
+                .setUserId(USER_UUID)
+                .build();
     }
 
     public static RoleId adminRoleId() {
@@ -116,11 +115,12 @@ public class UserTestEnv {
     }
 
     static Identity githubIdentity() {
-        return IdentityVBuilder.newBuilder()
-                               .setDisplayName("j.s@github.com")
-                               .setDirectoryId(githubDirectoryId())
-                               .setUserId(USER_UUID)
-                               .build();
+        return Identity
+                .vBuilder()
+                .setDisplayName("j.s@github.com")
+                .setDirectoryId(githubDirectoryId())
+                .setUserId(USER_UUID)
+                .build();
     }
 
     static RoleId editorRoleId() {
@@ -128,53 +128,61 @@ public class UserTestEnv {
     }
 
     private static DirectoryId googleDirectoryId() {
-        return DirectoryIdVBuilder.newBuilder()
-                                         .setValue("gmail.com")
-                                         .build();
+        return DirectoryId
+                .vBuilder()
+                .setValue("gmail.com")
+                .build();
     }
 
     private static DirectoryId githubDirectoryId() {
-        return DirectoryIdVBuilder.newBuilder()
-                                         .setValue("github.com")
-                                         .build();
+        return DirectoryId
+                .vBuilder()
+                .setValue("github.com")
+                .build();
     }
 
     private static OrganizationId organizationId() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue("org_id")
-                                     .build();
+        return OrganizationId
+                .vBuilder()
+                .setValue("org_id")
+                .build();
     }
 
     private static OrgUnitId orgUnitId() {
-        return OrgUnitIdVBuilder.newBuilder()
-                                .setValue("orgunit_id")
-                                .build();
+        return OrgUnitId
+                .vBuilder()
+                .setValue("orgunit_id")
+                .build();
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("john@smith.com")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("john@smith.com")
+                .build();
     }
 
     private static PersonName personName() {
-        return PersonNameVBuilder.newBuilder()
-                                 .setGivenName("Jane")
-                                 .setFamilyName("Jones")
-                                 .build();
+        return PersonNameVBuilder
+                .newBuilder()
+                .setGivenName("Jane")
+                .setFamilyName("Jones")
+                .build();
     }
 
     private static EmailAddress newEmail() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("john+alias@smith.com")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("john+alias@smith.com")
+                .build();
     }
 
     private static PersonName newPersonName() {
-        return PersonNameVBuilder.newBuilder()
-                                 .setGivenName("John")
-                                 .setMiddleName("The Person")
-                                 .setFamilyName("Smith")
-                                 .build();
+        return PersonNameVBuilder
+                .newBuilder()
+                .setGivenName("John")
+                .setMiddleName("The Person")
+                .setFamilyName("Smith")
+                .build();
     }
 }

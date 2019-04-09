@@ -23,7 +23,6 @@ package io.spine.users.server.group.google;
 import io.spine.server.entity.Repository;
 import io.spine.testing.server.projection.ProjectionTest;
 import io.spine.users.GoogleIdMappingViewId;
-import io.spine.users.GoogleIdMappingViewIdVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleIdMappingView;
@@ -47,10 +46,10 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
                                                            GoogleIdMappingView,
                                                            GoogleIdMappingProjection> {
 
-    private static final GoogleIdMappingViewId ID =
-            GoogleIdMappingViewIdVBuilder.newBuilder()
-                                         .setValue(SINGLETON)
-                                         .build();
+    private static final GoogleIdMappingViewId ID = GoogleIdMappingViewId
+            .vBuilder()
+            .setValue(SINGLETON)
+            .build();
 
     GoogleIdMappingProjectionTest() {
         super(ID, groupCreated());
