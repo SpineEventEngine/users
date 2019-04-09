@@ -30,7 +30,6 @@ import io.spine.users.group.GroupRolesPropagationVBuilder;
 import io.spine.users.group.event.RoleAssignedToGroup;
 import io.spine.users.group.event.RoleDisinheritedByUser;
 import io.spine.users.group.event.RoleInheritedByUser;
-import io.spine.users.group.event.RoleInheritedByUserVBuilder;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
 import io.spine.users.user.event.UserJoinedGroup;
 import io.spine.users.user.event.UserLeftGroup;
@@ -57,7 +56,7 @@ public class GroupRolesPropagationPm
         UserId newMember = event.getId();
         GroupId groupId = event.getGroupId();
         builder().setId(groupId)
-                    .addUserMember(newMember);
+                 .addUserMember(newMember);
         List<RoleInheritedByUser> commands = roles()
                 .stream()
                 .map(role -> roleInherited(groupId, newMember, role))
@@ -82,7 +81,7 @@ public class GroupRolesPropagationPm
         RoleId assignedRole = event.getRoleId();
         GroupId groupId = event.getId();
         builder().setId(groupId)
-                    .addRole(assignedRole);
+                 .addRole(assignedRole);
         List<RoleInheritedByUser> commands = members()
                 .stream()
                 .map(member -> roleInherited(groupId, member, assignedRole))
@@ -128,8 +127,8 @@ public class GroupRolesPropagationPm
     private static RoleInheritedByUser roleInherited(GroupId group,
                                                      UserId member,
                                                      RoleId role) {
-        return RoleInheritedByUserVBuilder
-                .newBuilder()
+        return RoleInheritedByUser
+                .vBuilder()
                 .setId(group)
                 .setRoleId(role)
                 .setUserId(member)
@@ -140,7 +139,7 @@ public class GroupRolesPropagationPm
                                                            UserId member,
                                                            RoleId role) {
         return RoleDisinheritedByUser
-                .newBuilder()
+                .vBuilder()
                 .setId(group)
                 .setRoleId(role)
                 .setUserId(member)

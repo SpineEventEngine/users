@@ -22,9 +22,7 @@ package io.spine.users.server.role.given;
 
 import io.spine.users.RoleId;
 import io.spine.users.role.command.CreateRole;
-import io.spine.users.role.command.CreateRoleVBuilder;
 import io.spine.users.role.command.DeleteRole;
-import io.spine.users.role.command.DeleteRoleVBuilder;
 import io.spine.users.server.role.RoleAggregate;
 
 /**
@@ -39,14 +37,16 @@ public final class RoleTestCommands {
     }
 
     public static CreateRole createRole(RoleId id) {
-        return CreateRoleVBuilder.newBuilder()
-                                 .setId(id)
-                                 .build();
+        return CreateRole
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 
     public static DeleteRole deleteRole(RoleId id) {
-        return DeleteRoleVBuilder.newBuilder()
-                                 .setId(id)
-                                 .build();
+        return DeleteRole
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 }

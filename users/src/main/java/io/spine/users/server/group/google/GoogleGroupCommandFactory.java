@@ -22,7 +22,6 @@ package io.spine.users.server.group.google;
 
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.google.group.event.GoogleGroupDeleted;
 import io.spine.users.google.group.event.GoogleGroupDescriptionChanged;
@@ -31,19 +30,12 @@ import io.spine.users.google.group.event.GoogleGroupJoinedParentGroup;
 import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
 import io.spine.users.google.group.event.GoogleGroupRenamed;
 import io.spine.users.group.command.ChangeGroupDescription;
-import io.spine.users.group.command.ChangeGroupDescriptionVBuilder;
 import io.spine.users.group.command.ChangeGroupEmail;
-import io.spine.users.group.command.ChangeGroupEmailVBuilder;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.command.CreateGroupVBuilder;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.DeleteGroupVBuilder;
 import io.spine.users.group.command.JoinParentGroup;
-import io.spine.users.group.command.JoinParentGroupVBuilder;
 import io.spine.users.group.command.LeaveParentGroup;
-import io.spine.users.group.command.LeaveParentGroupVBuilder;
 import io.spine.users.group.command.RenameGroup;
-import io.spine.users.group.command.RenameGroupVBuilder;
 
 /**
  * A command factory for {@link GoogleGroupLifecyclePm}.
@@ -68,28 +60,28 @@ class GoogleGroupCommandFactory {
      * Creates {@link CreateGroup} command for a group from an external domain.
      */
     CreateGroup createExternalGroup(GoogleGroupCreated event) {
-        CreateGroupVBuilder builder =
-                CreateGroupVBuilder
-                        .newBuilder()
-                        .setId(event.getId())
-                        .setEmail(event.getEmail())
-                        .setDisplayName(event.getDisplayName())
-                        .setExternalDomain(event.getDomain());
-
-        return builder.build();
+        CreateGroup result = CreateGroup
+                .vBuilder()
+                .setId(event.getId())
+                .setEmail(event.getEmail())
+                .setDisplayName(event.getDisplayName())
+                .setExternalDomain(event.getDomain())
+                .build();
+        return result;
     }
 
     /**
      * Creates {@link CreateGroup} command for a group from a tenant's domain.
      */
     CreateGroup createInternalGroup(GoogleGroupCreated event, OrganizationId organization) {
-        CreateGroupVBuilder builder = CreateGroupVBuilder
-                .newBuilder()
+        CreateGroup result = CreateGroup
+                .vBuilder()
                 .setId(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
-                .setOrgEntity(orgEntity(organization));
-        return builder.build();
+                .setOrgEntity(orgEntity(organization))
+                .build();
+        return result;
     }
 
     /**
@@ -97,8 +89,8 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupJoinedParentGroup} event.
      */
     JoinParentGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
-        return JoinParentGroupVBuilder
-                .newBuilder()
+        return JoinParentGroup
+                .vBuilder()
                 .setId(event.getId())
                 .setParentGroupId(event.getNewParentId())
                 .build();
@@ -109,8 +101,8 @@ class GoogleGroupCommandFactory {
      * event.
      */
     RenameGroup renameGroup(GoogleGroupRenamed event) {
-        return RenameGroupVBuilder
-                .newBuilder()
+        return RenameGroup
+                .vBuilder()
                 .setId(event.getId())
                 .setNewName(event.getDisplayName())
                 .build();
@@ -121,8 +113,8 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupLeftParentGroup} event.
      */
     LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
-        return LeaveParentGroupVBuilder
-                .newBuilder()
+        return LeaveParentGroup
+                .vBuilder()
                 .setId(event.getId())
                 .setParentGroupId(event.getParentGroupId())
                 .build();
@@ -133,8 +125,8 @@ class GoogleGroupCommandFactory {
      * event.
      */
     DeleteGroup deleteGroup(GoogleGroupDeleted event) {
-        return DeleteGroupVBuilder
-                .newBuilder()
+        return DeleteGroup
+                .vBuilder()
                 .setId(event.getId())
                 .build();
     }
@@ -144,24 +136,24 @@ class GoogleGroupCommandFactory {
      * {@link GoogleGroupEmailChanged} event.
      */
     ChangeGroupEmail changeEmail(GoogleGroupEmailChanged event) {
-        return ChangeGroupEmailVBuilder
-                .newBuilder()
+        return ChangeGroupEmail
+                .vBuilder()
                 .setId(event.getId())
                 .setNewEmail(event.getNewEmail())
                 .build();
     }
 
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
-        return ChangeGroupDescriptionVBuilder
-                .newBuilder()
+        return ChangeGroupDescription
+                .vBuilder()
                 .setId(event.getId())
                 .setDescription(event.getNewDescription())
                 .build();
     }
 
     private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
-        return OrganizationOrUnitVBuilder
-                .newBuilder()
+        return OrganizationOrUnit
+                .vBuilder()
                 .setOrganization(organizationId)
                 .build();
     }

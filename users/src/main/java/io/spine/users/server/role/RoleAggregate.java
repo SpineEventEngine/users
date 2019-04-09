@@ -29,9 +29,7 @@ import io.spine.users.role.RoleVBuilder;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleCreated;
-import io.spine.users.role.event.RoleCreatedVBuilder;
 import io.spine.users.role.event.RoleDeleted;
-import io.spine.users.role.event.RoleDeletedVBuilder;
 
 /**
  * A role that can be assigned to {@linkplain io.spine.users.server.user.UserPart users} and
@@ -66,21 +64,19 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
 
     @Assign
     RoleCreated handle(CreateRole command) {
-        RoleCreated event =
-                RoleCreatedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .build();
+        RoleCreated event = RoleCreated
+                .vBuilder()
+                .setId(command.getId())
+                .build();
         return event;
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command) {
-        RoleDeleted event =
-                RoleDeletedVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .build();
+        RoleDeleted event = RoleDeleted
+                .vBuilder()
+                .setId(command.getId())
+                .build();
         return event;
     }
 
@@ -88,9 +84,9 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     private void on(RoleCreated event) {
         RoleId id = event.getId();
         builder().setId(id)
-                    .setDisplayName(id.getName())
-                    .setOrgEntity(id.getOrgEntity())
-                    .build();
+                 .setDisplayName(id.getName())
+                 .setOrgEntity(id.getOrgEntity())
+                 .build();
     }
 
     @Apply

@@ -26,7 +26,6 @@ import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GoogleGroupId;
 import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
 import io.spine.users.server.group.google.GoogleGroupLifecyclePm;
 
 import static io.spine.base.Identifier.newUuid;
@@ -45,14 +44,15 @@ public class GoogleGroupTestEnv {
     }
 
     public static GroupId newGroupId() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(newUuid())
-                              .build();
+        return GroupId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static GoogleGroupId googleId() {
         return GoogleGroupId
-                .newBuilder()
+                .vBuilder()
                 .setValue("x123pwd")
                 .build();
     }
@@ -62,15 +62,17 @@ public class GoogleGroupTestEnv {
     }
 
     static EmailAddress email() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers@spine.io")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("developers@spine.io")
+                .build();
     }
 
     static EmailAddress newEmail() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers+1@spine.io")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("developers+1@spine.io")
+                .build();
     }
 
     static String newDescription() {
@@ -78,9 +80,10 @@ public class GoogleGroupTestEnv {
     }
 
     static InternetDomain internalDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("spine.io")
-                                     .build();
+        return InternetDomainVBuilder
+                .newBuilder()
+                .setValue("spine.io")
+                .build();
     }
 
     public static EmailAddress alias() {
@@ -90,9 +93,10 @@ public class GoogleGroupTestEnv {
     }
 
     public static GroupId parentGroup() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(newUuid())
-                              .build();
+        return GroupId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static String groupName() {

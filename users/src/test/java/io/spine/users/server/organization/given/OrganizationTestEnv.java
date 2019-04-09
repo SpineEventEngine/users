@@ -21,13 +21,11 @@
 package io.spine.users.server.organization.given;
 
 import io.spine.core.TenantId;
-import io.spine.core.TenantIdVBuilder;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationIdVBuilder;
 import io.spine.users.server.organization.OrganizationAggregate;
 
 import static io.spine.base.Identifier.newUuid;
@@ -46,9 +44,10 @@ public final class OrganizationTestEnv {
     }
 
     public static OrganizationId createOrganizationId() {
-        return OrganizationIdVBuilder.newBuilder()
-                                     .setValue(newUuid())
-                                     .build();
+        return OrganizationId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static String orgName() {
@@ -60,36 +59,41 @@ public final class OrganizationTestEnv {
     }
 
     public static InternetDomain orgDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("organization.com")
-                                     .build();
+        return InternetDomainVBuilder
+                .newBuilder()
+                .setValue("organization.com")
+                .build();
     }
 
     public static InternetDomain newOrgDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("organization-renamed.com")
-                                     .build();
+        return InternetDomainVBuilder
+                .newBuilder()
+                .setValue("organization-renamed.com")
+                .build();
     }
 
     public static TenantId orgTenant() {
-        return TenantIdVBuilder.newBuilder()
-                               .setDomain(orgDomain())
-                               .setEmail(email())
-                               .setValue(newUuid())
-                               .build();
+        return TenantId
+                .vBuilder()
+                .setDomain(orgDomain())
+                .setEmail(email())
+                .setValue(newUuid())
+                .build();
     }
 
     public static TenantId newOrgTenant() {
-        return TenantIdVBuilder.newBuilder()
-                               .setDomain(orgDomain())
-                               .setEmail(email())
-                               .setValue(newUuid())
-                               .build();
+        return TenantId
+                .vBuilder()
+                .setDomain(orgDomain())
+                .setEmail(email())
+                .setValue(newUuid())
+                .build();
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("random@email.com")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("random@email.com")
+                .build();
     }
 }

@@ -23,7 +23,6 @@ package io.spine.users.server.organization;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
-import io.spine.users.organization.OrganizationVBuilder;
 
 import static io.spine.users.server.organization.given.OrganizationTestEnv.orgDomain;
 import static io.spine.users.server.organization.given.OrganizationTestEnv.orgName;
@@ -53,7 +52,7 @@ final class TestOrganizationFactory {
      * Creates a new instance of the aggregate with the filled state.
      */
     static OrganizationAggregate createAggregate(OrganizationId id) {
-        return aggregate(state(id).build());
+        return aggregate(state(id));
     }
 
     private static OrganizationAggregate aggregate(Organization state) {
@@ -63,11 +62,13 @@ final class TestOrganizationFactory {
                     .build();
     }
 
-    private static OrganizationVBuilder state(OrganizationId id) {
-        return OrganizationVBuilder.newBuilder()
-                                   .setId(id)
-                                   .setTenant(orgTenant())
-                                   .setDomain(orgDomain())
-                                   .setDisplayName(orgName());
+    private static Organization state(OrganizationId id) {
+        return Organization
+                .vBuilder()
+                .setId(id)
+                .setTenant(orgTenant())
+                .setDomain(orgDomain())
+                .setDisplayName(orgName())
+                .build();
     }
 }

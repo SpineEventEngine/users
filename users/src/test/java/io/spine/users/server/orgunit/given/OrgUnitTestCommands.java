@@ -22,15 +22,10 @@ package io.spine.users.server.orgunit.given;
 
 import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.command.ChangeOrgUnitDomain;
-import io.spine.users.orgunit.command.ChangeOrgUnitDomainVBuilder;
 import io.spine.users.orgunit.command.CreateOrgUnit;
-import io.spine.users.orgunit.command.CreateOrgUnitVBuilder;
 import io.spine.users.orgunit.command.DeleteOrgUnit;
-import io.spine.users.orgunit.command.DeleteOrgUnitVBuilder;
 import io.spine.users.orgunit.command.MoveOrgUnit;
-import io.spine.users.orgunit.command.MoveOrgUnitVBuilder;
 import io.spine.users.orgunit.command.RenameOrgUnit;
-import io.spine.users.orgunit.command.RenameOrgUnitVBuilder;
 
 /**
  * Test commands for {@link io.spine.users.server.orgunit.OrgUnitAggregate}.
@@ -46,39 +41,44 @@ public final class OrgUnitTestCommands {
     }
 
     public static CreateOrgUnit createOrgUnit(OrgUnitId id) {
-        return CreateOrgUnitVBuilder.newBuilder()
-                                    .setId(id)
-                                    .setDisplayName(OrgUnitTestEnv.orgUnitName())
-                                    .setDomain(OrgUnitTestEnv.orgUnitDomain())
-                                    .setParentEntity(OrgUnitTestEnv.orgUnitParentEntity())
-                                    .build();
+        return CreateOrgUnit
+                .vBuilder()
+                .setId(id)
+                .setDisplayName(OrgUnitTestEnv.orgUnitName())
+                .setDomain(OrgUnitTestEnv.orgUnitDomain())
+                .setParentEntity(OrgUnitTestEnv.orgUnitParentEntity())
+                .build();
 
     }
 
     public static DeleteOrgUnit deleteOrgUnit(OrgUnitId id) {
-        return DeleteOrgUnitVBuilder.newBuilder()
-                                    .setId(id)
-                                    .build();
+        return DeleteOrgUnit
+                .vBuilder()
+                .setId(id)
+                .build();
     }
 
     public static MoveOrgUnit moveOrgUnit(OrgUnitId id) {
-        return MoveOrgUnitVBuilder.newBuilder()
-                                  .setId(id)
-                                  .setNewParentEntity(OrgUnitTestEnv.newOrgUnitParentEntity())
-                                  .build();
+        return MoveOrgUnit
+                .vBuilder()
+                .setId(id)
+                .setNewParentEntity(OrgUnitTestEnv.newOrgUnitParentEntity())
+                .build();
     }
 
     public static RenameOrgUnit renameOrgUnit(OrgUnitId id) {
-        return RenameOrgUnitVBuilder.newBuilder()
-                                    .setId(id)
-                                    .setNewName(OrgUnitTestEnv.orgUnitNewName())
-                                    .build();
+        return RenameOrgUnit
+                .vBuilder()
+                .setId(id)
+                .setNewName(OrgUnitTestEnv.orgUnitNewName())
+                .build();
     }
 
     public static ChangeOrgUnitDomain changeOrgUnitDomain(OrgUnitId id) {
-        return ChangeOrgUnitDomainVBuilder.newBuilder()
-                                          .setId(id)
-                                          .setNewDomain(OrgUnitTestEnv.orgUnitNewDomain())
-                                          .build();
+        return ChangeOrgUnitDomain
+                .vBuilder()
+                .setId(id)
+                .setNewDomain(OrgUnitTestEnv.orgUnitNewDomain())
+                .build();
     }
 }

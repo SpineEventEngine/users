@@ -23,9 +23,7 @@ package io.spine.users.server.orgunit.given;
 import io.spine.net.InternetDomain;
 import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
-import io.spine.users.OrgUnitIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 
 import static io.spine.base.Identifier.newUuid;
 
@@ -41,9 +39,10 @@ public final class OrgUnitTestEnv {
     }
 
     public static OrgUnitId createOrgUnitId() {
-        return OrgUnitId.newBuilder()
-                        .setValue(newUuid())
-                        .build();
+        return OrgUnitId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static String orgUnitName() {
@@ -55,32 +54,37 @@ public final class OrgUnitTestEnv {
     }
 
     public static InternetDomain orgUnitDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("unit.organization.com")
-                                     .build();
+        return InternetDomainVBuilder
+                .newBuilder()
+                .setValue("unit.organization.com")
+                .build();
     }
 
     public static InternetDomain orgUnitNewDomain() {
-        return InternetDomainVBuilder.newBuilder()
-                                     .setValue("unit-renamed.organization.com")
-                                     .build();
+        return InternetDomainVBuilder
+                .newBuilder()
+                .setValue("unit-renamed.organization.com")
+                .build();
     }
 
     public static OrganizationOrUnit orgUnitParentEntity() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(organization())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrgUnit(organization())
+                .build();
     }
 
     public static OrganizationOrUnit newOrgUnitParentEntity() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(createOrgUnitId())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrgUnit(createOrgUnitId())
+                .build();
     }
 
     private static OrgUnitId organization() {
-        return OrgUnitIdVBuilder.newBuilder()
-                                .setValue(newUuid())
-                                .build();
+        return OrgUnitId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 }

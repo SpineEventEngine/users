@@ -31,9 +31,7 @@ import io.spine.users.user.UserMembershipVBuilder;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
 import io.spine.users.user.event.UserJoinedGroup;
-import io.spine.users.user.event.UserJoinedGroupVBuilder;
 import io.spine.users.user.event.UserLeftGroup;
-import io.spine.users.user.event.UserLeftGroupVBuilder;
 
 import java.util.Optional;
 
@@ -55,35 +53,32 @@ public class UserMembershipPart
 
     @Assign
     UserJoinedGroup handle(JoinGroup command) {
-        UserJoinedGroup event =
-                UserJoinedGroupVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setGroupId(command.getGroupId())
-                        .setRole(MEMBER)
-                        .build();
+        UserJoinedGroup event = UserJoinedGroup
+                .vBuilder()
+                .setId(command.getId())
+                .setGroupId(command.getGroupId())
+                .setRole(MEMBER)
+                .build();
         return event;
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command) {
-        UserLeftGroup event =
-                UserLeftGroupVBuilder
-                        .newBuilder()
-                        .setId(command.getId())
-                        .setGroupId(command.getGroupId())
-                        .build();
+        UserLeftGroup event = UserLeftGroup
+                .vBuilder()
+                .setId(command.getId())
+                .setGroupId(command.getGroupId())
+                .build();
         return event;
     }
 
     @Apply
     private void on(UserJoinedGroup event) {
-        UserMembershipRecord membershipRecord =
-                UserMembershipRecord
-                        .newBuilder()
-                        .setGroupId(event.getGroupId())
-                        .setRole(event.getRole())
-                        .build();
+        UserMembershipRecord membershipRecord = UserMembershipRecord
+                .vBuilder()
+                .setGroupId(event.getGroupId())
+                .setRole(event.getRole())
+                .build();
         builder()
                 .setId(id())
                 .addMembership(membershipRecord);
@@ -97,17 +92,17 @@ public class UserMembershipPart
 
     private void removeMembership(UserMembershipRecord record) {
         int index = builder().getMembership()
-                                .indexOf(record);
+                             .indexOf(record);
         builder().removeMembership(index);
     }
 
     private Optional<UserMembershipRecord> findMembership(GroupId groupId) {
         Optional<UserMembershipRecord> record =
                 builder().getMembership()
-                            .stream()
-                            .filter(membership -> membership.getGroupId()
-                                                            .equals(groupId))
-                            .findFirst();
+                         .stream()
+                         .filter(membership -> membership.getGroupId()
+                                                         .equals(groupId))
+                         .findFirst();
         return record;
     }
 }

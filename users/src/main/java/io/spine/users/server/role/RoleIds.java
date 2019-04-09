@@ -23,9 +23,7 @@ package io.spine.users.server.role;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
-import io.spine.users.RoleIdVBuilder;
 
 /**
  * Factory methods for producing {@linkplain RoleId role IDs}.
@@ -40,8 +38,8 @@ public class RoleIds {
      * Creates an ID of a role belonging to the organization.
      */
     public static RoleId roleId(OrganizationId organizationId, String name) {
-        OrganizationOrUnit orgEntity = OrganizationOrUnitVBuilder
-                .newBuilder()
+        OrganizationOrUnit orgEntity = OrganizationOrUnit
+                .vBuilder()
                 .setOrganization(organizationId)
                 .build();
         return roleId(orgEntity, name);
@@ -51,8 +49,8 @@ public class RoleIds {
      * Creates an ID of a role belonging to the organizational unit.
      */
     public static RoleId roleId(OrgUnitId orgUnitId, String name) {
-        OrganizationOrUnit orgEntity = OrganizationOrUnitVBuilder
-                .newBuilder()
+        OrganizationOrUnit orgEntity = OrganizationOrUnit
+                .vBuilder()
                 .setOrgUnit(orgUnitId)
                 .build();
         return roleId(orgEntity, name);
@@ -62,8 +60,8 @@ public class RoleIds {
      * Creates an ID of a role belonging to the {@link OrganizationOrUnit}.
      */
     public static RoleId roleId(OrganizationOrUnit orgEntity, String name) {
-        return RoleIdVBuilder
-                .newBuilder()
+        return RoleId
+                .vBuilder()
                 .setOrgEntity(orgEntity)
                 .setName(name)
                 .build();

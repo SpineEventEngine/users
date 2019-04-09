@@ -23,9 +23,7 @@ package io.spine.users.server.group.given;
 import io.spine.net.EmailAddress;
 import io.spine.net.EmailAddressVBuilder;
 import io.spine.users.GroupId;
-import io.spine.users.GroupIdVBuilder;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.OrganizationOrUnitVBuilder;
 import io.spine.users.RoleId;
 
 import static io.spine.base.Identifier.newUuid;
@@ -47,9 +45,10 @@ public class GroupTestEnv {
     }
 
     public static GroupId createGroupId() {
-        return GroupIdVBuilder.newBuilder()
-                              .setValue(newUuid())
-                              .build();
+        return GroupId
+                .vBuilder()
+                .setValue(newUuid())
+                .build();
     }
 
     public static GroupId upperGroupId() {
@@ -61,21 +60,24 @@ public class GroupTestEnv {
     }
 
     public static EmailAddress groupEmail() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers-list@gmail.com")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("developers-list@gmail.com")
+                .build();
     }
 
     public static OrganizationOrUnit groupOrgEntityOrganization() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrganization(organizationId("Space travel"))
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrganization(organizationId("Space travel"))
+                .build();
     }
 
     public static OrganizationOrUnit groupParentOrgUnit() {
-        return OrganizationOrUnitVBuilder.newBuilder()
-                                         .setOrgUnit(orgUnitUuid())
-                                         .build();
+        return OrganizationOrUnit
+                .vBuilder()
+                .setOrgUnit(orgUnitUuid())
+                .build();
     }
 
     public static RoleId groupRole() {
@@ -95,8 +97,9 @@ public class GroupTestEnv {
     }
 
     static EmailAddress newGroupEmail() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers-renamed-list@gmail.com")
-                                   .build();
+        return EmailAddressVBuilder
+                .newBuilder()
+                .setValue("developers-renamed-list@gmail.com")
+                .build();
     }
 }

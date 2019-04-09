@@ -23,7 +23,6 @@ package io.spine.users.server.group.google;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 import io.spine.users.group.google.GoogleGroupLifecycle;
-import io.spine.users.group.google.GoogleGroupLifecycleVBuilder;
 
 /**
  * Test {@link GoogleGroupLifecyclePm Google Group process managers}.
@@ -39,7 +38,8 @@ public class GoogleGroupTestPms {
     /**
      * Creates empty process manager in the default state.
      *
-     * @param id and ID of the process manager
+     * @param id
+     *         and ID of the process manager
      */
     static GoogleGroupLifecyclePm emptyPm(GroupId id) {
         return Given.processManagerOfClass(GoogleGroupLifecyclePm.class)
@@ -48,8 +48,8 @@ public class GoogleGroupTestPms {
     }
 
     private static GoogleGroupLifecycle lifecycle(GroupId id) {
-        return GoogleGroupLifecycleVBuilder
-                .newBuilder()
+        return GoogleGroupLifecycle
+                .vBuilder()
                 .setId(id)
                 .build();
     }

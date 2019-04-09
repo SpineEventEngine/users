@@ -26,7 +26,6 @@ import io.spine.users.DirectoryId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignIn.Status;
-import io.spine.users.signin.SignInVBuilder;
 import io.spine.users.user.Identity;
 
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
@@ -71,8 +70,8 @@ final class TestProcManFactory {
     }
 
     private static SignIn signIn(UserId id, Identity identity, Status status) {
-        return SignInVBuilder
-                .newBuilder()
+        return SignIn
+                .vBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .setStatus(status)
@@ -81,7 +80,7 @@ final class TestProcManFactory {
 
     static DirectoryId directoryId(String id) {
         return DirectoryId
-                .newBuilder()
+                .vBuilder()
                 .setValue(id)
                 .build();
     }
