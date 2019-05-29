@@ -41,7 +41,7 @@ public class GoogleIdMappingTestEvents {
 
     public static GoogleGroupCreated googleGroupCreated() {
         return GoogleGroupCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId())
                 .setDisplayName(googleGroupDisplayName())
                 .setDomain(domain())

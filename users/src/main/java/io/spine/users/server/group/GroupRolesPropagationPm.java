@@ -128,7 +128,7 @@ public class GroupRolesPropagationPm
                                                      UserId member,
                                                      RoleId role) {
         return RoleInheritedByUser
-                .vBuilder()
+                .newBuilder()
                 .setId(group)
                 .setRoleId(role)
                 .setUserId(member)
@@ -139,7 +139,7 @@ public class GroupRolesPropagationPm
                                                            UserId member,
                                                            RoleId role) {
         return RoleDisinheritedByUser
-                .vBuilder()
+                .newBuilder()
                 .setId(group)
                 .setRoleId(role)
                 .setUserId(member)

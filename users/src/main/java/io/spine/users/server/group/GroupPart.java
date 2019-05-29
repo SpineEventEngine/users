@@ -80,7 +80,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupCreated handle(CreateGroup command) {
         return GroupCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
@@ -100,7 +100,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                     .build();
         }
         return GroupMoved
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewOrgEntity(command.getNewOrgEntity())
                 .setOldOrgEntity(state().getOrgEntity())
@@ -110,7 +110,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupDeleted handle(DeleteGroup command) {
         return GroupDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .build();
     }
@@ -118,7 +118,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     RoleAssignedToGroup handle(AssignRoleToGroup command) {
         return RoleAssignedToGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setRoleId(command.getRoleId())
                 .build();
@@ -137,7 +137,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
                     .build();
         }
         return RoleUnassignedFromGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setRoleId(command.getRoleId())
                 .build();
@@ -146,7 +146,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupRenamed handle(RenameGroup command) {
         return GroupRenamed
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
@@ -157,7 +157,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupEmailChanged handle(ChangeGroupEmail command) {
         return GroupEmailChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewEmail(command.getNewEmail())
                 .setOldEmail(state().getEmail())
@@ -167,7 +167,7 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Assign
     GroupDescriptionChanged handle(ChangeGroupDescription command) {
         return GroupDescriptionChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewDescription(command.getDescription())
                 .setOldDescription(state().getDescription())

@@ -131,7 +131,7 @@ public final class SignInTestEnv {
 
     public static Identity identity(String id, DirectoryId directoryId, String name) {
         return Identity
-                .vBuilder()
+                .newBuilder()
                 .setUserId(id)
                 .setDisplayName(name)
                 .setDirectoryId(directoryId)
@@ -148,7 +148,7 @@ public final class SignInTestEnv {
 
     static PersonProfile profile() {
         return PersonProfile
-                .vBuilder()
+                .newBuilder()
                 .setName(name())
                 .setEmail(email())
                 .build();
@@ -156,7 +156,7 @@ public final class SignInTestEnv {
 
     static DirectoryId googleDirectoryId() {
         return DirectoryId
-                .vBuilder()
+                .newBuilder()
                 .setValue("gmail.com")
                 .build();
     }
@@ -182,8 +182,8 @@ public final class SignInTestEnv {
     }
 
     private static UserVBuilder userPartState() {
-        return User
-                .vBuilder()
+        return UserVBuilder
+                .newBuilder()
                 .setId(userId())
                 .setOrgEntity(orgEntity())
                 .setDisplayName(displayName())
@@ -196,7 +196,7 @@ public final class SignInTestEnv {
 
     private static OrganizationOrUnit orgEntity() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId())
                 .build();
     }
@@ -207,7 +207,7 @@ public final class SignInTestEnv {
 
     private static OrganizationId organizationId() {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue("org_id")
                 .build();
     }

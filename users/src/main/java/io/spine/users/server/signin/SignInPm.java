@@ -185,7 +185,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setSuccessful(false)
                 .setFailureReason(failureReason)
@@ -194,7 +194,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     FinishSignIn finishSuccessfully() {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setSuccessful(true)
                 .build();
@@ -202,7 +202,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignUserIn signIn(Identity identity) {
         return SignUserIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setIdentity(identity)
                 .build();
@@ -212,7 +212,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         String displayName = profile.getEmail()
                                     .getValue();
         return CreateUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setDisplayName(displayName)
                 .setPrimaryIdentity(identity)
@@ -225,7 +225,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignInSuccessful signInSuccessful(UserId id, Identity identity) {
         return SignInSuccessful
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .build();
@@ -233,7 +233,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignInFailed signInFailed(UserId id, Identity identity, SignInFailureReason reason) {
         return SignInFailed
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .setFailureReason(reason)
@@ -242,7 +242,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignOutCompleted signOutCompleted(UserId id) {
         return SignOutCompleted
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }

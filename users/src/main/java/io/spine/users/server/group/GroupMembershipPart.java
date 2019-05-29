@@ -65,7 +65,7 @@ public class GroupMembershipPart
             throws GroupsCannotFormCycles {
         ensureNoCycles(command);
         return JoinedParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
                 .build();
@@ -74,7 +74,7 @@ public class GroupMembershipPart
     @Assign
     LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
         return LeftParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
                 .build();

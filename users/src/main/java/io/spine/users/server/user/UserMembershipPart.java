@@ -54,31 +54,31 @@ public class UserMembershipPart
     @Assign
     UserJoinedGroup handle(JoinGroup command) {
         UserJoinedGroup event = UserJoinedGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setGroupId(command.getGroupId())
                 .setRole(MEMBER)
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command) {
         UserLeftGroup event = UserLeftGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setGroupId(command.getGroupId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Apply
     private void on(UserJoinedGroup event) {
         UserMembershipRecord membershipRecord = UserMembershipRecord
-                .vBuilder()
+                .newBuilder()
                 .setGroupId(event.getGroupId())
                 .setRole(event.getRole())
-                .build();
+                .vBuild();
         builder()
                 .setId(id())
                 .addMembership(membershipRecord);

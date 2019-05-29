@@ -46,9 +46,9 @@ public class GroupTestEnv {
 
     public static GroupId createGroupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
-                .build();
+                .vBuild();
     }
 
     public static GroupId upperGroupId() {
@@ -68,16 +68,16 @@ public class GroupTestEnv {
 
     public static OrganizationOrUnit groupOrgEntityOrganization() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId("Space travel"))
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit groupParentOrgUnit() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrgUnit(orgUnitUuid())
-                .build();
+                .vBuild();
     }
 
     public static RoleId groupRole() {

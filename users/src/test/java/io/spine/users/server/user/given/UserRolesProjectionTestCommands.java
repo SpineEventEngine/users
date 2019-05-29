@@ -46,11 +46,11 @@ public class UserRolesProjectionTestCommands {
     public static CreateUser createUser(UserId userId) {
         OrganizationId organizationId = organizationId("organization of " + userId.getValue());
         OrganizationOrUnit orgEntity = OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId)
                 .build();
         return CreateUser
-                .vBuilder()
+                .newBuilder()
                 .setId(userId)
                 .setNature(UserNature.UNAVAILABLE)
                 .setDisplayName("display name of " + userId.getValue())
@@ -61,14 +61,14 @@ public class UserRolesProjectionTestCommands {
 
     public static CreateRole createRole(RoleId id) {
         return CreateRole
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }
 
     public static CreateGroup createGroup(GroupId groupId) {
         return CreateGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setDisplayName("group " + groupId.getValue())
                 .setEmail(GroupTestEnv.groupEmail())
@@ -79,7 +79,7 @@ public class UserRolesProjectionTestCommands {
 
     public static JoinGroup joinGroup(UserId user, GroupId groupId) {
         return JoinGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(user)
                 .setGroupId(groupId)
                 .setRole(RoleInGroup.MEMBER)
@@ -88,7 +88,7 @@ public class UserRolesProjectionTestCommands {
 
     public static LeaveGroup leaveGroup(UserId userId, GroupId group) {
         return LeaveGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(userId)
                 .setGroupId(group)
                 .build();

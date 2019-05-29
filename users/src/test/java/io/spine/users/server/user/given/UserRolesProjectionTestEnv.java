@@ -41,17 +41,17 @@ public class UserRolesProjectionTestEnv {
 
     public static UserRoles userWithoutRoles(UserId user) {
         return UserRoles
-                .vBuilder()
+                .newBuilder()
                 .setId(user)
-                .build();
+                .vBuild();
     }
 
     public static UserRoles userWithRole(UserId userId, RoleId roleId) {
         return UserRoles
-                .vBuilder()
+                .newBuilder()
                 .setId(userId)
                 .addRole(roleId)
-                .build();
+                .vBuild();
     }
 
     public static String roleNameUuid() {

@@ -71,7 +71,7 @@ final class TestProcManFactory {
 
     private static SignIn signIn(UserId id, Identity identity, Status status) {
         return SignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .setStatus(status)
@@ -80,7 +80,7 @@ final class TestProcManFactory {
 
     static DirectoryId directoryId(String id) {
         return DirectoryId
-                .vBuilder()
+                .newBuilder()
                 .setValue(id)
                 .build();
     }

@@ -45,16 +45,16 @@ public class GoogleGroupTestEnv {
 
     public static GroupId newGroupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
-                .build();
+                .vBuild();
     }
 
     public static GoogleGroupId googleId() {
         return GoogleGroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue("x123pwd")
-                .build();
+                .vBuild();
     }
 
     static String description() {
@@ -94,9 +94,9 @@ public class GoogleGroupTestEnv {
 
     public static GroupId parentGroup() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
-                .build();
+                .vBuild();
     }
 
     public static String groupName() {

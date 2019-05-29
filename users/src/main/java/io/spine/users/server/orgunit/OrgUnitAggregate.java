@@ -64,54 +64,54 @@ public class OrgUnitAggregate
     @Assign
     OrgUnitCreated handle(CreateOrgUnit command, CommandContext context) {
         OrgUnitCreated event = OrgUnitCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setDomain(command.getDomain())
                 .setParentEntity(command.getParentEntity())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrgUnitDeleted handle(DeleteOrgUnit command, CommandContext context) {
         OrgUnitDeleted event = OrgUnitDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrgUnitMoved handle(MoveOrgUnit command, CommandContext context) {
         OrgUnitMoved event = OrgUnitMoved
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewParentEntity(command.getNewParentEntity())
                 .setOldParentEntity(state().getParentEntity())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrgUnitRenamed handle(RenameOrgUnit command, CommandContext context) {
         OrgUnitRenamed event = OrgUnitRenamed
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrgUnitDomainChanged handle(ChangeOrgUnitDomain command, CommandContext context) {
         OrgUnitDomainChanged event = OrgUnitDomainChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewDomain(command.getNewDomain())
                 .setOldDomain(state().getDomain())
-                .build();
+                .vBuild();
         return event;
     }
 

@@ -64,7 +64,7 @@ final class TestOrganizationFactory {
 
     private static Organization state(OrganizationId id) {
         return Organization
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setTenant(orgTenant())
                 .setDomain(orgDomain())

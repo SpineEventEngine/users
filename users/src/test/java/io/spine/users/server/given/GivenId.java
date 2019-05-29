@@ -41,16 +41,16 @@ public class GivenId {
 
     public static OrgUnitId orgUnitUuid() {
         return OrgUnitId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
-                .build();
+                .vBuild();
     }
 
     public static OrganizationId organizationId(String value) {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue(value)
-                .build();
+                .vBuild();
     }
 
     public static GroupId groupUuid() {
@@ -59,8 +59,8 @@ public class GivenId {
 
     private static GroupId groupId(String value) {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(value)
-                .build();
+                .vBuild();
     }
 }

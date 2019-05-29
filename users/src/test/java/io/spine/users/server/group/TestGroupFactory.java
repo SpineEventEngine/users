@@ -100,8 +100,8 @@ final class TestGroupFactory {
 
     private static GroupMembership membershipState(GroupId id) {
         return GroupMembership
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 }

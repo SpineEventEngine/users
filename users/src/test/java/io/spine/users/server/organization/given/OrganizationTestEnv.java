@@ -45,7 +45,7 @@ public final class OrganizationTestEnv {
 
     public static OrganizationId createOrganizationId() {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
@@ -74,7 +74,7 @@ public final class OrganizationTestEnv {
 
     public static TenantId orgTenant() {
         return TenantId
-                .vBuilder()
+                .newBuilder()
                 .setDomain(orgDomain())
                 .setEmail(email())
                 .setValue(newUuid())
@@ -83,7 +83,7 @@ public final class OrganizationTestEnv {
 
     public static TenantId newOrgTenant() {
         return TenantId
-                .vBuilder()
+                .newBuilder()
                 .setDomain(orgDomain())
                 .setEmail(email())
                 .setValue(newUuid())

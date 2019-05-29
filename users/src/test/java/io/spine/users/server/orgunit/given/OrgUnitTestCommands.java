@@ -42,7 +42,7 @@ public final class OrgUnitTestCommands {
 
     public static CreateOrgUnit createOrgUnit(OrgUnitId id) {
         return CreateOrgUnit
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setDisplayName(OrgUnitTestEnv.orgUnitName())
                 .setDomain(OrgUnitTestEnv.orgUnitDomain())
@@ -53,14 +53,14 @@ public final class OrgUnitTestCommands {
 
     public static DeleteOrgUnit deleteOrgUnit(OrgUnitId id) {
         return DeleteOrgUnit
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }
 
     public static MoveOrgUnit moveOrgUnit(OrgUnitId id) {
         return MoveOrgUnit
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewParentEntity(OrgUnitTestEnv.newOrgUnitParentEntity())
                 .build();
@@ -68,7 +68,7 @@ public final class OrgUnitTestCommands {
 
     public static RenameOrgUnit renameOrgUnit(OrgUnitId id) {
         return RenameOrgUnit
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewName(OrgUnitTestEnv.orgUnitNewName())
                 .build();
@@ -76,7 +76,7 @@ public final class OrgUnitTestCommands {
 
     public static ChangeOrgUnitDomain changeOrgUnitDomain(OrgUnitId id) {
         return ChangeOrgUnitDomain
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewDomain(OrgUnitTestEnv.orgUnitNewDomain())
                 .build();

@@ -46,7 +46,7 @@ public class GoogleGroupTestEvents {
 
     public static GoogleGroupCreated internalGoogleGroupCreated(GroupId id) {
         return GoogleGroupCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setGoogleId(GoogleGroupTestEnv.googleId())
                 .setDisplayName(GoogleGroupTestEnv.displayName())
@@ -54,12 +54,12 @@ public class GoogleGroupTestEvents {
                 .setDomain(GoogleGroupTestEnv.internalDomain())
                 .addAlias(GoogleGroupTestEnv.alias())
                 .setDescription(GoogleGroupTestEnv.description())
-                .build();
+                .vBuild();
     }
 
     public static GoogleGroupCreated externalGoogleGroupCreated(GroupId id) {
         return GoogleGroupCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setGoogleId(GoogleGroupTestEnv.googleId())
                 .setDisplayName(GoogleGroupTestEnv.displayName())
@@ -67,29 +67,29 @@ public class GoogleGroupTestEvents {
                 .setDomain(GoogleGroupTestEnv.internalDomain())
                 .addAlias(GoogleGroupTestEnv.alias())
                 .setDescription(GoogleGroupTestEnv.description())
-                .build();
+                .vBuild();
     }
 
     public static GoogleGroupJoinedParentGroup googleGroupJoinedParentGroup(GroupId groupId) {
         return GoogleGroupJoinedParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setRole(GoogleGroupTestEnv.role())
                 .setNewParentId(GoogleGroupTestEnv.parentGroup())
-                .build();
+                .vBuild();
     }
 
     public static GoogleGroupLeftParentGroup googleGroupLeftParentGroup(GroupId groupId) {
         return GoogleGroupLeftParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setParentGroupId(GoogleGroupTestEnv.parentGroup())
-                .build();
+                .vBuild();
     }
 
     public static GoogleGroupRenamed googleGroupRenamed(GroupId groupId) {
         return GoogleGroupRenamed
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setDisplayName(GoogleGroupTestEnv.groupName())
                 .build();
@@ -97,14 +97,14 @@ public class GoogleGroupTestEvents {
 
     public static GoogleGroupDeleted googleGroupDeleted(GroupId groupId) {
         return GoogleGroupDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .build();
     }
 
     public static GoogleGroupEmailChanged googleGroupEmailChanged(GroupId groupId) {
         return GoogleGroupEmailChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setNewEmail(GoogleGroupTestEnv.newEmail())
                 .build();
@@ -112,7 +112,7 @@ public class GoogleGroupTestEvents {
 
     public static GoogleGroupDescriptionChanged googleGroupDescriptionChanged(GroupId groupId) {
         return GoogleGroupDescriptionChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setNewDescription(GoogleGroupTestEnv.newDescription())
                 .build();
@@ -120,7 +120,7 @@ public class GoogleGroupTestEvents {
 
     public static GoogleGroupAliasesChanged googleGroupAliasesChanged(GroupId groupId) {
         return GoogleGroupAliasesChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .addNewAlias(GoogleGroupTestEnv.newEmail())
                 .build();

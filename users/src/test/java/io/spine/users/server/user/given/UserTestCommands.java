@@ -69,7 +69,7 @@ public class UserTestCommands {
      */
     public static CreateUser createUser(UserId id) {
         return CreateUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setDisplayName(userDisplayName())
                 .setOrgEntity(userOrgEntity())
@@ -77,12 +77,12 @@ public class UserTestCommands {
                 .setProfile(profile())
                 .setStatus(NOT_READY)
                 .setNature(PERSON)
-                .build();
+                .vBuild();
     }
 
     public static MoveUser moveUser(UserId id) {
         return MoveUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewOrgEntity(newUserOrgEntity())
                 .build();
@@ -90,7 +90,7 @@ public class UserTestCommands {
 
     public static JoinGroup startGroupMembership(UserId id) {
         return JoinGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setGroupId(firstGroupId())
                 .setRole(MEMBER)
@@ -99,7 +99,7 @@ public class UserTestCommands {
 
     public static LeaveGroup stopGroupMembership(UserId id) {
         return LeaveGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setGroupId(firstGroupId())
                 .build();
@@ -107,14 +107,14 @@ public class UserTestCommands {
 
     public static DeleteUser deleteUser(UserId id) {
         return DeleteUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }
 
     public static AssignRoleToUser assignRoleToUser(UserId id) {
         return AssignRoleToUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setRoleId(editorRoleId())
                 .build();
@@ -122,7 +122,7 @@ public class UserTestCommands {
 
     public static UnassignRoleFromUser unassignRoleFromUser(UserId id) {
         return UnassignRoleFromUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setRoleId(adminRoleId())
                 .build();
@@ -130,7 +130,7 @@ public class UserTestCommands {
 
     public static AddSecondaryIdentity addAuthIdentity(UserId id) {
         return AddSecondaryIdentity
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(googleIdentity())
                 .build();
@@ -139,7 +139,7 @@ public class UserTestCommands {
     public static RemoveSecondaryIdentity removeAuthIdentity(UserId id) {
         Identity identity = googleIdentity();
         return RemoveSecondaryIdentity
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setDirectoryId(identity.getDirectoryId())
                 .setUserId(identity.getUserId())
@@ -148,7 +148,7 @@ public class UserTestCommands {
 
     public static ChangeUserStatus changeUserStatus(UserId id) {
         return ChangeUserStatus
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setStatus(Status.SUSPENDED)
                 .build();
@@ -156,7 +156,7 @@ public class UserTestCommands {
 
     public static ChangePrimaryIdentity changePrimaryIdentity(UserId id) {
         return ChangePrimaryIdentity
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(githubIdentity())
                 .build();
@@ -164,7 +164,7 @@ public class UserTestCommands {
 
     public static RenameUser renameUser(UserId id) {
         return RenameUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewName(newUserDisplayName())
                 .build();
@@ -172,7 +172,7 @@ public class UserTestCommands {
 
     public static UpdatePersonProfile updatePersonProfile(UserId id) {
         return UpdatePersonProfile
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setUpdatedProfile(newProfile())
                 .build();

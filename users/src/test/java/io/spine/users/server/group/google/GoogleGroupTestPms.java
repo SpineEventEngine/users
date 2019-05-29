@@ -49,8 +49,8 @@ public class GoogleGroupTestPms {
 
     private static GoogleGroupLifecycle lifecycle(GroupId id) {
         return GoogleGroupLifecycle
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 }

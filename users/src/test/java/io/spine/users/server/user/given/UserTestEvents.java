@@ -40,16 +40,16 @@ public class UserTestEvents {
 
     public static SignInSuccessful signInSuccessful(UserId id) {
         return SignInSuccessful
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(UserTestEnv.googleIdentity())
-                .build();
+                .vBuild();
     }
 
     public static SignOutCompleted signOutCompleted(UserId id) {
         return SignOutCompleted
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 }

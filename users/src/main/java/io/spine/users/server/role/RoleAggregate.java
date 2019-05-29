@@ -65,18 +65,18 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Assign
     RoleCreated handle(CreateRole command) {
         RoleCreated event = RoleCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command) {
         RoleDeleted event = RoleDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
@@ -86,7 +86,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
         builder().setId(id)
                  .setDisplayName(id.getName())
                  .setOrgEntity(id.getOrgEntity())
-                 .build();
+                 .vBuild();
     }
 
     @Apply

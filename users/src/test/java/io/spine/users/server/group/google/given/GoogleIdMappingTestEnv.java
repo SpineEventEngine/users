@@ -44,7 +44,7 @@ public class GoogleIdMappingTestEnv {
 
     static GroupId groupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
@@ -62,7 +62,7 @@ public class GoogleIdMappingTestEnv {
 
     static GoogleGroupId googleId() {
         return GoogleGroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
