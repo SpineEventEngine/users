@@ -20,12 +20,12 @@
 
 package io.spine.users.server.group;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.server.route.EventRoute;
+import io.spine.server.route.EventRouting;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupRolesPropagation;
-import io.spine.users.user.event.UserJoinedGroup;
-import io.spine.users.user.event.UserLeftGroup;
 
 /**
  * The repository for {@link GroupRolesPropagationPm}.
@@ -33,11 +33,10 @@ import io.spine.users.user.event.UserLeftGroup;
 public class GroupRolesPropagationRepository
         extends ProcessManagerRepository<GroupId, GroupRolesPropagationPm, GroupRolesPropagation> {
 
-    public GroupRolesPropagationRepository() {
-        super();
-        eventRouting().route(UserJoinedGroup.class,
-                             (event, context) -> ImmutableSet.of(event.getGroupId()))
-                      .route(UserLeftGroup.class,
-                             (event, context) -> ImmutableSet.of(event.getGroupId()));
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void setupEventRouting(EventRouting<GroupId> routing) {
+        super.setupEventRouting(routing);
+        routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
     }
 }

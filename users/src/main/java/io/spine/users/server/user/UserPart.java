@@ -102,7 +102,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        UserCreatedVBuilder eventBuilder = UserCreated
+        UserCreatedVBuilder eventBuilder = UserCreatedVBuilder
                 .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
@@ -132,7 +132,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                     .newBuilder()
                     .setId(command.getId())
                     .setExternalDomain(state().getExternalDomain())
-                    .vBuild();
+                    .build();
         }
         UserMoved event = UserMoved
                 .newBuilder()
@@ -172,7 +172,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                     .newBuilder()
                     .setId(id())
                     .setRoleId(roleId)
-                    .vBuild();
+                    .build();
         }
         RoleUnassignedFromUser event = RoleUnassignedFromUser
                 .newBuilder()
@@ -364,6 +364,6 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                 .setId(command.getId())
                 .setDirectoryId(command.getDirectoryId())
                 .setUserId(command.getUserId())
-                .vBuild();
+                .build();
     }
 }

@@ -86,7 +86,7 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
         builder().setId(id)
                  .setDisplayName(id.getName())
                  .setOrgEntity(id.getOrgEntity())
-                 .vBuild();
+                 .build();
     }
 
     @Apply
