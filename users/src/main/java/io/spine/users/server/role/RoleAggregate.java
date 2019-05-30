@@ -53,7 +53,7 @@ import io.spine.users.role.event.RoleDeleted;
  * Group} aggregates have not only the roles listed in their aggregate states, but effectively all
  * the roles derived from parent groups.
  */
-public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
+public class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
 
     /**
      * @see Aggregate#Aggregate(Object)

@@ -42,7 +42,7 @@ import io.spine.users.server.group.GroupRoot;
  * </ul>
  */
 public class GoogleGroupPart
-        extends AggregatePart<GroupId, GoogleGroup, GoogleGroupVBuilder, GroupRoot> {
+        extends AggregatePart<GroupId, GoogleGroup, GoogleGroup.Builder, GroupRoot> {
 
     /**
      * @see AggregatePart#AggregatePart(AggregateRoot)

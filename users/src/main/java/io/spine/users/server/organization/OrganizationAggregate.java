@@ -48,7 +48,7 @@ import io.spine.users.orgunit.OrgUnit;
  * @author Vladyslav Lubenskyi
  */
 public class OrganizationAggregate
-        extends Aggregate<OrganizationId, Organization, OrganizationVBuilder> {
+        extends Aggregate<OrganizationId, Organization, Organization.Builder> {
 
     /**
      * @see Aggregate#Aggregate(Object)

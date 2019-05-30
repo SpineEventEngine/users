@@ -21,7 +21,6 @@
 package io.spine.users.server.orgunit.given;
 
 import io.spine.net.InternetDomain;
-import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationOrUnit;
 
@@ -54,17 +53,17 @@ public final class OrgUnitTestEnv {
     }
 
     public static InternetDomain orgUnitDomain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("unit.organization.com")
-                .build();
+                .vBuild();
     }
 
     public static InternetDomain orgUnitNewDomain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("unit-renamed.organization.com")
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit orgUnitParentEntity() {

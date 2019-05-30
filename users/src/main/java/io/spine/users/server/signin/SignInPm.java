@@ -32,7 +32,6 @@ import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
-import io.spine.users.signin.SignInVBuilder;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
@@ -64,21 +63,21 @@ import static java.util.Optional.of;
  * <p>This process manager covers a straightforward sign-in scenario:
  *
  * <ol>
- *     <li>{@link SignUserIn} command initializes the sign-in process.
- *     <li>If a {@linkplain UserPart user} with the given {@linkplain UserId ID} already exists
- *         and all checks pass {@link SignInSuccessful} event is generated in response.
- *     <li>Otherwise, the process manager creates a {@link UserPart} and then attempts to
- *         {@linkplain SignUserIn sign user in} again.
+ * <li>{@link SignUserIn} command initializes the sign-in process.
+ * <li>If a {@linkplain UserPart user} with the given {@linkplain UserId ID} already exists
+ * and all checks pass {@link SignInSuccessful} event is generated in response.
+ * <li>Otherwise, the process manager creates a {@link UserPart} and then attempts to
+ * {@linkplain SignUserIn sign user in} again.
  * </ol>
  *
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- *     <li>a {@linkplain Directory} is aware of the given authentication identity;
- *     <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
- *         account was suspended);
- *     <li>the given authentication identity is associated with the user (that is, serves as the
- *         primary or a secondary authentication identity).
+ * <li>a {@linkplain Directory} is aware of the given authentication identity;
+ * <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
+ * account was suspended);
+ * <li>the given authentication identity is associated with the user (that is, serves as the
+ * primary or a secondary authentication identity).
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.
@@ -86,7 +85,7 @@ import static java.util.Optional.of;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
-public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
+public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
 
     private UserPartRepository userRepository;
     private DirectoryFactory directories;
@@ -116,8 +115,9 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
-        SignInVBuilder builder = builder().setId(id)
-                                          .setIdentity(identity);
+        SignIn.Builder builder = builder()
+                .setId(id)
+                .setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));

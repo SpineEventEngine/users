@@ -27,7 +27,6 @@ import io.spine.users.RoleId;
 import io.spine.users.group.event.RoleDisinheritedByUser;
 import io.spine.users.group.event.RoleInheritedByUser;
 import io.spine.users.user.UserRoles;
-import io.spine.users.user.UserRolesVBuilder;
 import io.spine.users.user.event.RoleAssignedToUser;
 import io.spine.users.user.event.RoleUnassignedFromUser;
 import io.spine.users.user.event.UserCreated;
@@ -35,7 +34,7 @@ import io.spine.users.user.event.UserCreated;
 /**
  * A projection of all user roles (both explicitly and implicitly assigned).
  */
-public class UserRolesProjection extends Projection<UserId, UserRoles, UserRolesVBuilder> {
+public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles.Builder> {
 
     protected UserRolesProjection(UserId id) {
         super(id);
@@ -70,7 +69,7 @@ public class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles
     }
 
     private void removeRole(RoleId roleId) {
-        int roleIndex = builder().getRole()
+        int roleIndex = builder().getRoleList()
                                  .indexOf(roleId);
         builder().removeRole(roleIndex);
     }

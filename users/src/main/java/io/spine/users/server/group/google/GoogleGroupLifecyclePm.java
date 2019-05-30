@@ -68,7 +68,7 @@ import static java.util.Optional.empty;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
                                                            GoogleGroupLifecycle,
-                                                           GoogleGroupLifecycleVBuilder> {
+                                                           GoogleGroupLifecycle.Builder> {
 
     /**
      * @see ProcessManager#ProcessManager(Object)

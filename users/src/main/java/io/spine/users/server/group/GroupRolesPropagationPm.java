@@ -45,7 +45,7 @@ import static java.util.stream.Collectors.toList;
  * <p>The process manager emits events, which explicitly state the fact of a role propagation.
  */
 public class GroupRolesPropagationPm
-        extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagationVBuilder> {
+        extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagation.Builder> {
 
     protected GroupRolesPropagationPm(GroupId id) {
         super(id);
@@ -102,26 +102,28 @@ public class GroupRolesPropagationPm
     }
 
     private void removeMember(UserId member) {
-        List<UserId> members = builder().getUserMember();
+        GroupRolesPropagation.Builder builder = builder();
+        List<UserId> members = builder.getUserMemberList();
         int memberIndex = members.indexOf(member);
         builder().removeUserMember(memberIndex);
     }
 
     private void removeRole(RoleId role) {
-        List<RoleId> roles = builder().getRole();
+        GroupRolesPropagation.Builder builder = builder();
+        List<RoleId> roles = builder.getRoleList();
         int roleIndex = roles.indexOf(role);
-        builder().removeRole(roleIndex);
+        builder.removeRole(roleIndex);
     }
 
     private List<UserId> members() {
-        return builder().getUserMember();
+        return builder().getUserMemberList();
     }
 
     /**
      * Obtains the roles currently assigned to the group.
      */
     private List<RoleId> roles() {
-        return builder().getRole();
+        return builder().getRoleList();
     }
 
     private static RoleInheritedByUser roleInherited(GroupId group,

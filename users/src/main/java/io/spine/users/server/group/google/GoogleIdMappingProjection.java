@@ -39,7 +39,7 @@ import io.spine.users.group.google.GoogleIdMappingViewVBuilder;
 public class GoogleIdMappingProjection
         extends Projection<GoogleIdMappingViewId,
                            GoogleIdMappingView,
-                           GoogleIdMappingViewVBuilder> {
+                           GoogleIdMappingView.Builder> {
 
     /**
      * @see Projection#Projection(Object)

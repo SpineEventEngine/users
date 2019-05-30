@@ -90,7 +90,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot> {
+public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
     /**
      * @see Aggregate#Aggregate(Object)
@@ -251,7 +251,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
 
     @Apply
     private void on(UserCreated event) {
-        UserVBuilder builder = builder();
+        User.Builder builder = builder();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setPrimaryIdentity(event.getPrimaryIdentity())
@@ -332,7 +332,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleId> roles = builder().getRole();
+        List<RoleId> roles = builder().getRoleList();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
             builder().removeRole(index);
@@ -340,7 +340,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     private void removeIdentity(Identity identity) {
-        List<Identity> identities = builder().getSecondaryIdentity();
+        List<Identity> identities = builder().getSecondaryIdentityList();
         if (identities.contains(identity)) {
             int index = identities.indexOf(identity);
             builder().removeSecondaryIdentity(index);

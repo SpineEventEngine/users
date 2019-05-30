@@ -22,9 +22,7 @@ package io.spine.users.server.user.given;
 
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
-import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.DirectoryId;
 import io.spine.users.GroupId;
@@ -156,33 +154,33 @@ public class UserTestEnv {
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("john@smith.com")
-                .build();
+                .vBuild();
     }
 
     private static PersonName personName() {
-        return PersonNameVBuilder
+        return PersonName
                 .newBuilder()
                 .setGivenName("Jane")
                 .setFamilyName("Jones")
-                .build();
+                .vBuild();
     }
 
     private static EmailAddress newEmail() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("john+alias@smith.com")
-                .build();
+                .vBuild();
     }
 
     private static PersonName newPersonName() {
-        return PersonNameVBuilder
+        return PersonName
                 .newBuilder()
                 .setGivenName("John")
                 .setMiddleName("The Person")
                 .setFamilyName("Smith")
-                .build();
+                .vBuild();
     }
 }

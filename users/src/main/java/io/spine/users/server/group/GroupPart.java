@@ -68,7 +68,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * @see GroupMembershipPart for the part that handle group memberships
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
-public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, GroupRoot> {
+public class GroupPart extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
     /**
      * @see Aggregate#Aggregate(Object)
@@ -176,11 +176,11 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
 
     @Apply
     private void on(GroupCreated event) {
-        GroupVBuilder builder = builder();
+        Group.Builder builder = builder();
         builder.setId(event.getId())
-               .setDisplayName(event.getDisplayName())
-               .setEmail(event.getEmail())
-               .setDescription(event.getDescription());
+                 .setDisplayName(event.getDisplayName())
+                 .setEmail(event.getEmail())
+                 .setDescription(event.getDescription());
 
         switch (event.getOriginCase()) {
             case ORG_ENTITY:
@@ -214,11 +214,10 @@ public class GroupPart extends AggregatePart<GroupId, Group, GroupVBuilder, Grou
     @Apply
     private void on(RoleUnassignedFromGroup event) {
         RoleId roleId = event.getRoleId();
-        GroupVBuilder builder = builder();
-        List<RoleId> roles = builder.getRole();
+        List<RoleId> roles = builder().getRoleList();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
-            builder.removeRole(index);
+            builder().removeRole(index);
         }
     }
 

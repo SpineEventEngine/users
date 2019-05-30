@@ -60,14 +60,14 @@ final class TestGroupFactory {
      * Creates a new instance of the {@link GroupPart} with the filled state.
      */
     static GroupPart createGroupPart(GroupRoot root) {
-        return groupPart(groupState(root.getId()), root);
+        return groupPart(groupState(root.id()), root);
     }
 
     /**
      * Creates a new instance of the {@link GroupMembershipPart} with the filled state.
      */
     static GroupMembershipPart createMembershipPart(GroupRoot root) {
-        return membershipPart(membershipState(root.getId()), root);
+        return membershipPart(membershipState(root.id()), root);
     }
 
     private static GroupPart groupPart(Group state, GroupRoot root) {

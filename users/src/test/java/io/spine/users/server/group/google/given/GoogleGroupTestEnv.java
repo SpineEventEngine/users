@@ -21,9 +21,7 @@
 package io.spine.users.server.group.google.given;
 
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
-import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GoogleGroupId;
 import io.spine.users.GroupId;
 import io.spine.users.server.group.google.GoogleGroupLifecyclePm;
@@ -62,17 +60,17 @@ public class GoogleGroupTestEnv {
     }
 
     static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("developers@spine.io")
-                .build();
+                .vBuild();
     }
 
     static EmailAddress newEmail() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("developers+1@spine.io")
-                .build();
+                .vBuild();
     }
 
     static String newDescription() {
@@ -80,16 +78,16 @@ public class GoogleGroupTestEnv {
     }
 
     static InternetDomain internalDomain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("spine.io")
-                .build();
+                .vBuild();
     }
 
     public static EmailAddress alias() {
-        return EmailAddressVBuilder.newBuilder()
-                                   .setValue("developers@spine.eu")
-                                   .build();
+        return EmailAddress.newBuilder()
+                           .setValue("developers@spine.eu")
+                           .vBuild();
     }
 
     public static GroupId parentGroup() {

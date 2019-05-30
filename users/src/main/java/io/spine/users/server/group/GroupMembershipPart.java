@@ -48,7 +48,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Vladyslav Lubenskyi
  */
 public class GroupMembershipPart
-        extends AggregatePart<GroupId, GroupMembership, GroupMembershipVBuilder, GroupRoot> {
+        extends AggregatePart<GroupId, GroupMembership, GroupMembership.Builder, GroupRoot> {
 
     /**
      * Creates a new instance of the aggregate part.
@@ -96,8 +96,8 @@ public class GroupMembershipPart
     }
 
     private void removeMembership(GroupId parentGroup) {
-        GroupMembershipVBuilder builder = builder();
-        List<GroupId> memberships = builder.getMembership();
+        GroupMembership.Builder builder = builder();
+        List<GroupId> memberships = builder.getMembershipList();
         if (memberships.contains(parentGroup)) {
             int index = memberships.indexOf(parentGroup);
             builder.removeMembership(index);

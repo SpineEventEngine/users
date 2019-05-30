@@ -45,7 +45,7 @@ import static io.spine.users.user.RoleInGroup.MEMBER;
  * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
  */
 public class UserMembershipPart
-        extends AggregatePart<UserId, UserMembership, UserMembershipVBuilder, UserRoot> {
+        extends AggregatePart<UserId, UserMembership, UserMembership.Builder, UserRoot> {
 
     UserMembershipPart(UserRoot root) {
         super(root);
@@ -91,14 +91,14 @@ public class UserMembershipPart
     }
 
     private void removeMembership(UserMembershipRecord record) {
-        int index = builder().getMembership()
+        int index = builder().getMembershipList()
                              .indexOf(record);
         builder().removeMembership(index);
     }
 
     private Optional<UserMembershipRecord> findMembership(GroupId groupId) {
         Optional<UserMembershipRecord> record =
-                builder().getMembership()
+                builder().getMembershipList()
                          .stream()
                          .filter(membership -> membership.getGroupId()
                                                          .equals(groupId))
