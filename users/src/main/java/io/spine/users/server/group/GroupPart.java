@@ -27,7 +27,6 @@ import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.group.Group;
-import io.spine.users.group.GroupVBuilder;
 import io.spine.users.group.command.AssignRoleToGroup;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;

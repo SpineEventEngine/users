@@ -25,7 +25,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
-import io.spine.users.role.RoleVBuilder;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleCreated;

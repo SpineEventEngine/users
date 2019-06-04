@@ -55,7 +55,7 @@ public class GoogleIdMappingTestEnv {
         return InternetDomain
                 .newBuilder()
                 .setValue("spine.io")
-                .vBuild();
+                .build();
     }
 
     static GoogleGroupId googleId() {
@@ -69,6 +69,6 @@ public class GoogleIdMappingTestEnv {
         return EmailAddress
                 .newBuilder()
                 .setValue("developers@company.com")
-                .vBuild();
+                .build();
     }
 }

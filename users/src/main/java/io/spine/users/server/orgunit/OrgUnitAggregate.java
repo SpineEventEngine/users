@@ -26,7 +26,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
-import io.spine.users.orgunit.OrgUnitVBuilder;
 import io.spine.users.orgunit.command.ChangeOrgUnitDomain;
 import io.spine.users.orgunit.command.CreateOrgUnit;
 import io.spine.users.orgunit.command.DeleteOrgUnit;

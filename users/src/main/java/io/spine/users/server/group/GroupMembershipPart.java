@@ -26,7 +26,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
-import io.spine.users.group.GroupMembershipVBuilder;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;

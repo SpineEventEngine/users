@@ -26,7 +26,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
-import io.spine.users.organization.OrganizationVBuilder;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
 import io.spine.users.organization.command.CreateOrganization;

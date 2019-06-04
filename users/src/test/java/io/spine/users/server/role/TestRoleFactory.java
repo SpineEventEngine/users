@@ -23,7 +23,6 @@ package io.spine.users.server.role;
 import io.spine.testing.server.entity.given.Given;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
-import io.spine.users.role.RoleVBuilder;
 import io.spine.users.server.role.given.RoleTestEnv;
 
 /**
@@ -60,8 +59,8 @@ final class TestRoleFactory {
                     .build();
     }
 
-    private static RoleVBuilder state(RoleId id) {
-        return RoleVBuilder
+    private static Role.Builder state(RoleId id) {
+        return Role
                 .newBuilder()
                 .setId(id)
                 .setDisplayName(RoleTestEnv.roleName())

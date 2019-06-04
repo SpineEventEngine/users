@@ -22,7 +22,7 @@ package io.spine.users.server.user;
 
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.server.aggregate.Aggregate;
+import io.spine.net.EmailAddress;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -33,7 +33,6 @@ import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.role.Role;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
-import io.spine.users.user.UserVBuilder;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.ChangePrimaryIdentity;
@@ -52,7 +51,6 @@ import io.spine.users.user.event.RoleUnassignedFromUser;
 import io.spine.users.user.event.SecondaryIdentityAdded;
 import io.spine.users.user.event.SecondaryIdentityRemoved;
 import io.spine.users.user.event.UserCreated;
-import io.spine.users.user.event.UserCreatedVBuilder;
 import io.spine.users.user.event.UserDeleted;
 import io.spine.users.user.event.UserMoved;
 import io.spine.users.user.event.UserRenamed;
@@ -92,9 +90,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
 public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
     UserPart(UserRoot root) {
         super(root);
     }
@@ -102,7 +97,7 @@ public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        UserCreatedVBuilder eventBuilder = UserCreatedVBuilder
+        UserCreated.Builder eventBuilder = UserCreated
                 .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
@@ -110,7 +105,6 @@ public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot
                 .setStatus(command.getStatus())
                 .setProfile(command.getProfile())
                 .setNature(command.getNature());
-
         switch (command.getOriginCase()) {
             case ORG_ENTITY:
                 eventBuilder.setOrgEntity(command.getOrgEntity());
@@ -122,7 +116,7 @@ public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot
             default:
                 throw newIllegalArgumentException("No `origin` found in CreateUser command");
         }
-        return eventBuilder.build();
+        return eventBuilder.vBuild();
     }
 
     @Assign

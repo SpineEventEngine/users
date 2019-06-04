@@ -24,7 +24,6 @@ import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
-import io.spine.users.group.GroupVBuilder;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
@@ -87,7 +86,7 @@ final class TestGroupFactory {
     }
 
     private static Group groupState(GroupId id) {
-        return GroupVBuilder
+        return Group
                 .newBuilder()
                 .setId(id)
                 .setOrgEntity(groupOrgEntityOrganization())
@@ -95,7 +94,7 @@ final class TestGroupFactory {
                 .setEmail(groupEmail())
                 .setDescription(groupDescription())
                 .addRole(groupRole())
-                .build();
+                .vBuild();
     }
 
     private static GroupMembership membershipState(GroupId id) {

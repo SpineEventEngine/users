@@ -45,14 +45,14 @@ public class GoogleGroupTestEnv {
         return GroupId
                 .newBuilder()
                 .setValue(newUuid())
-                .vBuild();
+                .build();
     }
 
     public static GoogleGroupId googleId() {
         return GoogleGroupId
                 .newBuilder()
                 .setValue("x123pwd")
-                .vBuild();
+                .build();
     }
 
     static String description() {
@@ -63,14 +63,14 @@ public class GoogleGroupTestEnv {
         return EmailAddress
                 .newBuilder()
                 .setValue("developers@spine.io")
-                .vBuild();
+                .build();
     }
 
     static EmailAddress newEmail() {
         return EmailAddress
                 .newBuilder()
                 .setValue("developers+1@spine.io")
-                .vBuild();
+                .build();
     }
 
     static String newDescription() {
@@ -87,14 +87,14 @@ public class GoogleGroupTestEnv {
     public static EmailAddress alias() {
         return EmailAddress.newBuilder()
                            .setValue("developers@spine.eu")
-                           .vBuild();
+                           .build();
     }
 
     public static GroupId parentGroup() {
         return GroupId
                 .newBuilder()
                 .setValue(newUuid())
-                .vBuild();
+                .build();
     }
 
     public static String groupName() {

@@ -40,7 +40,6 @@ import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.google.GoogleGroupLifecycle;
-import io.spine.users.group.google.GoogleGroupLifecycleVBuilder;
 
 import java.util.Optional;
 
