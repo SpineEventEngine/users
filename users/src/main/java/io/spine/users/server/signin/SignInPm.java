@@ -55,7 +55,6 @@ import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
 import static io.spine.users.user.User.Status.ACTIVE;
 import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 /**
  * The process of a sign-in using the given {@linkplain Identity authentication identity}.
@@ -142,7 +141,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
     @Command
     Optional<SignUserIn> on(UserCreated event) {
         if (awaitsUserCreation()) {
-            return of(signIn(builder().getIdentity()));
+            return Optional.of(signIn(builder().getIdentity()));
         }
         return empty();
     }

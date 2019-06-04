@@ -86,8 +86,9 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: spineProtobufPluginId
     apply plugin: 'net.ltgt.errorprone'
-    
     apply plugin: 'pmd'
+
+    apply from: deps.scripts.javacArgs
     apply from: deps.scripts.pmd
     apply from: deps.scripts.modelCompiler
     apply from: deps.scripts.projectLicenseReport
@@ -102,7 +103,7 @@ subprojects {
         errorproneJavac deps.build.errorProneJavac
         // For dependencies config. based on version of Java, see:
         //  https://github.com/epeee/junit-jupiter-extension-testing/blob/57b7ba75ab64ed8c229d2a5b14a954d6ae359189/gradle/errorprone.gradle
-        
+
         implementation deps.build.guava
         implementation deps.build.checkerAnnotations
         implementation deps.build.errorProneAnnotations
@@ -162,7 +163,7 @@ subprojects {
     }
 
     task javadocJar(type: Jar, dependsOn: 'javadoc') {
-        from ("$projectDir/build/docs/javadoc")
+        from("$projectDir/build/docs/javadoc")
         archiveClassifier.set("javadoc")
     }
 
