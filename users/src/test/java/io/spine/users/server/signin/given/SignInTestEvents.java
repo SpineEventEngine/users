@@ -44,7 +44,7 @@ public final class SignInTestEvents {
 
     public static UserCreated userCreated(UserId id) {
         return UserCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setProfile(profile())
                 .setStatus(ACTIVE)

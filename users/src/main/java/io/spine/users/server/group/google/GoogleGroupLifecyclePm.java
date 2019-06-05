@@ -40,7 +40,6 @@ import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.google.GoogleGroupLifecycle;
-import io.spine.users.group.google.GoogleGroupLifecycleVBuilder;
 
 import java.util.Optional;
 
@@ -68,7 +67,7 @@ import static java.util.Optional.empty;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
                                                            GoogleGroupLifecycle,
-                                                           GoogleGroupLifecycleVBuilder> {
+                                                           GoogleGroupLifecycle.Builder> {
 
     /**
      * @see ProcessManager#ProcessManager(Object)

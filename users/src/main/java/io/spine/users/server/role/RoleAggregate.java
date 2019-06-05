@@ -25,7 +25,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
-import io.spine.users.role.RoleVBuilder;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleCreated;
@@ -53,7 +52,7 @@ import io.spine.users.role.event.RoleDeleted;
  * Group} aggregates have not only the roles listed in their aggregate states, but effectively all
  * the roles derived from parent groups.
  */
-public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
+public class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
 
     /**
      * @see Aggregate#Aggregate(Object)
@@ -65,18 +64,18 @@ public class RoleAggregate extends Aggregate<RoleId, Role, RoleVBuilder> {
     @Assign
     RoleCreated handle(CreateRole command) {
         RoleCreated event = RoleCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     RoleDeleted handle(DeleteRole command) {
         RoleDeleted event = RoleDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 

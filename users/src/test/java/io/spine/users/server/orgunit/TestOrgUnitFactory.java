@@ -64,7 +64,7 @@ final class TestOrgUnitFactory {
 
     private static OrgUnit state(OrgUnitId id) {
         return OrgUnit
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setParentEntity(orgUnitParentEntity())
                 .setDomain(orgUnitDomain())

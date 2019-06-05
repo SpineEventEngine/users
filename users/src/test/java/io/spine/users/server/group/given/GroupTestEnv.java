@@ -21,7 +21,6 @@
 package io.spine.users.server.group.given;
 
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
@@ -46,9 +45,9 @@ public class GroupTestEnv {
 
     public static GroupId createGroupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
-                .build();
+                .vBuild();
     }
 
     public static GroupId upperGroupId() {
@@ -60,24 +59,24 @@ public class GroupTestEnv {
     }
 
     public static EmailAddress groupEmail() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("developers-list@gmail.com")
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit groupOrgEntityOrganization() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId("Space travel"))
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit groupParentOrgUnit() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrgUnit(orgUnitUuid())
-                .build();
+                .vBuild();
     }
 
     public static RoleId groupRole() {
@@ -97,9 +96,9 @@ public class GroupTestEnv {
     }
 
     static EmailAddress newGroupEmail() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("developers-renamed-list@gmail.com")
-                .build();
+                .vBuild();
     }
 }

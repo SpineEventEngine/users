@@ -18,38 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user.given;
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.users.server.organization.given;
 
-import io.spine.core.UserId;
-import io.spine.users.server.user.UserPart;
-import io.spine.users.signin.event.SignInSuccessful;
-import io.spine.users.signin.event.SignOutCompleted;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-/**
- * Test events for {@link UserPart}.
- *
- * @author Vladyslav Lubenskyi
- */
-public class UserTestEvents {
-
-    /**
-     * Prevents direct instantiation.
-     */
-    private UserTestEvents() {
-    }
-
-    public static SignInSuccessful signInSuccessful(UserId id) {
-        return SignInSuccessful
-                .newBuilder()
-                .setId(id)
-                .setIdentity(UserTestEnv.googleIdentity())
-                .vBuild();
-    }
-
-    public static SignOutCompleted signOutCompleted(UserId id) {
-        return SignOutCompleted
-                .newBuilder()
-                .setId(id)
-                .vBuild();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

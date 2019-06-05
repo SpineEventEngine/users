@@ -22,9 +22,7 @@ package io.spine.users.server.organization.given;
 
 import io.spine.core.TenantId;
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
-import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.OrganizationId;
 import io.spine.users.server.organization.OrganizationAggregate;
 
@@ -45,7 +43,7 @@ public final class OrganizationTestEnv {
 
     public static OrganizationId createOrganizationId() {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
@@ -59,22 +57,22 @@ public final class OrganizationTestEnv {
     }
 
     public static InternetDomain orgDomain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("organization.com")
-                .build();
+                .vBuild();
     }
 
     public static InternetDomain newOrgDomain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("organization-renamed.com")
-                .build();
+                .vBuild();
     }
 
     public static TenantId orgTenant() {
         return TenantId
-                .vBuilder()
+                .newBuilder()
                 .setDomain(orgDomain())
                 .setEmail(email())
                 .setValue(newUuid())
@@ -83,7 +81,7 @@ public final class OrganizationTestEnv {
 
     public static TenantId newOrgTenant() {
         return TenantId
-                .vBuilder()
+                .newBuilder()
                 .setDomain(orgDomain())
                 .setEmail(email())
                 .setValue(newUuid())
@@ -91,9 +89,9 @@ public final class OrganizationTestEnv {
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("random@email.com")
-                .build();
+                .vBuild();
     }
 }

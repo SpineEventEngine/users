@@ -44,7 +44,7 @@ public final class SignInTestCommands {
 
     public static SignUserIn signInCommand(UserId id, Identity identity) {
         return SignUserIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .build();
@@ -52,14 +52,14 @@ public final class SignInTestCommands {
 
     public static SignUserOut signOutCommand(UserId id) {
         return SignUserOut
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }
 
     public static FinishSignIn finishSignInSuccessfully(UserId id) {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setSuccessful(true)
                 .build();
@@ -67,7 +67,7 @@ public final class SignInTestCommands {
 
     public static FinishSignIn finishSignInUnsuccessfully(UserId id) {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setSuccessful(false)
                 .setFailureReason(failureReason())

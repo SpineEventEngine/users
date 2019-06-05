@@ -61,7 +61,7 @@ class GoogleGroupCommandFactory {
      */
     CreateGroup createExternalGroup(GoogleGroupCreated event) {
         CreateGroup result = CreateGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
@@ -75,7 +75,7 @@ class GoogleGroupCommandFactory {
      */
     CreateGroup createInternalGroup(GoogleGroupCreated event, OrganizationId organization) {
         CreateGroup result = CreateGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
@@ -90,7 +90,7 @@ class GoogleGroupCommandFactory {
      */
     JoinParentGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
         return JoinParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setParentGroupId(event.getNewParentId())
                 .build();
@@ -102,7 +102,7 @@ class GoogleGroupCommandFactory {
      */
     RenameGroup renameGroup(GoogleGroupRenamed event) {
         return RenameGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setNewName(event.getDisplayName())
                 .build();
@@ -114,7 +114,7 @@ class GoogleGroupCommandFactory {
      */
     LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
         return LeaveParentGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setParentGroupId(event.getParentGroupId())
                 .build();
@@ -126,7 +126,7 @@ class GoogleGroupCommandFactory {
      */
     DeleteGroup deleteGroup(GoogleGroupDeleted event) {
         return DeleteGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .build();
     }
@@ -137,7 +137,7 @@ class GoogleGroupCommandFactory {
      */
     ChangeGroupEmail changeEmail(GoogleGroupEmailChanged event) {
         return ChangeGroupEmail
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setNewEmail(event.getNewEmail())
                 .build();
@@ -145,7 +145,7 @@ class GoogleGroupCommandFactory {
 
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
         return ChangeGroupDescription
-                .vBuilder()
+                .newBuilder()
                 .setId(event.getId())
                 .setDescription(event.getNewDescription())
                 .build();
@@ -153,7 +153,7 @@ class GoogleGroupCommandFactory {
 
     private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId)
                 .build();
     }

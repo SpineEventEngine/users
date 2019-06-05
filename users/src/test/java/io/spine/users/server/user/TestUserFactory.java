@@ -78,7 +78,7 @@ final class TestUserFactory {
 
     private static User userPartState() {
         return User
-                .vBuilder()
+                .newBuilder()
                 .setId(userId())
                 .setOrgEntity(userOrgEntity())
                 .setDisplayName(userDisplayName())
@@ -88,14 +88,14 @@ final class TestUserFactory {
                 .addSecondaryIdentity(googleIdentity())
                 .setNature(PERSON)
                 .addRole(adminRoleId())
-                .build();
+                .vBuild();
     }
 
     private static UserMembership membershipState() {
         return UserMembership
-                .vBuilder()
+                .newBuilder()
                 .setId(userId())
-                .build();
+                .vBuild();
     }
 
     static UserMembershipPart createEmptyMembershipPart(UserRoot root) {

@@ -43,7 +43,7 @@ public final class OrganizationTestCommands {
 
     public static CreateOrganization createOrganization(OrganizationId id) {
         return CreateOrganization
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setDisplayName(OrganizationTestEnv.orgName())
                 .setDomain(OrganizationTestEnv.orgDomain())
@@ -54,14 +54,14 @@ public final class OrganizationTestCommands {
 
     public static DeleteOrganization deleteOrganization(OrganizationId id) {
         return DeleteOrganization
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }
 
     public static ChangeOrganizationDomain changeOrganizationDomain(OrganizationId id) {
         return ChangeOrganizationDomain
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewDomain(OrganizationTestEnv.newOrgDomain())
                 .build();
@@ -69,7 +69,7 @@ public final class OrganizationTestCommands {
 
     public static ChangeOrganizationTenant changeOrganizationTenant(OrganizationId id) {
         return ChangeOrganizationTenant
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewTenant(OrganizationTestEnv.newOrgTenant())
                 .build();
@@ -77,7 +77,7 @@ public final class OrganizationTestCommands {
 
     public static RenameOrganization renameOrganization(OrganizationId id) {
         return RenameOrganization
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setNewName(OrganizationTestEnv.orgNewName())
                 .build();

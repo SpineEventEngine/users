@@ -22,9 +22,7 @@ package io.spine.users.server.signin.given;
 
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
-import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.DirectoryId;
 import io.spine.users.OrganizationId;
@@ -51,7 +49,6 @@ import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -81,14 +78,14 @@ public final class SignInTestEnv {
 
     public static UserPartRepository nonEmptyUserRepo() {
         UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = of(normalUserPart());
+        Optional<UserPart> user = Optional.of(normalUserPart());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
 
     public static UserPartRepository noIdentityUserRepo() {
         UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = of(noIdentityUserPart());
+        Optional<UserPart> user = Optional.of(noIdentityUserPart());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
@@ -131,7 +128,7 @@ public final class SignInTestEnv {
 
     public static Identity identity(String id, DirectoryId directoryId, String name) {
         return Identity
-                .vBuilder()
+                .newBuilder()
                 .setUserId(id)
                 .setDisplayName(name)
                 .setDirectoryId(directoryId)
@@ -148,7 +145,7 @@ public final class SignInTestEnv {
 
     static PersonProfile profile() {
         return PersonProfile
-                .vBuilder()
+                .newBuilder()
                 .setName(name())
                 .setEmail(email())
                 .build();
@@ -156,7 +153,7 @@ public final class SignInTestEnv {
 
     static DirectoryId googleDirectoryId() {
         return DirectoryId
-                .vBuilder()
+                .newBuilder()
                 .setValue("gmail.com")
                 .build();
     }
@@ -182,8 +179,8 @@ public final class SignInTestEnv {
     }
 
     private static UserVBuilder userPartState() {
-        return User
-                .vBuilder()
+        return UserVBuilder
+                .newBuilder()
                 .setId(userId())
                 .setOrgEntity(orgEntity())
                 .setDisplayName(displayName())
@@ -196,7 +193,7 @@ public final class SignInTestEnv {
 
     private static OrganizationOrUnit orgEntity() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId())
                 .build();
     }
@@ -207,24 +204,24 @@ public final class SignInTestEnv {
 
     private static OrganizationId organizationId() {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue("org_id")
                 .build();
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("john@smith.com")
-                .build();
+                .vBuild();
     }
 
     private static PersonName name() {
-        return PersonNameVBuilder
+        return PersonName
                 .newBuilder()
                 .setGivenName("John")
                 .setFamilyName("Smith")
-                .build();
+                .vBuild();
     }
 
     /**

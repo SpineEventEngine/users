@@ -27,7 +27,6 @@ import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupAliasesChanged;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleGroup;
-import io.spine.users.group.google.GoogleGroupVBuilder;
 import io.spine.users.server.group.GroupRoot;
 
 /**
@@ -42,7 +41,7 @@ import io.spine.users.server.group.GroupRoot;
  * </ul>
  */
 public class GoogleGroupPart
-        extends AggregatePart<GroupId, GoogleGroup, GoogleGroupVBuilder, GroupRoot> {
+        extends AggregatePart<GroupId, GoogleGroup, GoogleGroup.Builder, GroupRoot> {
 
     /**
      * @see AggregatePart#AggregatePart(AggregateRoot)

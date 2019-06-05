@@ -38,15 +38,15 @@ public final class RoleTestCommands {
 
     public static CreateRole createRole(RoleId id) {
         return CreateRole
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 
     public static DeleteRole deleteRole(RoleId id) {
         return DeleteRole
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 }

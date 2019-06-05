@@ -24,7 +24,6 @@ import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
-import io.spine.users.group.GroupVBuilder;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
@@ -60,14 +59,14 @@ final class TestGroupFactory {
      * Creates a new instance of the {@link GroupPart} with the filled state.
      */
     static GroupPart createGroupPart(GroupRoot root) {
-        return groupPart(groupState(root.getId()), root);
+        return groupPart(groupState(root.id()), root);
     }
 
     /**
      * Creates a new instance of the {@link GroupMembershipPart} with the filled state.
      */
     static GroupMembershipPart createMembershipPart(GroupRoot root) {
-        return membershipPart(membershipState(root.getId()), root);
+        return membershipPart(membershipState(root.id()), root);
     }
 
     private static GroupPart groupPart(Group state, GroupRoot root) {
@@ -87,7 +86,7 @@ final class TestGroupFactory {
     }
 
     private static Group groupState(GroupId id) {
-        return GroupVBuilder
+        return Group
                 .newBuilder()
                 .setId(id)
                 .setOrgEntity(groupOrgEntityOrganization())
@@ -95,13 +94,13 @@ final class TestGroupFactory {
                 .setEmail(groupEmail())
                 .setDescription(groupDescription())
                 .addRole(groupRole())
-                .build();
+                .vBuild();
     }
 
     private static GroupMembership membershipState(GroupId id) {
         return GroupMembership
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
-                .build();
+                .vBuild();
     }
 }

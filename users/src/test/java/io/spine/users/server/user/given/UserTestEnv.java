@@ -22,9 +22,7 @@ package io.spine.users.server.user.given;
 
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.people.PersonName;
-import io.spine.people.PersonNameVBuilder;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.DirectoryId;
 import io.spine.users.GroupId;
@@ -58,9 +56,9 @@ public class UserTestEnv {
 
     public static GroupId firstGroupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue("fisrt_group@example.com")
-                .build();
+                .vBuild();
     }
 
     public static String userDisplayName() {
@@ -73,41 +71,41 @@ public class UserTestEnv {
 
     public static PersonProfile profile() {
         return PersonProfile
-                .vBuilder()
+                .newBuilder()
                 .setName(personName())
                 .setEmail(email())
-                .build();
+                .vBuild();
     }
 
     public static PersonProfile newProfile() {
         return PersonProfile
-                .vBuilder()
+                .newBuilder()
                 .setName(newPersonName())
                 .setEmail(newEmail())
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit userOrgEntity() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId())
-                .build();
+                .vBuild();
     }
 
     static OrganizationOrUnit newUserOrgEntity() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrgUnit(orgUnitId())
-                .build();
+                .vBuild();
     }
 
     public static Identity googleIdentity() {
         return Identity
-                .vBuilder()
+                .newBuilder()
                 .setDisplayName("j.s@google.com")
                 .setDirectoryId(googleDirectoryId())
                 .setUserId(USER_UUID)
-                .build();
+                .vBuild();
     }
 
     public static RoleId adminRoleId() {
@@ -116,11 +114,11 @@ public class UserTestEnv {
 
     static Identity githubIdentity() {
         return Identity
-                .vBuilder()
+                .newBuilder()
                 .setDisplayName("j.s@github.com")
                 .setDirectoryId(githubDirectoryId())
                 .setUserId(USER_UUID)
-                .build();
+                .vBuild();
     }
 
     static RoleId editorRoleId() {
@@ -129,60 +127,60 @@ public class UserTestEnv {
 
     private static DirectoryId googleDirectoryId() {
         return DirectoryId
-                .vBuilder()
+                .newBuilder()
                 .setValue("gmail.com")
-                .build();
+                .vBuild();
     }
 
     private static DirectoryId githubDirectoryId() {
         return DirectoryId
-                .vBuilder()
+                .newBuilder()
                 .setValue("github.com")
-                .build();
+                .vBuild();
     }
 
     private static OrganizationId organizationId() {
         return OrganizationId
-                .vBuilder()
+                .newBuilder()
                 .setValue("org_id")
-                .build();
+                .vBuild();
     }
 
     private static OrgUnitId orgUnitId() {
         return OrgUnitId
-                .vBuilder()
+                .newBuilder()
                 .setValue("orgunit_id")
-                .build();
+                .vBuild();
     }
 
     private static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("john@smith.com")
-                .build();
+                .vBuild();
     }
 
     private static PersonName personName() {
-        return PersonNameVBuilder
+        return PersonName
                 .newBuilder()
                 .setGivenName("Jane")
                 .setFamilyName("Jones")
-                .build();
+                .vBuild();
     }
 
     private static EmailAddress newEmail() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("john+alias@smith.com")
-                .build();
+                .vBuild();
     }
 
     private static PersonName newPersonName() {
-        return PersonNameVBuilder
+        return PersonName
                 .newBuilder()
                 .setGivenName("John")
                 .setMiddleName("The Person")
                 .setFamilyName("Smith")
-                .build();
+                .vBuild();
     }
 }

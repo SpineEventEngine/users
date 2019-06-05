@@ -26,7 +26,6 @@ import io.spine.users.GoogleGroupId;
 import io.spine.users.GoogleIdMappingViewId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleIdMappingView;
-import io.spine.users.group.google.GoogleIdMappingViewVBuilder;
 
 /**
  * A projection that maps Google Group IDs to `GroupId`s.
@@ -39,7 +38,7 @@ import io.spine.users.group.google.GoogleIdMappingViewVBuilder;
 public class GoogleIdMappingProjection
         extends Projection<GoogleIdMappingViewId,
                            GoogleIdMappingView,
-                           GoogleIdMappingViewVBuilder> {
+                           GoogleIdMappingView.Builder> {
 
     /**
      * @see Projection#Projection(Object)

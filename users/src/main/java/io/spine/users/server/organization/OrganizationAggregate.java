@@ -26,7 +26,6 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
-import io.spine.users.organization.OrganizationVBuilder;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
 import io.spine.users.organization.command.CreateOrganization;
@@ -48,7 +47,7 @@ import io.spine.users.orgunit.OrgUnit;
  * @author Vladyslav Lubenskyi
  */
 public class OrganizationAggregate
-        extends Aggregate<OrganizationId, Organization, OrganizationVBuilder> {
+        extends Aggregate<OrganizationId, Organization, Organization.Builder> {
 
     /**
      * @see Aggregate#Aggregate(Object)
@@ -60,54 +59,54 @@ public class OrganizationAggregate
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {
         OrganizationCreated event = OrganizationCreated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setDomain(command.getDomain())
                 .setTenant(command.getTenant())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrganizationDeleted handle(DeleteOrganization command, CommandContext context) {
         OrganizationDeleted event = OrganizationDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrganizationRenamed handle(RenameOrganization command, CommandContext context) {
         OrganizationRenamed event = OrganizationRenamed
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrganizationDomainChanged handle(ChangeOrganizationDomain command, CommandContext context) {
         OrganizationDomainChanged event = OrganizationDomainChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewDomain(command.getNewDomain())
                 .setOldDomain(state().getDomain())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     OrganizationTenantChanged handle(ChangeOrganizationTenant command, CommandContext context) {
         OrganizationTenantChanged event = OrganizationTenantChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewTenant(command.getNewTenant())
                 .setOldTenant(state().getTenant())
-                .build();
+                .vBuild();
         return event;
     }
 

@@ -39,33 +39,33 @@ public class GivenCommand {
 
     public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
         return AssignRoleToUser
-                .vBuilder()
+                .newBuilder()
                 .setId(userId)
                 .setRoleId(roleId)
-                .build();
+                .vBuild();
     }
 
     public static UnassignRoleFromUser unassignRoleFromUser(UserId userId, RoleId roleId) {
         return UnassignRoleFromUser
-                .vBuilder()
+                .newBuilder()
                 .setId(userId)
                 .setRoleId(roleId)
-                .build();
+                .vBuild();
     }
 
     public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
         return AssignRoleToGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setRoleId(roleId)
-                .build();
+                .vBuild();
     }
 
     public static UnassignRoleFromGroup unassignRoleFromGroup(GroupId groupId, RoleId roleId) {
         return UnassignRoleFromGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(groupId)
                 .setRoleId(roleId)
-                .build();
+                .vBuild();
     }
 }

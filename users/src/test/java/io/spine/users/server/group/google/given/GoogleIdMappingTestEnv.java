@@ -21,9 +21,7 @@
 package io.spine.users.server.group.google.given;
 
 import io.spine.net.EmailAddress;
-import io.spine.net.EmailAddressVBuilder;
 import io.spine.net.InternetDomain;
-import io.spine.net.InternetDomainVBuilder;
 import io.spine.users.GoogleGroupId;
 import io.spine.users.GroupId;
 
@@ -44,7 +42,7 @@ public class GoogleIdMappingTestEnv {
 
     static GroupId groupId() {
         return GroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
@@ -54,7 +52,7 @@ public class GoogleIdMappingTestEnv {
     }
 
     static InternetDomain domain() {
-        return InternetDomainVBuilder
+        return InternetDomain
                 .newBuilder()
                 .setValue("spine.io")
                 .build();
@@ -62,13 +60,13 @@ public class GoogleIdMappingTestEnv {
 
     static GoogleGroupId googleId() {
         return GoogleGroupId
-                .vBuilder()
+                .newBuilder()
                 .setValue(newUuid())
                 .build();
     }
 
     static EmailAddress email() {
-        return EmailAddressVBuilder
+        return EmailAddress
                 .newBuilder()
                 .setValue("developers@company.com")
                 .build();

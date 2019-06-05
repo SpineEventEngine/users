@@ -49,15 +49,15 @@ public final class RoleTestEnv {
 
     public static OrganizationOrUnit roleParent() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(GivenId.organizationUuid())
-                .build();
+                .vBuild();
     }
 
     public static OrganizationOrUnit newRoleParent() {
         return OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrgUnit(GivenId.orgUnitUuid())
-                .build();
+                .vBuild();
     }
 }

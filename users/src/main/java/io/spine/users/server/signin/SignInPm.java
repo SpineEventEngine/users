@@ -32,7 +32,6 @@ import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
-import io.spine.users.signin.SignInVBuilder;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
@@ -56,7 +55,6 @@ import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
 import static io.spine.users.user.User.Status.ACTIVE;
 import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 /**
  * The process of a sign-in using the given {@linkplain Identity authentication identity}.
@@ -64,21 +62,21 @@ import static java.util.Optional.of;
  * <p>This process manager covers a straightforward sign-in scenario:
  *
  * <ol>
- *     <li>{@link SignUserIn} command initializes the sign-in process.
- *     <li>If a {@linkplain UserPart user} with the given {@linkplain UserId ID} already exists
- *         and all checks pass {@link SignInSuccessful} event is generated in response.
- *     <li>Otherwise, the process manager creates a {@link UserPart} and then attempts to
- *         {@linkplain SignUserIn sign user in} again.
+ * <li>{@link SignUserIn} command initializes the sign-in process.
+ * <li>If a {@linkplain UserPart user} with the given {@linkplain UserId ID} already exists
+ * and all checks pass {@link SignInSuccessful} event is generated in response.
+ * <li>Otherwise, the process manager creates a {@link UserPart} and then attempts to
+ * {@linkplain SignUserIn sign user in} again.
  * </ol>
  *
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- *     <li>a {@linkplain Directory} is aware of the given authentication identity;
- *     <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
- *         account was suspended);
- *     <li>the given authentication identity is associated with the user (that is, serves as the
- *         primary or a secondary authentication identity).
+ *      <li>a {@linkplain Directory} is aware of the given authentication identity;
+ *      <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
+ *          account was suspended);
+ *      <li>the given authentication identity is associated with the user (that is, serves as the
+ *          primary or a secondary authentication identity).
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.
@@ -86,7 +84,7 @@ import static java.util.Optional.of;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
-public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
+public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
 
     private UserPartRepository userRepository;
     private DirectoryFactory directories;
@@ -116,8 +114,9 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
-        SignInVBuilder builder = builder().setId(id)
-                                          .setIdentity(identity);
+        SignIn.Builder builder = builder()
+                .setId(id)
+                .setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
@@ -142,7 +141,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
     @Command
     Optional<SignUserIn> on(UserCreated event) {
         if (awaitsUserCreation()) {
-            return of(signIn(builder().getIdentity()));
+            return Optional.of(signIn(builder().getIdentity()));
         }
         return empty();
     }
@@ -185,7 +184,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setSuccessful(false)
                 .setFailureReason(failureReason)
@@ -194,7 +193,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     FinishSignIn finishSuccessfully() {
         return FinishSignIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setSuccessful(true)
                 .build();
@@ -202,7 +201,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignUserIn signIn(Identity identity) {
         return SignUserIn
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setIdentity(identity)
                 .build();
@@ -212,7 +211,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
         String displayName = profile.getEmail()
                                     .getValue();
         return CreateUser
-                .vBuilder()
+                .newBuilder()
                 .setId(id())
                 .setDisplayName(displayName)
                 .setPrimaryIdentity(identity)
@@ -225,7 +224,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignInSuccessful signInSuccessful(UserId id, Identity identity) {
         return SignInSuccessful
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .build();
@@ -233,7 +232,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignInFailed signInFailed(UserId id, Identity identity, SignInFailureReason reason) {
         return SignInFailed
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .setIdentity(identity)
                 .setFailureReason(reason)
@@ -242,7 +241,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignInVBuilder> {
 
     SignOutCompleted signOutCompleted(UserId id) {
         return SignOutCompleted
-                .vBuilder()
+                .newBuilder()
                 .setId(id)
                 .build();
     }

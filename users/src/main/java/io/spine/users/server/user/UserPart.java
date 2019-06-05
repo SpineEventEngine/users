@@ -22,7 +22,6 @@ package io.spine.users.server.user;
 
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -33,7 +32,6 @@ import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.role.Role;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
-import io.spine.users.user.UserVBuilder;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.ChangePrimaryIdentity;
@@ -52,7 +50,6 @@ import io.spine.users.user.event.RoleUnassignedFromUser;
 import io.spine.users.user.event.SecondaryIdentityAdded;
 import io.spine.users.user.event.SecondaryIdentityRemoved;
 import io.spine.users.user.event.UserCreated;
-import io.spine.users.user.event.UserCreatedVBuilder;
 import io.spine.users.user.event.UserDeleted;
 import io.spine.users.user.event.UserMoved;
 import io.spine.users.user.event.UserRenamed;
@@ -90,11 +87,8 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot> {
+public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
     UserPart(UserRoot root) {
         super(root);
     }
@@ -102,15 +96,14 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
-        UserCreatedVBuilder eventBuilder = UserCreated
-                .vBuilder()
+        UserCreated.Builder eventBuilder = UserCreated
+                .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setPrimaryIdentity(command.getPrimaryIdentity())
                 .setStatus(command.getStatus())
                 .setProfile(command.getProfile())
                 .setNature(command.getNature());
-
         switch (command.getOriginCase()) {
             case ORG_ENTITY:
                 eventBuilder.setOrgEntity(command.getOrgEntity());
@@ -122,7 +115,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
             default:
                 throw newIllegalArgumentException("No `origin` found in CreateUser command");
         }
-        return eventBuilder.build();
+        return eventBuilder.vBuild();
     }
 
     @Assign
@@ -135,30 +128,30 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                     .build();
         }
         UserMoved event = UserMoved
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewOrgEntity(command.getNewOrgEntity())
                 .setOldOrgEntity(state().getOrgEntity())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     UserDeleted handle(DeleteUser command, CommandContext context) {
         UserDeleted event = UserDeleted
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
         RoleAssignedToUser event = RoleAssignedToUser
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setRoleId(command.getRoleId())
-                .build();
+                .vBuild();
         return event;
     }
 
@@ -175,31 +168,31 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
                     .build();
         }
         RoleUnassignedFromUser event = RoleUnassignedFromUser
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setRoleId(command.getRoleId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
         UserStatusChanged event = UserStatusChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewStatus(command.getStatus())
                 .setOldStatus(state().getStatus())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     SecondaryIdentityAdded handle(AddSecondaryIdentity command, CommandContext context) {
         SecondaryIdentityAdded event = SecondaryIdentityAdded
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setIdentity(command.getIdentity())
-                .build();
+                .vBuild();
         return event;
     }
 
@@ -209,10 +202,10 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
         Optional<Identity> identityToRemove = findAuthIdentity(command);
         if (identityToRemove.isPresent()) {
             SecondaryIdentityRemoved event = SecondaryIdentityRemoved
-                    .vBuilder()
+                    .newBuilder()
                     .setId(command.getId())
                     .setIdentity(identityToRemove.get())
-                    .build();
+                    .vBuild();
             return event;
         }
         throw identityDoesNotExist(command);
@@ -221,37 +214,37 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     @Assign
     PrimaryIdentityChanged handle(ChangePrimaryIdentity command, CommandContext context) {
         PrimaryIdentityChanged event = PrimaryIdentityChanged
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setIdentity(command.getIdentity())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     UserRenamed handle(RenameUser command, CommandContext context) {
         UserRenamed event = UserRenamed
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     PersonProfileUpdated handle(UpdatePersonProfile command, CommandContext context) {
         PersonProfileUpdated event = PersonProfileUpdated
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setUpdatedProfile(command.getUpdatedProfile())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Apply
     private void on(UserCreated event) {
-        UserVBuilder builder = builder();
+        User.Builder builder = builder();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
                .setPrimaryIdentity(event.getPrimaryIdentity())
@@ -332,7 +325,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     private void removeRole(RoleId roleId) {
-        List<RoleId> roles = builder().getRole();
+        List<RoleId> roles = builder().getRoleList();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
             builder().removeRole(index);
@@ -340,7 +333,7 @@ public class UserPart extends AggregatePart<UserId, User, UserVBuilder, UserRoot
     }
 
     private void removeIdentity(Identity identity) {
-        List<Identity> identities = builder().getSecondaryIdentity();
+        List<Identity> identities = builder().getSecondaryIdentityList();
         if (identities.contains(identity)) {
             int index = identities.indexOf(identity);
             builder().removeSecondaryIdentity(index);

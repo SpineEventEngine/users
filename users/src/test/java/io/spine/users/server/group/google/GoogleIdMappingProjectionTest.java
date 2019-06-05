@@ -47,9 +47,9 @@ class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId
                                                            GoogleIdMappingProjection> {
 
     private static final GoogleIdMappingViewId ID = GoogleIdMappingViewId
-            .vBuilder()
+            .newBuilder()
             .setValue(SINGLETON)
-            .build();
+            .vBuild();
 
     GoogleIdMappingProjectionTest() {
         super(ID, groupCreated());

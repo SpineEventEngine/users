@@ -20,12 +20,16 @@
 
 package io.spine.users.server.user;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.core.UserId;
 import io.spine.server.projection.ProjectionRepository;
+import io.spine.server.route.EventRoute;
+import io.spine.server.route.EventRouting;
 import io.spine.users.group.event.RoleDisinheritedByUser;
 import io.spine.users.group.event.RoleInheritedByUser;
 import io.spine.users.user.UserRoles;
+
+import static io.spine.server.route.EventRoute.withId;
 
 /**
  * The repository for {@link UserRolesProjection}.
@@ -33,11 +37,12 @@ import io.spine.users.user.UserRoles;
 public class UserRolesRepository
         extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
-    public UserRolesRepository() {
-        super();
-        eventRouting().route(RoleInheritedByUser.class,
-                             (event, context) -> ImmutableSet.of(event.getUserId()))
-                      .route(RoleDisinheritedByUser.class,
-                             (event, context) -> ImmutableSet.of(event.getUserId()));
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void setupEventRouting(EventRouting<UserId> routing) {
+        super.setupEventRouting(routing);
+        routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
+        routing.route(RoleInheritedByUser.class, (message, context) -> withId(message.getUserId()));
+        routing.route(RoleDisinheritedByUser.class, (message, context) -> withId(message.getUserId()));
     }
 }

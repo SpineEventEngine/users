@@ -39,9 +39,9 @@ public class RoleIds {
      */
     public static RoleId roleId(OrganizationId organizationId, String name) {
         OrganizationOrUnit orgEntity = OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrganization(organizationId)
-                .build();
+                .vBuild();
         return roleId(orgEntity, name);
     }
 
@@ -50,9 +50,9 @@ public class RoleIds {
      */
     public static RoleId roleId(OrgUnitId orgUnitId, String name) {
         OrganizationOrUnit orgEntity = OrganizationOrUnit
-                .vBuilder()
+                .newBuilder()
                 .setOrgUnit(orgUnitId)
-                .build();
+                .vBuild();
         return roleId(orgEntity, name);
     }
 
@@ -61,9 +61,9 @@ public class RoleIds {
      */
     public static RoleId roleId(OrganizationOrUnit orgEntity, String name) {
         return RoleId
-                .vBuilder()
+                .newBuilder()
                 .setOrgEntity(orgEntity)
                 .setName(name)
-                .build();
+                .vBuild();
     }
 }

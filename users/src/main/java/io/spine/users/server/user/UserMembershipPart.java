@@ -27,7 +27,6 @@ import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.user.UserMembership;
 import io.spine.users.user.UserMembershipRecord;
-import io.spine.users.user.UserMembershipVBuilder;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
 import io.spine.users.user.event.UserJoinedGroup;
@@ -45,7 +44,7 @@ import static io.spine.users.user.RoleInGroup.MEMBER;
  * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
  */
 public class UserMembershipPart
-        extends AggregatePart<UserId, UserMembership, UserMembershipVBuilder, UserRoot> {
+        extends AggregatePart<UserId, UserMembership, UserMembership.Builder, UserRoot> {
 
     UserMembershipPart(UserRoot root) {
         super(root);
@@ -54,31 +53,31 @@ public class UserMembershipPart
     @Assign
     UserJoinedGroup handle(JoinGroup command) {
         UserJoinedGroup event = UserJoinedGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setGroupId(command.getGroupId())
                 .setRole(MEMBER)
-                .build();
+                .vBuild();
         return event;
     }
 
     @Assign
     UserLeftGroup handle(LeaveGroup command) {
         UserLeftGroup event = UserLeftGroup
-                .vBuilder()
+                .newBuilder()
                 .setId(command.getId())
                 .setGroupId(command.getGroupId())
-                .build();
+                .vBuild();
         return event;
     }
 
     @Apply
     private void on(UserJoinedGroup event) {
         UserMembershipRecord membershipRecord = UserMembershipRecord
-                .vBuilder()
+                .newBuilder()
                 .setGroupId(event.getGroupId())
                 .setRole(event.getRole())
-                .build();
+                .vBuild();
         builder()
                 .setId(id())
                 .addMembership(membershipRecord);
@@ -91,14 +90,14 @@ public class UserMembershipPart
     }
 
     private void removeMembership(UserMembershipRecord record) {
-        int index = builder().getMembership()
+        int index = builder().getMembershipList()
                              .indexOf(record);
         builder().removeMembership(index);
     }
 
     private Optional<UserMembershipRecord> findMembership(GroupId groupId) {
         Optional<UserMembershipRecord> record =
-                builder().getMembership()
+                builder().getMembershipList()
                          .stream()
                          .filter(membership -> membership.getGroupId()
                                                          .equals(groupId))
