@@ -49,7 +49,6 @@ import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -79,14 +78,14 @@ public final class SignInTestEnv {
 
     public static UserPartRepository nonEmptyUserRepo() {
         UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = of(normalUserPart());
+        Optional<UserPart> user = Optional.of(normalUserPart());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
 
     public static UserPartRepository noIdentityUserRepo() {
         UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = of(noIdentityUserPart());
+        Optional<UserPart> user = Optional.of(noIdentityUserPart());
         when(mock.find(any())).thenReturn(user);
         return mock;
     }
