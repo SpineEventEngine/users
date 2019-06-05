@@ -28,7 +28,6 @@ import io.spine.users.GoogleIdMappingViewId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleIdMappingView;
 
-import static com.google.common.collect.ImmutableSet.of;
 import static io.spine.users.GoogleIdMappingViewId.Value.SINGLETON;
 
 /**

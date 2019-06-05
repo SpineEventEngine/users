@@ -22,7 +22,6 @@ package io.spine.users.server.user;
 
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.net.EmailAddress;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
