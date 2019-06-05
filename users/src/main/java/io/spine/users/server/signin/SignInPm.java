@@ -72,11 +72,11 @@ import static java.util.Optional.empty;
  * <p>To sign a user in, the process manager ensures the following:
  *
  * <ul>
- * <li>a {@linkplain Directory} is aware of the given authentication identity;
- * <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
- * account was suspended);
- * <li>the given authentication identity is associated with the user (that is, serves as the
- * primary or a secondary authentication identity).
+ *      <li>a {@linkplain Directory} is aware of the given authentication identity;
+ *      <li>the directory authorizes the user to sign-in (e.g. the opposite would be if the user
+ *          account was suspended);
+ *      <li>the given authentication identity is associated with the user (that is, serves as the
+ *          primary or a secondary authentication identity).
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.

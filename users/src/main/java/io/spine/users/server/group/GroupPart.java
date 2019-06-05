@@ -177,9 +177,9 @@ public class GroupPart extends AggregatePart<GroupId, Group, Group.Builder, Grou
     private void on(GroupCreated event) {
         Group.Builder builder = builder();
         builder.setId(event.getId())
-                 .setDisplayName(event.getDisplayName())
-                 .setEmail(event.getEmail())
-                 .setDescription(event.getDescription());
+               .setDisplayName(event.getDisplayName())
+               .setEmail(event.getEmail())
+               .setDescription(event.getDescription());
 
         switch (event.getOriginCase()) {
             case ORG_ENTITY:
