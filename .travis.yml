@@ -1,5 +1,8 @@
 language: java
 
+jdk:
+  - openjdk8
+
 env:
   global:
     # https://docs.travis-ci.com/user/environment-variables/#Encrypting-environment-variables
