@@ -20,7 +20,9 @@
 
 package io.spine.users.server;
 
+import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -31,11 +33,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class UsersContextTest {
 
-    private BlackBoxBoundedContext context;
+    private SingleTenantBlackBoxContext context;
 
     @BeforeEach
     void createContext() {
-        context = BlackBoxBoundedContext.from(UsersContext.newBuilder());
+        BoundedContextBuilder builder = UsersContext.newBuilder();
+        context = (SingleTenantBlackBoxContext) BlackBoxBoundedContext.from(builder);
     }
 
     @AfterEach
@@ -43,7 +46,7 @@ public class UsersContextTest {
         context.close();
     }
 
-    protected BlackBoxBoundedContext<?> context() {
+    protected SingleTenantBlackBoxContext context() {
         return checkNotNull(context);
     }
 }
