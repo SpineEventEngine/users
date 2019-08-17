@@ -20,48 +20,50 @@
 
 package io.spine.users.server.group;
 
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.event.GroupRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.renameGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameGroup command should")
+@DisplayName("`RenameGroup` command should")
 class RenameGroupTest extends GroupCommandTest<RenameGroup> {
 
-    RenameGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce GroupRenamed event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(GroupRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
+    @DisplayName("produce `GroupRenamed` event and change the display name")
+    void produceEventAndChangeState() {
+        createPartWithState();
+        RenameGroup command = renameGroup(GROUP_ID);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        GroupRenamed expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Group expectedState = expectedState(command);
+        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("change the display_name")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewName(), state.getDisplayName());
-        });
+    private static Group expectedState(RenameGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .build();
     }
 
-    private static RenameGroup createMessage() {
-        return renameGroup(GROUP_ID);
+    private static GroupRenamed expectedEvent(RenameGroup command) {
+        return GroupRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
     }
 }

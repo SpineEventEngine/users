@@ -21,39 +21,49 @@
 package io.spine.users.server.group;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.server.UsersContextTest;
 
 import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.server.group.given.GroupTestEnv.groupName;
+import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
  *
- * @param <C> the type of the command being tested
+ * @param <C>
+ *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<GroupId, C, Group, GroupPart> {
+abstract class GroupCommandTest<C extends CommandMessage> extends UsersContextTest {
 
     static final GroupId GROUP_ID = createGroupId();
 
-    GroupCommandTest(C commandMessage) {
-        super(GROUP_ID, commandMessage);
+    /**
+     * Creates the {@link GroupPart} with the some predefined state and the {@link #GROUP_ID}
+     * identifier.
+     */
+    protected void createPartWithState() {
+        createPartWithState(GROUP_ID);
     }
 
-    @Override
-    protected Repository<GroupId, GroupPart> createRepository() {
-        return new GroupPartRepository();
-    }
-
-    protected GroupPart createPartWithState() {
-        return TestGroupFactory.createGroupPart(root(GROUP_ID));
-    }
-
-    protected static GroupRoot root(GroupId id) {
-        return new GroupRoot(create(), id);
+    /**
+     * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
+     */
+    protected void createPartWithState(GroupId id) {
+        CreateGroup createGroup = CreateGroup
+                .newBuilder()
+                .setId(id)
+                .setOrgEntity(groupOrgEntityOrganization())
+                .setDisplayName(groupName())
+                .setEmail(groupEmail())
+                .setDescription(groupDescription())
+                .vBuild();
+        context().receivesCommand(createGroup);
     }
 }

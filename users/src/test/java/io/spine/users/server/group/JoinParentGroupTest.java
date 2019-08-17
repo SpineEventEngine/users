@@ -20,7 +20,9 @@
 
 package io.spine.users.server.group;
 
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.GroupId;
+import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
@@ -28,43 +30,43 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.joinParentGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("JoinParentGroup command should")
+@DisplayName("`JoinParentGroup` command should")
 class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup> {
 
     private static final GroupId SUPER_GROUP = GroupTestEnv.createGroupId();
 
-    JoinParentGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce JoinedParentGroup event")
-    void produceEvent() {
-        GroupMembershipPart part = createPartWithState();
-        expectThat(part).producesEvent(JoinedParentGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getParentGroupId(), event.getParentGroupId());
-        });
+    @DisplayName("produce `JoinedParentGroup` event and create the group membership")
+    void produceEventAndChangeState() {
+        JoinParentGroup command = joinParentGroup(GROUP_ID, PARENT_GROUP_ID);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        JoinedParentGroup expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        GroupMembership expectedState = expectedState(command);
+        afterCommand.assertEntity(GroupMembershipPart.class, GROUP_ID)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("add a group membership")
-    void changeState() {
-        GroupMembershipPart part = createPartWithState();
-        expectThat(part).hasState(state -> {
-            GroupId expectedGroup = message().getParentGroupId();
-            assertTrue(state.getMembershipList()
-                            .contains(expectedGroup));
-        });
+    private static GroupMembership expectedState(JoinParentGroup command) {
+        return GroupMembership
+                .newBuilder()
+                .setId(command.getId())
+                .addMembership(command.getParentGroupId())
+                .build();
     }
 
-    private static JoinParentGroup createMessage() {
-        return joinParentGroup(GROUP_ID, SUPER_GROUP);
+    private static JoinedParentGroup expectedEvent(JoinParentGroup command) {
+        return JoinedParentGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 }

@@ -20,47 +20,50 @@
 
 package io.spine.users.server.group;
 
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.event.GroupDescriptionChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.changeGroupDescription;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeGroupDescription command should")
+@DisplayName("`ChangeGroupDescription` command should")
 class ChangeGroupDescriptionTest extends GroupCommandTest<ChangeGroupDescription> {
 
-    ChangeGroupDescriptionTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce GroupDescriptionChanged event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        String oldDescription = aggregate.state()
-                                         .getDescription();
-        expectThat(aggregate).producesEvent(GroupDescriptionChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getDescription(), event.getNewDescription());
-            assertEquals(oldDescription, event.getOldDescription());
-        });
+    @DisplayName("produce `GroupDescriptionChanged` event and set the updated description")
+    void produceEventAndChangeState() {
+        createPartWithState();
+        ChangeGroupDescription changeDescription = changeGroupDescription(GROUP_ID);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(changeDescription);
+        GroupDescriptionChanged expectedEvent = expectedEvent(changeDescription);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Group expectedState = expectedState(changeDescription);
+        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("change the email")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getDescription(), state.getDescription());
-        });
+    private static Group expectedState(ChangeGroupDescription command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDescription(command.getDescription())
+                .build();
     }
 
-    private static ChangeGroupDescription createMessage() {
-        return changeGroupDescription(GROUP_ID);
+    private static GroupDescriptionChanged expectedEvent(ChangeGroupDescription command) {
+        return GroupDescriptionChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDescription(command.getDescription())
+                .build();
     }
 }

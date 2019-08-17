@@ -20,44 +20,62 @@
 
 package io.spine.users.server.group;
 
+import io.spine.client.Query;
+import io.spine.testing.client.TestActorRequestFactory;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.group.event.GroupDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.client.Filters.all;
+import static io.spine.client.Filters.eq;
 import static io.spine.users.server.group.given.GroupTestCommands.deleteGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteGroup command should")
+@DisplayName("`DeleteGroup` command should")
 class DeleteGroupTest extends GroupCommandTest<DeleteGroup> {
 
-    DeleteGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce GroupDeleted event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(GroupDeleted.class, event -> {
-            assertEquals(message().getId(), event.getId());
-        });
+    @DisplayName("produce `GroupDeleted` event and delete the group")
+    void produceEventAndChangeState() {
+        createPartWithState();
+        DeleteGroup command = deleteGroup(GROUP_ID);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        GroupDeleted expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+        Query findDeleted = findDeleted(GROUP_ID);
+        afterCommand
+                .assertQueryResult(findDeleted)
+                .containsSingleEntityStateThat()
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(expectedState(command));
     }
 
-    @Test
-    @DisplayName("delete the group")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                                                                    .getDeleted()));
+    private static Query findDeleted(GroupId id) {
+        TestActorRequestFactory factory = new TestActorRequestFactory(DeleteGroupTest.class);
+        return factory
+                .query()
+                .select(Group.class)
+                .where(all(eq("id", id), eq("deleted", true)))
+                .build();
     }
 
-    private static DeleteGroup createMessage() {
-        return deleteGroup(GROUP_ID);
+    private static Group expectedState(DeleteGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    private static GroupDeleted expectedEvent(DeleteGroup command) {
+        return GroupDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 }

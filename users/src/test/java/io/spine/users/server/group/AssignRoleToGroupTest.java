@@ -20,7 +20,8 @@
 
 package io.spine.users.server.group;
 
-import io.spine.users.RoleId;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.AssignRoleToGroup;
 import io.spine.users.group.event.RoleAssignedToGroup;
 import org.junit.jupiter.api.DisplayName;
@@ -30,41 +31,43 @@ import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
 import static io.spine.users.server.given.GivenId.organizationUuid;
 import static io.spine.users.server.role.RoleIds.roleId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("AssignRoleToGroup command should")
+@DisplayName("`AssignRoleToGroup` command should")
 class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
 
-    private static final RoleId NEW_ROLE = roleId(organizationUuid(), newUuid());
-
-    AssignRoleToGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce RoleAssignedToGroup event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(RoleAssignedToGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
-        });
+    @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
+    void produceEventAndChangeState() {
+        createPartWithState();
+        AssignRoleToGroup assignRole = assignRoleToGroup(GROUP_ID,
+                                                         roleId(organizationUuid(), newUuid()));
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(assignRole);
+        RoleAssignedToGroup expectedEvent = expectedEvent(assignRole);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Group expectedState = expectedState(assignRole);
+        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("add a role assignment")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            RoleId expectedRole = message().getRoleId();
-            assertTrue(state.getRoleList()
-                            .contains(expectedRole));
-        });
+    private static Group expectedState(AssignRoleToGroup assignRole) {
+        return Group
+                .newBuilder()
+                .setId(GROUP_ID)
+                .addRole(assignRole.getRoleId())
+                .build();
     }
 
-    private static AssignRoleToGroup createMessage() {
-        return assignRoleToGroup(GROUP_ID, NEW_ROLE);
+    private static RoleAssignedToGroup expectedEvent(AssignRoleToGroup assignRole) {
+        return RoleAssignedToGroup
+                .newBuilder()
+                .setId(assignRole.getId())
+                .setRoleId(assignRole.getRoleId())
+                .build();
     }
 }

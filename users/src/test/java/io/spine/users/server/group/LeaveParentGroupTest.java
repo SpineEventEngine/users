@@ -20,49 +20,49 @@
 
 package io.spine.users.server.group;
 
-import io.spine.users.GroupId;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.LeftParentGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.leaveParentGroup;
-import static io.spine.users.server.group.given.GroupTestEnv.upperGroupId;
-import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("LeaveParentGroup command should")
+@DisplayName("`LeaveParentGroup` command should")
 class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup> {
 
-    LeaveParentGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce ParentGroupLeft event")
-    void produceEvent() {
-        GroupMembershipPart part = createPartWithState();
-        expectThat(part).producesEvent(LeftParentGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getParentGroupId(), event.getParentGroupId());
-        });
+    @DisplayName("produce `LeftParentGroup` event and clear the respective membership")
+    void produceEventAndChangeState() {
+        createPartWithState();
+        LeaveParentGroup command = leaveParentGroup(GROUP_ID, PARENT_GROUP_ID);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        LeftParentGroup expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        GroupMembership expectedState = expectedState(command);
+        afterCommand.assertEntity(GroupMembershipPart.class, GROUP_ID)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("remove a group membership")
-    void changeState() {
-        GroupMembershipPart part = createPartWithState();
-        expectThat(part).hasState(state -> {
-            GroupId expectedGroup = message().getParentGroupId();
-            assertFalse(state.getMembershipList()
-                             .contains(expectedGroup));
-        });
+    private static GroupMembership expectedState(LeaveParentGroup command) {
+        return GroupMembership
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 
-    private static LeaveParentGroup createMessage() {
-        return leaveParentGroup(GROUP_ID, upperGroupId());
+    private static LeftParentGroup expectedEvent(LeaveParentGroup command) {
+        return LeftParentGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setParentGroupId(command.getParentGroupId())
+                .build();
     }
 }
