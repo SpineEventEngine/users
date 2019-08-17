@@ -20,9 +20,11 @@
 
 package io.spine.users.server;
 
+import io.spine.core.UserId;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.server.DefaultRepository;
+import io.spine.server.entity.Repository;
 import io.spine.users.server.group.GroupMembershipPart;
 import io.spine.users.server.group.GroupPart;
 import io.spine.users.server.group.GroupRolesPropagationRepository;
@@ -31,9 +33,12 @@ import io.spine.users.server.group.google.GoogleIdMappingRepository;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
+import io.spine.users.server.signin.SignInPmRepository;
 import io.spine.users.server.user.UserMembershipPart;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserRolesRepository;
+
+import javax.annotation.Nullable;
 
 /**
  * A factory of {@code Users} bounded context.
@@ -54,17 +59,21 @@ public final class UsersContext {
     /**
      * Creates a builder of {@code Users} Bounded Context along with the registered repositories.
      *
-     * <p>{@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository} is not
-     * configured, as it requires {@link DirectoryFactory} instance configured. So it should
-     * be supplied by a caller of this method.
+     * <p>This method optionally accepts {@link DirectoryFactory} instance. In case it is supplied,
+     * the {@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository} is registered
+     * with the supplied factory instance as a constructor argument.
      *
-     * @return a new instance of {@code BoundedContextBuilder} for this BoundedContext
+     * <p>If the passed {@code DirectoryFactory} instance is {@code null},
+     * the {@code SignInPmRepository} is not registered in the resulting builder instance.
+     *
+     * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
      */
     @SuppressWarnings("OverlyCoupledMethod")    // OK, as references all the repositories.
-    public static BoundedContextBuilder newBuilder() {
+    public static BoundedContextBuilder newBuilder(@Nullable DirectoryFactory directoryFactory) {
+        Repository<UserId, UserPart> userPartRepo = DefaultRepository.of(UserPart.class);
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
-                .add(DefaultRepository.of(UserPart.class))
+                .add(userPartRepo)
                 .add(DefaultRepository.of(UserMembershipPart.class))
                 .add(new UserRolesRepository())
                 .add(DefaultRepository.of(RoleAggregate.class))
@@ -75,6 +84,22 @@ public final class UsersContext {
                 .add(new GroupRolesPropagationRepository())
                 .add(DefaultRepository.of(GoogleGroupLifecyclePm.class))
                 .add(new GoogleIdMappingRepository());
+        if (directoryFactory != null) {
+            builder.add(new SignInPmRepository(directoryFactory, userPartRepo));
+        }
         return builder;
+    }
+
+    /**
+     * Creates a builder of {@code Users} Bounded Context along with the registered repositories.
+     *
+     * <p>Registers all the entity repositories except for
+     * {@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository}.
+     *
+     * @return a new instance of {@code BoundedContextBuilder} for this BoundedContext
+     * @see #newBuilder(DirectoryFactory)
+     */
+    public static BoundedContextBuilder newBuilder() {
+        return newBuilder(null);
     }
 }

@@ -23,13 +23,13 @@ package io.spine.users.server.signin;
 import io.spine.core.UserId;
 import io.spine.server.command.Assign;
 import io.spine.server.command.Command;
+import io.spine.server.entity.Repository;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.users.PersonProfile;
 import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPart;
-import io.spine.users.server.user.UserPartRepository;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.signin.command.FinishSignIn;
@@ -86,12 +86,9 @@ import static java.util.Optional.empty;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
 
-    private UserPartRepository userRepository;
+    private Repository<UserId, UserPart> userRepository;
     private DirectoryFactory directories;
 
-    /**
-     * @see ProcessManager#ProcessManager(Object)
-     */
     SignInPm(UserId id) {
         super(id);
     }
@@ -100,7 +97,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
         this.directories = directoryFactory;
     }
 
-    void setUserRepository(UserPartRepository userRepository) {
+    void setUserRepository(Repository<UserId, UserPart> userRepository) {
         this.userRepository = userRepository;
     }
 

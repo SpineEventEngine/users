@@ -20,9 +20,13 @@
 
 package io.spine.users.server.signin;
 
+import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.server.signin.given.SignInTestEnv;
+import io.spine.users.signin.SignIn;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.user.User;
 import io.spine.users.user.command.CreateUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,59 +41,105 @@ import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyDirector
 import static io.spine.users.server.signin.given.SignInTestEnv.mockSuspendedDirectory;
 import static io.spine.users.server.signin.given.SignInTestEnv.noIdentityUserRepo;
 import static io.spine.users.server.signin.given.SignInTestEnv.nonEmptyUserRepo;
-import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
+import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.server.user.given.UserTestEnv.profile;
+import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
+import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.signin.SignInFailureReason.UNKNOWN_IDENTITY;
 import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.UserNature.PERSON;
 
-@DisplayName("SignInPm should, when SignUserIn")
-class SignUserInCommandTest extends SignInPmCommandOnCommandTest<SignUserIn> {
-
-    SignUserInCommandTest() {
-        super(SignInTestEnv.userId(), command());
-    }
+@DisplayName("`SignInPm` should, when `SignUserIn` is dispatched to it,")
+class SignUserInCommandTest extends SignInPmTest {
 
     @Test
-    @DisplayName("initialize")
+    @DisplayName("create `User` and set self into `COMPLETED` state")
     void initialize() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
-        expectThat(emptyProcMan).hasState(state -> {
-            assertEquals(message().getId(), state.getId());
-            assertEquals(message().getIdentity(), state.getIdentity());
-        });
+        SignUserIn command = command();
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        afterCommand
+                .assertCommands()
+                .message(0)
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(createUserInResponseTo(command));
+
+        afterCommand
+                .assertEntityWithState(SignIn.class, command.getId())
+                .hasStateThat()
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(completedAfter(command));
+
+        afterCommand
+                .assertEntityWithState(User.class, command.getId())
+                .hasStateThat()
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(createdUser(command));
     }
 
-    @Test
-    @DisplayName("create user if the user doesn't exist")
-    void createUser() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(SignInTestEnv.emptyUserRepo());
-        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
-        expectThat(emptyProcMan)
-                .producesCommand(CreateUser.class, command -> {
-                    assertEquals(message().getId(), command.getId());
-                    assertEquals(message().getIdentity(), command.getPrimaryIdentity());
-                })
-                .hasState(state -> assertEquals(AWAITING_USER_AGGREGATE_CREATION,
-                                                state.getStatus()));
+    private static SignIn completedAfter(SignUserIn command) {
+        return SignIn.newBuilder()
+                     .setId(command.getId())
+                     .setIdentity(command.getIdentity())
+                     .setStatus(COMPLETED)
+                     .build();
+    }
+
+    private static User createdUser(SignUserIn command) {
+        return User.newBuilder()
+                   .setId(command.getId())
+                   .setPrimaryIdentity(command.getIdentity())
+                   .setStatus(User.Status.ACTIVE)
+                   .build();
+    }
+
+    private static CreateUser createUserInResponseTo(SignUserIn command) {
+        return CreateUser.newBuilder()
+                         .setId(command.getId())
+                         .setPrimaryIdentity(command.getIdentity())
+                         .build();
+    }
+
+    private static CreateUser createUser(UserId id) {
+        return CreateUser
+                .newBuilder()
+                .setId(id)
+                .setDisplayName(userDisplayName())
+                .setOrgEntity(userOrgEntity())
+                .setPrimaryIdentity(googleIdentity())
+                .setProfile(profile())
+                .setStatus(NOT_READY)
+                .setNature(PERSON)
+                .vBuild();
     }
 
     @Test
     @DisplayName("finish the process if the user exists and is active")
     void finishProcess() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
+        SignUserIn signUserIn = command();
+        UserId id = signUserIn.getId();
+        CreateUser createUser = createUser(id);
+        SingleTenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
+                                                                               signUserIn);
+        afterCommands
+                .assertEntityWithState(SignIn.class, id)
+                .hasStateThat()
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(completedAfter(signUserIn));
 
-        expectThat(emptyProcMan)
-                .producesCommand(FinishSignIn.class,
-                                 command -> assertEquals(message().getId(), command.getId()))
-                .hasState(state -> assertEquals(COMPLETED, state.getStatus()));
+        //TODO:2019-08-17:alex.tymchenko: clarify this one!
+        afterCommands.assertCommands()
+                     .message(0)
+                     .comparingExpectedFieldsOnly()
+                     .isEqualTo(finishSignIn(id));
+    }
+
+    private static FinishSignIn finishSignIn(UserId id) {
+        return FinishSignIn.newBuilder()
+                           .setId(id)
+                           .build();
     }
 
     @Test

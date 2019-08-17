@@ -21,9 +21,10 @@
 package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
+import io.spine.server.entity.Repository;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.user.UserPartRepository;
+import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -35,11 +36,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInPm, SignIn> {
 
-    private final UserPartRepository userRepository;
+    private final Repository<UserId, UserPart> userRepository;
     private final DirectoryFactory directoryFactory;
 
     public SignInPmRepository(DirectoryFactory directoryFactory,
-                              UserPartRepository userRepository) {
+                              Repository<UserId, UserPart> userRepository) {
         super();
         this.directoryFactory = checkNotNull(directoryFactory);
         this.userRepository = checkNotNull(userRepository);

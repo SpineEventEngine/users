@@ -18,39 +18,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.users.server.signin;
 
 import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.spine.users.server.UsersContext;
+import io.spine.users.server.UsersContextTest;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveDirectory;
 
 /**
- * An abstract base for tests in {@code Users} Bounded Context.
+ * An abstract base for the tests of {@link SignInPm}.
  */
-public class UsersContextTest {
+public abstract class SignInPmTest extends UsersContextTest {
 
-    private SingleTenantBlackBoxContext context;
-
-    @BeforeEach
-    void createContext() {
-        BoundedContextBuilder builder = contextBuilder();
-        context = (SingleTenantBlackBoxContext) BlackBoxBoundedContext.from(builder);
-    }
-
+    @Override
     protected BoundedContextBuilder contextBuilder() {
-        return UsersContext.newBuilder();
-    }
-
-    @AfterEach
-    void closeContext() {
-        context.close();
-    }
-
-    protected SingleTenantBlackBoxContext context() {
-        return checkNotNull(context);
+        return UsersContext.newBuilder(mockActiveDirectory());
     }
 }
