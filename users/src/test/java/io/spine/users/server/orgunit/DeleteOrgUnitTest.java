@@ -50,7 +50,7 @@ class DeleteOrgUnitTest extends UsersContextTest {
         SingleTenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
         OrgUnitDeleted expectedEvent = expectedEvent(deleteCmd);
         afterCommand.assertEvents()
-                    .message(0)
+                    .message(1)
                     .comparingExpectedFieldsOnly()
                     .isEqualTo(expectedEvent);
         Query findDeleted = findDeleted(id);

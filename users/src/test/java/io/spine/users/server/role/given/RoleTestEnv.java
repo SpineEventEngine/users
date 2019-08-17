@@ -43,21 +43,10 @@ public final class RoleTestEnv {
         return roleId(roleParent(), newUuid());
     }
 
-    public static String roleName() {
-        return "github-contributor";
-    }
-
-    public static OrganizationOrUnit roleParent() {
+    private static OrganizationOrUnit roleParent() {
         return OrganizationOrUnit
                 .newBuilder()
                 .setOrganization(GivenId.organizationUuid())
-                .vBuild();
-    }
-
-    public static OrganizationOrUnit newRoleParent() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrgUnit(GivenId.orgUnitUuid())
                 .vBuild();
     }
 }

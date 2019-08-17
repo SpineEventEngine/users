@@ -21,44 +21,42 @@
 package io.spine.users.server.role;
 
 import io.spine.users.RoleId;
+import io.spine.users.role.Role;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.event.RoleCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.role.TestRoleFactory.createEmptyAggregate;
 import static io.spine.users.server.role.given.RoleTestCommands.createRole;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("CreateRole command should")
-class CreateRoleTest extends RoleCommandTest<CreateRole> {
-
-    CreateRoleTest() {
-        super(createMessage());
-    }
+@DisplayName("`CreateRole` command should")
+class CreateRoleTest extends RoleCommandTest<CreateRole, RoleCreated> {
 
     @Test
-    @DisplayName("produce RoleCreated event")
-    void produceEvent() {
-        CreateRole command = message();
-        expectThat(createEmptyAggregate(ROLE_ID)).producesEvent(RoleCreated.class, event -> {
-            assertEquals(command.getId(), event.getId());
-        });
+    @DisplayName("produce `RoleCreated` event and create the role")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("create a role")
-    void changeState() {
-        CreateRole command = message();
-        RoleId roleId = command.getId();
-        expectThat(createEmptyAggregate(ROLE_ID)).hasState(state -> {
-            assertEquals(roleId, state.getId());
-            assertEquals(roleId.getName(), state.getDisplayName());
-            assertEquals(roleId.getOrgEntity(), state.getOrgEntity());
-        });
+    @Override
+    protected CreateRole command(RoleId id) {
+        return createRole(id);
     }
 
-    private static CreateRole createMessage() {
-        return createRole(ROLE_ID);
+    @Override
+    protected RoleCreated expectedEventAfter(CreateRole command) {
+        return RoleCreated
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected Role expectedStateAfter(CreateRole command) {
+        return Role
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 }
