@@ -28,6 +28,7 @@ import io.spine.users.GroupId;
  *
  * @author Vladyslav Lubenskyi
  */
+@Deprecated
 public class GroupMembershipPartRepository
         extends AggregatePartRepository<GroupId, GroupMembershipPart, GroupRoot> {
 }

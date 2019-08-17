@@ -29,6 +29,7 @@ import io.spine.users.server.group.GroupRoot;
  *
  * @author Vladyslav Lubenskyi
  */
+@Deprecated
 public class GoogleGroupPartRepository
         extends AggregatePartRepository<GroupId, GoogleGroupPart, GroupRoot> {
 }

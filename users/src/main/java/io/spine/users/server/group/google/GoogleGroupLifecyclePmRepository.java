@@ -29,6 +29,7 @@ import io.spine.users.group.google.GoogleGroupLifecycle;
  *
  * @author Vladyslav Lubenskyi
  */
+@Deprecated
 public class GoogleGroupLifecyclePmRepository
         extends ProcessManagerRepository<GroupId, GoogleGroupLifecyclePm, GoogleGroupLifecycle> {
 }

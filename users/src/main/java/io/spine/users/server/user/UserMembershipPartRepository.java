@@ -28,6 +28,7 @@ import io.spine.server.aggregate.AggregatePartRepository;
  *
  * @author Vladyslav Lubenskyi
  */
+@Deprecated
 public class UserMembershipPartRepository
         extends AggregatePartRepository<UserId, UserMembershipPart, UserRoot> {
 }

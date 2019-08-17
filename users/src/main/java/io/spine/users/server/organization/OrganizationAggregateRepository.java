@@ -28,6 +28,7 @@ import io.spine.users.OrganizationId;
  *
  * @author Vladyslav Lubenskyi
  */
+@Deprecated
 public class OrganizationAggregateRepository
         extends AggregateRepository<OrganizationId, OrganizationAggregate> {
 }
