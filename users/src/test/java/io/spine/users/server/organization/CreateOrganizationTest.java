@@ -20,51 +20,57 @@
 
 package io.spine.users.server.organization;
 
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.event.OrganizationCreated;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.createOrganization;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
-@DisplayName("CreateOrganization command should")
-class CreateOrganizationTest extends OrgCommandTest<CreateOrganization> {
-
-    CreateOrganizationTest() {
-        super(createMessage());
-    }
+@DisplayName("`CreateOrganization` command should")
+class CreateOrganizationTest extends UsersContextTest {
 
     @Test
-    @DisplayName("produce OrganizationCreated event")
-    void produceEvent() {
-        CreateOrganization command = message();
-        expectThat(
-                TestOrganizationFactory.createEmptyAggregate(ORG_ID)).producesEvent(OrganizationCreated.class, event -> {
-            assertEquals(command.getId(), event.getId());
-            assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getTenant(), event.getTenant());
-            assertEquals(command.getDomain(), event.getDomain());
-        });
+    @DisplayName("produce `OrganizationCreated` event and create the organization")
+    void produceEventAndChangeState() {
+        OrganizationId id = createOrganizationId();
+        CreateOrganization command = createOrganization(id);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        OrganizationCreated expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Organization expectedState = expectedState(command);
+        afterCommand.assertEntity(OrganizationAggregate.class, id)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("create an organization")
-    void changeState() {
-        CreateOrganization command = message();
-        expectThat(TestOrganizationFactory.createEmptyAggregate(ORG_ID)).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
-            assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getTenant(), state.getTenant());
-            assertEquals(command.getDomain(), state.getDomain());
-        });
+    private static Organization expectedState(CreateOrganization command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
     }
 
-    private static CreateOrganization createMessage() {
-        return createOrganization(ORG_ID);
+    private static OrganizationCreated expectedEvent(CreateOrganization command) {
+        return OrganizationCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
     }
 }

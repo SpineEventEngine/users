@@ -20,49 +20,53 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.net.InternetDomain;
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.event.OrganizationDomainChanged;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationDomain;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeOrganizationDomain command should")
-class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDomain> {
-
-    ChangeOrganizationDomainTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeOrganizationDomain` command should")
+class ChangeOrganizationDomainTest extends UsersContextTest {
 
     @Test
-    @DisplayName("produce OrganizationDomainChanged event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        InternetDomain oldDomain = aggregate.state()
-                                            .getDomain();
-        expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewDomain(), event.getNewDomain());
-            assertEquals(oldDomain, event.getOldDomain());
-        });
+    @DisplayName("produce `OrganizationDomainChanged` event and update the organization domain")
+    void produceEventAndChangeState() {
+        OrganizationId id = createOrganizationId();
+        ChangeOrganizationDomain command = changeOrganizationDomain(id);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        OrganizationDomainChanged expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Organization expectedState = expectedState(command);
+        afterCommand.assertEntity(OrganizationAggregate.class, id)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("change the domain")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewDomain(), state.getDomain());
-        });
+    private static Organization expectedState(ChangeOrganizationDomain command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDomain(command.getNewDomain())
+                .build();
     }
 
-    private static ChangeOrganizationDomain createMessage() {
-        return changeOrganizationDomain(ORG_ID);
+    private static OrganizationDomainChanged expectedEvent(ChangeOrganizationDomain command) {
+        return OrganizationDomainChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .build();
     }
 }

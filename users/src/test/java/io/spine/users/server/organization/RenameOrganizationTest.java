@@ -20,47 +20,53 @@
 
 package io.spine.users.server.organization;
 
+import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.RenameOrganization;
 import io.spine.users.organization.event.OrganizationRenamed;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.renameOrganization;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameOrganization command should")
-class RenameOrganizationTest extends OrgCommandTest<RenameOrganization> {
-
-    RenameOrganizationTest() {
-        super(createMessage());
-    }
+@DisplayName("`RenameOrganization` command should")
+class RenameOrganizationTest extends UsersContextTest {
 
     @Test
-    @DisplayName("produce OrganizationRenamed event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(OrganizationRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
+    @DisplayName("produce `OrganizationRenamed` event and update the organization display name")
+    void produceEventAndChangeState() {
+        OrganizationId id = createOrganizationId();
+        RenameOrganization command = renameOrganization(id);
+        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        OrganizationRenamed expectedEvent = expectedEvent(command);
+        afterCommand.assertEvents()
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+
+        Organization expectedState = expectedState(command);
+        afterCommand.assertEntity(OrganizationAggregate.class, id)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedState);
     }
 
-    @Test
-    @DisplayName("change the name")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewName(), state.getDisplayName());
-        });
+    private static Organization expectedState(RenameOrganization command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .build();
     }
 
-    private static RenameOrganization createMessage() {
-        return renameOrganization(ORG_ID);
+    private static OrganizationRenamed expectedEvent(RenameOrganization command) {
+        return OrganizationRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
     }
 }
