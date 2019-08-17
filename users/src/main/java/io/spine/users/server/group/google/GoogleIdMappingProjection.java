@@ -40,9 +40,6 @@ public class GoogleIdMappingProjection
                            GoogleIdMappingView,
                            GoogleIdMappingView.Builder> {
 
-    /**
-     * @see Projection#Projection(Object)
-     */
     protected GoogleIdMappingProjection(GoogleIdMappingViewId id) {
         super(id);
     }

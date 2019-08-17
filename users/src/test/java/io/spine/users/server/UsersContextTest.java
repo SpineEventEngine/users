@@ -18,33 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group.google;
+package io.spine.users.server;
 
-import io.spine.base.EventMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnEventTest;
-import io.spine.users.GroupId;
-import io.spine.users.group.google.GoogleGroupLifecycle;
+import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.
- *
- * @param <E> an event being tested
- * @author Vladyslav Lubenskyi
+ * An abstract base for tests in {@code Users} Bounded Context.
  */
-abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<GroupId, E, GoogleGroupLifecycle, GoogleGroupLifecyclePm> {
+public class UsersContextTest {
 
-    protected static final GroupId GROUP_ID = newGroupId();
+    private BlackBoxBoundedContext context;
 
-    GoogleGroupLifecycleEventTest(E eventMessage) {
-        super(GROUP_ID, eventMessage);
+    @BeforeEach
+    void createContext() {
+        context = BlackBoxBoundedContext.from(UsersContext.newBuilder());
     }
 
-    @Override
-    protected Repository<GroupId, GoogleGroupLifecyclePm> createRepository() {
-        return new GoogleGroupLifecyclePmRepository();
+    @AfterEach
+    void closeContext() {
+        context.close();
+    }
+
+    protected BlackBoxBoundedContext<?> context() {
+        return checkNotNull(context);
     }
 }

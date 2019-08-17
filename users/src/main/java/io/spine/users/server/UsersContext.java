@@ -32,7 +32,7 @@ import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
 import io.spine.users.server.user.UserMembershipPart;
-import io.spine.users.server.user.UserPartRepository;
+import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserRolesRepository;
 
 /**
@@ -61,13 +61,11 @@ public final class UsersContext {
      * @return a new instance of {@code BoundedContextBuilder} for this BoundedContext
      */
     @SuppressWarnings("OverlyCoupledMethod")    // OK, as references all the repositories.
-    public static BoundedContextBuilder builder() {
-        UserPartRepository userPartRepo = new UserPartRepository();
+    public static BoundedContextBuilder newBuilder() {
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
-                .add(userPartRepo)
-                .add(DefaultRepository.of(
-                        UserMembershipPart.class))
+                .add(DefaultRepository.of(UserPart.class))
+                .add(DefaultRepository.of(UserMembershipPart.class))
                 .add(new UserRolesRepository())
                 .add(DefaultRepository.of(RoleAggregate.class))
                 .add(DefaultRepository.of(OrgUnitAggregate.class))

@@ -20,30 +20,34 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupJoinedParentGroup;
 import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupJoinedParentGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleGroupPm should, when GoogleGroupJoinedParentGroup")
-class GoogleGroupJoinedGroupTest extends GoogleGroupLifecycleEventTest<GoogleGroupJoinedParentGroup> {
-
-    GoogleGroupJoinedGroupTest() {
-        super(googleGroupJoinedParentGroup(GROUP_ID));
-    }
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupJoinedParentGroup`")
+class GoogleGroupJoinedGroupTest extends UsersContextTest {
 
     @Test
     @DisplayName("translate it to JoinParentGroup command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(JoinParentGroup.class, command -> {
-            assertEquals(GROUP_ID, command.getId());
-            assertEquals(message().getNewParentId(), command.getParentGroupId());
-        });
+        GroupId groupId = newGroupId();
+        GoogleGroupJoinedParentGroup event = googleGroupJoinedParentGroup(groupId);
+        JoinParentGroup expectedCmd = JoinParentGroup
+                .newBuilder()
+                .setId(groupId)
+                .setParentGroupId(event.getNewParentId())
+                .build();
+        context().receivesEvent(event)
+                 .assertCommands()
+                 .withType(JoinParentGroup.class)
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedCmd);
     }
 }

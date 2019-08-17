@@ -20,64 +20,38 @@
 
 package io.spine.users.server.group.google;
 
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.projection.ProjectionTest;
 import io.spine.users.GoogleIdMappingViewId;
-import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.google.GoogleIdMappingView;
-import io.spine.users.server.group.google.given.GoogleIdMappingTestEvents;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static io.spine.users.GoogleIdMappingViewId.Value.SINGLETON;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.spine.users.server.group.google.given.GoogleIdMappingTestEvents.googleGroupCreated;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleMappingProjection should")
-class GoogleIdMappingProjectionTest extends ProjectionTest<GoogleIdMappingViewId,
-                                                           GoogleGroupCreated,
-                                                           GoogleIdMappingView,
-                                                           GoogleIdMappingProjection> {
+@DisplayName("`GoogleMappingProjection` should")
+class GoogleIdMappingProjectionTest extends UsersContextTest {
 
     private static final GoogleIdMappingViewId ID = GoogleIdMappingViewId
             .newBuilder()
             .setValue(SINGLETON)
             .vBuild();
 
-    GoogleIdMappingProjectionTest() {
-        super(ID, groupCreated());
-    }
-
     @Test
-    @DisplayName("store GoogleId - GroupId pair when group is created")
+    @DisplayName("store `GoogleId`-`GroupId` pair when the Google group is created")
     void testPair() {
-        GoogleIdMappingProjection projection = new GoogleIdMappingProjection(ID);
-        expectThat(projection).hasState(state -> {
-            Map<String, GroupId> mapping = state.getGroupsMap();
-            assertFalse(mapping.isEmpty());
-
-            String rawGoogleId = message().getGoogleId()
-                                          .getValue();
-            assertTrue(mapping.containsKey(rawGoogleId));
-
-            GroupId groupId = mapping.get(rawGoogleId);
-            assertEquals(message().getId(), groupId);
-        });
-    }
-
-    @Override
-    protected Repository<GoogleIdMappingViewId, GoogleIdMappingProjection> createRepository() {
-        return new GoogleIdMappingRepository();
-    }
-
-    private static GoogleGroupCreated groupCreated() {
-        return GoogleIdMappingTestEvents.googleGroupCreated();
+        GoogleGroupCreated event = googleGroupCreated();
+        GoogleIdMappingView expectedState = GoogleIdMappingView
+                .newBuilder()
+                .setId(GoogleIdMappingRepository.PROJECTION_ID)
+                .putGroups(event.getGoogleId()
+                                .getValue(), event.getId())
+                .build();
+        context().receivesEvent(event)
+                 .assertEntityWithState(GoogleIdMappingView.class, ID)
+                 .hasStateThat()
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedState);
     }
 }

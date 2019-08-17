@@ -64,7 +64,7 @@ public class GoogleGroupTestEvents {
                 .setGoogleId(GoogleGroupTestEnv.googleId())
                 .setDisplayName(GoogleGroupTestEnv.displayName())
                 .setEmail(GoogleGroupTestEnv.email())
-                .setDomain(GoogleGroupTestEnv.internalDomain())
+                .setDomain(GoogleGroupTestEnv.externalDomain())
                 .addAlias(GoogleGroupTestEnv.alias())
                 .setDescription(GoogleGroupTestEnv.description())
                 .vBuild();

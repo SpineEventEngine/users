@@ -20,64 +20,94 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.command.CreateGroup;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.externalGoogleGroupCreated;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.internalGoogleGroupCreated;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@SuppressWarnings("InnerClassMayBeStatic") // JUnit doesn't support static classes.
-@DisplayName("GoogleGroupPm should, when")
-class GoogleGroupCreatedTest {
+@DisplayName("`GoogleGroupPm` should, when")
+class GoogleGroupCreatedTest extends UsersContextTest {
+
+    private static final GroupId GROUP_ID = newGroupId();
 
     @Nested
     @Disabled // Enable when Organization projection is ready.
-    @DisplayName("internal GoogleGroupCreated")
-    class InternalGroupCreated extends GoogleGroupLifecycleEventTest<GoogleGroupCreated> {
-
-        InternalGroupCreated() {
-            super(internalGoogleGroupCreated(GROUP_ID));
-        }
+    @DisplayName("internal `GoogleGroupCreated`")
+    class InternalGroupCreated {
 
         @Test
-        @DisplayName("translate it to CreateGroup command")
+        @DisplayName("translate it to `CreateGroup` command")
         void testBeTranslated() {
-            expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(CreateGroup.class, command -> {
-                assertEquals(GROUP_ID, command.getId());
-                assertEquals(message().getDisplayName(), command.getDisplayName());
-                assertEquals(message().getEmail(), command.getEmail());
-                assertTrue(command.hasOrgEntity());
-            });
+            GoogleGroupCreated event = internalGoogleGroupCreated(GROUP_ID);
+            CreateGroup expectedCmd = CreateGroup
+                    .newBuilder()
+                    .setId(GROUP_ID)
+                    .setDisplayName(event.getDisplayName())
+                    .setEmail(event.getEmail())
+                    .build();
+            context().receivesEvent(event)
+                     .assertCommands()
+                     .withType(CreateGroup.class)
+                     .message(0)
+                     .comparingExpectedFieldsOnly()
+                     .isEqualTo(expectedCmd);
+            //TODO:2019-08-17:alex.tymchenko: check that the command has `OrgEntity` set.
+
+//            expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(CreateGroup.class, command -> {
+//                assertEquals(GROUP_ID, command.getId());
+//                assertEquals(message().getDisplayName(), command.getDisplayName());
+//                assertEquals(message().getEmail(), command.getEmail());
+//                assertTrue(command.hasOrgEntity());
+//            });
         }
     }
 
     @Nested
     @Disabled // Enable when Organization projection is ready.
-    @DisplayName("external GoogleGroupCreated")
-    class ExternalGroupCreated extends GoogleGroupLifecycleEventTest<GoogleGroupCreated> {
-
-        ExternalGroupCreated() {
-            super(externalGoogleGroupCreated(GROUP_ID));
-        }
+    @DisplayName("external `GoogleGroupCreated`")
+    class ExternalGroupCreated {
 
         @Test
-        @DisplayName("translate it to CreateGroup command")
+        @DisplayName("translate it to `CreateGroup` command")
         void testBeTranslated() {
-            expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(CreateGroup.class, command -> {
-                assertEquals(GROUP_ID, command.getId());
-                assertEquals(message().getDisplayName(), command.getDisplayName());
-                assertEquals(message().getEmail(), command.getEmail());
-                assertTrue(command.hasExternalDomain());
-            });
+
+            GoogleGroupCreated event = externalGoogleGroupCreated(GROUP_ID);
+            CreateGroup expectedCmd = CreateGroup
+                    .newBuilder()
+                    .setId(GROUP_ID)
+                    .setDisplayName(event.getDisplayName())
+                    .setEmail(event.getEmail())
+                    .setExternalDomain(event.getDomain())
+                    .build();
+            context().receivesEvent(event)
+                     .assertCommands()
+                     .withType(CreateGroup.class)
+                     .message(0)
+                     .comparingExpectedFieldsOnly()
+                     .isEqualTo(expectedCmd);
+
+//            expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(CreateGroup.class,
+//                                                                             command -> {
+//                                                                                 assertEquals(
+//                                                                                         GROUP_ID,
+//                                                                                         command.getId());
+//                                                                                 assertEquals(
+//                                                                                         message().getDisplayName(),
+//                                                                                         command.getDisplayName());
+//                                                                                 assertEquals(
+//                                                                                         message().getEmail(),
+//                                                                                         command.getEmail());
+//                                                                                 assertTrue(
+//                                                                                         command.hasExternalDomain());
+//                                                                             });
         }
     }
 }
