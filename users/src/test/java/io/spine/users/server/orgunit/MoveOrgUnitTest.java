@@ -20,49 +20,46 @@
 
 package io.spine.users.server.orgunit;
 
-import io.spine.users.OrganizationOrUnit;
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.MoveOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitMoved;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.moveOrgUnit;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("MoveOrgUnit command should")
-class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit> {
+@DisplayName("`MoveOrgUnit` command should")
+class MoveOrgUnitTest
+        extends OrgUnitCommandTest<MoveOrgUnit, OrgUnitMoved> {
 
-    MoveOrgUnitTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("produce OrgUnitMoved event")
-    void produceEvent() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-        OrganizationOrUnit oldParent = aggregate.state()
-                                                  .getParentEntity();
-        expectThat(aggregate).producesEvent(OrgUnitMoved.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewParentEntity(), event.getNewParentEntity());
-            assertEquals(oldParent, event.getOldParentEntity());
-        });
+    @DisplayName("produce `OrgUnitMoved` event and move the unit to another parent")
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the parent")
-    void changeState() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewParentEntity(), state.getParentEntity());
-        });
+    @Override
+    protected MoveOrgUnit command(OrgUnitId id) {
+        return moveOrgUnit(id);
     }
 
-    private static MoveOrgUnit createMessage() {
-        return moveOrgUnit(ORG_UNIT_ID);
+    @Override
+    protected OrgUnitMoved expectedEventAfter(MoveOrgUnit command) {
+        return OrgUnitMoved
+                .newBuilder()
+                .setId(command.getId())
+                .setNewParentEntity(command.getNewParentEntity())
+                .build();
+    }
+
+    @Override
+    protected OrgUnit expectedStateAfter(MoveOrgUnit command) {
+        return OrgUnit
+                .newBuilder()
+                .setId(command.getId())
+                .setParentEntity(command.getNewParentEntity())
+                .build();
     }
 }

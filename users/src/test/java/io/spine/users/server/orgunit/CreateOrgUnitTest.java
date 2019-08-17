@@ -20,51 +20,50 @@
 
 package io.spine.users.server.orgunit;
 
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.CreateOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.createOrgUnit;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
-@DisplayName("CreateOrgUnit command should")
-class CreateOrgUnitTest extends OrgUnitCommandTest<CreateOrgUnit> {
+@DisplayName("`CreateOrgUnit` command should")
+class CreateOrgUnitTest
+        extends OrgUnitCommandTest<CreateOrgUnit, OrgUnitCreated> {
 
-    CreateOrgUnitTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("produce OrgUnitCreated event")
-    void produceEvent() {
-        CreateOrgUnit command = message();
-        expectThat(
-                TestOrgUnitFactory.createEmptyAggregate(ORG_UNIT_ID)).producesEvent(OrgUnitCreated.class, event -> {
-            assertEquals(command.getId(), event.getId());
-            assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getParentEntity(), event.getParentEntity());
-            assertEquals(command.getDomain(), event.getDomain());
-        });
+    @DisplayName("produce `OrgUnitCreated` event and create the org.unit")
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("create an orgunit")
-    void changeState() {
-        CreateOrgUnit command = message();
-        expectThat(TestOrgUnitFactory.createEmptyAggregate(ORG_UNIT_ID)).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
-            assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getParentEntity(), state.getParentEntity());
-            assertEquals(command.getDomain(), state.getDomain());
-        });
+    @Override
+    protected CreateOrgUnit command(OrgUnitId id) {
+        return createOrgUnit(id);
     }
 
-    private static CreateOrgUnit createMessage() {
-        return createOrgUnit(ORG_UNIT_ID);
+    @Override
+    protected OrgUnitCreated expectedEventAfter(CreateOrgUnit command) {
+        return OrgUnitCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setParentEntity(command.getParentEntity())
+                .build();
+    }
+
+    @Override
+    protected OrgUnit expectedStateAfter(CreateOrgUnit command) {
+        return OrgUnit
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setParentEntity(command.getParentEntity())
+                .build();
     }
 }
