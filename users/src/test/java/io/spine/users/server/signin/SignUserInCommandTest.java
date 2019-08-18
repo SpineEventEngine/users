@@ -24,6 +24,7 @@ import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.server.signin.given.SignInTestEnv;
 import io.spine.users.signin.SignIn;
+import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.user.User;
@@ -31,16 +32,9 @@ import io.spine.users.user.command.CreateUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.signin.TestProcManFactory.createEmptyProcMan;
-import static io.spine.users.server.signin.TestProcManFactory.directoryId;
-import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
+import javax.annotation.Nullable;
+
 import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveDirectory;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyDirectory;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockEmptyDirectoryFactory;
-import static io.spine.users.server.signin.given.SignInTestEnv.mockSuspendedDirectory;
-import static io.spine.users.server.signin.given.SignInTestEnv.noIdentityUserRepo;
-import static io.spine.users.server.signin.given.SignInTestEnv.nonEmptyUserRepo;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
@@ -48,7 +42,7 @@ import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.signin.SignInFailureReason.UNKNOWN_IDENTITY;
-import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
+import static io.spine.users.user.User.Status.ACTIVE;
 import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
@@ -79,12 +73,39 @@ class SignUserInCommandTest extends SignInPmTest {
                 .isEqualTo(createdUser(command));
     }
 
+    @Test
+    @DisplayName("finish the process if the user exists and is active")
+    void finishProcess() {
+        createUserAndAttemptSignIn(ACTIVE, null);
+    }
+
+    @Test
+    @DisplayName("fail the process if the user exists and is NOT active")
+    void failProcess() {
+        createUserAndAttemptSignIn(NOT_READY, SIGN_IN_NOT_AUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("fail if unsupported identity given")
+    void failIfNoIdentity() {
+        createUserAndAttemptSignIn(NOT_READY, UNKNOWN_IDENTITY);
+    }
+
     private static SignIn completedAfter(SignUserIn command) {
         return SignIn.newBuilder()
                      .setId(command.getId())
                      .setIdentity(command.getIdentity())
                      .setStatus(COMPLETED)
                      .build();
+    }
+
+    private static FinishSignIn finishSignIn(UserId id, @Nullable SignInFailureReason reason) {
+        FinishSignIn.Builder builder = FinishSignIn.newBuilder()
+                                                   .setId(id);
+        if (reason != null) {
+            builder.setFailureReason(reason);
+        }
+        return builder.build();
     }
 
     private static User createdUser(SignUserIn command) {
@@ -102,7 +123,7 @@ class SignUserInCommandTest extends SignInPmTest {
                          .build();
     }
 
-    private static CreateUser createUser(UserId id) {
+    private static CreateUser createUser(UserId id, User.Status status) {
         return CreateUser
                 .newBuilder()
                 .setId(id)
@@ -110,17 +131,17 @@ class SignUserInCommandTest extends SignInPmTest {
                 .setOrgEntity(userOrgEntity())
                 .setPrimaryIdentity(googleIdentity())
                 .setProfile(profile())
-                .setStatus(NOT_READY)
+                .setStatus(status)
                 .setNature(PERSON)
                 .vBuild();
     }
 
-    @Test
-    @DisplayName("finish the process if the user exists and is active")
-    void finishProcess() {
+    private void createUserAndAttemptSignIn(User.Status userStatus,
+                                            SignInFailureReason failureReason) {
         SignUserIn signUserIn = command();
         UserId id = signUserIn.getId();
-        CreateUser createUser = createUser(id);
+
+        CreateUser createUser = createUser(id, userStatus);
         SingleTenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
                                                                                signUserIn);
         afterCommands
@@ -129,71 +150,38 @@ class SignUserInCommandTest extends SignInPmTest {
                 .comparingExpectedFieldsOnly()
                 .isEqualTo(completedAfter(signUserIn));
 
-        //TODO:2019-08-17:alex.tymchenko: clarify this one!
         afterCommands.assertCommands()
                      .message(0)
                      .comparingExpectedFieldsOnly()
-                     .isEqualTo(finishSignIn(id));
+                     .isEqualTo(finishSignIn(id, failureReason));
     }
 
-    private static FinishSignIn finishSignIn(UserId id) {
-        return FinishSignIn.newBuilder()
-                           .setId(id)
-                           .build();
-    }
-
-    @Test
-    @DisplayName("fail the process if the user exists and is NOT active")
-    void failProcess() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(nonEmptyUserRepo());
-        emptyProcMan.setDirectoryFactory(mockSuspendedDirectory());
-
-        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
-            assertEquals(message().getId(), command.getId());
-            assertFalse(command.getSuccessful());
-            assertEquals(SIGN_IN_NOT_AUTHORIZED, command.getFailureReason());
-        });
-    }
-
-    @Test
-    @DisplayName("fail if unsupported identity given")
-    void failIfNoIdentity() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setDirectoryFactory(mockActiveDirectory());
-        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
-            assertEquals(message().getId(), command.getId());
-            assertFalse(command.getSuccessful());
-            assertEquals(UNKNOWN_IDENTITY, command.getFailureReason());
-        });
-    }
-
-    @Test
-    @DisplayName("fail if directory is not aware of given identity")
-    void failIfUnknownIdentity() {
-        SignInPm emptyProcMan = createEmptyProcMan(entityId());
-        emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setDirectoryFactory(mockEmptyDirectory());
-        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
-            assertEquals(message().getId(), command.getId());
-            assertFalse(command.getSuccessful());
-            assertEquals(UNKNOWN_IDENTITY, command.getFailureReason());
-        });
-    }
-
-    @Test
-    @DisplayName("fail if there is no directory")
-    void failIfNoDirectory() {
-        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("invalid"));
-        emptyProcMan.setUserRepository(noIdentityUserRepo());
-        emptyProcMan.setDirectoryFactory(mockEmptyDirectoryFactory());
-        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
-            assertEquals(message().getId(), command.getId());
-            assertFalse(command.getSuccessful());
-            assertEquals(UNSUPPORTED_IDENTITY, command.getFailureReason());
-        });
-    }
+    //TODO:2019-08-18:alex.tymchenko: Find out if the commented tests still make sense.
+//    @Test
+//    @DisplayName("fail if directory is not aware of given identity")
+//    void failIfUnknownIdentity() {
+//        SignInPm emptyProcMan = createEmptyProcMan(entityId());
+//        emptyProcMan.setUserRepository(noIdentityUserRepo());
+//        emptyProcMan.setDirectoryFactory(mockEmptyDirectory());
+//        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
+//            assertEquals(message().getId(), command.getId());
+//            assertFalse(command.getSuccessful());
+//            assertEquals(UNKNOWN_IDENTITY, command.getFailureReason());
+//        });
+//    }
+//
+//    @Test
+//    @DisplayName("fail if there is no directory")
+//    void failIfNoDirectory() {
+//        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("invalid"));
+//        emptyProcMan.setUserRepository(noIdentityUserRepo());
+//        emptyProcMan.setDirectoryFactory(mockEmptyDirectoryFactory());
+//        expectThat(emptyProcMan).producesCommand(FinishSignIn.class, command -> {
+//            assertEquals(message().getId(), command.getId());
+//            assertFalse(command.getSuccessful());
+//            assertEquals(UNSUPPORTED_IDENTITY, command.getFailureReason());
+//        });
+//    }
 
     private static SignUserIn command() {
         return signInCommand(SignInTestEnv.userId(), SignInTestEnv.identity());

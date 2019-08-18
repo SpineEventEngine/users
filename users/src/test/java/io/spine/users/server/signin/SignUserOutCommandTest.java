@@ -20,35 +20,33 @@
 
 package io.spine.users.server.signin;
 
-import io.spine.users.server.signin.given.SignInTestCommands;
+import io.spine.core.UserId;
+import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
 import io.spine.users.signin.event.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.signin.TestProcManFactory.directoryId;
-import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
+import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
+import static io.spine.users.server.signin.given.SignInTestCommands.signOutCommand;
+import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("SignInPm should, when SignUserOut")
-class SignUserOutCommandTest extends SignInPmCommandTest<SignUserOut> {
-
-    SignUserOutCommandTest() {
-        super(userId(), command());
-    }
+@DisplayName("`SignInPm` should, when `SignUserOut` command is dispatched to it,")
+class SignUserOutCommandTest extends SignInPmTest {
 
     @Test
-    @DisplayName("generate SignOutCompleted event")
-    void failProcess() {
-        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("google.com"));
-
-        expectThat(emptyProcMan)
-                .producesEvent(SignOutCompleted.class,
-                               command -> assertEquals(message().getId(), command.getId()));
-    }
-
-    private static SignUserOut command() {
-        return SignInTestCommands.signOutCommand(userId());
+    @DisplayName("emit `SignOutCompleted` event")
+    void emitSignOutCompleted() {
+        UserId userId = userId();
+        SignUserIn signIn = signInCommand(userId, identity());
+        SignUserOut signOut = signOutCommand(userId);
+        context().receivesCommands(signIn, signOut)
+                 .assertEvents()
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(SignOutCompleted.newBuilder()
+                                            .setId(userId)
+                                            .build());
     }
 }
