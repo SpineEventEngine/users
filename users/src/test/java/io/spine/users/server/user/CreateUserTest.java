@@ -20,51 +20,53 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.event.UserCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.createUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("CreateUser command should")
-class CreateUserTest extends UserPartCommandTest<CreateUser> {
+@DisplayName("`CreateUser` command should")
+class CreateUserTest extends UserPartCommandTest<CreateUser, UserCreated> {
 
-    CreateUserTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("generate UserCreated event")
-    void produceEvent() {
-        expectThat(new UserPart(root(USER_ID))).producesEvent(UserCreated.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getDisplayName(), event.getDisplayName());
-            assertEquals(message().getPrimaryIdentity(), event.getPrimaryIdentity());
-            assertEquals(message().getOrgEntity(), event.getOrgEntity());
-            assertEquals(message().getStatus(), event.getStatus());
-            assertEquals(message().getNature(), event.getNature());
-        });
+    @DisplayName("generate `UserCreated` event and create the `User`")
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("create the user")
-    void changeState() {
-        expectThat(new UserPart(root(USER_ID))).hasState(state -> {
-            assertEquals(message().getId(), state.getId());
-            assertEquals(message().getDisplayName(), state.getDisplayName());
-            assertEquals(message().getPrimaryIdentity(), state.getPrimaryIdentity());
-            assertEquals(message().getOrgEntity(), state.getOrgEntity());
-            assertEquals(message().getStatus(), state.getStatus());
-            assertEquals(message().getNature(), state.getNature());
-        });
+    @Override
+    protected CreateUser command(UserId id) {
+        return createUser(id);
     }
 
-    private static CreateUser createMessage() {
-        return createUser(USER_ID);
+    @Override
+    protected UserCreated expectedEventAfter(CreateUser command) {
+        return UserCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setPrimaryIdentity(command.getPrimaryIdentity())
+                .setOrgEntity(command.getOrgEntity())
+                .setStatus(command.getStatus())
+                .setNature(command.getNature())
+                .build();
+    }
+
+    @Override
+    protected User expectedStateAfter(CreateUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setPrimaryIdentity(command.getPrimaryIdentity())
+                .setOrgEntity(command.getOrgEntity())
+                .setStatus(command.getStatus())
+                .setNature(command.getNature())
+                .build();
     }
 }

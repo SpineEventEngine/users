@@ -20,43 +20,47 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.event.SecondaryIdentityAdded;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.addAuthIdentity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("AddAuthIdentity command should")
-class AddAuthIdentityTest extends UserPartCommandTest<AddSecondaryIdentity> {
-
-    AddAuthIdentityTest() {
-        super(createMessage());
-    }
+@DisplayName("`AddAuthIdentity` command should")
+class AddAuthIdentityTest
+        extends UserPartCommandTest<AddSecondaryIdentity, SecondaryIdentityAdded> {
 
     @Test
-    @DisplayName("generate AuthIdentityAdded event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(SecondaryIdentityAdded.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getIdentity(), event.getIdentity());
-        });
+    @DisplayName("produce `SecondaryIdentityAdded` event and add the second identity for the user")
+    @Override
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("add a new identity")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getSecondaryIdentity(1)));
+    @Override
+    protected AddSecondaryIdentity command(UserId id) {
+        return addAuthIdentity(id);
     }
 
-    private static AddSecondaryIdentity createMessage() {
-        return addAuthIdentity(USER_ID);
+    @Override
+    protected SecondaryIdentityAdded expectedEventAfter(AddSecondaryIdentity command) {
+        return SecondaryIdentityAdded
+                .newBuilder()
+                .setId(command.getId())
+                .setIdentity(command.getIdentity())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(AddSecondaryIdentity command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .addSecondaryIdentity(command.getIdentity())
+                .buildPartial();
     }
 }

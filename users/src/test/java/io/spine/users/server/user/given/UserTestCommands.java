@@ -132,7 +132,7 @@ public class UserTestCommands {
         return AddSecondaryIdentity
                 .newBuilder()
                 .setId(id)
-                .setIdentity(googleIdentity())
+                .setIdentity(githubIdentity())
                 .build();
     }
 

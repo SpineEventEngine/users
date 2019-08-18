@@ -20,47 +20,46 @@
 
 package io.spine.users.server.user;
 
-import io.spine.users.OrganizationOrUnit;
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.MoveUser;
 import io.spine.users.user.event.UserMoved;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.moveUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("MoveUser command should")
-class MoveUserTest extends UserPartCommandTest<MoveUser> {
-
-    MoveUserTest() {
-        super(createMessage());
-    }
+@DisplayName("`MoveUser` command should")
+class MoveUserTest extends UserPartCommandTest<MoveUser, UserMoved> {
 
     @Test
-    @DisplayName("generate UserMoved event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        OrganizationOrUnit oldParent = aggregate.state()
-                                                  .getOrgEntity();
-        expectThat(aggregate).producesEvent(UserMoved.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewOrgEntity(), event.getNewOrgEntity());
-            assertEquals(oldParent, event.getOldOrgEntity());
-        });
+    @DisplayName("produce `UserMoved` event and move the user to another org.entity")
+    @Override
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change parent entity of the user")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getNewOrgEntity(), state.getOrgEntity()));
+    @Override
+    protected MoveUser command(UserId id) {
+        return moveUser(id);
     }
 
-    private static MoveUser createMessage() {
-        return moveUser(USER_ID);
+    @Override
+    protected UserMoved expectedEventAfter(MoveUser command) {
+        return UserMoved
+                .newBuilder()
+                .setId(command.getId())
+                .setNewOrgEntity(command.getNewOrgEntity())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(MoveUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setOrgEntity(command.getNewOrgEntity())
+                .buildPartial();
     }
 }

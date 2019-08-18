@@ -42,7 +42,7 @@ import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
  *         the class of the entity
  */
 public abstract class CommandTest<I, C extends CommandMessage, E extends EventMessage,
-                                  S extends Message, Z extends Entity<I, S>>
+        S extends Message, Z extends Entity<I, S>>
         extends UsersContextTest {
 
     /**
@@ -68,6 +68,24 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
     protected abstract S expectedStateAfter(C command);
 
     /**
+     * Tells whether the entity is expected to become deleted after the command is dispatched.
+     *
+     * <p>By default, returns {@code false}.
+     */
+    protected boolean isDeletedAfterCommand() {
+        return false;
+    }
+
+    /**
+     * Tells whether the entity is expected to become archived after the command is dispatched.
+     *
+     * <p>By default, returns {@code false}.
+     */
+    protected boolean isArchivedAfterCommand() {
+        return false;
+    }
+
+    /**
      * Obtains the class of the entity.
      */
     protected abstract Class<Z> entityClass();
@@ -88,5 +106,12 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
                     .hasStateThat()
                     .comparingExpectedFieldsOnly()
                     .isEqualTo(expectedState);
+
+        afterCommand.assertEntity(entityClass(), id)
+                    .archivedFlag()
+                    .isEqualTo(isArchivedAfterCommand());
+        afterCommand.assertEntity(entityClass(), id)
+                    .deletedFlag()
+                    .isEqualTo(isDeletedAfterCommand());
     }
 }

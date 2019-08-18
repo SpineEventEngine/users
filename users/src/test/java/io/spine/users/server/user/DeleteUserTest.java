@@ -20,43 +20,48 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.DeleteUser;
 import io.spine.users.user.event.UserDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.deleteUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteUser command should")
-class DeleteUserTest extends UserPartCommandTest<DeleteUser> {
-
-    DeleteUserTest() {
-        super(createMessage());
-    }
+@DisplayName("`DeleteUser` command should")
+class DeleteUserTest extends UserPartCommandTest<DeleteUser, UserDeleted> {
 
     @Test
-    @DisplayName("generate UserDeleted event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(UserDeleted.class,
-                event -> assertEquals(message().getId(),
-                        event.getId()));
+    @DisplayName("produce `UserDeleted` event and delete the user")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("mark aggregate as deleted")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                .getDeleted()));
+    @Override
+    protected DeleteUser command(UserId id) {
+        return deleteUser(id);
     }
 
-    private static DeleteUser createMessage() {
-        return deleteUser(USER_ID);
+    @Override
+    protected UserDeleted expectedEventAfter(DeleteUser command) {
+        return UserDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected User expectedStateAfter(DeleteUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

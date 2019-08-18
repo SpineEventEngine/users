@@ -20,51 +20,47 @@
 
 package io.spine.users.server.user;
 
-import io.spine.users.user.Identity;
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.event.SecondaryIdentityRemoved;
-import io.spine.users.user.rejection.Rejections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.removeAuthIdentity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("RemoveSecondaryIdentity command should")
-class RemoveAuthIdentityTest extends UserPartCommandTest<RemoveSecondaryIdentity> {
-
-    RemoveAuthIdentityTest() {
-        super(createMessage());
-    }
+@DisplayName("`RemoveSecondaryIdentity` command should")
+class RemoveAuthIdentityTest
+        extends UserPartCommandTest<RemoveSecondaryIdentity, SecondaryIdentityRemoved> {
 
     @Test
-    @DisplayName("generate AuthIdentityRemoved event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(SecondaryIdentityRemoved.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            Identity eventIdentity = event.getIdentity();
-            assertEquals(message().getDirectoryId(), eventIdentity.getDirectoryId());
-            assertEquals(message().getUserId(), eventIdentity.getUserId());
-        });
+    @DisplayName("produce `SecondaryIdentityRemoved` event and add the second identity for the user")
+    @Override
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("remove an identity")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getSecondaryIdentityList()
-                                                                .isEmpty()));
+    @Override
+    protected RemoveSecondaryIdentity command(UserId id) {
+        return removeAuthIdentity(id);
     }
 
-    @Test
-    @DisplayName("throw rejection if auth identity doesn't exist")
-    void generateRejection() {
-        expectThat(new UserPart(root(USER_ID))).throwsRejection(Rejections.IdentityDoesNotExist.class);
+    @Override
+    protected SecondaryIdentityRemoved expectedEventAfter(RemoveSecondaryIdentity command) {
+        return SecondaryIdentityRemoved
+                .newBuilder()
+                .setId(command.getId())
+                .setIdentity(secondaryIdentity())
+                .buildPartial();
     }
 
-    private static RemoveSecondaryIdentity createMessage() {
-        return removeAuthIdentity(USER_ID);
+    //TODO:2019-08-18:alex.tymchenko:  find out how to check that the identity has been removed
+    @Override
+    protected User expectedStateAfter(RemoveSecondaryIdentity command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .buildPartial();
     }
 }

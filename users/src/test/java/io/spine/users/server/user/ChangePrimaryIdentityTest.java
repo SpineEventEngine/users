@@ -20,43 +20,47 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.ChangePrimaryIdentity;
 import io.spine.users.user.event.PrimaryIdentityChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.changePrimaryIdentity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangePrimaryIdentity command should")
-class ChangePrimaryIdentityTest extends UserPartCommandTest<ChangePrimaryIdentity> {
-
-    ChangePrimaryIdentityTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangePrimaryIdentity` command should")
+class ChangePrimaryIdentityTest
+        extends UserPartCommandTest<ChangePrimaryIdentity, PrimaryIdentityChanged> {
 
     @Test
-    @DisplayName("generate PrimaryIdentityChanged event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(PrimaryIdentityChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getIdentity(), event.getIdentity());
-        });
+    @DisplayName("produce `PrimaryIdentityChanged` event and update the user's primary identity")
+    @Override
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the primary googleIdentity")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getPrimaryIdentity()));
+    @Override
+    protected ChangePrimaryIdentity command(UserId id) {
+        return changePrimaryIdentity(id);
     }
 
-    private static ChangePrimaryIdentity createMessage() {
-        return changePrimaryIdentity(USER_ID);
+    @Override
+    protected PrimaryIdentityChanged expectedEventAfter(ChangePrimaryIdentity command) {
+        return PrimaryIdentityChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setIdentity(command.getIdentity())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(ChangePrimaryIdentity command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setPrimaryIdentity(command.getIdentity())
+                .buildPartial();
     }
 }
