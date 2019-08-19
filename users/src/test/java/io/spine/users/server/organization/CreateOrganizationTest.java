@@ -20,41 +20,37 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.event.OrganizationCreated;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.createOrganization;
-import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
 @DisplayName("`CreateOrganization` command should")
-class CreateOrganizationTest extends UsersContextTest {
+class CreateOrganizationTest
+        extends OrganizationCommandTest<CreateOrganization, OrganizationCreated> {
 
-    @Test
-    @DisplayName("produce `OrganizationCreated` event and create the organization")
-    void produceEventAndChangeState() {
-        OrganizationId id = createOrganizationId();
-        CreateOrganization command = createOrganization(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        OrganizationCreated expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Organization expectedState = expectedState(command);
-        afterCommand.assertEntity(OrganizationAggregate.class, id)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected CreateOrganization command(OrganizationId id) {
+        return createOrganization(id);
     }
 
-    private static Organization expectedState(CreateOrganization command) {
+    @Override
+    protected OrganizationCreated expectedEventAfter(CreateOrganization command) {
+        return OrganizationCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(CreateOrganization command) {
         return Organization
                 .newBuilder()
                 .setId(command.getId())
@@ -64,13 +60,10 @@ class CreateOrganizationTest extends UsersContextTest {
                 .build();
     }
 
-    private static OrganizationCreated expectedEvent(CreateOrganization command) {
-        return OrganizationCreated
-                .newBuilder()
-                .setId(command.getId())
-                .setDisplayName(command.getDisplayName())
-                .setDomain(command.getDomain())
-                .setTenant(command.getTenant())
-                .build();
+    @Test
+    @DisplayName("produce `OrganizationCreated` event and create the organization")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 }

@@ -69,9 +69,6 @@ public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
                                                            GoogleGroupLifecycle,
                                                            GoogleGroupLifecycle.Builder> {
 
-    /**
-     * @see ProcessManager#ProcessManager(Object)
-     */
     GoogleGroupLifecyclePm(GroupId id) {
         super(id);
     }

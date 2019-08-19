@@ -21,12 +21,12 @@
 package io.spine.users.server.group;
 
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.users.server.UsersContextTest;
+import io.spine.users.server.CommandTest;
 
-import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
@@ -40,9 +40,20 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrgan
  *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends CommandMessage> extends UsersContextTest {
+abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<GroupId, C, E, Group, GroupPart> {
 
     static final GroupId GROUP_ID = createGroupId();
+
+    @Override
+    protected GroupId entityId() {
+        return GROUP_ID;
+    }
+
+    @Override
+    protected Class<GroupPart> entityClass() {
+        return GroupPart.class;
+    }
 
     /**
      * Creates the {@link GroupPart} with the some predefined state and the {@link #GROUP_ID}

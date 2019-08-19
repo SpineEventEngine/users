@@ -20,53 +20,47 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.event.OrganizationDomainChanged;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationDomain;
-import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
 @DisplayName("`ChangeOrganizationDomain` command should")
-class ChangeOrganizationDomainTest extends UsersContextTest {
+class ChangeOrganizationDomainTest
+        extends OrganizationCommandTest<ChangeOrganizationDomain, OrganizationDomainChanged> {
 
     @Test
     @DisplayName("produce `OrganizationDomainChanged` event and update the organization domain")
-    void produceEventAndChangeState() {
-        OrganizationId id = createOrganizationId();
-        ChangeOrganizationDomain command = changeOrganizationDomain(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        OrganizationDomainChanged expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Organization expectedState = expectedState(command);
-        afterCommand.assertEntity(OrganizationAggregate.class, id)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    private static Organization expectedState(ChangeOrganizationDomain command) {
-        return Organization
-                .newBuilder()
-                .setId(command.getId())
-                .setDomain(command.getNewDomain())
-                .build();
+    @Override
+    protected ChangeOrganizationDomain command(OrganizationId id) {
+        return changeOrganizationDomain(id);
     }
 
-    private static OrganizationDomainChanged expectedEvent(ChangeOrganizationDomain command) {
+    @Override
+    protected OrganizationDomainChanged expectedEventAfter(ChangeOrganizationDomain command) {
         return OrganizationDomainChanged
                 .newBuilder()
                 .setId(command.getId())
                 .setNewDomain(command.getNewDomain())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(ChangeOrganizationDomain command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDomain(command.getNewDomain())
                 .build();
     }
 }

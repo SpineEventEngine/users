@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.LeftParentGroup;
@@ -37,7 +37,7 @@ class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup> 
     void produceEventAndChangeState() {
         createPartWithState();
         LeaveParentGroup command = leaveParentGroup(GROUP_ID, PARENT_GROUP_ID);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
         LeftParentGroup expectedEvent = expectedEvent(command);
         afterCommand.assertEvents()
                     .message(0)

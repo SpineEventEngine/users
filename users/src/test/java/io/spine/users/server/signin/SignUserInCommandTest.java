@@ -21,7 +21,7 @@
 package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.server.signin.given.SignInTestEnv;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
@@ -53,7 +53,7 @@ class SignUserInCommandTest extends SignInPmTest {
     @DisplayName("create `User` and set self into `COMPLETED` state")
     void initialize() {
         SignUserIn command = command();
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
         afterCommand
                 .assertCommands()
                 .message(0)
@@ -142,7 +142,7 @@ class SignUserInCommandTest extends SignInPmTest {
         UserId id = signUserIn.getId();
 
         CreateUser createUser = createUser(id, userStatus);
-        SingleTenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
+        MultitenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
                                                                                signUserIn);
         afterCommands
                 .assertEntityWithState(SignIn.class, id)

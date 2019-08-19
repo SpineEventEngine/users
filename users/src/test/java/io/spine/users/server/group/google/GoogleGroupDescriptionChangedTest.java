@@ -23,10 +23,12 @@ package io.spine.users.server.group.google;
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupDescriptionChanged;
 import io.spine.users.group.command.ChangeGroupDescription;
+import io.spine.users.group.command.CreateGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
 
@@ -37,13 +39,15 @@ class GoogleGroupDescriptionChangedTest extends UsersContextTest {
     @DisplayName("translate it to `ChangeGroupDescription` command")
     void testBeTranslated() {
         GroupId groupId = newGroupId();
+        CreateGroup createGroup = createGroup(groupId);
         GoogleGroupDescriptionChanged event = googleGroupDescriptionChanged(groupId);
         ChangeGroupDescription expectedCmd = ChangeGroupDescription
                 .newBuilder()
                 .setId(groupId)
                 .setDescription(event.getNewDescription())
                 .build();
-        context().receivesEvent(event)
+        context().receivesCommand(createGroup)
+                 .receivesEvent(event)
                  .assertCommands()
                  .withType(ChangeGroupDescription.class)
                  .message(0)

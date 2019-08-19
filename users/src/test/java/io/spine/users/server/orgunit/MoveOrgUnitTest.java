@@ -30,8 +30,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.moveOrgUnit;
 
 @DisplayName("`MoveOrgUnit` command should")
-class MoveOrgUnitTest
-        extends OrgUnitCommandTest<MoveOrgUnit, OrgUnitMoved> {
+class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit, OrgUnitMoved> {
 
     @Override
     @Test

@@ -23,7 +23,6 @@ package io.spine.users.server.group.google;
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
 import io.spine.users.group.command.JoinParentGroup;
-import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ class GoogleGroupLeftGroupTest extends UsersContextTest {
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
-                 .withType(LeaveParentGroup.class)
+                 .withType(JoinParentGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);

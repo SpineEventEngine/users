@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.event.GroupCreated;
@@ -30,27 +30,27 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 
 @DisplayName("`CreateGroup` command should")
-class CreateGroupTest extends GroupCommandTest<CreateGroup> {
+class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
 
-    @Test
-    @DisplayName("produce `CreateGroup` event and create the group")
-    void produceEventAndChangeState() {
-        CreateGroup command = createGroup(GROUP_ID);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        GroupCreated expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(command);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected CreateGroup command(GroupId id) {
+        return createGroup(id);
     }
 
-    private static Group expectedState(CreateGroup command) {
+    @Override
+    protected GroupCreated expectedEventAfter(CreateGroup command) {
+        return GroupCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setEmail(command.getEmail())
+                .setOrgEntity(command.getOrgEntity())
+                .setDescription(command.getDescription())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(CreateGroup command) {
         return Group
                 .newBuilder()
                 .setId(command.getId())
@@ -61,14 +61,10 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup> {
                 .build();
     }
 
-    private static GroupCreated expectedEvent(CreateGroup command) {
-        return GroupCreated
-                .newBuilder()
-                .setId(command.getId())
-                .setDisplayName(command.getDisplayName())
-                .setEmail(command.getEmail())
-                .setOrgEntity(command.getOrgEntity())
-                .setDescription(command.getDescription())
-                .build();
+    @Test
+    @DisplayName("produce `GroupCreated` event and create the group")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 }

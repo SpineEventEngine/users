@@ -20,58 +20,47 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.core.TenantId;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
-import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
-import io.spine.users.organization.event.OrganizationDomainChanged;
 import io.spine.users.organization.event.OrganizationTenantChanged;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationDomain;
 import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationTenant;
-import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("`ChangeOrganizationTenant` command should")
-class ChangeOrganizationTenantTest extends UsersContextTest {
+class ChangeOrganizationTenantTest
+        extends OrganizationCommandTest<ChangeOrganizationTenant, OrganizationTenantChanged> {
 
     @Test
     @DisplayName("produce `OrganizationTenantChanged` event and update the organization tenant")
-    void produceEventAndChangeState() {
-        OrganizationId id = createOrganizationId();
-        ChangeOrganizationTenant command = changeOrganizationTenant(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        OrganizationTenantChanged expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Organization expectedState = expectedState(command);
-        afterCommand.assertEntity(OrganizationAggregate.class, id)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    private static Organization expectedState(ChangeOrganizationTenant command) {
-        return Organization
-                .newBuilder()
-                .setId(command.getId())
-                .setTenant(command.getNewTenant())
-                .build();
+    @Override
+    protected ChangeOrganizationTenant command(OrganizationId id) {
+        return changeOrganizationTenant(id);
     }
 
-    private static OrganizationTenantChanged expectedEvent(ChangeOrganizationTenant command) {
+    @Override
+    protected OrganizationTenantChanged expectedEventAfter(ChangeOrganizationTenant command) {
         return OrganizationTenantChanged
                 .newBuilder()
                 .setId(command.getId())
                 .setNewTenant(command.getNewTenant())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(ChangeOrganizationTenant command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setTenant(command.getNewTenant())
                 .build();
     }
 }

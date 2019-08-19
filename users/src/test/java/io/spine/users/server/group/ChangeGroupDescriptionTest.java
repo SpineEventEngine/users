@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.event.GroupDescriptionChanged;
@@ -30,40 +30,37 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.changeGroupDescription;
 
 @DisplayName("`ChangeGroupDescription` command should")
-class ChangeGroupDescriptionTest extends GroupCommandTest<ChangeGroupDescription> {
+class ChangeGroupDescriptionTest
+        extends GroupCommandTest<ChangeGroupDescription, GroupDescriptionChanged> {
 
     @Test
     @DisplayName("produce `GroupDescriptionChanged` event and set the updated description")
-    void produceEventAndChangeState() {
+    @Override
+    protected void produceEventAndChangeState() {
         createPartWithState();
-        ChangeGroupDescription changeDescription = changeGroupDescription(GROUP_ID);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(changeDescription);
-        GroupDescriptionChanged expectedEvent = expectedEvent(changeDescription);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(changeDescription);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+        super.produceEventAndChangeState();
     }
 
-    private static Group expectedState(ChangeGroupDescription command) {
-        return Group
-                .newBuilder()
-                .setId(command.getId())
-                .setDescription(command.getDescription())
-                .build();
+    @Override
+    protected ChangeGroupDescription command(GroupId id) {
+        return changeGroupDescription(id);
     }
 
-    private static GroupDescriptionChanged expectedEvent(ChangeGroupDescription command) {
+    @Override
+    protected GroupDescriptionChanged expectedEventAfter(ChangeGroupDescription command) {
         return GroupDescriptionChanged
                 .newBuilder()
                 .setId(command.getId())
                 .setNewDescription(command.getDescription())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(ChangeGroupDescription command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDescription(command.getDescription())
                 .build();
     }
 }

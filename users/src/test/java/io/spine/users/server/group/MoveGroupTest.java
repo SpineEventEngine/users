@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.MoveGroup;
@@ -32,42 +32,38 @@ import static io.spine.users.server.group.given.GroupTestCommands.moveGroup;
 import static io.spine.users.server.group.given.GroupTestEnv.groupParentOrgUnit;
 
 @DisplayName("`MoveGroup` command should")
-class MoveGroupTest extends GroupCommandTest<MoveGroup> {
+class MoveGroupTest extends GroupCommandTest<MoveGroup, GroupMoved> {
 
     private static final OrganizationOrUnit NEW_PARENT = groupParentOrgUnit();
 
     @Test
     @DisplayName("produce `GroupMoved` event and change the group parent OrgUnit")
-    void produceEventAndChangeState() {
+    @Override
+    protected void produceEventAndChangeState() {
         createPartWithState();
-        MoveGroup command = moveGroup(GROUP_ID, NEW_PARENT);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        GroupMoved expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(command);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+        super.produceEventAndChangeState();
     }
 
-    private static Group expectedState(MoveGroup command) {
-        return Group
-                .newBuilder()
-                .setId(command.getId())
-                .setOrgEntity(command.getNewOrgEntity())
-                .build();
+    @Override
+    protected MoveGroup command(GroupId id) {
+        return moveGroup(id, NEW_PARENT);
     }
 
-    private static GroupMoved expectedEvent(MoveGroup command) {
+    @Override
+    protected GroupMoved expectedEventAfter(MoveGroup command) {
         return GroupMoved
                 .newBuilder()
                 .setId(command.getId())
                 .setNewOrgEntity(command.getNewOrgEntity())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(MoveGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setOrgEntity(command.getNewOrgEntity())
                 .build();
     }
 }

@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.event.GroupRenamed;
@@ -30,28 +30,24 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.renameGroup;
 
 @DisplayName("`RenameGroup` command should")
-class RenameGroupTest extends GroupCommandTest<RenameGroup> {
+class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
 
-    @Test
-    @DisplayName("produce `GroupRenamed` event and change the display name")
-    void produceEventAndChangeState() {
-        createPartWithState();
-        RenameGroup command = renameGroup(GROUP_ID);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        GroupRenamed expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(command);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected RenameGroup command(GroupId id) {
+        return renameGroup(id);
     }
 
-    private static Group expectedState(RenameGroup command) {
+    @Override
+    protected GroupRenamed expectedEventAfter(RenameGroup command) {
+        return GroupRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(RenameGroup command) {
         return Group
                 .newBuilder()
                 .setId(command.getId())
@@ -59,11 +55,11 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup> {
                 .build();
     }
 
-    private static GroupRenamed expectedEvent(RenameGroup command) {
-        return GroupRenamed
-                .newBuilder()
-                .setId(command.getId())
-                .setNewName(command.getNewName())
-                .build();
+    @Test
+    @DisplayName("produce `GroupRenamed` event and change the display name")
+    @Override
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 }

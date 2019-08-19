@@ -22,7 +22,7 @@ package io.spine.users.server.orgunit;
 
 import io.spine.client.Query;
 import io.spine.testing.client.TestActorRequestFactory;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.CreateOrgUnit;
@@ -47,7 +47,7 @@ class DeleteOrgUnitTest extends UsersContextTest {
         OrgUnitId id = createOrgUnitId();
         CreateOrgUnit createCmd = createOrgUnit(id);
         DeleteOrgUnit deleteCmd = deleteOrgUnit(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
         OrgUnitDeleted expectedEvent = expectedEvent(deleteCmd);
         afterCommand.assertEvents()
                     .message(1)

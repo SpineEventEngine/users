@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.AssignRoleToGroup;
 import io.spine.users.group.event.RoleAssignedToGroup;
@@ -33,41 +33,37 @@ import static io.spine.users.server.given.GivenId.organizationUuid;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 @DisplayName("`AssignRoleToGroup` command should")
-class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup> {
+class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup, RoleAssignedToGroup> {
+
+    @Override
+    protected AssignRoleToGroup command(GroupId id) {
+        return assignRoleToGroup(id,
+                                 roleId(organizationUuid(), newUuid()));
+    }
+
+    @Override
+    protected RoleAssignedToGroup expectedEventAfter(AssignRoleToGroup command) {
+        return RoleAssignedToGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(AssignRoleToGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .addRole(command.getRoleId())
+                .build();
+    }
 
     @Test
     @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
-    void produceEventAndChangeState() {
+    @Override
+    protected void produceEventAndChangeState() {
         createPartWithState();
-        AssignRoleToGroup assignRole = assignRoleToGroup(GROUP_ID,
-                                                         roleId(organizationUuid(), newUuid()));
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(assignRole);
-        RoleAssignedToGroup expectedEvent = expectedEvent(assignRole);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(assignRole);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
-    }
-
-    private static Group expectedState(AssignRoleToGroup assignRole) {
-        return Group
-                .newBuilder()
-                .setId(GROUP_ID)
-                .addRole(assignRole.getRoleId())
-                .build();
-    }
-
-    private static RoleAssignedToGroup expectedEvent(AssignRoleToGroup assignRole) {
-        return RoleAssignedToGroup
-                .newBuilder()
-                .setId(assignRole.getId())
-                .setRoleId(assignRole.getRoleId())
-                .build();
+        super.produceEventAndChangeState();
     }
 }

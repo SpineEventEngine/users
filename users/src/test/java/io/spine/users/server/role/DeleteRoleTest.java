@@ -22,7 +22,7 @@ package io.spine.users.server.role;
 
 import io.spine.client.Query;
 import io.spine.testing.client.TestActorRequestFactory;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
 import io.spine.users.role.command.CreateRole;
@@ -47,7 +47,7 @@ class DeleteRoleTest extends UsersContextTest {
         RoleId id = createRoleId();
         CreateRole createCmd = createRole(id);
         DeleteRole deleteCmd = deleteRole(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
         RoleDeleted expectedEvent = expectedEvent(deleteCmd);
         afterCommand.assertEvents()
                     .message(1)

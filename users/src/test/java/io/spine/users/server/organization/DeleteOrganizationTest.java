@@ -20,64 +20,47 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.client.Query;
-import io.spine.testing.client.TestActorRequestFactory;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
-import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.command.DeleteOrganization;
 import io.spine.users.organization.event.OrganizationDeleted;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.client.Filters.all;
-import static io.spine.client.Filters.eq;
-import static io.spine.users.server.organization.given.OrganizationTestCommands.createOrganization;
 import static io.spine.users.server.organization.given.OrganizationTestCommands.deleteOrganization;
-import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
 @DisplayName("`DeleteOrganization` command should")
-class DeleteOrganizationTest extends UsersContextTest {
+class DeleteOrganizationTest
+        extends OrganizationCommandTest<DeleteOrganization, OrganizationDeleted> {
 
     @Test
     @DisplayName("produce `OrganizationDeleted` event and delete the organization")
-    void produceEventAndChangeState() {
-        OrganizationId id = createOrganizationId();
-        CreateOrganization createCmd = createOrganization(id);
-        DeleteOrganization deleteCmd = deleteOrganization(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
-        OrganizationDeleted expectedEvent = expectedEvent(deleteCmd);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-        Query findDeleted = findDeleted(id);
-        afterCommand
-                .assertQueryResult(findDeleted)
-                .containsSingleEntityStateThat()
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(expectedState(deleteCmd));
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    private static Query findDeleted(OrganizationId id) {
-        TestActorRequestFactory factory = new TestActorRequestFactory(DeleteOrganizationTest.class);
-        return factory
-                .query()
-                .select(Organization.class)
-                .where(all(eq("id", id), eq("deleted", true)))
-                .build();
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 
-    private static OrganizationDeleted expectedEvent(DeleteOrganization command) {
+    @Override
+    protected DeleteOrganization command(OrganizationId id) {
+        return deleteOrganization(id);
+    }
+
+    @Override
+    protected OrganizationDeleted expectedEventAfter(DeleteOrganization command) {
         return OrganizationDeleted
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    private static Organization expectedState(DeleteOrganization command) {
+    @Override
+    protected Organization expectedStateAfter(DeleteOrganization command) {
         return Organization
                 .newBuilder()
                 .setId(command.getId())

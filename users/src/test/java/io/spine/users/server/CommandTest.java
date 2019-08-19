@@ -24,7 +24,7 @@ import com.google.protobuf.Message;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.server.entity.Entity;
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 
 /**
  * An abstract base for tests of {@code Users} Bounded Context, which test that a certain command
@@ -93,10 +93,11 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
     protected void produceEventAndChangeState() {
         I id = entityId();
         C command = command(id);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
         E expectedEvent = expectedEventAfter(command);
 
         afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
                     .message(0)
                     .comparingExpectedFieldsOnly()
                     .isEqualTo(expectedEvent);

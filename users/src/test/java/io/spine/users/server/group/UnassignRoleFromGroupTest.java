@@ -20,10 +20,8 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
-import io.spine.users.group.command.AssignRoleToGroup;
 import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
 import io.spine.users.group.rejection.Rejections;
@@ -31,7 +29,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
 import static io.spine.users.server.given.GivenCommand.unassignRoleFromGroup;
 import static io.spine.users.server.given.GivenId.organizationUuid;
 import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
@@ -39,7 +36,8 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 @DisplayName("`UnassignRoleFromGroup` command should")
-class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {
+class UnassignRoleFromGroupTest
+        extends GroupCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
 
     @Test
     @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")
@@ -53,40 +51,31 @@ class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> 
 
     @Test
     @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
-    void produceEventAndChangeState() {
+    @Override
+    protected void produceEventAndChangeState() {
         createPartWithState();
-        AssignRoleToGroup assignRole =
-                assignRoleToGroup(GROUP_ID, roleId(organizationUuid(), newUuid()));
-        UnassignRoleFromGroup unassignRole =
-                unassignRoleFromGroup(GROUP_ID, assignRole.getRoleId());
-
-        SingleTenantBlackBoxContext afterCommand =
-                context().receivesCommands(assignRole, unassignRole);
-        RoleUnassignedFromGroup expectedEvent = expectedEvent(unassignRole);
-        afterCommand.assertEvents()
-                    .message(1)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        Group expectedState = expectedState(unassignRole);
-        afterCommand.assertEntity(GroupPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+        super.produceEventAndChangeState();
     }
 
-    private static Group expectedState(UnassignRoleFromGroup command) {
-        return Group
-                .newBuilder()
-                .setId(command.getId())
-                .build();
+    @Override
+    protected UnassignRoleFromGroup command(GroupId id) {
+        return unassignRoleFromGroup(id, roleId(organizationUuid(), newUuid()));
     }
 
-    private static RoleUnassignedFromGroup expectedEvent(UnassignRoleFromGroup command) {
+    @Override
+    protected RoleUnassignedFromGroup expectedEventAfter(UnassignRoleFromGroup command) {
         return RoleUnassignedFromGroup
                 .newBuilder()
                 .setId(command.getId())
                 .setRoleId(command.getRoleId())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(UnassignRoleFromGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
                 .build();
     }
 }

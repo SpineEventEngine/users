@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.SingleTenantBlackBoxContext;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
@@ -40,7 +40,7 @@ class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup> {
     @DisplayName("produce `JoinedParentGroup` event and create the group membership")
     void produceEventAndChangeState() {
         JoinParentGroup command = joinParentGroup(GROUP_ID, PARENT_GROUP_ID);
-        SingleTenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
         JoinedParentGroup expectedEvent = expectedEvent(command);
         afterCommand.assertEvents()
                     .message(0)
