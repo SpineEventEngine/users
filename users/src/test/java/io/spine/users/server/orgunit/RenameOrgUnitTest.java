@@ -36,6 +36,7 @@ class RenameOrgUnitTest extends OrgUnitCommandTest<RenameOrgUnit, OrgUnitRenamed
     @DisplayName("produce `OrgUnitRenamed` event and update the org.unit display name")
     @Override
     protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
         super.produceEventAndChangeState();
     }
 

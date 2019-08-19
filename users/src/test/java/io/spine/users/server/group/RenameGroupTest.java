@@ -59,7 +59,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
     @DisplayName("produce `GroupRenamed` event and change the display name")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 }

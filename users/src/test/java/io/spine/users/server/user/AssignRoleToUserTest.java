@@ -36,7 +36,7 @@ class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAss
     @Test
     @DisplayName("generate `RoleAssignedToUser` assign the role to the user")
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

@@ -37,7 +37,7 @@ class ChangePrimaryIdentityTest
     @DisplayName("produce `PrimaryIdentityChanged` event and update the user's primary identity")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

@@ -40,7 +40,7 @@ class MoveGroupTest extends GroupCommandTest<MoveGroup, GroupMoved> {
     @DisplayName("produce `GroupMoved` event and change the group parent OrgUnit")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 

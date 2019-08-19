@@ -43,7 +43,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrgan
 abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<GroupId, C, E, Group, GroupPart> {
 
-    static final GroupId GROUP_ID = createGroupId();
+    private static final GroupId GROUP_ID = createGroupId();
 
     @Override
     protected GroupId entityId() {
@@ -59,14 +59,14 @@ abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage
      * Creates the {@link GroupPart} with the some predefined state and the {@link #GROUP_ID}
      * identifier.
      */
-    protected void createPartWithState() {
-        createPartWithState(GROUP_ID);
+    protected void preCreateGroup() {
+        preCreateGroup(GROUP_ID);
     }
 
     /**
      * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
      */
-    protected void createPartWithState(GroupId id) {
+    protected void preCreateGroup(GroupId id) {
         CreateGroup createGroup = CreateGroup
                 .newBuilder()
                 .setId(id)

@@ -37,7 +37,7 @@ class ChangeGroupDescriptionTest
     @DisplayName("produce `GroupDescriptionChanged` event and set the updated description")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 

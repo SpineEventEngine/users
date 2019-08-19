@@ -63,7 +63,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup, RoleAssi
     @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 }

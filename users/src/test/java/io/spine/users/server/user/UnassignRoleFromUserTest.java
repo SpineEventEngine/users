@@ -37,7 +37,7 @@ class UnassignRoleFromUserTest
     @Test
     @DisplayName("generate `RoleUnassignedFromUser` and unassign the role from the user")
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

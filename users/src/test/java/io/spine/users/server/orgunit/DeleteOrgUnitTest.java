@@ -20,67 +20,49 @@
 
 package io.spine.users.server.orgunit;
 
-import io.spine.client.Query;
-import io.spine.testing.client.TestActorRequestFactory;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
-import io.spine.users.orgunit.command.CreateOrgUnit;
 import io.spine.users.orgunit.command.DeleteOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitDeleted;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.client.Filters.all;
-import static io.spine.client.Filters.eq;
-import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.createOrgUnit;
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.deleteOrgUnit;
-import static io.spine.users.server.orgunit.given.OrgUnitTestEnv.createOrgUnitId;
 
 @DisplayName("`DeleteOrgUnit` command should")
-class DeleteOrgUnitTest extends UsersContextTest {
+class DeleteOrgUnitTest extends OrgUnitCommandTest<DeleteOrgUnit, OrgUnitDeleted> {
 
     @Test
     @DisplayName("produce `OrgUnitDeleted` event and delete the org.unit")
-    void produceEventAndChangeState() {
-        OrgUnitId id = createOrgUnitId();
-        CreateOrgUnit createCmd = createOrgUnit(id);
-        DeleteOrgUnit deleteCmd = deleteOrgUnit(id);
-        MultitenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
-        OrgUnitDeleted expectedEvent = expectedEvent(deleteCmd);
-        afterCommand.assertEvents()
-                    .message(1)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-        Query findDeleted = findDeleted(id);
-        afterCommand
-                .assertQueryResult(findDeleted)
-                .containsSingleEntityStateThat()
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(expectedState(deleteCmd));
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
+        super.produceEventAndChangeState();
     }
 
-    private static Query findDeleted(OrgUnitId id) {
-        TestActorRequestFactory factory = new TestActorRequestFactory(DeleteOrgUnitTest.class);
-        return factory
-                .query()
-                .select(OrgUnit.class)
-                .where(all(eq("id", id), eq("deleted", true)))
-                .build();
+    @Override
+    protected DeleteOrgUnit command(OrgUnitId id) {
+        return deleteOrgUnit(id);
     }
 
-    private static OrgUnitDeleted expectedEvent(DeleteOrgUnit command) {
+    @Override
+    protected OrgUnitDeleted expectedEventAfter(DeleteOrgUnit command) {
         return OrgUnitDeleted
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    private static OrgUnit expectedState(DeleteOrgUnit command) {
+    @Override
+    protected OrgUnit expectedStateAfter(DeleteOrgUnit command) {
         return OrgUnit
                 .newBuilder()
                 .setId(command.getId())
                 .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

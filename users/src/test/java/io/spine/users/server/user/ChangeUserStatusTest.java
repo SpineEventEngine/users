@@ -36,7 +36,7 @@ class ChangeUserStatusTest extends UserPartCommandTest<ChangeUserStatus, UserSta
     @DisplayName("produce `UserStatusChanged` event and update the user's status")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

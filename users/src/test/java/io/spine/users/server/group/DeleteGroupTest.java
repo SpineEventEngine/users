@@ -36,7 +36,7 @@ class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {
     @DisplayName("produce `GroupDeleted` event and delete the group")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 

@@ -37,7 +37,7 @@ class RemoveAuthIdentityTest
     @DisplayName("produce `SecondaryIdentityRemoved` event and add the second identity for the user")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

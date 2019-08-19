@@ -36,6 +36,7 @@ class DeleteUserTest extends UserPartCommandTest<DeleteUser, UserDeleted> {
     @DisplayName("produce `UserDeleted` event and delete the user")
     @Override
     protected void produceEventAndChangeState() {
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

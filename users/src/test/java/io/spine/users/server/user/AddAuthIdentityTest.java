@@ -37,7 +37,7 @@ class AddAuthIdentityTest
     @DisplayName("produce `SecondaryIdentityAdded` event and add the second identity for the user")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

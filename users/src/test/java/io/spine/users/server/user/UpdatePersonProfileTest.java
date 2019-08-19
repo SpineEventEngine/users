@@ -37,6 +37,7 @@ class UpdatePersonProfileTest
     @Test
     @DisplayName("generate `PersonProfileUpdated` event and update the person profile")
     protected void produceEventAndChangeState() {
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

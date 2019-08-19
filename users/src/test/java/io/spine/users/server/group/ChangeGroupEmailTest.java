@@ -36,13 +36,13 @@ class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmail
     @DisplayName("produce `GroupEmailChanged` event and set the updated email")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
         super.produceEventAndChangeState();
     }
 
     @Override
     protected ChangeGroupEmail command(GroupId id) {
-        return changeGroupEmail(GROUP_ID);
+        return changeGroupEmail(id);
     }
 
     @Override
@@ -51,7 +51,7 @@ class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmail
                 .newBuilder()
                 .setId(command.getId())
                 .setNewEmail(command.getNewEmail())
-                .build();
+                .buildPartial();
     }
 
     @Override

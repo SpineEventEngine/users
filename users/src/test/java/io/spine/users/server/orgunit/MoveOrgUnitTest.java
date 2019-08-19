@@ -35,7 +35,8 @@ class MoveOrgUnitTest extends OrgUnitCommandTest<MoveOrgUnit, OrgUnitMoved> {
     @Override
     @Test
     @DisplayName("produce `OrgUnitMoved` event and move the unit to another parent")
-    protected void produceEventAndChangeState() {
+    protected void produceEventAndChangeState(){
+        preCreateOrgUnit();
         super.produceEventAndChangeState();
     }
 

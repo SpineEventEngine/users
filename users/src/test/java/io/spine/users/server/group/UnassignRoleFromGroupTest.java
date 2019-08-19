@@ -21,6 +21,7 @@
 package io.spine.users.server.group;
 
 import io.spine.users.GroupId;
+import io.spine.users.RoleId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
 import static io.spine.users.server.given.GivenCommand.unassignRoleFromGroup;
 import static io.spine.users.server.given.GivenId.organizationUuid;
 import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
@@ -38,6 +40,8 @@ import static io.spine.users.server.role.RoleIds.roleId;
 @DisplayName("`UnassignRoleFromGroup` command should")
 class UnassignRoleFromGroupTest
         extends GroupCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
+
+    private static final RoleId ROLE_ID = roleId(organizationUuid(), newUuid());
 
     @Test
     @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")
@@ -53,13 +57,14 @@ class UnassignRoleFromGroupTest
     @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateGroup();
+        context().receivesCommand(assignRoleToGroup(entityId(), ROLE_ID));
         super.produceEventAndChangeState();
     }
 
     @Override
     protected UnassignRoleFromGroup command(GroupId id) {
-        return unassignRoleFromGroup(id, roleId(organizationUuid(), newUuid()));
+        return unassignRoleFromGroup(id, ROLE_ID);
     }
 
     @Override

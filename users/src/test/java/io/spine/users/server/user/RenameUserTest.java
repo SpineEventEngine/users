@@ -36,7 +36,7 @@ class RenameUserTest extends UserPartCommandTest<RenameUser, UserRenamed> {
     @DisplayName("produce `UserRenamed` event and change the name of the user")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

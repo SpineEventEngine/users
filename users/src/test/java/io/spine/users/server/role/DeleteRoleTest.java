@@ -20,67 +20,52 @@
 
 package io.spine.users.server.role;
 
-import io.spine.client.Query;
-import io.spine.testing.client.TestActorRequestFactory;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
 import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleDeleted;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.client.Filters.all;
-import static io.spine.client.Filters.eq;
 import static io.spine.users.server.role.given.RoleTestCommands.createRole;
 import static io.spine.users.server.role.given.RoleTestCommands.deleteRole;
-import static io.spine.users.server.role.given.RoleTestEnv.createRoleId;
 
 @DisplayName("`DeleteRole` command should")
-class DeleteRoleTest extends UsersContextTest {
+class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
 
     @Test
     @DisplayName("produce `RoleDeleted` event and delete the role")
-    void produceEventAndChangeState() {
-        RoleId id = createRoleId();
-        CreateRole createCmd = createRole(id);
-        DeleteRole deleteCmd = deleteRole(id);
-        MultitenantBlackBoxContext afterCommand = context().receivesCommands(createCmd, deleteCmd);
-        RoleDeleted expectedEvent = expectedEvent(deleteCmd);
-        afterCommand.assertEvents()
-                    .message(1)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-        Query findDeleted = findDeleted(id);
-        afterCommand
-                .assertQueryResult(findDeleted)
-                .containsSingleEntityStateThat()
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(expectedState(deleteCmd));
+    @Override
+    protected void produceEventAndChangeState() {
+        CreateRole createRole = createRole(entityId());
+        context().receivesCommand(createRole);
+        super.produceEventAndChangeState();
     }
 
-    private static Query findDeleted(RoleId id) {
-        TestActorRequestFactory factory = new TestActorRequestFactory(DeleteRoleTest.class);
-        return factory
-                .query()
-                .select(Role.class)
-                .where(all(eq("id", id), eq("deleted", true)))
-                .build();
+    @Override
+    protected DeleteRole command(RoleId id) {
+        return deleteRole(id);
     }
 
-    private static RoleDeleted expectedEvent(DeleteRole command) {
+    @Override
+    protected RoleDeleted expectedEventAfter(DeleteRole command) {
         return RoleDeleted
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
-    private static Role expectedState(DeleteRole command) {
+    @Override
+    protected Role expectedStateAfter(DeleteRole command) {
         return Role
                 .newBuilder()
                 .setId(command.getId())
                 .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

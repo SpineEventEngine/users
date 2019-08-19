@@ -27,6 +27,7 @@ import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupEmailChanged;
 
@@ -34,9 +35,10 @@ import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.goo
 class GoogleGroupEmailChangedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to ChangeGroupEmail command")
+    @DisplayName("translate it to `ChangeGroupEmail` command")
     void testBeTranslated() {
         GroupId groupId = newGroupId();
+        context().receivesCommand(createGroup(groupId));
         GoogleGroupEmailChanged event = googleGroupEmailChanged(groupId);
         ChangeGroupEmail expectedCmd = ChangeGroupEmail
                 .newBuilder()

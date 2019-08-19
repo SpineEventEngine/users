@@ -36,7 +36,7 @@ class MoveUserTest extends UserPartCommandTest<MoveUser, UserMoved> {
     @DisplayName("produce `UserMoved` event and move the user to another org.entity")
     @Override
     protected void produceEventAndChangeState() {
-        createPartWithState();
+        preCreateUser();
         super.produceEventAndChangeState();
     }
 

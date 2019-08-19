@@ -26,6 +26,7 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.server.CommandTest;
 
+import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.createOrgUnit;
 import static io.spine.users.server.orgunit.given.OrgUnitTestEnv.createOrgUnitId;
 
 /**
@@ -39,13 +40,19 @@ import static io.spine.users.server.orgunit.given.OrgUnitTestEnv.createOrgUnitId
 abstract class OrgUnitCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<OrgUnitId, C, E, OrgUnit, OrgUnitAggregate> {
 
+    private static final OrgUnitId ORG_UNIT_ID = createOrgUnitId();
+
     @Override
     protected OrgUnitId entityId() {
-        return createOrgUnitId();
+        return ORG_UNIT_ID;
     }
 
     @Override
     protected Class<OrgUnitAggregate> entityClass() {
         return OrgUnitAggregate.class;
+    }
+
+    protected void preCreateOrgUnit() {
+        context().receivesCommand(createOrgUnit(ORG_UNIT_ID));
     }
 }

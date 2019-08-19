@@ -37,6 +37,7 @@ class ChangeOrgUnitDomainTest
     @Test
     @DisplayName("produce `OrgUnitDomainChanged` event and update the org.unit domain")
     protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
         super.produceEventAndChangeState();
     }
 

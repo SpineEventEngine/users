@@ -39,9 +39,11 @@ import static io.spine.users.server.role.given.RoleTestEnv.createRoleId;
 public abstract class RoleCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<RoleId, C, E, Role, RoleAggregate> {
 
+    private static final RoleId ROLE_ID = createRoleId();
+
     @Override
     protected RoleId entityId() {
-        return createRoleId();
+        return ROLE_ID;
     }
 
     @Override
