@@ -24,9 +24,7 @@ import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.server.group.GroupPartRepository;
-import io.spine.users.server.group.GroupRolesPropagationRepository;
-import io.spine.users.server.role.RoleAggregateRepository;
+import io.spine.users.server.UsersContextTest;
 import io.spine.users.server.user.given.UserRolesProjectionTestEnv;
 import io.spine.users.user.UserRoles;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,25 +51,19 @@ import static io.spine.users.server.user.given.UserRolesProjectionTestEnv.userWi
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
  */
 @DisplayName("UserRolesProjection should")
-class UserRolesProjectionIntegrationTest {
+class UserRolesProjectionIntegrationTest extends UsersContextTest {
 
     private final UserId user = userUuid();
-    private BlackBoxBoundedContext boundedContext;
-
-    @BeforeEach
-    void setUp() {
-        boundedContext = newBoundedContext();
-    }
 
     @Test
     @DisplayName("have explicitly assigned roles")
     void assignExplicitRoles() {
         RoleId roleId = roleUuid();
         UserRoles expectedRoles = userWithRole(user, roleId);
-        boundedContext.receivesCommands(createUser(user),
-                                        createRole(roleId),
-                                        assignRoleToUser(user, roleId))
-                      .assertThat(exactlyOne(expectedRoles));
+        context().receivesCommands(createUser(user),
+                                   createRole(roleId),
+                                   assignRoleToUser(user, roleId))
+                 .assertThat(exactlyOne(expectedRoles));
     }
 
     @Test
@@ -80,13 +72,13 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         UserRoles expectedRoles = userWithRole(user, role);
-        boundedContext.receivesCommands(createUser(user),
-                                        createRole(role),
-                                        createGroup(group),
-                                        assignRoleToGroup(group, role))
-                      // Join a group after the role assigned.
-                      .receivesCommand(joinGroup(user, group))
-                      .assertThat(exactlyOne(expectedRoles));
+        context().receivesCommands(createUser(user),
+                                   createRole(role),
+                                   createGroup(group),
+                                   assignRoleToGroup(group, role))
+                 // Join a group after the role assigned.
+                 .receivesCommand(joinGroup(user, group))
+                 .assertThat(exactlyOne(expectedRoles));
     }
 
     @Test
@@ -95,13 +87,13 @@ class UserRolesProjectionIntegrationTest {
         RoleId role = roleUuid();
         GroupId group = groupUuid();
         UserRoles expectedRoles = userWithRole(user, role);
-        boundedContext.receivesCommands(createUser(user),
-                                        createRole(role),
-                                        createGroup(group),
-                                        joinGroup(user, group))
-                      // Assign a role when a user already joined a group
-                      .receivesCommand(assignRoleToGroup(group, role))
-                      .assertThat(exactlyOne(expectedRoles));
+        context().receivesCommands(createUser(user),
+                                   createRole(role),
+                                   createGroup(group),
+                                   joinGroup(user, group))
+                 // Assign a role when a user already joined a group
+                 .receivesCommand(assignRoleToGroup(group, role))
+                 .assertThat(exactlyOne(expectedRoles));
     }
 
     @Nested
@@ -112,16 +104,16 @@ class UserRolesProjectionIntegrationTest {
 
         @BeforeEach
         void setUp() {
-            boundedContext.receivesCommands(createUser(user),
-                                            createRole(role),
-                                            assignRoleToUser(user, role));
+            context().receivesCommands(createUser(user),
+                                       createRole(role),
+                                       assignRoleToUser(user, role));
         }
 
         @Test
         @DisplayName("remove if it is unassigned")
         void removeUnassignedRole() {
-            boundedContext.receivesCommand(unassignRoleFromUser(user, role))
-                          .assertThat(exactlyOne(userWithoutRoles()));
+            context().receivesCommand(unassignRoleFromUser(user, role))
+                     .assertThat(exactlyOne(userWithoutRoles()));
         }
     }
 
@@ -134,40 +126,29 @@ class UserRolesProjectionIntegrationTest {
 
         @BeforeEach
         void setUp() {
-            boundedContext.receivesCommands(createUser(user),
-                                            createRole(role),
-                                            createGroup(group),
-                                            joinGroup(user, group),
-                                            assignRoleToGroup(group, role));
+            context().receivesCommands(createUser(user),
+                                       createRole(role),
+                                       createGroup(group),
+                                       joinGroup(user, group),
+                                       assignRoleToGroup(group, role));
         }
 
         @Test
         @DisplayName("remove role if it is unassigned from group")
         void removeUnassignedGroupRole() {
-            boundedContext.receivesCommand(unassignRoleFromGroup(group, role))
-                          .assertThat(exactlyOne(userWithoutRoles()));
+            context().receivesCommand(unassignRoleFromGroup(group, role))
+                     .assertThat(exactlyOne(userWithoutRoles()));
         }
 
         @Test
         @DisplayName("remove role if user leaves group")
         void removeRoleOfLeftGroup() {
-            boundedContext.receivesCommand(leaveGroup(user, group))
-                          .assertThat(exactlyOne(userWithoutRoles()));
+            context().receivesCommand(leaveGroup(user, group))
+                     .assertThat(exactlyOne(userWithoutRoles()));
         }
     }
 
     private UserRoles userWithoutRoles() {
         return UserRolesProjectionTestEnv.userWithoutRoles(user);
-    }
-
-    /** The bounded context with repositories related to {@link UserRolesProjection}. */
-    private static BlackBoxBoundedContext newBoundedContext() {
-        return BlackBoxBoundedContext.singleTenant()
-                                     .with(new UserPartRepository(),
-                                           new UserMembershipPartRepository(),
-                                           new RoleAggregateRepository(),
-                                           new GroupPartRepository(),
-                                           new GroupRolesPropagationRepository(),
-                                           new UserRolesRepository());
     }
 }

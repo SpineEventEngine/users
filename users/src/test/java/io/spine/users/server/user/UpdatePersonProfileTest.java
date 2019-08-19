@@ -20,41 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.UpdatePersonProfile;
 import io.spine.users.user.event.PersonProfileUpdated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.updatePersonProfile;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("UpdatePersonProfile command should")
-class UpdatePersonProfileTest extends UserPartCommandTest<UpdatePersonProfile> {
+@DisplayName("`UpdatePersonProfile` command should")
+class UpdatePersonProfileTest
+        extends UserPartCommandTest<UpdatePersonProfile, PersonProfileUpdated> {
 
-    UpdatePersonProfileTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("generate PersonProfileUpdated event")
-    void generateEvent() {
-        expectThat(createPartWithState()).producesEvent(PersonProfileUpdated.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getUpdatedProfile(), event.getUpdatedProfile());
-        });
+    @DisplayName("generate `PersonProfileUpdated` event and update the person profile")
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("update the profile")
-    void changeState() {
-        expectThat(createPartWithState()).hasState(
-                state -> assertEquals(message().getUpdatedProfile(), state.getProfile()));
+    @Override
+    protected UpdatePersonProfile command(UserId id) {
+        return updatePersonProfile(id);
     }
 
-    private static UpdatePersonProfile createMessage() {
-        return updatePersonProfile(USER_ID);
+    @Override
+    protected PersonProfileUpdated expectedEventAfter(UpdatePersonProfile command) {
+        return PersonProfileUpdated
+                .newBuilder()
+                .setId(command.getId())
+                .setUpdatedProfile(command.getUpdatedProfile())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(UpdatePersonProfile command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setProfile(command.getUpdatedProfile())
+                .buildPartial();
     }
 }

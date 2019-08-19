@@ -20,41 +20,55 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.UserMembership;
+import io.spine.users.user.UserMembershipRecord;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.event.UserJoinedGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.user.given.UserTestCommands.startGroupMembership;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
 
-@DisplayName("JoinGroup command should")
-class JoinGroupTest extends UserMembershipCommandTest<JoinGroup> {
-
-    JoinGroupTest() {
-        super(createMessage());
-    }
+@DisplayName("`JoinGroup` command should")
+class JoinGroupTest extends UserMembershipCommandTest<JoinGroup, UserJoinedGroup> {
 
     @Test
-    @DisplayName("generate UserJoinedGroup event")
-    void generateEvent() {
-        UserMembershipPart part = createPart();
-        expectThat(part).producesEvent(UserJoinedGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getGroupId(), event.getGroupId());
-        });
+    @DisplayName("produce `UserJoinedGroup` event and update the user group membership")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("add a new group membership")
-    void changeState() {
-        UserMembershipPart part = createPart();
-        expectThat(part).hasState(
-                state -> assertEquals(message().getGroupId(), state.getMembership(0)
-                                                                   .getGroupId()));
+    @Override
+    protected JoinGroup command(UserId id) {
+        return joinGroup(id);
     }
 
-    private static JoinGroup createMessage() {
-        return startGroupMembership(USER_ID);
+    @Override
+    protected UserJoinedGroup expectedEventAfter(JoinGroup command) {
+        return UserJoinedGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setGroupId(command.getGroupId())
+                .setRole(command.getRole())
+                .buildPartial();
+    }
+
+    @Override
+    protected UserMembership expectedStateAfter(JoinGroup command) {
+        return UserMembership
+                .newBuilder()
+                .setId(command.getId())
+                .addMembership(membershipAfter(command))
+                .buildPartial();
+    }
+
+    private static UserMembershipRecord membershipAfter(JoinGroup command) {
+        return UserMembershipRecord
+                .newBuilder()
+                .setGroupId(command.getGroupId())
+                .setRole(command.getRole())
+                .buildPartial();
     }
 }

@@ -20,43 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.event.RoleAssignedToUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.assignRoleToUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("AssignRoleToUser command should")
-class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser> {
+@DisplayName("`AssignRoleToUser` command should")
+class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAssignedToUser> {
 
-    AssignRoleToUserTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("generate RoleAssignedToUser event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(RoleAssignedToUser.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
-        });
+    @DisplayName("generate `RoleAssignedToUser` assign the role to the user")
+    protected void produceEventAndChangeState() {
+        createPartWithState();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("add a new role")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getRoleId(), state.getRole(1)));
+    @Override
+    protected AssignRoleToUser command(UserId id) {
+        return assignRoleToUser(id);
     }
 
-    private static AssignRoleToUser createMessage() {
-        return assignRoleToUser(USER_ID);
+    @Override
+    protected RoleAssignedToUser expectedEventAfter(AssignRoleToUser command) {
+        return RoleAssignedToUser
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(AssignRoleToUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .addRole(command.getRoleId())
+                .buildPartial();
     }
 }

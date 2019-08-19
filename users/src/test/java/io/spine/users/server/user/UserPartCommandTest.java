@@ -50,7 +50,7 @@ import static io.spine.users.user.UserNature.PERSON;
 abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<UserId, C, E, User, UserPart> {
 
-    protected static final UserId USER_ID = userId();
+    static final UserId USER_ID = userId();
 
     @Override
     protected UserId entityId() {

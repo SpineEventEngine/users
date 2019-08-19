@@ -29,9 +29,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.changeUserStatus;
 
-/**
- * @author Vladyslav Lubenskyi
- */
 @DisplayName("`ChangeUserStatus` command should")
 class ChangeUserStatusTest extends UserPartCommandTest<ChangeUserStatus, UserStatusChanged> {
 
