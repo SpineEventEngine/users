@@ -143,7 +143,7 @@ class SignUserInCommandTest extends SignInPmTest {
 
         CreateUser createUser = createUser(id, userStatus);
         MultitenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
-                                                                               signUserIn);
+                                                                              signUserIn);
         afterCommands
                 .assertEntityWithState(SignIn.class, id)
                 .hasStateThat()

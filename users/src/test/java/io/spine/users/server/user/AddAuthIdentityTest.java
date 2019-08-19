@@ -21,6 +21,7 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.event.SecondaryIdentityAdded;
@@ -42,6 +43,20 @@ class AddAuthIdentityTest
     }
 
     @Override
+    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
+                               SecondaryIdentityAdded expectedEvent) {
+        /*
+         The second event of {@code SecondaryIdentityAdded} type is checked,
+         as the {@link #preCreateUser} also leads to the {@code SecondaryIdentityAdded} event.
+         */
+        afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
+                    .message(1)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
+    }
+
+    @Override
     protected AddSecondaryIdentity command(UserId id) {
         return addAuthIdentity(id);
     }
@@ -60,6 +75,11 @@ class AddAuthIdentityTest
         return User
                 .newBuilder()
                 .setId(command.getId())
+
+                // The one which was there previously.
+                .addSecondaryIdentity(originalSecondaryIdentity())
+
+                // The one that should have been added as the result of command dispatching.
                 .addSecondaryIdentity(command.getIdentity())
                 .buildPartial();
     }

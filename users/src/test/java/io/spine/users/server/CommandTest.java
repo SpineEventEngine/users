@@ -96,11 +96,7 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
         MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
         E expectedEvent = expectedEventAfter(command);
 
-        afterCommand.assertEvents()
-                    .withType(expectedEvent.getClass())
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
+        assertEvent(afterCommand, expectedEvent);
 
         S expectedState = expectedStateAfter(command);
         afterCommand.assertEntity(entityClass(), id)
@@ -114,5 +110,13 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
         afterCommand.assertEntity(entityClass(), id)
                     .deletedFlag()
                     .isEqualTo(isDeletedAfterCommand());
+    }
+
+    protected void assertEvent(MultitenantBlackBoxContext afterCommand, E expectedEvent) {
+        afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
+                    .message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
     }
 }

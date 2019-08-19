@@ -20,53 +20,45 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;
-import io.spine.users.server.group.given.GroupTestEnv;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.joinParentGroup;
 
 @DisplayName("`JoinParentGroup` command should")
-class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup> {
-
-    private static final GroupId SUPER_GROUP = GroupTestEnv.createGroupId();
+class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup, JoinedParentGroup> {
 
     @Test
     @DisplayName("produce `JoinedParentGroup` event and create the group membership")
-    void produceEventAndChangeState() {
-        JoinParentGroup command = joinParentGroup(GROUP_ID, PARENT_GROUP_ID);
-        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        JoinedParentGroup expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        GroupMembership expectedState = expectedState(command);
-        afterCommand.assertEntity(GroupMembershipPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 
-    private static GroupMembership expectedState(JoinParentGroup command) {
-        return GroupMembership
-                .newBuilder()
-                .setId(command.getId())
-                .addMembership(command.getParentGroupId())
-                .build();
+    @Override
+    protected JoinParentGroup command(GroupId id) {
+        return joinParentGroup(id, PARENT_GROUP_ID);
     }
 
-    private static JoinedParentGroup expectedEvent(JoinParentGroup command) {
+    @Override
+    protected JoinedParentGroup expectedEventAfter(JoinParentGroup command) {
         return JoinedParentGroup
                 .newBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
+                .build();
+    }
+
+    @Override
+    protected GroupMembership expectedStateAfter(JoinParentGroup command) {
+        return GroupMembership
+                .newBuilder()
+                .setId(command.getId())
+                .addMembership(command.getParentGroupId())
                 .build();
     }
 }

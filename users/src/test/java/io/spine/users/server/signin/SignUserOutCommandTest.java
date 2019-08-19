@@ -41,12 +41,16 @@ class SignUserOutCommandTest extends SignInPmTest {
         UserId userId = userId();
         SignUserIn signIn = signInCommand(userId, identity());
         SignUserOut signOut = signOutCommand(userId);
+        SignOutCompleted expectedEvent =
+                SignOutCompleted
+                        .newBuilder()
+                        .setId(userId)
+                        .build();
         context().receivesCommands(signIn, signOut)
                  .assertEvents()
+                 .withType(expectedEvent.getClass())
                  .message(0)
                  .comparingExpectedFieldsOnly()
-                 .isEqualTo(SignOutCompleted.newBuilder()
-                                            .setId(userId)
-                                            .build());
+                 .isEqualTo(expectedEvent);
     }
 }

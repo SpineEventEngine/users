@@ -21,6 +21,7 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.event.RoleAssignedToUser;
@@ -38,6 +39,20 @@ class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAss
     protected void produceEventAndChangeState() {
         preCreateUser();
         super.produceEventAndChangeState();
+    }
+
+    @Override
+    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
+                               RoleAssignedToUser expectedEvent) {
+        /*
+         The second event of {@code RoleAssignedToUser} type is checked,
+         as the {@link #preCreateUser} also leads to the {@code RoleAssignedToUser} event.
+         */
+        afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
+                    .message(1)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
     }
 
     @Override
@@ -59,6 +74,11 @@ class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAss
         return User
                 .newBuilder()
                 .setId(command.getId())
+
+                // The role which was set originally.
+                .addRole(originalRole())
+
+                // The one expected to be added after the command dispatching.
                 .addRole(command.getRoleId())
                 .buildPartial();
     }

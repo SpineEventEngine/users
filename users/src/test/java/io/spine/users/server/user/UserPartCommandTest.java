@@ -23,6 +23,7 @@ package io.spine.users.server.user;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
+import io.spine.users.RoleId;
 import io.spine.users.server.CommandTest;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
@@ -30,7 +31,6 @@ import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.CreateUser;
 
-import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.server.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
@@ -76,21 +76,21 @@ abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMess
         AddSecondaryIdentity addSecondaryIdentity = AddSecondaryIdentity
                 .newBuilder()
                 .setId(USER_ID)
-                .setIdentity(secondaryIdentity())
+                .setIdentity(originalSecondaryIdentity())
                 .vBuild();
         AssignRoleToUser assignRole = AssignRoleToUser
                 .newBuilder()
                 .setId(USER_ID)
-                .setRoleId(adminRoleId())
+                .setRoleId(originalRole())
                 .vBuild();
         context().receivesCommands(createUser, addSecondaryIdentity, assignRole);
     }
 
-    Identity secondaryIdentity() {
-        return googleIdentity();
+    RoleId originalRole() {
+        return adminRoleId();
     }
 
-    protected static UserRoot root(UserId id) {
-        return new UserRoot(create(), id);
+    Identity originalSecondaryIdentity() {
+        return googleIdentity();
     }
 }

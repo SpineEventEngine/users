@@ -105,15 +105,13 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
     EitherOf2<FinishSignIn, CreateUser> handle(SignUserIn command) {
         UserId id = command.getId();
         Identity identity = command.getIdentity();
-        Optional<Directory> directoryOptional =
-                directories.get(identity.getDirectoryId());
+        Optional<Directory> directoryOptional = directories.get(identity.getDirectoryId());
         if (!directoryOptional.isPresent()) {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
 
-        SignIn.Builder builder = builder()
-                .setId(id)
-                .setIdentity(identity);
+        SignIn.Builder builder = builder().setId(id)
+                                          .setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));

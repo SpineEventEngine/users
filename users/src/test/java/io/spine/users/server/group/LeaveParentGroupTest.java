@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group;
 
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.LeftParentGroup;
@@ -30,39 +30,35 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.leaveParentGroup;
 
 @DisplayName("`LeaveParentGroup` command should")
-class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup> {
+class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, LeftParentGroup> {
 
     @Test
     @DisplayName("produce `LeftParentGroup` event and clear the respective membership")
-    void produceEventAndChangeState() {
-        createPartWithState();
-        LeaveParentGroup command = leaveParentGroup(GROUP_ID, PARENT_GROUP_ID);
-        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
-        LeftParentGroup expectedEvent = expectedEvent(command);
-        afterCommand.assertEvents()
-                    .message(0)
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedEvent);
-
-        GroupMembership expectedState = expectedState(command);
-        afterCommand.assertEntity(GroupMembershipPart.class, GROUP_ID)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroupMembership();
+        super.produceEventAndChangeState();
     }
 
-    private static GroupMembership expectedState(LeaveParentGroup command) {
-        return GroupMembership
-                .newBuilder()
-                .setId(command.getId())
-                .build();
+    @Override
+    protected LeaveParentGroup command(GroupId id) {
+        return leaveParentGroup(id, PARENT_GROUP_ID);
     }
 
-    private static LeftParentGroup expectedEvent(LeaveParentGroup command) {
+    @Override
+    protected LeftParentGroup expectedEventAfter(LeaveParentGroup command) {
         return LeftParentGroup
                 .newBuilder()
                 .setId(command.getId())
                 .setParentGroupId(command.getParentGroupId())
+                .build();
+    }
+
+    @Override
+    protected GroupMembership expectedStateAfter(LeaveParentGroup command) {
+        return GroupMembership
+                .newBuilder()
+                .setId(command.getId())
                 .build();
     }
 }

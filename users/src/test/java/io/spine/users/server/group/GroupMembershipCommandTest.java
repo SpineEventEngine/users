@@ -21,11 +21,13 @@
 package io.spine.users.server.group;
 
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
+import io.spine.users.group.Group;
+import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
-import io.spine.users.server.UsersContextTest;
+import io.spine.users.server.CommandTest;
 
-import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
 
 /**
@@ -34,27 +36,34 @@ import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
  * @param <C>
  *         the type of the command being tested
  */
-abstract class GroupMembershipCommandTest<C extends CommandMessage> extends UsersContextTest {
+abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<GroupId, C, E, GroupMembership, GroupMembershipPart> {
 
     static final GroupId GROUP_ID = createGroupId();
     static final GroupId PARENT_GROUP_ID = createGroupId();
 
-    private static GroupRoot root(GroupId id) {
-        return new GroupRoot(create(), id);
+    @Override
+    protected GroupId entityId() {
+        return GROUP_ID;
+    }
+
+    @Override
+    protected Class<GroupMembershipPart> entityClass() {
+        return GroupMembershipPart.class;
     }
 
     /**
      * Creates the {@link GroupMembershipPart} with for the group with the {@link #GROUP_ID}
      * identifier and a parent group with  {@link #PARENT_GROUP_ID} identifier.
      */
-    protected void createPartWithState() {
-        createPartWithState(GROUP_ID, PARENT_GROUP_ID);
+    void preCreateGroupMembership() {
+        preCreateGroupMembership(GROUP_ID, PARENT_GROUP_ID);
     }
 
     /**
      * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
      */
-    protected void createPartWithState(GroupId group, GroupId parentGroup) {
+    protected void preCreateGroupMembership(GroupId group, GroupId parentGroup) {
         JoinParentGroup joinParentGroup = JoinParentGroup
                 .newBuilder()
                 .setId(group)

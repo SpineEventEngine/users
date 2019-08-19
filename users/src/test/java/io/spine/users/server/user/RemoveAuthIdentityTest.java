@@ -51,7 +51,7 @@ class RemoveAuthIdentityTest
         return SecondaryIdentityRemoved
                 .newBuilder()
                 .setId(command.getId())
-                .setIdentity(secondaryIdentity())
+                .setIdentity(originalSecondaryIdentity())
                 .buildPartial();
     }
 

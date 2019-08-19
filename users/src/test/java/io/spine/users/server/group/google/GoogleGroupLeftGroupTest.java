@@ -22,7 +22,7 @@ package io.spine.users.server.group.google;
 
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupLeftParentGroup;
 
-@DisplayName("`GoogleGroupPm` should, when `GoogleGroupLeftParentGroup`")
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupLeftParentGroup` is dispatched to it,")
 class GoogleGroupLeftGroupTest extends UsersContextTest {
 
     @Test
@@ -38,14 +38,14 @@ class GoogleGroupLeftGroupTest extends UsersContextTest {
     void testBeTranslated() {
         GroupId groupId = newGroupId();
         GoogleGroupLeftParentGroup event = googleGroupLeftParentGroup(groupId);
-        JoinParentGroup expectedCmd = JoinParentGroup
+        LeaveParentGroup expectedCmd = LeaveParentGroup
                 .newBuilder()
                 .setId(groupId)
                 .setParentGroupId(event.getParentGroupId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
-                 .withType(JoinParentGroup.class)
+                 .withType(LeaveParentGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);
