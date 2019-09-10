@@ -57,7 +57,7 @@ public final class UsersContext {
     }
 
     /**
-     * Creates a builder of {@code Users} Bounded Context along with the registered repositories.
+     * Creates a builder of the {@code Users} Context along with the registered repositories.
      *
      * <p>This method optionally accepts {@link DirectoryFactory} instance. In case it is supplied,
      * the {@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository} is registered
@@ -74,15 +74,15 @@ public final class UsersContext {
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
                 .add(userPartRepo)
-                .add(DefaultRepository.of(UserMembershipPart.class))
+                .add(UserMembershipPart.class)
                 .add(new UserRolesRepository())
-                .add(DefaultRepository.of(RoleAggregate.class))
-                .add(DefaultRepository.of(OrgUnitAggregate.class))
-                .add(DefaultRepository.of(OrganizationAggregate.class))
-                .add(DefaultRepository.of(GroupPart.class))
-                .add(DefaultRepository.of(GroupMembershipPart.class))
+                .add(RoleAggregate.class)
+                .add(OrgUnitAggregate.class)
+                .add(OrganizationAggregate.class)
+                .add(GroupPart.class)
+                .add(GroupMembershipPart.class)
                 .add(new GroupRolesPropagationRepository())
-                .add(DefaultRepository.of(GoogleGroupLifecyclePm.class))
+                .add(GoogleGroupLifecyclePm.class)
                 .add(new GoogleIdMappingRepository());
         if (directoryFactory != null) {
             builder.add(new SignInPmRepository(directoryFactory, userPartRepo));
