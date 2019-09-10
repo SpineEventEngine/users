@@ -20,7 +20,6 @@
 
 package io.spine.users.server.group;
 
-import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
@@ -69,9 +68,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
 public class GroupPart extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
     GroupPart(GroupRoot root) {
         super(root);
     }
