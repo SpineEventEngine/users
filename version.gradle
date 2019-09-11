@@ -30,10 +30,11 @@
  */
 
 final def SPINE_VERSION = '1.1.0'
+final def VERSION_TO_PUBLISH = '1.1.1-SNAPSHOT'
 
 ext {
     spineBaseVersion = SPINE_VERSION
     spineVersion = SPINE_VERSION
-    versionToPublish = SPINE_VERSION
-    versionToPublishJs = SPINE_VERSION
+    versionToPublish = VERSION_TO_PUBLISH
+    versionToPublishJs = VERSION_TO_PUBLISH
 }
