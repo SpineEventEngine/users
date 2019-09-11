@@ -22,12 +22,11 @@ package io.spine.users.server.signin.given;
 
 import io.spine.core.UserId;
 import io.spine.users.server.signin.SignInProcess;
+import io.spine.users.server.signin.Signals;
 import io.spine.users.signin.command.FinishSignIn;
-import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
-import io.spine.users.user.Identity;
 
-import static io.spine.users.server.signin.given.SignInTestEnv.failureReason;
+import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 
 /**
  * Test commands for {@link SignInProcess}.
@@ -40,14 +39,6 @@ public final class SignInTestCommands {
     private SignInTestCommands() {
     }
 
-    public static SignUserIn signInCommand(UserId id, Identity identity) {
-        return SignUserIn
-                .newBuilder()
-                .setId(id)
-                .setIdentity(identity)
-                .build();
-    }
-
     public static SignUserOut signOutCommand(UserId id) {
         return SignUserOut
                 .newBuilder()
@@ -55,20 +46,7 @@ public final class SignInTestCommands {
                 .build();
     }
 
-    public static FinishSignIn finishSignInSuccessfully(UserId id) {
-        return FinishSignIn
-                .newBuilder()
-                .setId(id)
-                .setSuccessful(true)
-                .build();
-    }
-
     public static FinishSignIn finishSignInUnsuccessfully(UserId id) {
-        return FinishSignIn
-                .newBuilder()
-                .setId(id)
-                .setSuccessful(false)
-                .setFailureReason(failureReason())
-                .build();
+        return Signals.finishWithError(id, SIGN_IN_NOT_AUTHORIZED);
     }
 }

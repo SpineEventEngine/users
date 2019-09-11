@@ -32,13 +32,11 @@ import io.spine.users.RoleId;
 import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.signin.SignInProcess;
-import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.user.Identity;
 
 import java.util.Optional;
 
 import static io.spine.users.server.role.RoleIds.roleId;
-import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static java.util.Optional.ofNullable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -78,10 +76,6 @@ public final class SignInTestEnv {
                 .setDisplayName(name)
                 .setDirectoryId(directoryId)
                 .build();
-    }
-
-    public static SignInFailureReason failureReason() {
-        return SIGN_IN_NOT_AUTHORIZED;
     }
 
     static String displayName() {

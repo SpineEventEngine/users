@@ -67,8 +67,9 @@ class FinishSignInTest {
 //            });
 //        }
 //    }
+//
 //    private static FinishSignIn finishSuccessfully() {
-//        return finishSignInSuccessfully(userId());
+//        return Commands.finishSuccessfully(userId());
 //    }
 //
 //    private static FinishSignIn finishUnsuccessfully() {

@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nullable;
 
-import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
@@ -184,6 +183,6 @@ class SignUserInCommandTest extends SignInProcessTest {
 //    }
 
     private static SignUserIn command() {
-        return signInCommand(SignInTestEnv.userId(), SignInTestEnv.identity());
+        return Signals.signIn(SignInTestEnv.userId(), SignInTestEnv.identity());
     }
 }

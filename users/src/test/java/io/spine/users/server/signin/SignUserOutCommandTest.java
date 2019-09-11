@@ -27,7 +27,6 @@ import io.spine.users.signin.event.SignOutCompleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.signin.given.SignInTestCommands.signInCommand;
 import static io.spine.users.server.signin.given.SignInTestCommands.signOutCommand;
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
@@ -39,7 +38,7 @@ class SignUserOutCommandTest extends SignInProcessTest {
     @DisplayName("emit `SignOutCompleted` event")
     void emitSignOutCompleted() {
         UserId userId = userId();
-        SignUserIn signIn = signInCommand(userId, identity());
+        SignUserIn signIn = Signals.signIn(userId, identity());
         SignUserOut signOut = signOutCommand(userId);
         SignOutCompleted expectedEvent =
                 SignOutCompleted

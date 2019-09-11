@@ -31,7 +31,6 @@ import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
-import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
@@ -47,13 +46,17 @@ import java.util.Optional;
 
 import static io.spine.server.tuple.EitherOf2.withA;
 import static io.spine.server.tuple.EitherOf2.withB;
+import static io.spine.users.server.signin.Signals.createUser;
+import static io.spine.users.server.signin.Signals.finishWithError;
+import static io.spine.users.server.signin.Signals.signIn;
+import static io.spine.users.server.signin.Signals.signInFailed;
+import static io.spine.users.server.signin.Signals.signInSuccessful;
+import static io.spine.users.server.signin.Signals.signOutCompleted;
 import static io.spine.users.signin.SignIn.Status.AWAITING_USER_AGGREGATE_CREATION;
 import static io.spine.users.signin.SignIn.Status.COMPLETED;
 import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
 import static io.spine.users.signin.SignInFailureReason.UNKNOWN_IDENTITY;
 import static io.spine.users.signin.SignInFailureReason.UNSUPPORTED_IDENTITY;
-import static io.spine.users.user.User.Status.ACTIVE;
-import static io.spine.users.user.UserNature.PERSON;
 import static java.util.Optional.empty;
 
 /**
@@ -104,28 +107,28 @@ public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder
         Identity identity = command.getIdentity();
         Optional<Directory> directoryOptional = directories.get(identity.getDirectoryId());
         if (!directoryOptional.isPresent()) {
-            return withA(finishWithError(UNSUPPORTED_IDENTITY));
+            return withA(finishWithError(id(), UNSUPPORTED_IDENTITY));
         }
         setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
-            return withA(finishWithError(UNKNOWN_IDENTITY));
+            return withA(finishWithError(id(), UNKNOWN_IDENTITY));
         }
         if (!directory.isSignInAllowed(identity)) {
-            return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
+            return withA(finishWithError(id(), SIGN_IN_NOT_AUTHORIZED));
         }
 
-        Optional<UserPart> user = users.find(command.getId());
-        if (!user.isPresent()) {
+        Optional<UserPart> account = users.find(command.getId());
+        if (!account.isPresent()) {
             builder().setStatus(AWAITING_USER_AGGREGATE_CREATION);
-            return withB(createUser(directory));
+            return withB(createUserIn(directory));
         }
-        if (!identityBelongsToUser(user.get(), identity)) {
-            return withA(finishWithError(UNKNOWN_IDENTITY));
+        if (!identityBelongsToUser(account.get(), identity)) {
+            return withA(finishWithError(id(), UNKNOWN_IDENTITY));
         }
 
         builder().setStatus(COMPLETED);
-        return withA(finishSuccessfully());
+        return withA(Signals.finishSuccessfully(id()));
     }
 
     private void setIdentity(Identity identity) {
@@ -136,7 +139,7 @@ public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder
     @Command
     Optional<SignUserIn> on(UserCreated event) {
         if (awaitsUserCreation()) {
-            return Optional.of(signIn(builder().getIdentity()));
+            return Optional.of(signIn(id(), builder().getIdentity()));
         }
         return empty();
     }
@@ -145,12 +148,9 @@ public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder
     EitherOf2<SignInSuccessful, SignInFailed> handle(FinishSignIn command) {
         UserId id = command.getId();
         Identity identity = builder().getIdentity();
-        if (command.getSuccessful()) {
-            return withA(signInSuccessful(id, identity));
-        } else {
-
-            return withB(signInFailed(id, identity, command.getFailureReason()));
-        }
+        return command.getSuccessful()
+               ? withA(signInSuccessful(id, identity))
+               : withB(signInFailed(id, identity, command.getFailureReason()));
     }
 
     @Assign
@@ -158,9 +158,9 @@ public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder
         return signOutCompleted(command.getId());
     }
 
-    private CreateUser createUser(Directory directory) {
+    private CreateUser createUserIn(Directory directory) {
         PersonProfile profile = directory.fetchProfile(builder().getIdentity());
-        return createUser(builder().getIdentity(), profile);
+        return createUser(id(), builder().getIdentity(), profile);
     }
 
     private boolean awaitsUserCreation() {
@@ -175,70 +175,5 @@ public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder
         }
         return userState.getSecondaryIdentityList()
                         .contains(identity);
-    }
-
-    private FinishSignIn finishWithError(SignInFailureReason failureReason) {
-        return FinishSignIn
-                .newBuilder()
-                .setId(id())
-                .setSuccessful(false)
-                .setFailureReason(failureReason)
-                .build();
-    }
-
-    private FinishSignIn finishSuccessfully() {
-        return FinishSignIn
-                .newBuilder()
-                .setId(id())
-                .setSuccessful(true)
-                .build();
-    }
-
-    private SignUserIn signIn(Identity identity) {
-        return SignUserIn
-                .newBuilder()
-                .setId(id())
-                .setIdentity(identity)
-                .build();
-    }
-
-    private CreateUser createUser(Identity identity, PersonProfile profile) {
-        String displayName = profile.getEmail()
-                                    .getValue();
-        return CreateUser
-                .newBuilder()
-                .setId(id())
-                .setDisplayName(displayName)
-                .setPrimaryIdentity(identity)
-                .setProfile(profile)
-                .setStatus(ACTIVE)
-                .setExternalDomain(identity.getDomain())
-                .setNature(PERSON)
-                .build();
-    }
-
-    private static SignInSuccessful signInSuccessful(UserId user, Identity identity) {
-        return SignInSuccessful
-                .newBuilder()
-                .setId(user)
-                .setIdentity(identity)
-                .build();
-    }
-
-    private static SignInFailed
-    signInFailed(UserId user, Identity identity, SignInFailureReason reason) {
-        return SignInFailed
-                .newBuilder()
-                .setId(user)
-                .setIdentity(identity)
-                .setFailureReason(reason)
-                .build();
-    }
-
-    private static SignOutCompleted signOutCompleted(UserId user) {
-        return SignOutCompleted
-                .newBuilder()
-                .setId(user)
-                .build();
     }
 }
