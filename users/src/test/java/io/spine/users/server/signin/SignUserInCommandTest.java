@@ -47,7 +47,7 @@ import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
 @DisplayName("`SignInPm` should, when `SignUserIn` is dispatched to it,")
-class SignUserInCommandTest extends SignInPmTest {
+class SignUserInCommandTest extends SignInProcessTest {
 
     @Test
     @DisplayName("create `User` and set self into `COMPLETED` state")

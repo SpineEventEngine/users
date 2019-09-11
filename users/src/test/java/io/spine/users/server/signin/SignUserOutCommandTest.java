@@ -33,7 +33,7 @@ import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
 
 @DisplayName("`SignInPm` should, when `SignUserOut` command is dispatched to it,")
-class SignUserOutCommandTest extends SignInPmTest {
+class SignUserOutCommandTest extends SignInProcessTest {
 
     @Test
     @DisplayName("emit `SignOutCompleted` event")

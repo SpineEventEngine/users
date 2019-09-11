@@ -80,16 +80,13 @@ import static java.util.Optional.empty;
  * </ul>
  *
  * <p>If one of the checks fails, the process is {@linkplain SignInFailed completed} immediately.
- *
- * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
-public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
+public class SignInProcess extends ProcessManager<UserId, SignIn, SignIn.Builder> {
 
-    private Repository<UserId, UserPart> userRepository;
+    private Repository<UserId, UserPart> users;
     private DirectoryFactory directories;
 
-    SignInPm(UserId id) {
+    SignInProcess(UserId id) {
         super(id);
     }
 
@@ -97,21 +94,19 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
         this.directories = directoryFactory;
     }
 
-    void setUserRepository(Repository<UserId, UserPart> userRepository) {
-        this.userRepository = userRepository;
+    void setUsers(Repository<UserId, UserPart> users) {
+        this.users = users;
     }
 
+    @SuppressWarnings("MethodWithMoreThanThreeNegations")
     @Command
     EitherOf2<FinishSignIn, CreateUser> handle(SignUserIn command) {
-        UserId id = command.getId();
         Identity identity = command.getIdentity();
         Optional<Directory> directoryOptional = directories.get(identity.getDirectoryId());
         if (!directoryOptional.isPresent()) {
             return withA(finishWithError(UNSUPPORTED_IDENTITY));
         }
-
-        SignIn.Builder builder = builder().setId(id)
-                                          .setIdentity(identity);
+        setIdentity(identity);
         Directory directory = directoryOptional.get();
         if (!directory.hasIdentity(identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
@@ -120,17 +115,22 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
             return withA(finishWithError(SIGN_IN_NOT_AUTHORIZED));
         }
 
-        Optional<UserPart> user = userRepository.find(id);
+        Optional<UserPart> user = users.find(command.getId());
         if (!user.isPresent()) {
-            builder.setStatus(AWAITING_USER_AGGREGATE_CREATION);
+            builder().setStatus(AWAITING_USER_AGGREGATE_CREATION);
             return withB(createUser(directory));
         }
         if (!identityBelongsToUser(user.get(), identity)) {
             return withA(finishWithError(UNKNOWN_IDENTITY));
         }
 
-        builder.setStatus(COMPLETED);
+        builder().setStatus(COMPLETED);
         return withA(finishSuccessfully());
+    }
+
+    private void setIdentity(Identity identity) {
+        builder().setId(id())
+                 .setIdentity(identity);
     }
 
     @Command
@@ -177,7 +177,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
                         .contains(identity);
     }
 
-    FinishSignIn finishWithError(SignInFailureReason failureReason) {
+    private FinishSignIn finishWithError(SignInFailureReason failureReason) {
         return FinishSignIn
                 .newBuilder()
                 .setId(id())
@@ -186,7 +186,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
                 .build();
     }
 
-    FinishSignIn finishSuccessfully() {
+    private FinishSignIn finishSuccessfully() {
         return FinishSignIn
                 .newBuilder()
                 .setId(id())
@@ -194,7 +194,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
                 .build();
     }
 
-    SignUserIn signIn(Identity identity) {
+    private SignUserIn signIn(Identity identity) {
         return SignUserIn
                 .newBuilder()
                 .setId(id())
@@ -202,7 +202,7 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
                 .build();
     }
 
-    CreateUser createUser(Identity identity, PersonProfile profile) {
+    private CreateUser createUser(Identity identity, PersonProfile profile) {
         String displayName = profile.getEmail()
                                     .getValue();
         return CreateUser
@@ -217,27 +217,28 @@ public class SignInPm extends ProcessManager<UserId, SignIn, SignIn.Builder> {
                 .build();
     }
 
-    SignInSuccessful signInSuccessful(UserId id, Identity identity) {
+    private static SignInSuccessful signInSuccessful(UserId user, Identity identity) {
         return SignInSuccessful
                 .newBuilder()
-                .setId(id)
+                .setId(user)
                 .setIdentity(identity)
                 .build();
     }
 
-    SignInFailed signInFailed(UserId id, Identity identity, SignInFailureReason reason) {
+    private static SignInFailed
+    signInFailed(UserId user, Identity identity, SignInFailureReason reason) {
         return SignInFailed
                 .newBuilder()
-                .setId(id)
+                .setId(user)
                 .setIdentity(identity)
                 .setFailureReason(reason)
                 .build();
     }
 
-    SignOutCompleted signOutCompleted(UserId id) {
+    private static SignOutCompleted signOutCompleted(UserId user) {
         return SignOutCompleted
                 .newBuilder()
-                .setId(id)
+                .setId(user)
                 .build();
     }
 }

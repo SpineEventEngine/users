@@ -29,8 +29,6 @@ import io.spine.users.signin.SignIn.Status;
 import io.spine.users.user.Identity;
 
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
-import static io.spine.users.server.signin.given.SignInTestEnv.userId;
-import static io.spine.users.signin.SignIn.Status.SIS_UNKNOWN;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.
@@ -46,8 +44,8 @@ final class TestProcManFactory {
     /**
      * Creates a new instance of the process manager with the default state.
      */
-    static SignInPm createEmptyProcMan(UserId id) {
-        return new SignInPm(id);
+    static SignInProcess createEmptyProcMan(UserId id) {
+        return new SignInProcess(id);
     }
 
 //    static SignInPm nonEmptyProcMan(Status status) {

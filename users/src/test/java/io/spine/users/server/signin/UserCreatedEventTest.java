@@ -25,7 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("SignInPM should, when UserCreated")
-class UserCreatedEventTest extends SignInPmTest {
+class UserCreatedEventTest extends SignInProcessTest {
 
     @Test
     @DisplayName("do nothing in a wrong status")

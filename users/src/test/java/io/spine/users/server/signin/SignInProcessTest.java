@@ -27,9 +27,9 @@ import io.spine.users.server.UsersContextTest;
 import static io.spine.users.server.signin.given.SignInTestEnv.mockActiveDirectory;
 
 /**
- * An abstract base for the tests of {@link SignInPm}.
+ * An abstract base for the tests of {@link SignInProcess}.
  */
-public abstract class SignInPmTest extends UsersContextTest {
+public abstract class SignInProcessTest extends UsersContextTest {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {

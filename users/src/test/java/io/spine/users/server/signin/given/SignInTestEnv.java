@@ -31,7 +31,7 @@ import io.spine.users.PersonProfile;
 import io.spine.users.RoleId;
 import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.signin.SignInPm;
+import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.user.Identity;
 
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * The environment for the {@link SignInPm} tests.
+ * The environment for the {@link SignInProcess} tests.
  */
 public final class SignInTestEnv {
 

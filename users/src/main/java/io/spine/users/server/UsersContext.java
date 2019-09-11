@@ -33,7 +33,7 @@ import io.spine.users.server.group.google.GoogleIdMappingRepository;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
-import io.spine.users.server.signin.SignInPmRepository;
+import io.spine.users.server.signin.SignInRepository;
 import io.spine.users.server.user.UserMembershipPart;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserRolesRepository;
@@ -60,7 +60,7 @@ public final class UsersContext {
      * Creates a builder of the {@code Users} Context along with the registered repositories.
      *
      * <p>This method optionally accepts {@link DirectoryFactory} instance. In case it is supplied,
-     * the {@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository} is registered
+     * the {@link SignInRepository SignInPmRepository} is registered
      * with the supplied factory instance as a constructor argument.
      *
      * <p>If the passed {@code DirectoryFactory} instance is {@code null},
@@ -85,7 +85,7 @@ public final class UsersContext {
                 .add(GoogleGroupLifecyclePm.class)
                 .add(new GoogleIdMappingRepository());
         if (directoryFactory != null) {
-            builder.add(new SignInPmRepository(directoryFactory, userPartRepo));
+            builder.add(new SignInRepository(directoryFactory, userPartRepo));
         }
         return builder;
     }
@@ -94,7 +94,7 @@ public final class UsersContext {
      * Creates a builder of {@code Users} Bounded Context along with the registered repositories.
      *
      * <p>Registers all the entity repositories except for
-     * {@link io.spine.users.server.signin.SignInPmRepository SignInPmRepository}.
+     * {@link SignInRepository SignInPmRepository}.
      *
      * @return a new instance of {@code BoundedContextBuilder} for this BoundedContext
      * @see #newBuilder(DirectoryFactory)

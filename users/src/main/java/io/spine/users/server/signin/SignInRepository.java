@@ -30,26 +30,25 @@ import io.spine.users.signin.SignIn;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The repository for {@link SignInPm}.
- *
- * @author Vladyslav Lubenskyi
+ * The repository for {@link SignInProcess}.
  */
-public class SignInPmRepository extends ProcessManagerRepository<UserId, SignInPm, SignIn> {
+public final class SignInRepository
+        extends ProcessManagerRepository<UserId, SignInProcess, SignIn> {
 
-    private final Repository<UserId, UserPart> userRepository;
+    private final Repository<UserId, UserPart> users;
     private final DirectoryFactory directoryFactory;
 
-    public SignInPmRepository(DirectoryFactory directoryFactory,
-                              Repository<UserId, UserPart> userRepository) {
+    public SignInRepository(DirectoryFactory directoryFactory,
+                            Repository<UserId, UserPart> users) {
         super();
         this.directoryFactory = checkNotNull(directoryFactory);
-        this.userRepository = checkNotNull(userRepository);
+        this.users = checkNotNull(users);
     }
 
     @Override
-    protected SignInPm findOrCreate(UserId id) {
-        SignInPm processManager = super.findOrCreate(id);
-        processManager.setUserRepository(userRepository);
+    protected SignInProcess findOrCreate(UserId id) {
+        SignInProcess processManager = super.findOrCreate(id);
+        processManager.setUsers(users);
         processManager.setDirectoryFactory(directoryFactory);
         return processManager;
     }

@@ -21,7 +21,7 @@
 package io.spine.users.server.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.server.signin.SignInPm;
+import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
@@ -30,9 +30,7 @@ import io.spine.users.user.Identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.failureReason;
 
 /**
- * Test commands for {@link SignInPm}.
- *
- * @author Vladyslav Lubenskyi
+ * Test commands for {@link SignInProcess}.
  */
 public final class SignInTestCommands {
 
