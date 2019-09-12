@@ -28,8 +28,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
-import static io.spine.users.server.given.GivenId.organizationUuid;
+import static io.spine.users.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 @DisplayName("`AssignRoleToGroup` command should")
@@ -38,7 +38,7 @@ class AssignRoleToGroupTest extends GroupCommandTest<AssignRoleToGroup, RoleAssi
     @Override
     protected AssignRoleToGroup command(GroupId id) {
         return assignRoleToGroup(id,
-                                 roleId(organizationUuid(), newUuid()));
+                                 roleId(orgId(), newUuid()));
     }
 
     @Override

@@ -18,35 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.role.given;
-
-import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
-import io.spine.users.server.given.TestIdentifiers;
-import io.spine.users.server.role.RoleAggregate;
-
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.role.RoleIds.roleId;
-
 /**
- * The environment for the {@link RoleAggregate} tests.
+ * Test environment for {@link io.spine.users.server.group.GroupPart} tests.
  */
-public final class RoleTestEnv {
 
-    /**
-     * Prevents instantiation.
-     */
-    private RoleTestEnv() {
-    }
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.server.group.given;
 
-    public static RoleId createRoleId() {
-        return roleId(roleParent(), newUuid());
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    private static OrganizationOrUnit roleParent() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(TestIdentifiers.orgId())
-                .vBuild();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -33,11 +33,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
-import static io.spine.users.server.given.GivenCommand.assignRoleToUser;
-import static io.spine.users.server.given.GivenCommand.unassignRoleFromGroup;
-import static io.spine.users.server.given.GivenCommand.unassignRoleFromUser;
-import static io.spine.users.server.given.GivenId.groupUuid;
+import static io.spine.users.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.users.server.given.TestCommands.assignRoleToUser;
+import static io.spine.users.server.given.TestCommands.unassignRoleFromGroup;
+import static io.spine.users.server.given.TestCommands.unassignRoleFromUser;
+import static io.spine.users.server.given.TestIdentifiers.groupId;
 import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createGroup;
 import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createRole;
 import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createUser;
@@ -62,7 +62,7 @@ class UserRolesProjectionIntegrationTest extends UsersContextTest {
     void createUserRoleAndGroup() {
         user =  userUuid();
         role = roleUuid();
-        group = groupUuid();
+        group = groupId();
         context().receivesCommands(
                 createUser(user),
                 createRole(role),

@@ -26,8 +26,8 @@ import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.server.CommandTest;
+import io.spine.users.server.given.TestIdentifiers;
 
-import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.groupName;
@@ -43,7 +43,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrgan
 abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<GroupId, C, E, Group, GroupPart> {
 
-    private static final GroupId GROUP_ID = createGroupId();
+    private static final GroupId GROUP_ID = TestIdentifiers.groupId();
 
     @Override
     protected GroupId entityId() {

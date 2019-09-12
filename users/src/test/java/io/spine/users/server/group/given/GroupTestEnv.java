@@ -24,10 +24,10 @@ import io.spine.net.EmailAddress;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
+import io.spine.users.server.given.TestIdentifiers;
 
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.GivenId.orgUnitUuid;
-import static io.spine.users.server.given.GivenId.organizationId;
+import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 /**
@@ -35,19 +35,12 @@ import static io.spine.users.server.role.RoleIds.roleId;
  */
 public class GroupTestEnv {
 
-    private static final GroupId NESTED_GROUP_ID = createGroupId();
+    private static final GroupId NESTED_GROUP_ID = TestIdentifiers.groupId();
 
     /**
      * Prevents instantiation.
      */
     private GroupTestEnv() {
-    }
-
-    public static GroupId createGroupId() {
-        return GroupId
-                .newBuilder()
-                .setValue(newUuid())
-                .vBuild();
     }
 
     public static GroupId upperGroupId() {
@@ -68,14 +61,14 @@ public class GroupTestEnv {
     public static OrganizationOrUnit groupOrgEntityOrganization() {
         return OrganizationOrUnit
                 .newBuilder()
-                .setOrganization(organizationId("Space travel"))
+                .setOrganization(orgId("Space travel"))
                 .vBuild();
     }
 
     public static OrganizationOrUnit groupParentOrgUnit() {
         return OrganizationOrUnit
                 .newBuilder()
-                .setOrgUnit(orgUnitUuid())
+                .setOrgUnit(orgUnitId())
                 .vBuild();
     }
 

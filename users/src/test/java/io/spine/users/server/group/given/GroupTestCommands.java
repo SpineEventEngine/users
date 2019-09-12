@@ -32,10 +32,16 @@ import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.server.group.GroupPart;
 
+import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.server.group.given.GroupTestEnv.groupName;
+import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
+import static io.spine.users.server.group.given.GroupTestEnv.newGroupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
+import static io.spine.users.server.group.given.GroupTestEnv.newGroupName;
+
 /**
  * Test commands for {@link GroupPart}.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GroupTestCommands {
 
@@ -49,10 +55,10 @@ public class GroupTestCommands {
         return CreateGroup
                 .newBuilder()
                 .setId(id)
-                .setDisplayName(GroupTestEnv.groupName())
-                .setEmail(GroupTestEnv.groupEmail())
-                .setOrgEntity(GroupTestEnv.groupOrgEntityOrganization())
-                .setDescription(GroupTestEnv.groupDescription())
+                .setDisplayName(groupName())
+                .setEmail(groupEmail())
+                .setOrgEntity(groupOrgEntityOrganization())
+                .setDescription(groupDescription())
                 .vBuild();
     }
 
@@ -91,7 +97,7 @@ public class GroupTestCommands {
         return RenameGroup
                 .newBuilder()
                 .setId(id)
-                .setNewName(GroupTestEnv.newGroupName())
+                .setNewName(newGroupName())
                 .vBuild();
     }
 
@@ -99,7 +105,7 @@ public class GroupTestCommands {
         return ChangeGroupEmail
                 .newBuilder()
                 .setId(id)
-                .setNewEmail(GroupTestEnv.newGroupEmail())
+                .setNewEmail(newGroupEmail())
                 .vBuild();
     }
 
@@ -107,7 +113,7 @@ public class GroupTestCommands {
         return ChangeGroupDescription
                 .newBuilder()
                 .setId(id)
-                .setDescription(GroupTestEnv.newGroupDescription())
+                .setDescription(newGroupDescription())
                 .vBuild();
     }
 }

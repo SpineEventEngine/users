@@ -26,7 +26,7 @@ import io.spine.users.RoleId;
 import io.spine.users.user.UserRoles;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.GivenId.organizationUuid;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 public class UserRolesProjectionTestEnv {
@@ -59,6 +59,6 @@ public class UserRolesProjectionTestEnv {
     }
 
     public static RoleId roleUuid() {
-        return roleId(organizationUuid(), roleNameUuid());
+        return roleId(orgId(), roleNameUuid());
     }
 }

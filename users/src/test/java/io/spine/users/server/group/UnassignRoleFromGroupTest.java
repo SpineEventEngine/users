@@ -26,14 +26,14 @@ import io.spine.users.group.Group;
 import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
 import io.spine.users.group.rejection.Rejections.RoleIsNotAssignedToGroup;
+import io.spine.users.server.given.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.GivenCommand.assignRoleToGroup;
-import static io.spine.users.server.given.GivenCommand.unassignRoleFromGroup;
-import static io.spine.users.server.given.GivenId.organizationUuid;
-import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.users.server.given.TestCommands.unassignRoleFromGroup;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.group.given.GroupTestEnv.groupRole;
 import static io.spine.users.server.role.RoleIds.roleId;
 
@@ -41,12 +41,12 @@ import static io.spine.users.server.role.RoleIds.roleId;
 class UnassignRoleFromGroupTest
         extends GroupCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
 
-    private static final RoleId ROLE_ID = roleId(organizationUuid(), newUuid());
+    private static final RoleId ROLE_ID = roleId(orgId(), newUuid());
 
     @Test
     @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")
     void throwsRejection() {
-        GroupId someGroupId = createGroupId();
+        GroupId someGroupId = TestIdentifiers.groupId();
         UnassignRoleFromGroup unassignRole = unassignRoleFromGroup(someGroupId, groupRole());
 
         context().receivesCommand(unassignRole)

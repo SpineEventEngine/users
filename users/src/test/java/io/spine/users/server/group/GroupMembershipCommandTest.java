@@ -27,8 +27,7 @@ import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.server.CommandTest;
-
-import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
+import io.spine.users.server.given.TestIdentifiers;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
@@ -39,8 +38,8 @@ import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
 abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<GroupId, C, E, GroupMembership, GroupMembershipPart> {
 
-    static final GroupId GROUP_ID = createGroupId();
-    static final GroupId PARENT_GROUP_ID = createGroupId();
+    static final GroupId GROUP_ID = TestIdentifiers.groupId();
+    static final GroupId PARENT_GROUP_ID = TestIdentifiers.groupId();
 
     @Override
     protected GroupId entityId() {

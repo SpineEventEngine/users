@@ -20,52 +20,47 @@
 
 package io.spine.users.server.given;
 
-import io.spine.core.UserId;
 import io.spine.users.GroupId;
-import io.spine.users.RoleId;
-import io.spine.users.group.command.AssignRoleToGroup;
-import io.spine.users.group.command.UnassignRoleFromGroup;
-import io.spine.users.user.command.AssignRoleToUser;
-import io.spine.users.user.command.UnassignRoleFromUser;
+import io.spine.users.OrgUnitId;
+import io.spine.users.OrganizationId;
+
+import static io.spine.base.Identifier.newUuid;
 
 /**
- * Factory methods for creating of test commands.
+ * Factory methods for creating test values of identifiers in Users bounded context.
  */
-public class GivenCommand {
+public class TestIdentifiers {
 
     /** Prevents instantiation of this utility class. */
-    private GivenCommand() {
+    private TestIdentifiers() {
     }
 
-    public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {
-        return AssignRoleToUser
+    public static OrganizationId orgId() {
+        return orgId("org-" + newUuid());
+    }
+
+    public static OrgUnitId orgUnitId() {
+        return OrgUnitId
                 .newBuilder()
-                .setId(userId)
-                .setRoleId(roleId)
+                .setValue(newUuid())
                 .vBuild();
     }
 
-    public static UnassignRoleFromUser unassignRoleFromUser(UserId userId, RoleId roleId) {
-        return UnassignRoleFromUser
+    public static OrganizationId orgId(String value) {
+        return OrganizationId
                 .newBuilder()
-                .setId(userId)
-                .setRoleId(roleId)
+                .setValue(value)
                 .vBuild();
     }
 
-    public static AssignRoleToGroup assignRoleToGroup(GroupId groupId, RoleId roleId) {
-        return AssignRoleToGroup
-                .newBuilder()
-                .setId(groupId)
-                .setRoleId(roleId)
-                .vBuild();
+    public static GroupId groupId() {
+        return groupId("group-" + newUuid());
     }
 
-    public static UnassignRoleFromGroup unassignRoleFromGroup(GroupId groupId, RoleId roleId) {
-        return UnassignRoleFromGroup
+    private static GroupId groupId(String value) {
+        return GroupId
                 .newBuilder()
-                .setId(groupId)
-                .setRoleId(roleId)
+                .setValue(value)
                 .vBuild();
     }
 }

@@ -35,7 +35,7 @@ import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
 
-import static io.spine.users.server.given.GivenId.organizationId;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 
 public class UserRolesProjectionTestCommands {
 
@@ -44,7 +44,7 @@ public class UserRolesProjectionTestCommands {
     }
 
     public static CreateUser createUser(UserId userId) {
-        OrganizationId organizationId = organizationId("organization of " + userId.getValue());
+        OrganizationId organizationId = orgId("organization of " + userId.getValue());
         OrganizationOrUnit orgEntity = OrganizationOrUnit
                 .newBuilder()
                 .setOrganization(organizationId)
