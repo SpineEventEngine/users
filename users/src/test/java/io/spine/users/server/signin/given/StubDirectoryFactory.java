@@ -18,40 +18,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.signin;
+package io.spine.users.server.signin.given;
 
-import io.spine.server.BoundedContextBuilder;
+import io.spine.users.DirectoryId;
 import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.UsersContext;
-import io.spine.users.server.UsersContextTest;
-import io.spine.users.server.signin.given.StubDirectoryFactory;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
- * An abstract base for the tests of {@link SignInProcess}.
+ * A factory that always returns the same passed directory.
  */
-public abstract class SignInProcessTest extends UsersContextTest {
+public final class StubDirectoryFactory implements DirectoryFactory {
 
-    private @Nullable Directory directory;
+    private final Directory directory;
+
+    public StubDirectoryFactory(Directory directory) {
+        super();
+        this.directory = directory;
+    }
 
     @Override
-    protected BoundedContextBuilder contextBuilder() {
-        directory = createDirectory();
-        @Nullable DirectoryFactory factory = directory != null
-                ? new StubDirectoryFactory(directory)
-                : null;
-        return UsersContext.newBuilder(factory);
-    }
-
-    /**
-     * Override this method in derived tests to create directories suited for the tests.
-     */
-    protected @Nullable Directory createDirectory() {
-        return null;
-    }
-
-    protected final @Nullable Directory directory() {
-        return directory;
+    public Optional<Directory> get(DirectoryId id) {
+        return ofNullable(directory);
     }
 }

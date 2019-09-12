@@ -29,18 +29,10 @@ import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
 import io.spine.users.RoleId;
-import io.spine.users.server.Directory;
-import io.spine.users.server.DirectoryFactory;
 import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.user.Identity;
 
-import java.util.Optional;
-
 import static io.spine.users.server.role.RoleIds.roleId;
-import static java.util.Optional.ofNullable;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * The environment for the {@link SignInProcess} tests.
@@ -55,14 +47,6 @@ public final class SignInTestEnv {
 
     public static UserId userId() {
         return GivenUserId.of("john.smith@example.com");
-    }
-
-    public static DirectoryFactory mockActiveDirectory() {
-        Directory mock = mock(Directory.class);
-        when(mock.hasIdentity(any())).thenReturn(true);
-        when(mock.isSignInAllowed(any())).thenReturn(true);
-        when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestDirectoryFactory(mock);
     }
 
     public static Identity identity() {
@@ -128,23 +112,5 @@ public final class SignInTestEnv {
                 .setGivenName("John")
                 .setFamilyName("Smith")
                 .vBuild();
-    }
-
-    /**
-     * A factory that always returns a single user directory.
-     */
-    static class TestDirectoryFactory implements DirectoryFactory {
-
-        private final Directory directory;
-
-        private TestDirectoryFactory(Directory directory) {
-            super();
-            this.directory = directory;
-        }
-
-        @Override
-        public Optional<Directory> get(DirectoryId id) {
-            return ofNullable(directory);
-        }
     }
 }

@@ -22,19 +22,21 @@ package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.server.Directory;
 import io.spine.users.server.signin.given.SignInTestEnv;
+import io.spine.users.server.signin.given.StubDirectory;
 import io.spine.users.signin.SignIn;
 import io.spine.users.signin.SignInFailureReason;
 import io.spine.users.signin.command.FinishSignIn;
 import io.spine.users.signin.command.SignUserIn;
+import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.CreateUser;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
-
-import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
@@ -47,6 +49,15 @@ import static io.spine.users.user.UserNature.PERSON;
 
 @DisplayName("`SignInPm` should, when `SignUserIn` is dispatched to it,")
 class SignUserInCommandTest extends SignInProcessTest {
+
+    @Override
+    protected @Nullable Directory createDirectory() {
+        Identity identity = identity();
+        return new StubDirectory()
+                .addIdentity(identity)
+                .allowSignInFor(identity)
+                .addProfile(identity, profile());
+    }
 
     @Test
     @DisplayName("create `User` and set self into `COMPLETED` state")
@@ -69,7 +80,7 @@ class SignUserInCommandTest extends SignInProcessTest {
                 .assertEntityWithState(User.class, command.getId())
                 .hasStateThat()
                 .comparingExpectedFieldsOnly()
-                .isEqualTo(createdUser(command));
+                .isEqualTo(userCreatedBy(command));
     }
 
     @Test
@@ -78,15 +89,23 @@ class SignUserInCommandTest extends SignInProcessTest {
         createUserAndAttemptSignIn(ACTIVE, null);
     }
 
+    private StubDirectory stubDirectory() {
+        return (StubDirectory) directory();
+    }
+
     @Test
-    @DisplayName("fail the process if the user exists and is NOT active")
+    @DisplayName("fail the process if the user exists and is NOT active yet")
     void failProcess() {
+        // Simulate the fact that the user with the given identity cannot be logged in.
+        stubDirectory().prohibitSignInFor(identity());
         createUserAndAttemptSignIn(NOT_READY, SIGN_IN_NOT_AUTHORIZED);
     }
 
     @Test
     @DisplayName("fail if unsupported identity given")
     void failIfNoIdentity() {
+        // Simulate the absence of the identity.
+        stubDirectory().removeIdentity(identity());
         createUserAndAttemptSignIn(NOT_READY, UNKNOWN_IDENTITY);
     }
 
@@ -107,7 +126,7 @@ class SignUserInCommandTest extends SignInProcessTest {
         return builder.build();
     }
 
-    private static User createdUser(SignUserIn command) {
+    private static User userCreatedBy(SignUserIn command) {
         return User.newBuilder()
                    .setId(command.getId())
                    .setPrimaryIdentity(command.getIdentity())
@@ -122,13 +141,13 @@ class SignUserInCommandTest extends SignInProcessTest {
                          .build();
     }
 
-    private static CreateUser createUser(UserId id, User.Status status) {
+    private static CreateUser createUser(UserId id, User.Status status, Identity identity) {
         return CreateUser
                 .newBuilder()
                 .setId(id)
                 .setDisplayName(userDisplayName())
                 .setOrgEntity(userOrgEntity())
-                .setPrimaryIdentity(googleIdentity())
+                .setPrimaryIdentity(identity)
                 .setProfile(profile())
                 .setStatus(status)
                 .setNature(PERSON)
@@ -140,19 +159,24 @@ class SignUserInCommandTest extends SignInProcessTest {
         SignUserIn signUserIn = command();
         UserId id = signUserIn.getId();
 
-        CreateUser createUser = createUser(id, userStatus);
-        MultitenantBlackBoxContext afterCommands = context().receivesCommands(createUser,
-                                                                              signUserIn);
-        afterCommands
-                .assertEntityWithState(SignIn.class, id)
-                .hasStateThat()
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(completedAfter(signUserIn));
+        CreateUser createUser = createUser(id, userStatus, signUserIn.getIdentity());
+        context().receivesCommand(createUser);
 
-        afterCommands.assertCommands()
-                     .message(0)
-                     .comparingExpectedFieldsOnly()
-                     .isEqualTo(finishSignIn(id, failureReason));
+        MultitenantBlackBoxContext afterCommands = context().receivesCommand(signUserIn);
+
+        if (failureReason == null) {
+            afterCommands
+                    .assertEntityWithState(SignIn.class, id)
+                    .hasStateThat()
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(completedAfter(signUserIn));
+        }
+
+        afterCommands
+                .assertCommands()
+                .message(0)
+                .comparingExpectedFieldsOnly()
+                .isEqualTo(finishSignIn(id, failureReason));
     }
 
     //TODO:2019-08-18:alex.tymchenko: Find out if the commented tests still make sense.
@@ -183,6 +207,6 @@ class SignUserInCommandTest extends SignInProcessTest {
 //    }
 
     private static SignUserIn command() {
-        return Signals.signIn(SignInTestEnv.userId(), SignInTestEnv.identity());
+        return Signals.signIn(SignInTestEnv.userId(), identity());
     }
 }
