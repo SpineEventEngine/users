@@ -25,7 +25,7 @@ import io.spine.users.RoleId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
-import io.spine.users.group.rejection.Rejections;
+import io.spine.users.group.rejection.Rejections.RoleIsNotAssignedToGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +50,9 @@ class UnassignRoleFromGroupTest
         UnassignRoleFromGroup unassignRole = unassignRoleFromGroup(someGroupId, groupRole());
 
         context().receivesCommand(unassignRole)
-                 .assertRejectedWith(Rejections.RoleIsNotAssignedToGroup.class);
+                 .assertEvents()
+                 .withType(RoleIsNotAssignedToGroup.class)
+                 .hasSize(1);
     }
 
     @Test
