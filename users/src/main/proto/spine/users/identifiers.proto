@@ -32,14 +32,13 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 
-// A UUID of a user group.
-//
+// The ID of a user group.
 message GroupId {
 
     string value = 1;
 }
 
-// An ID of a role.
+// The ID of a role, which is unique in the scope of an organization or a unit.
 //
 message RoleId {
 
@@ -50,21 +49,19 @@ message RoleId {
     string name = 2 [(required) = true];
 }
 
-// A UUID of an organization.
-//
+// The ID of an organization.
 message OrganizationId {
 
     string value = 1;
 }
 
-// A UUID of an organizational unit.
-//
+// The ID of an organizational unit.
 message OrgUnitId {
 
     string value = 1;
 }
 
-// A string-based identifier of a user directory.
+// The ID of a user directory system.
 //
 // For example, "google.com", "active-directory.mycompany.co.uk".
 //
@@ -73,7 +70,7 @@ message DirectoryId {
     string value = 1;
 }
 
-// An ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
+// The ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
 //
 // An `OrgUnit` is quite similar to an `Organization`, the major difference is that
 // an `Organization` has no parent. So, most of the interaction can be performed in
