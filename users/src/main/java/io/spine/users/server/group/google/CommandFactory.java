@@ -45,14 +45,14 @@ import io.spine.users.group.command.RenameGroup;
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a command factory.
 final class CommandFactory {
 
-    /**
-     * Prevents direct instantiation.
-     */
+    private static final CommandFactory INSTANCE = new CommandFactory();
+
+    /** Prevents direct instantiation. */
     private CommandFactory() {
     }
 
     static CommandFactory instance() {
-        return new CommandFactory();
+        return INSTANCE;
     }
 
     /**
@@ -150,10 +150,10 @@ final class CommandFactory {
                 .build();
     }
 
-    private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
+    private static OrganizationOrUnit orgEntity(OrganizationId org) {
         return OrganizationOrUnit
                 .newBuilder()
-                .setOrganization(organizationId)
+                .setOrganization(org)
                 .build();
     }
 }
