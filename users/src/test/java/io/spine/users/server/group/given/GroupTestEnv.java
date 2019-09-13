@@ -33,7 +33,7 @@ import static io.spine.users.server.role.RoleIds.roleId;
 /**
  * The environment for the {@link GroupPart} tests.
  */
-public class GroupTestEnv {
+public final class GroupTestEnv {
 
     private static final GroupId NESTED_GROUP_ID = TestIdentifiers.groupId();
 
@@ -47,7 +47,7 @@ public class GroupTestEnv {
         return NESTED_GROUP_ID;
     }
 
-    public static String groupName() {
+    static String groupName() {
         return "Developers";
     }
 
@@ -80,11 +80,11 @@ public class GroupTestEnv {
         return "A relatively nice group";
     }
 
-    static String newGroupDescription() {
+    static String anotherGroupDescription() {
         return "A very nice group";
     }
 
-    static String newGroupName() {
+    static String anotherGroupName() {
         return "Developers-renamed";
     }
 

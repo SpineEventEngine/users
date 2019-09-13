@@ -36,9 +36,9 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.groupName;
 import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.server.group.given.GroupTestEnv.newGroupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
-import static io.spine.users.server.group.given.GroupTestEnv.newGroupName;
+import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 
 /**
  * Test commands for {@link GroupPart}.
@@ -97,7 +97,7 @@ public class GroupTestCommands {
         return RenameGroup
                 .newBuilder()
                 .setId(id)
-                .setNewName(newGroupName())
+                .setNewName(anotherGroupName())
                 .vBuild();
     }
 
@@ -113,7 +113,7 @@ public class GroupTestCommands {
         return ChangeGroupDescription
                 .newBuilder()
                 .setId(id)
-                .setDescription(newGroupDescription())
+                .setDescription(anotherGroupDescription())
                 .vBuild();
     }
 }
