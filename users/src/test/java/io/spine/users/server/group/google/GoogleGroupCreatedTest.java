@@ -93,21 +93,6 @@ class GoogleGroupCreatedTest extends UsersContextTest {
                      .message(0)
                      .comparingExpectedFieldsOnly()
                      .isEqualTo(expectedCmd);
-
-//            expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(CreateGroup.class,
-//                                                                             command -> {
-//                                                                                 assertEquals(
-//                                                                                         GROUP_ID,
-//                                                                                         command.getId());
-//                                                                                 assertEquals(
-//                                                                                         message().getDisplayName(),
-//                                                                                         command.getDisplayName());
-//                                                                                 assertEquals(
-//                                                                                         message().getEmail(),
-//                                                                                         command.getEmail());
-//                                                                                 assertTrue(
-//                                                                                         command.hasExternalDomain());
-//                                                                             });
         }
     }
 }

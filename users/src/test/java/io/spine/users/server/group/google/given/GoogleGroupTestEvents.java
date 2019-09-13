@@ -31,10 +31,19 @@ import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
 import io.spine.users.google.group.event.GoogleGroupRenamed;
 import io.spine.users.server.group.google.GoogleGroupLifecyclePm;
 
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.alias;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.description;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.displayName;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.email;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.externalDomain;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.googleId;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.internalDomain;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newDescription;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.parentGroup;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.role;
+
 /**
  * Test events for {@link GoogleGroupLifecyclePm}.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GoogleGroupTestEvents {
 
@@ -48,12 +57,12 @@ public class GoogleGroupTestEvents {
         return GoogleGroupCreated
                 .newBuilder()
                 .setId(id)
-                .setGoogleId(GoogleGroupTestEnv.googleId())
-                .setDisplayName(GoogleGroupTestEnv.displayName())
-                .setEmail(GoogleGroupTestEnv.email())
-                .setDomain(GoogleGroupTestEnv.internalDomain())
-                .addAlias(GoogleGroupTestEnv.alias())
-                .setDescription(GoogleGroupTestEnv.description())
+                .setGoogleId(googleId())
+                .setDisplayName(displayName())
+                .setEmail(email())
+                .setDomain(internalDomain())
+                .addAlias(alias())
+                .setDescription(description())
                 .vBuild();
     }
 
@@ -61,12 +70,12 @@ public class GoogleGroupTestEvents {
         return GoogleGroupCreated
                 .newBuilder()
                 .setId(id)
-                .setGoogleId(GoogleGroupTestEnv.googleId())
-                .setDisplayName(GoogleGroupTestEnv.displayName())
-                .setEmail(GoogleGroupTestEnv.email())
-                .setDomain(GoogleGroupTestEnv.externalDomain())
-                .addAlias(GoogleGroupTestEnv.alias())
-                .setDescription(GoogleGroupTestEnv.description())
+                .setGoogleId(googleId())
+                .setDisplayName(displayName())
+                .setEmail(email())
+                .setDomain(externalDomain())
+                .addAlias(alias())
+                .setDescription(description())
                 .vBuild();
     }
 
@@ -74,8 +83,8 @@ public class GoogleGroupTestEvents {
         return GoogleGroupJoinedParentGroup
                 .newBuilder()
                 .setId(groupId)
-                .setRole(GoogleGroupTestEnv.role())
-                .setNewParentId(GoogleGroupTestEnv.parentGroup())
+                .setRole(role())
+                .setNewParentId(parentGroup())
                 .vBuild();
     }
 
@@ -83,7 +92,7 @@ public class GoogleGroupTestEvents {
         return GoogleGroupLeftParentGroup
                 .newBuilder()
                 .setId(groupId)
-                .setParentGroupId(GoogleGroupTestEnv.parentGroup())
+                .setParentGroupId(parentGroup())
                 .vBuild();
     }
 
@@ -114,7 +123,7 @@ public class GoogleGroupTestEvents {
         return GoogleGroupDescriptionChanged
                 .newBuilder()
                 .setId(groupId)
-                .setNewDescription(GoogleGroupTestEnv.newDescription())
+                .setNewDescription(newDescription())
                 .build();
     }
 
