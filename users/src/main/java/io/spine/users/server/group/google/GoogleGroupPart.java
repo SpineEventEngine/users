@@ -21,7 +21,6 @@
 package io.spine.users.server.group.google;
 
 import io.spine.server.aggregate.AggregatePart;
-import io.spine.server.aggregate.AggregateRoot;
 import io.spine.server.aggregate.Apply;
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupAliasesChanged;
@@ -43,9 +42,6 @@ import io.spine.users.server.group.GroupRoot;
 public class GoogleGroupPart
         extends AggregatePart<GroupId, GoogleGroup, GoogleGroup.Builder, GroupRoot> {
 
-    /**
-     * @see AggregatePart#AggregatePart(AggregateRoot)
-     */
     protected GoogleGroupPart(GroupRoot root) {
         super(root);
     }

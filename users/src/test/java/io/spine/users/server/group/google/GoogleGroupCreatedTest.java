@@ -20,6 +20,8 @@
 
 package io.spine.users.server.group.google;
 
+import com.google.common.truth.extensions.proto.ProtoSubject;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
 import io.spine.users.group.command.CreateGroup;
@@ -47,16 +49,20 @@ class GoogleGroupCreatedTest extends UsersContextTest {
         @DisplayName("translate it to `CreateGroup` command")
         void testBeTranslated() {
             GoogleGroupCreated event = internalGoogleGroupCreated(GROUP_ID);
+            MultitenantBlackBoxContext afterEvent = context().receivesEvent(event);
+
+            ProtoSubject assertCommand =
+                    afterEvent.assertCommands()
+                              .withType(CreateGroup.class)
+                              .message(0);
+
             CreateGroup expectedCmd = CreateGroup
                     .newBuilder()
                     .setId(GROUP_ID)
                     .setDisplayName(event.getDisplayName())
                     .setEmail(event.getEmail())
                     .build();
-            context().receivesEvent(event)
-                     .assertCommands()
-                     .withType(CreateGroup.class)
-                     .message(0)
+            assertCommand
                      .comparingExpectedFieldsOnly()
                      .isEqualTo(expectedCmd);
             //TODO:2019-08-17:alex.tymchenko: check that the command has `OrgEntity` set.
