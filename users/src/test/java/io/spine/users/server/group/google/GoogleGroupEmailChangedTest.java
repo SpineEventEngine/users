@@ -20,30 +20,36 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupEmailChanged;
 import io.spine.users.group.command.ChangeGroupEmail;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupEmailChanged;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleGroupPm should, when GoogleGroupEmailChanged")
-class GoogleGroupEmailChangedTest extends GoogleGroupLifecycleEventTest<GoogleGroupEmailChanged> {
-
-    GoogleGroupEmailChangedTest() {
-        super(googleGroupEmailChanged(GROUP_ID));
-    }
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupEmailChanged`")
+class GoogleGroupEmailChangedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to ChangeGroupEmail command")
+    @DisplayName("translate it to `ChangeGroupEmail` command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(ChangeGroupEmail.class, command -> {
-            assertEquals(GROUP_ID, command.getId());
-            assertEquals(message().getNewEmail(), command.getNewEmail());
-        });
+        GroupId groupId = newGroupId();
+        context().receivesCommand(createGroup(groupId));
+        GoogleGroupEmailChanged event = googleGroupEmailChanged(groupId);
+        ChangeGroupEmail expectedCmd = ChangeGroupEmail
+                .newBuilder()
+                .setId(groupId)
+                .setNewEmail(event.getNewEmail())
+                .build();
+        context().receivesEvent(event)
+                 .assertCommands()
+                 .withType(ChangeGroupEmail.class)
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedCmd);
     }
 }

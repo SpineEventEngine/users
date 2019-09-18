@@ -38,22 +38,21 @@ import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 
 /**
- * A command factory for {@link GoogleGroupLifecyclePm}.
+ * Translates Google Group events into system-neutral commands.
  *
- * @author Vladyslav Lubenskyi
+ * @see GoogleGroupLifecyclePm
  */
-@SuppressWarnings("OverlyCoupledClass")
-        // It is OK for a command factory.
-class GoogleGroupCommandFactory {
+@SuppressWarnings("OverlyCoupledClass") // It is OK for a command factory.
+final class CommandFactory {
 
-    /**
-     * Prevents direct instantiation.
-     */
-    private GoogleGroupCommandFactory() {
+    private static final CommandFactory INSTANCE = new CommandFactory();
+
+    /** Prevents direct instantiation. */
+    private CommandFactory() {
     }
 
-    static GoogleGroupCommandFactory instance() {
-        return new GoogleGroupCommandFactory();
+    static CommandFactory instance() {
+        return INSTANCE;
     }
 
     /**
@@ -151,10 +150,10 @@ class GoogleGroupCommandFactory {
                 .build();
     }
 
-    private static OrganizationOrUnit orgEntity(OrganizationId organizationId) {
+    private static OrganizationOrUnit orgEntity(OrganizationId org) {
         return OrganizationOrUnit
                 .newBuilder()
-                .setOrganization(organizationId)
+                .setOrganization(org)
                 .build();
     }
 }

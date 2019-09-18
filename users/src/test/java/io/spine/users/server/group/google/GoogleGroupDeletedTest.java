@@ -20,29 +20,33 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupDeleted;
 import io.spine.users.group.command.DeleteGroup;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupDeleted;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleGroupPm should, when GoogleGroupDeleted")
-class GoogleGroupDeletedTest extends GoogleGroupLifecycleEventTest<GoogleGroupDeleted> {
-
-    GoogleGroupDeletedTest() {
-        super(googleGroupDeleted(GROUP_ID));
-    }
+@DisplayName("`GoogleGroupPm` should, when GoogleGroupDeleted")
+class GoogleGroupDeletedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to DeleteGroup command")
+    @DisplayName("translate it to `DeleteGroup` command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID))
-                .producesCommand(DeleteGroup.class,
-                                 command -> assertEquals(GROUP_ID, command.getId()));
+        GroupId groupId = newGroupId();
+        GoogleGroupDeleted event = googleGroupDeleted(groupId);
+        DeleteGroup expectedCmd = DeleteGroup
+                .newBuilder()
+                .setId(groupId)
+                .build();
+        context().receivesEvent(event)
+                 .assertCommands()
+                 .withType(DeleteGroup.class)
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedCmd);
     }
 }

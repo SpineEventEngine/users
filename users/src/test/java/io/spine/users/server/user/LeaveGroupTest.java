@@ -20,45 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.UserMembership;
 import io.spine.users.user.command.LeaveGroup;
 import io.spine.users.user.event.UserLeftGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.user.given.UserTestCommands.stopGroupMembership;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
+import static io.spine.users.server.user.given.UserTestCommands.leaveGroup;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("LeaveGroup command should")
-class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup> {
-
-    LeaveGroupTest() {
-        super(createMessage());
-    }
+@DisplayName("`LeaveGroup` command should")
+class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup, UserLeftGroup> {
 
     @Test
-    @DisplayName("generate UserLeftGroup event")
-    void generateEvent() {
-        UserMembershipPart part = createPartWithState();
-        expectThat(part).producesEvent(UserLeftGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getGroupId(), event.getGroupId());
-        });
+    @DisplayName("produce `UserLeftGroup` event and update the user group membership")
+    @Override
+    protected void produceEventAndChangeState() {
+        context().receivesCommand(joinGroup(entityId()));
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("stop a group membership")
-    void changeState() {
-        UserMembershipPart part = createPartWithState();
-        expectThat(part)
-                .hasState(state -> assertTrue(state.getMembershipList()
-                                                   .isEmpty()));
+    @Override
+    protected LeaveGroup command(UserId id) {
+        return leaveGroup(id);
     }
 
-    private static LeaveGroup createMessage() {
-        return stopGroupMembership(USER_ID);
+    @Override
+    protected UserLeftGroup expectedEventAfter(LeaveGroup command) {
+        return UserLeftGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setGroupId(command.getGroupId())
+                .buildPartial();
+    }
+
+    @Override
+    protected UserMembership expectedStateAfter(LeaveGroup command) {
+        return UserMembership
+                .newBuilder()
+                .setId(command.getId())
+                .buildPartial();
     }
 }

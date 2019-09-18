@@ -21,7 +21,7 @@
 package io.spine.users.server.signin;
 
 import io.spine.core.UserId;
-import io.spine.testing.server.entity.given.Given;
+//import io.spine.testing.server.entity.given.Given;
 import io.spine.users.DirectoryId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.signin.SignIn;
@@ -29,13 +29,9 @@ import io.spine.users.signin.SignIn.Status;
 import io.spine.users.user.Identity;
 
 import static io.spine.users.server.signin.given.SignInTestEnv.identity;
-import static io.spine.users.server.signin.given.SignInTestEnv.userId;
-import static io.spine.users.signin.SignIn.Status.SIS_UNKNOWN;
 
 /**
  * A factory for creating test {@linkplain UserPart User aggregates}.
- *
- * @author Vladyslav Lubenskyi
  */
 final class TestProcManFactory {
 
@@ -48,26 +44,26 @@ final class TestProcManFactory {
     /**
      * Creates a new instance of the process manager with the default state.
      */
-    static SignInPm createEmptyProcMan(UserId id) {
-        return new SignInPm(id);
+    static SignInProcess createEmptyProcMan(UserId id) {
+        return new SignInProcess(id);
     }
 
-    static SignInPm nonEmptyProcMan(Status status) {
-        SignIn state = signIn(userId(), identity(), status);
-        return Given.processManagerOfClass(SignInPm.class)
-                    .withId(userId())
-                    .withState(state)
-                    .build();
-    }
+//    static SignInPm nonEmptyProcMan(Status status) {
+//        SignIn state = signIn(userId(), identity(), status);
+//        return Given.processManagerOfClass(SignInPm.class)
+//                    .withId(userId())
+//                    .withState(state)
+//                    .build();
+//    }
 
-    static SignInPm withIdentity(UserId id, DirectoryId directoryId) {
-        Identity identity = identity(id.getValue(), directoryId, "Test User");
-        SignIn state = signIn(id, identity, SIS_UNKNOWN);
-        return Given.processManagerOfClass(SignInPm.class)
-                    .withId(id)
-                    .withState(state)
-                    .build();
-    }
+//    static SignInPm withIdentity(UserId id, DirectoryId directoryId) {
+//        Identity identity = identity(id.getValue(), directoryId, "Test User");
+//        SignIn state = signIn(id, identity, SIS_UNKNOWN);
+//        return Given.processManagerOfClass(SignInPm.class)
+//                    .withId(id)
+//                    .withState(state)
+//                    .build();
+//    }
 
     private static SignIn signIn(UserId id, Identity identity, Status status) {
         return SignIn

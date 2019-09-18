@@ -20,50 +20,47 @@
 
 package io.spine.users.server.orgunit;
 
-import io.spine.net.InternetDomain;
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.ChangeOrgUnitDomain;
 import io.spine.users.orgunit.event.OrgUnitDomainChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.orgunit.TestOrgUnitFactory.createAggregate;
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.changeOrgUnitDomain;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeOrgUnitDomain command should")
-class ChangeOrgUnitDomainTest extends OrgUnitCommandTest<ChangeOrgUnitDomain> {
+@DisplayName("`ChangeOrgUnitDomain` command should")
+class ChangeOrgUnitDomainTest
+        extends OrgUnitCommandTest<ChangeOrgUnitDomain, OrgUnitDomainChanged> {
 
-    ChangeOrgUnitDomainTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("produce OrgUnitDomainChanged event")
-    void produceEvent() {
-        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
-        InternetDomain oldDomain = aggregate.state()
-                                            .getDomain();
-        expectThat(aggregate).producesEvent(OrgUnitDomainChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewDomain(), event.getNewDomain());
-            assertEquals(oldDomain, event.getOldDomain());
-        });
+    @DisplayName("produce `OrgUnitDomainChanged` event and update the org.unit domain")
+    protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change orgunit domain")
-    void changeState() {
-        OrgUnitAggregate aggregate = createAggregate(ORG_UNIT_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewDomain(), state.getDomain());
-        });
+    @Override
+    protected ChangeOrgUnitDomain command(OrgUnitId id) {
+        return changeOrgUnitDomain(id);
     }
 
-    private static ChangeOrgUnitDomain createMessage() {
-        return changeOrgUnitDomain(ORG_UNIT_ID);
+    @Override
+    protected OrgUnitDomainChanged expectedEventAfter(ChangeOrgUnitDomain command) {
+        return OrgUnitDomainChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .build();
+    }
+
+    @Override
+    protected OrgUnit expectedStateAfter(ChangeOrgUnitDomain command) {
+        return OrgUnit
+                .newBuilder()
+                .setId(command.getId())
+                .setDomain(command.getNewDomain())
+                .build();
     }
 }

@@ -22,7 +22,7 @@ package io.spine.users.server.role.given;
 
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
-import io.spine.users.server.given.GivenId;
+import io.spine.users.server.given.TestIdentifiers;
 import io.spine.users.server.role.RoleAggregate;
 
 import static io.spine.base.Identifier.newUuid;
@@ -43,21 +43,10 @@ public final class RoleTestEnv {
         return roleId(roleParent(), newUuid());
     }
 
-    public static String roleName() {
-        return "github-contributor";
-    }
-
-    public static OrganizationOrUnit roleParent() {
+    private static OrganizationOrUnit roleParent() {
         return OrganizationOrUnit
                 .newBuilder()
-                .setOrganization(GivenId.organizationUuid())
-                .vBuild();
-    }
-
-    public static OrganizationOrUnit newRoleParent() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrgUnit(GivenId.orgUnitUuid())
+                .setOrganization(TestIdentifiers.orgId())
                 .vBuild();
     }
 }

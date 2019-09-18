@@ -35,22 +35,14 @@ import io.spine.users.group.google.GoogleIdMappingView;
  *
  * @author Vladyslav Lubenskyi
  */
-public class GoogleIdMappingProjection
-        extends Projection<GoogleIdMappingViewId,
-                           GoogleIdMappingView,
-                           GoogleIdMappingView.Builder> {
-
-    /**
-     * @see Projection#Projection(Object)
-     */
-    protected GoogleIdMappingProjection(GoogleIdMappingViewId id) {
-        super(id);
-    }
+public class GoogleIdMappingProjection extends Projection<GoogleIdMappingViewId,
+                                                          GoogleIdMappingView,
+                                                          GoogleIdMappingView.Builder> {
 
     @Subscribe
     void on(GoogleGroupCreated event) {
         GoogleGroupId googleId = event.getGoogleId();
         builder().setId(GoogleIdMappingRepository.PROJECTION_ID)
-                    .putGroups(googleId.getValue(), event.getId());
+                 .putGroups(googleId.getValue(), event.getId());
     }
 }

@@ -20,30 +20,38 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupRenamed;
+import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.RenameGroup;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupRenamed;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleGroupPm should, when GoogleGroupRenamed")
-class GoogleGroupRenamedTest extends GoogleGroupLifecycleEventTest<GoogleGroupRenamed> {
-
-    GoogleGroupRenamedTest() {
-        super(googleGroupRenamed(GROUP_ID));
-    }
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupRenamed`")
+class GoogleGroupRenamedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to RenameGroup command")
+    @DisplayName("translate it to `RenameGroup` command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(RenameGroup.class, command -> {
-            assertEquals(GROUP_ID, command.getId());
-            assertEquals(message().getDisplayName(), command.getNewName());
-        });
+        GroupId groupId = newGroupId();
+        CreateGroup createGroup = createGroup(groupId);
+        GoogleGroupRenamed event = googleGroupRenamed(groupId);
+        RenameGroup expectedCmd = RenameGroup
+                .newBuilder()
+                .setId(groupId)
+                .setNewName(event.getDisplayName())
+                .build();
+        context().receivesCommand(createGroup)
+                 .receivesEvent(event)
+                 .assertCommands()
+                 .withType(RenameGroup.class)
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedCmd);
     }
 }

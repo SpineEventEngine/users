@@ -20,56 +20,69 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
 import io.spine.users.RoleId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.RoleUnassignedFromGroup;
-import io.spine.users.group.rejection.Rejections;
+import io.spine.users.group.rejection.Rejections.RoleIsNotAssignedToGroup;
+import io.spine.users.server.given.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.given.GivenCommand.unassignRoleFromGroup;
+import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.users.server.given.TestCommands.unassignRoleFromGroup;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.group.given.GroupTestEnv.groupRole;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static io.spine.users.server.role.RoleIds.roleId;
 
-@DisplayName("UnassignRoleFromGroup command should")
-class UnassignRoleFromGroupTest extends GroupCommandTest<UnassignRoleFromGroup> {
+@DisplayName("`UnassignRoleFromGroup` command should")
+class UnassignRoleFromGroupTest
+        extends GroupCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
 
-    UnassignRoleFromGroupTest() {
-        super(createMessage());
-    }
+    private static final RoleId ROLE_ID = roleId(orgId(), newUuid());
 
     @Test
-    @DisplayName("produce RoleUnassignedFromGroup event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(RoleUnassignedFromGroup.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
-        });
-    }
-
-    @Test
-    @DisplayName("un-assign role from group")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            RoleId expectedRole = message().getRoleId();
-            assertFalse(state.getRoleList()
-                             .contains(expectedRole));
-        });
-    }
-
-    @Test
-    @DisplayName("throw rejection if role isn't assigned to a group")
+    @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")
     void throwsRejection() {
-        GroupPart aggregate = new GroupPart(root(GROUP_ID));
+        GroupId someGroupId = TestIdentifiers.groupId();
+        UnassignRoleFromGroup unassignRole = unassignRoleFromGroup(someGroupId, groupRole());
 
-        expectThat(aggregate).throwsRejection(Rejections.RoleIsNotAssignedToGroup.class);
+        context().receivesCommand(unassignRole)
+                 .assertEvents()
+                 .withType(RoleIsNotAssignedToGroup.class)
+                 .hasSize(1);
     }
 
-    private static UnassignRoleFromGroup createMessage() {
-        return unassignRoleFromGroup(GROUP_ID, groupRole());
+    @Test
+    @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        context().receivesCommand(assignRoleToGroup(entityId(), ROLE_ID));
+        super.produceEventAndChangeState();
+    }
+
+    @Override
+    protected UnassignRoleFromGroup command(GroupId id) {
+        return unassignRoleFromGroup(id, ROLE_ID);
+    }
+
+    @Override
+    protected RoleUnassignedFromGroup expectedEventAfter(UnassignRoleFromGroup command) {
+        return RoleUnassignedFromGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(UnassignRoleFromGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 }

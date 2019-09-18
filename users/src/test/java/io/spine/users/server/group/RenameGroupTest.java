@@ -20,48 +20,46 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.event.GroupRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.renameGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameGroup command should")
-class RenameGroupTest extends GroupCommandTest<RenameGroup> {
+@DisplayName("`RenameGroup` command should")
+class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
 
-    RenameGroupTest() {
-        super(createMessage());
+    @Override
+    protected RenameGroup command(GroupId id) {
+        return renameGroup(id);
+    }
+
+    @Override
+    protected GroupRenamed expectedEventAfter(RenameGroup command) {
+        return GroupRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(RenameGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .build();
     }
 
     @Test
-    @DisplayName("produce GroupRenamed event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(GroupRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
-    }
-
-    @Test
-    @DisplayName("change the display_name")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewName(), state.getDisplayName());
-        });
-    }
-
-    private static RenameGroup createMessage() {
-        return renameGroup(GROUP_ID);
+    @DisplayName("produce `GroupRenamed` event and change the display name")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        super.produceEventAndChangeState();
     }
 }

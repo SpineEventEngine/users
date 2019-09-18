@@ -21,29 +21,38 @@
 package io.spine.users.server.orgunit;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.base.EventMessage;
 import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
-import io.spine.users.server.orgunit.given.OrgUnitTestEnv;
+import io.spine.users.server.CommandTest;
+
+import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.createOrgUnit;
+import static io.spine.users.server.orgunit.given.OrgUnitTestEnv.createOrgUnitId;
 
 /**
- * An implementation base for the {@link OrgUnit} aggregate command handler tests.
+ * An abstract base for the tests of {@code OrgUnit} commands and their implications.
  *
- * @param <C> the type of the command being tested
- * @author Vladyslav Lubenskyi
+ * @param <C>
+ *         the type of the tested command
+ * @param <E>
+ *         the type of the expected event
  */
-abstract class OrgUnitCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<OrgUnitId, C, OrgUnit, OrgUnitAggregate> {
+abstract class OrgUnitCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<OrgUnitId, C, E, OrgUnit, OrgUnitAggregate> {
 
-    static final OrgUnitId ORG_UNIT_ID = OrgUnitTestEnv.createOrgUnitId();
+    private static final OrgUnitId ORG_UNIT_ID = createOrgUnitId();
 
-    OrgUnitCommandTest(C commandMessage) {
-        super(ORG_UNIT_ID, commandMessage);
+    @Override
+    protected OrgUnitId entityId() {
+        return ORG_UNIT_ID;
     }
 
     @Override
-    protected Repository<OrgUnitId, OrgUnitAggregate> createRepository() {
-        return new OrgUnitAggregateRepository();
+    protected Class<OrgUnitAggregate> entityClass() {
+        return OrgUnitAggregate.class;
+    }
+
+    protected void preCreateOrgUnit() {
+        context().receivesCommand(createOrgUnit(ORG_UNIT_ID));
     }
 }

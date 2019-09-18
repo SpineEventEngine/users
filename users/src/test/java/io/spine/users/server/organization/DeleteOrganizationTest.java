@@ -20,44 +20,50 @@
 
 package io.spine.users.server.organization;
 
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.DeleteOrganization;
 import io.spine.users.organization.event.OrganizationDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.deleteOrganization;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteOrganization command should")
-class DeleteOrganizationTest extends OrgCommandTest<DeleteOrganization> {
-
-    DeleteOrganizationTest() {
-        super(createMessage());
-    }
+@DisplayName("`DeleteOrganization` command should")
+class DeleteOrganizationTest
+        extends OrganizationCommandTest<DeleteOrganization, OrganizationDeleted> {
 
     @Test
-    @DisplayName("produce OrganizationDeleted event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        expectThat(aggregate).producesEvent(OrganizationDeleted.class, event -> {
-            assertEquals(message().getId(), event.getId());
-        });
+    @DisplayName("produce `OrganizationDeleted` event and delete the organization")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("delete the organization")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                                                                    .getDeleted()));
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 
-    private static DeleteOrganization createMessage() {
-        return deleteOrganization(ORG_ID);
+    @Override
+    protected DeleteOrganization command(OrganizationId id) {
+        return deleteOrganization(id);
+    }
+
+    @Override
+    protected OrganizationDeleted expectedEventAfter(DeleteOrganization command) {
+        return OrganizationDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(DeleteOrganization command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .build();
     }
 }

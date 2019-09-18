@@ -20,32 +20,38 @@
 
 package io.spine.users.server.signin;
 
-import io.spine.base.EventMessage;
-import io.spine.core.UserId;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnEventTest;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.users.server.Directory;
 import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.user.UserPartRepository;
-import io.spine.users.signin.SignIn;
-
-import static org.mockito.Mockito.mock;
+import io.spine.users.server.UsersContext;
+import io.spine.users.server.UsersContextTest;
+import io.spine.users.server.signin.given.StubDirectoryFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * An implementation base for the {@link SignInPm} event reactors tests.
- *
- * @param <E> the type of the event being tested
- * @author Vladyslav Lubenskyi
+ * An abstract base for the tests of {@link SignInProcess}.
  */
-abstract class SignInPmEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<UserId, E, SignIn, SignInPm> {
+public abstract class SignInProcessTest extends UsersContextTest {
 
-    SignInPmEventTest(UserId processManagerId, E eventMessage) {
-        super(processManagerId, eventMessage);
-    }
+    private @Nullable Directory directory;
 
     @Override
-    protected Repository<UserId, SignInPm> createRepository() {
-        return new SignInPmRepository(mock(DirectoryFactory.class),
-                                      mock(UserPartRepository.class));
+    protected BoundedContextBuilder contextBuilder() {
+        directory = createDirectory();
+        @Nullable DirectoryFactory factory = directory != null
+                ? new StubDirectoryFactory(directory)
+                : null;
+        return UsersContext.newBuilder(factory);
+    }
+
+    /**
+     * Override this method in derived tests to create directories suited for the tests.
+     */
+    protected @Nullable Directory createDirectory() {
+        return null;
+    }
+
+    protected final @Nullable Directory directory() {
+        return directory;
     }
 }

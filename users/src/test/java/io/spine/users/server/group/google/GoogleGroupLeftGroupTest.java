@@ -20,30 +20,34 @@
 
 package io.spine.users.server.group.google;
 
+import io.spine.users.GroupId;
 import io.spine.users.google.group.event.GoogleGroupLeftParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.server.group.google.given.GoogleGroupTestEvents.googleGroupLeftParentGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("GoogleGroupPm should, when GoogleGroupLeftParentGroup")
-class GoogleGroupLeftGroupTest extends GoogleGroupLifecycleEventTest<GoogleGroupLeftParentGroup> {
-
-    GoogleGroupLeftGroupTest() {
-        super(googleGroupLeftParentGroup(GROUP_ID));
-    }
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupLeftParentGroup` is dispatched to it,")
+class GoogleGroupLeftGroupTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to LeaveParentGroup command")
+    @DisplayName("translate it to `LeaveParentGroup` command")
     void testBeTranslated() {
-        expectThat(GoogleGroupTestPms.emptyPm(GROUP_ID)).producesCommand(LeaveParentGroup.class, command -> {
-            assertEquals(GROUP_ID, command.getId());
-            assertEquals(message().getParentGroupId(), command.getParentGroupId());
-        });
+        GroupId groupId = newGroupId();
+        GoogleGroupLeftParentGroup event = googleGroupLeftParentGroup(groupId);
+        LeaveParentGroup expectedCmd = LeaveParentGroup
+                .newBuilder()
+                .setId(groupId)
+                .setParentGroupId(event.getParentGroupId())
+                .build();
+        context().receivesEvent(event)
+                 .assertCommands()
+                 .withType(LeaveParentGroup.class)
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedCmd);
     }
 }

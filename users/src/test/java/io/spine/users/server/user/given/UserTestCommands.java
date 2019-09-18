@@ -88,7 +88,7 @@ public class UserTestCommands {
                 .build();
     }
 
-    public static JoinGroup startGroupMembership(UserId id) {
+    public static JoinGroup joinGroup(UserId id) {
         return JoinGroup
                 .newBuilder()
                 .setId(id)
@@ -97,7 +97,7 @@ public class UserTestCommands {
                 .build();
     }
 
-    public static LeaveGroup stopGroupMembership(UserId id) {
+    public static LeaveGroup leaveGroup(UserId id) {
         return LeaveGroup
                 .newBuilder()
                 .setId(id)
@@ -132,7 +132,7 @@ public class UserTestCommands {
         return AddSecondaryIdentity
                 .newBuilder()
                 .setId(id)
-                .setIdentity(googleIdentity())
+                .setIdentity(githubIdentity())
                 .build();
     }
 

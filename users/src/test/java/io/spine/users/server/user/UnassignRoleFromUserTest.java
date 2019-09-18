@@ -20,51 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.UnassignRoleFromUser;
 import io.spine.users.user.event.RoleUnassignedFromUser;
-import io.spine.users.user.rejection.Rejections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.unassignRoleFromUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("UnassignRoleFromUser command should")
-class UnassignRoleFromUserTest extends UserPartCommandTest<UnassignRoleFromUser> {
+@DisplayName("`UnassignRoleFromUser` command should")
+class UnassignRoleFromUserTest
+        extends UserPartCommandTest<UnassignRoleFromUser, RoleUnassignedFromUser> {
 
-    UnassignRoleFromUserTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("generate RoleUnassignedFromUser event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(RoleUnassignedFromUser.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
-        });
+    @DisplayName("generate `RoleUnassignedFromUser` and unassign the role from the user")
+    protected void produceEventAndChangeState() {
+        preCreateUser();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("remove a role")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> assertTrue(state.getRoleList()
-                .isEmpty()));
+    @Override
+    protected UnassignRoleFromUser command(UserId id) {
+        return unassignRoleFromUser(id);
     }
 
-    @Test
-    @DisplayName("throw rejection if role isn't assigned to a user")
-    void throwRejection() {
-        expectThat(new UserPart(root(USER_ID))).throwsRejection(Rejections.RoleIsNotAssignedToUser.class);
+    @Override
+    protected RoleUnassignedFromUser expectedEventAfter(UnassignRoleFromUser command) {
+        return RoleUnassignedFromUser
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .buildPartial();
     }
 
-    private static UnassignRoleFromUser createMessage() {
-        return unassignRoleFromUser(USER_ID);
+    @Override
+    protected User expectedStateAfter(UnassignRoleFromUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .buildPartial();
     }
 }

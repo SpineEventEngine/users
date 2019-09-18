@@ -20,43 +20,67 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.event.SecondaryIdentityAdded;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.addAuthIdentity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("AddAuthIdentity command should")
-class AddAuthIdentityTest extends UserPartCommandTest<AddSecondaryIdentity> {
-
-    AddAuthIdentityTest() {
-        super(createMessage());
-    }
+@DisplayName("`AddAuthIdentity` command should")
+class AddAuthIdentityTest
+        extends UserPartCommandTest<AddSecondaryIdentity, SecondaryIdentityAdded> {
 
     @Test
-    @DisplayName("generate AuthIdentityAdded event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(SecondaryIdentityAdded.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getIdentity(), event.getIdentity());
-        });
+    @DisplayName("produce `SecondaryIdentityAdded` event and add the second identity for the user")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateUser();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("add a new identity")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getIdentity(), state.getSecondaryIdentity(1)));
+    @Override
+    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
+                               SecondaryIdentityAdded expectedEvent) {
+        /*
+         The second event of {@code SecondaryIdentityAdded} type is checked,
+         as the {@link #preCreateUser} also leads to the {@code SecondaryIdentityAdded} event.
+         */
+        afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
+                    .message(1)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
     }
 
-    private static AddSecondaryIdentity createMessage() {
-        return addAuthIdentity(USER_ID);
+    @Override
+    protected AddSecondaryIdentity command(UserId id) {
+        return addAuthIdentity(id);
+    }
+
+    @Override
+    protected SecondaryIdentityAdded expectedEventAfter(AddSecondaryIdentity command) {
+        return SecondaryIdentityAdded
+                .newBuilder()
+                .setId(command.getId())
+                .setIdentity(command.getIdentity())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(AddSecondaryIdentity command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+
+                // The one which was there previously.
+                .addSecondaryIdentity(originalSecondaryIdentity())
+
+                // The one that should have been added as the result of command dispatching.
+                .addSecondaryIdentity(command.getIdentity())
+                .buildPartial();
     }
 }

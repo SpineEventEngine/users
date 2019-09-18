@@ -20,9 +20,10 @@
 
 package io.spine.users.server.group.google;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.server.projection.ProjectionRepository;
-import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
 import io.spine.users.GoogleIdMappingViewId;
 import io.spine.users.google.group.event.GoogleGroupCreated;
@@ -39,11 +40,15 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
                                                                     GoogleIdMappingProjection,
                                                                     GoogleIdMappingView> {
 
+    @VisibleForTesting
     static final GoogleIdMappingViewId PROJECTION_ID =
             GoogleIdMappingViewId
                     .newBuilder()
                     .setValue(SINGLETON)
                     .build();
+
+    private static final ImmutableSet<GoogleIdMappingViewId> SINGLE_ID =
+            ImmutableSet.of(PROJECTION_ID);
 
     /**
      * {@inheritDoc}
@@ -54,6 +59,6 @@ public class GoogleIdMappingRepository extends ProjectionRepository<GoogleIdMapp
     @Override
     protected void setupEventRouting(EventRouting<GoogleIdMappingViewId> routing) {
         super.setupEventRouting(routing);
-        routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
+        routing.route(GoogleGroupCreated.class, (m, ctx) -> SINGLE_ID);
     }
 }

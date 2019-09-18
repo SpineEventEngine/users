@@ -24,10 +24,11 @@
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-@BoundedContext("Users")
+@BoundedContext(UsersContext.NAME)
 package io.spine.users;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.server.annotation.BoundedContext;
+import io.spine.core.BoundedContext;
+import io.spine.users.server.UsersContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;

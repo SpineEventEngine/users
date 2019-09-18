@@ -20,48 +20,51 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.event.GroupCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("CreateGroup command should")
-class CreateGroupTest extends GroupCommandTest<CreateGroup> {
+@DisplayName("`CreateGroup` command should")
+class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
 
-    CreateGroupTest() {
-        super(createMessage());
+    @Override
+    protected CreateGroup command(GroupId id) {
+        return createGroup(id);
+    }
+
+    @Override
+    protected GroupCreated expectedEventAfter(CreateGroup command) {
+        return GroupCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setEmail(command.getEmail())
+                .setOrgEntity(command.getOrgEntity())
+                .setDescription(command.getDescription())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(CreateGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setEmail(command.getEmail())
+                .setOrgEntity(command.getOrgEntity())
+                .setDescription(command.getDescription())
+                .build();
     }
 
     @Test
-    @DisplayName("produce GroupCreated event")
-    void produceEvent() {
-        CreateGroup command = message();
-        expectThat(new GroupPart(root(GROUP_ID))).producesEvent(GroupCreated.class, event -> {
-            assertEquals(command.getId(), event.getId());
-            assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getEmail(), event.getEmail());
-            assertEquals(command.getOrgEntity(), event.getOrgEntity());
-            assertEquals(command.getDescription(), event.getDescription());
-        });
-    }
-
-    @Test
-    @DisplayName("create a group")
-    void changeState() {
-        CreateGroup command = message();
-        expectThat(new GroupPart(root(GROUP_ID))).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
-            assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getEmail(), state.getEmail());
-            assertEquals(command.getOrgEntity(), state.getOrgEntity());
-            assertEquals(command.getDescription(), state.getDescription());
-        });
-    }
-
-    private static CreateGroup createMessage() {
-        return createGroup(GROUP_ID);
+    @DisplayName("produce `GroupCreated` event and create the group")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 }

@@ -21,7 +21,7 @@
 package io.spine.users.server.signin.given;
 
 import io.spine.core.UserId;
-import io.spine.users.server.signin.SignInPm;
+import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.user.event.UserCreated;
 
 import static io.spine.net.InternetDomains.valueOf;
@@ -32,7 +32,7 @@ import static io.spine.users.user.User.Status.ACTIVE;
 import static io.spine.users.user.UserNature.PERSON;
 
 /**
- * Test events for {@link SignInPm}.
+ * Test events for {@link SignInProcess}.
  */
 public final class SignInTestEvents {
 

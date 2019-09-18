@@ -20,46 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.event.UserRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.renameUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameUser command should")
-class RenameUserTest extends UserPartCommandTest<RenameUser> {
-
-    RenameUserTest() {
-        super(createMessage());
-    }
+@DisplayName("`RenameUser` command should")
+class RenameUserTest extends UserPartCommandTest<RenameUser, UserRenamed> {
 
     @Test
-    @DisplayName("generate UserRenamed event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(UserRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
+    @DisplayName("produce `UserRenamed` event and change the name of the user")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateUser();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change User's display_name")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getNewName(), state.getDisplayName()));
+    @Override
+    protected RenameUser command(UserId id) {
+        return renameUser(id);
     }
 
-    private static RenameUser createMessage() {
-        return renameUser(USER_ID);
+    @Override
+    protected UserRenamed expectedEventAfter(RenameUser command) {
+        return UserRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(RenameUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .buildPartial();
     }
 }

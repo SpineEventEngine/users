@@ -18,16 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
-
-import io.spine.core.UserId;
-import io.spine.server.aggregate.AggregatePartRepository;
-
 /**
- * The repository for {@linkplain UserMembershipPart UserMembership} aggregate part.
- *
- * @author Vladyslav Lubenskyi
+ * Test environment for {@link io.spine.users.server.group.GroupPart} tests.
  */
-public class UserMembershipPartRepository
-        extends AggregatePartRepository<UserId, UserMembershipPart, UserRoot> {
-}
+
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.server.group.given;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;

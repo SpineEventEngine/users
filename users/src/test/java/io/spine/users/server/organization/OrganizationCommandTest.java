@@ -21,30 +21,39 @@
 package io.spine.users.server.organization;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.base.EventMessage;
 import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
+import io.spine.users.server.CommandTest;
 
+import static io.spine.users.server.organization.given.OrganizationTestCommands.createOrganization;
 import static io.spine.users.server.organization.given.OrganizationTestEnv.createOrganizationId;
 
 /**
- * An implementation base for the {@link Organization} aggregate command handler tests.
+ * An abstract base for the tests verifying that the commands are handled by
+ * {@link OrganizationAggregate} properly.
  *
- * @param <C> the type of the command being tested
- * @author Vladyslav Lubenskyi
+ * @param <C>
+ *         the type of the command dispatched to the {@code OrganizationAggregate}
+ * @param <E>
+ *         the type of the event expected to be emitted
  */
-abstract class OrgCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<OrganizationId, C, Organization, OrganizationAggregate> {
+abstract class OrganizationCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<OrganizationId, C, E, Organization, OrganizationAggregate> {
 
-    static final OrganizationId ORG_ID = createOrganizationId();
+    private static final OrganizationId ORGANIZATION_ID = createOrganizationId();
 
-    OrgCommandTest(C commandMessage) {
-        super(ORG_ID, commandMessage);
+    @Override
+    protected OrganizationId entityId() {
+        return ORGANIZATION_ID;
     }
 
     @Override
-    protected Repository<OrganizationId, OrganizationAggregate> createRepository() {
-        return new OrganizationAggregateRepository();
+    protected Class<OrganizationAggregate> entityClass() {
+        return OrganizationAggregate.class;
+    }
+
+    void preCreateOrganization() {
+        context().receivesCommand(createOrganization(entityId()));
     }
 }

@@ -20,48 +20,46 @@
 
 package io.spine.users.server.orgunit;
 
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.RenameOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.renameOrgUnit;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameOrgUnit command should")
-class RenameOrgUnitTest extends OrgUnitCommandTest<RenameOrgUnit> {
-
-    RenameOrgUnitTest() {
-        super(createMessage());
-    }
+@DisplayName("`RenameOrgUnit` command should")
+class RenameOrgUnitTest extends OrgUnitCommandTest<RenameOrgUnit, OrgUnitRenamed> {
 
     @Test
-    @DisplayName("produce OrgUnitRenamed event")
-    void produceEvent() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(OrgUnitRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
+    @DisplayName("produce `OrgUnitRenamed` event and update the org.unit display name")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("rename orgunit")
-    void changeState() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewName(), state.getDisplayName());
-        });
+    @Override
+    protected RenameOrgUnit command(OrgUnitId id) {
+        return renameOrgUnit(id);
     }
 
-    private static RenameOrgUnit createMessage() {
-        return renameOrgUnit(ORG_UNIT_ID);
+    @Override
+    protected OrgUnitRenamed expectedEventAfter(RenameOrgUnit command) {
+        return OrgUnitRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
+    }
+
+    @Override
+    protected OrgUnit expectedStateAfter(RenameOrgUnit command) {
+        return OrgUnit
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .build();
     }
 }

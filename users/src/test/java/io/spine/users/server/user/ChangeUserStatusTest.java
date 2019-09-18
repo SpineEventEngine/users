@@ -20,45 +20,46 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.users.user.User;
 import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.event.UserStatusChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.changeUserStatus;
-import static io.spine.users.user.User.Status.NOT_READY;
-import static io.spine.users.user.User.Status.SUSPENDED;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeUserStatus command should")
-class ChangeUserStatusTest extends UserPartCommandTest<ChangeUserStatus> {
-
-    ChangeUserStatusTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeUserStatus` command should")
+class ChangeUserStatusTest extends UserPartCommandTest<ChangeUserStatus, UserStatusChanged> {
 
     @Test
-    @DisplayName("generate UserStatusChanged event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(UserStatusChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getStatus(), event.getNewStatus());
-            assertEquals(NOT_READY, event.getOldStatus());
-        });
+    @DisplayName("produce `UserStatusChanged` event and update the user's status")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateUser();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change status of the user")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> assertEquals(SUSPENDED, state.getStatus()));
+    @Override
+    protected ChangeUserStatus command(UserId id) {
+        return changeUserStatus(id);
     }
 
-    private static ChangeUserStatus createMessage() {
-        return changeUserStatus(USER_ID);
+    @Override
+    protected UserStatusChanged expectedEventAfter(ChangeUserStatus command) {
+        return UserStatusChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewStatus(command.getStatus())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(ChangeUserStatus command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+                .setStatus(command.getStatus())
+                .buildPartial();
     }
 }

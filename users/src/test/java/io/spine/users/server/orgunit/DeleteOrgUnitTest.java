@@ -20,44 +20,49 @@
 
 package io.spine.users.server.orgunit;
 
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.DeleteOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitDeleted;
-import io.spine.users.server.orgunit.given.OrgUnitTestCommands;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.deleteOrgUnit;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteOrgUnit command should")
-class DeleteOrgUnitTest extends OrgUnitCommandTest<DeleteOrgUnit> {
-
-    DeleteOrgUnitTest() {
-        super(createMessage());
-    }
+@DisplayName("`DeleteOrgUnit` command should")
+class DeleteOrgUnitTest extends OrgUnitCommandTest<DeleteOrgUnit, OrgUnitDeleted> {
 
     @Test
-    @DisplayName("produce OrgUnitDeleted event")
-    void produceEvent() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-        expectThat(aggregate).producesEvent(OrgUnitDeleted.class, event -> {
-            assertEquals(message().getId(), event.getId());
-        });
+    @DisplayName("produce `OrgUnitDeleted` event and delete the org.unit")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrgUnit();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("delete the orgunit")
-    void changeState() {
-        OrgUnitAggregate aggregate = TestOrgUnitFactory.createAggregate(ORG_UNIT_ID);
-
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                                                                    .getDeleted()));
+    @Override
+    protected DeleteOrgUnit command(OrgUnitId id) {
+        return deleteOrgUnit(id);
     }
 
-    private static DeleteOrgUnit createMessage() {
-        return OrgUnitTestCommands.deleteOrgUnit(ORG_UNIT_ID);
+    @Override
+    protected OrgUnitDeleted expectedEventAfter(DeleteOrgUnit command) {
+        return OrgUnitDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected OrgUnit expectedStateAfter(DeleteOrgUnit command) {
+        return OrgUnit
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

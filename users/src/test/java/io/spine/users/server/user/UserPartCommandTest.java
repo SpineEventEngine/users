@@ -21,39 +21,76 @@
 package io.spine.users.server.user;
 
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.users.RoleId;
+import io.spine.users.server.CommandTest;
+import io.spine.users.user.Identity;
 import io.spine.users.user.User;
+import io.spine.users.user.command.AddSecondaryIdentity;
+import io.spine.users.user.command.AssignRoleToUser;
+import io.spine.users.user.command.CreateUser;
 
-import static io.spine.testing.server.TestBoundedContext.create;
+import static io.spine.users.server.user.given.UserTestEnv.adminRoleId;
+import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
+import static io.spine.users.server.user.given.UserTestEnv.profile;
+import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
+import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
+import static io.spine.users.user.User.Status.NOT_READY;
+import static io.spine.users.user.UserNature.PERSON;
 
 /**
  * An implementation base for the {@link User} aggregate command handler tests.
  *
- * @param <C> the type of the command being tested
+ * @param <C>
+ *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class UserPartCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<UserId, C, User, UserPart> {
+abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<UserId, C, E, User, UserPart> {
 
-    protected static final UserId USER_ID = userId();
+    private static final UserId USER_ID = userId();
 
-    protected UserPartCommandTest(C commandMessage) {
-        super(USER_ID, commandMessage);
+    @Override
+    protected UserId entityId() {
+        return USER_ID;
     }
 
     @Override
-    protected Repository<UserId, UserPart> createRepository() {
-        return new UserPartRepository();
+    protected Class<UserPart> entityClass() {
+        return UserPart.class;
     }
 
-    protected UserPart createPartWithState() {
-        return TestUserFactory.createUserPart(root(USER_ID));
+    protected void preCreateUser() {
+        CreateUser createUser = CreateUser
+                .newBuilder()
+                .setId(USER_ID)
+                .setOrgEntity(userOrgEntity())
+                .setDisplayName(userDisplayName())
+                .setPrimaryIdentity(googleIdentity())
+                .setProfile(profile())
+                .setStatus(NOT_READY)
+                .setNature(PERSON)
+                .vBuild();
+        AddSecondaryIdentity addSecondaryIdentity = AddSecondaryIdentity
+                .newBuilder()
+                .setId(USER_ID)
+                .setIdentity(originalSecondaryIdentity())
+                .vBuild();
+        AssignRoleToUser assignRole = AssignRoleToUser
+                .newBuilder()
+                .setId(USER_ID)
+                .setRoleId(originalRole())
+                .vBuild();
+        context().receivesCommands(createUser, addSecondaryIdentity, assignRole);
     }
 
-    protected static UserRoot root(UserId id) {
-        return new UserRoot(create(), id);
+    RoleId originalRole() {
+        return adminRoleId();
+    }
+
+    Identity originalSecondaryIdentity() {
+        return googleIdentity();
     }
 }

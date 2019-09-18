@@ -21,43 +21,32 @@
 package io.spine.users.server.user;
 
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.users.server.CommandTest;
 import io.spine.users.user.UserMembership;
 
-import static io.spine.testing.server.TestBoundedContext.create;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
 
 /**
  * An implementation base for the {@link User} aggregate command handler tests.
  *
- * @param <C> the type of the command being tested
+ * @param <C>
+ *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class UserMembershipCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<UserId, C, UserMembership, UserMembershipPart> {
+abstract class UserMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<UserId, C, E, UserMembership, UserMembershipPart> {
 
-    protected static final UserId USER_ID = userId();
+    static final UserId USER_ID = userId();
 
-    protected UserMembershipCommandTest(C commandMessage) {
-        super(USER_ID, commandMessage);
+    @Override
+    protected UserId entityId() {
+        return USER_ID;
     }
 
     @Override
-    protected Repository<UserId, UserMembershipPart> createRepository() {
-        return new UserMembershipPartRepository();
-    }
-
-    protected UserMembershipPart createPartWithState() {
-        return TestUserFactory.createMembershipPart(root(USER_ID));
-    }
-
-    protected UserMembershipPart createPart() {
-        return TestUserFactory.createEmptyMembershipPart(root(USER_ID));
-    }
-
-    private static UserRoot root(UserId id) {
-        return new UserRoot(create(), id);
+    protected Class<UserMembershipPart> entityClass() {
+        return UserMembershipPart.class;
     }
 }

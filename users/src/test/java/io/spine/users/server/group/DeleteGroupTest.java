@@ -20,44 +20,49 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.group.event.GroupDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.deleteGroup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteGroup command should")
-class DeleteGroupTest extends GroupCommandTest<DeleteGroup> {
-
-    DeleteGroupTest() {
-        super(createMessage());
-    }
+@DisplayName("`DeleteGroup` command should")
+class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {
 
     @Test
-    @DisplayName("produce GroupDeleted event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(GroupDeleted.class, event -> {
-            assertEquals(message().getId(), event.getId());
-        });
+    @DisplayName("produce `GroupDeleted` event and delete the group")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("delete the group")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                                                                    .getDeleted()));
+    @Override
+    protected DeleteGroup command(GroupId id) {
+        return deleteGroup(id);
     }
 
-    private static DeleteGroup createMessage() {
-        return deleteGroup(GROUP_ID);
+    @Override
+    protected GroupDeleted expectedEventAfter(DeleteGroup command) {
+        return GroupDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(DeleteGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

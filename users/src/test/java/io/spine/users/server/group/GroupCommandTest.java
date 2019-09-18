@@ -21,39 +21,60 @@
 package io.spine.users.server.group;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.server.CommandTest;
+import io.spine.users.server.given.TestIdentifiers;
 
-import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
+import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
+import static io.spine.users.server.group.given.GroupTestEnv.groupName;
+import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
  *
- * @param <C> the type of the command being tested
+ * @param <C>
+ *         the type of the command being tested
  * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<GroupId, C, Group, GroupPart> {
+abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<GroupId, C, E, Group, GroupPart> {
 
-    static final GroupId GROUP_ID = createGroupId();
+    private static final GroupId GROUP_ID = TestIdentifiers.groupId();
 
-    GroupCommandTest(C commandMessage) {
-        super(GROUP_ID, commandMessage);
+    @Override
+    protected GroupId entityId() {
+        return GROUP_ID;
     }
 
     @Override
-    protected Repository<GroupId, GroupPart> createRepository() {
-        return new GroupPartRepository();
+    protected Class<GroupPart> entityClass() {
+        return GroupPart.class;
     }
 
-    protected GroupPart createPartWithState() {
-        return TestGroupFactory.createGroupPart(root(GROUP_ID));
+    /**
+     * Creates the {@link GroupPart} with the some predefined state and the {@link #GROUP_ID}
+     * identifier.
+     */
+    protected void preCreateGroup() {
+        preCreateGroup(GROUP_ID);
     }
 
-    protected static GroupRoot root(GroupId id) {
-        return new GroupRoot(create(), id);
+    /**
+     * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
+     */
+    protected void preCreateGroup(GroupId id) {
+        CreateGroup createGroup = CreateGroup
+                .newBuilder()
+                .setId(id)
+                .setOrgEntity(groupOrgEntityOrganization())
+                .setDisplayName(groupName())
+                .setEmail(groupEmail())
+                .setDescription(groupDescription())
+                .vBuild();
+        context().receivesCommand(createGroup);
     }
 }

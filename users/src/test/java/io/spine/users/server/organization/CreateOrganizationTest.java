@@ -20,51 +20,50 @@
 
 package io.spine.users.server.organization;
 
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.event.OrganizationCreated;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.createOrganization;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@SuppressWarnings("Duplicates") // We perform the same assertions for resulting event and state
-@DisplayName("CreateOrganization command should")
-class CreateOrganizationTest extends OrgCommandTest<CreateOrganization> {
+@DisplayName("`CreateOrganization` command should")
+class CreateOrganizationTest
+        extends OrganizationCommandTest<CreateOrganization, OrganizationCreated> {
 
-    CreateOrganizationTest() {
-        super(createMessage());
+    @Override
+    protected CreateOrganization command(OrganizationId id) {
+        return createOrganization(id);
+    }
+
+    @Override
+    protected OrganizationCreated expectedEventAfter(CreateOrganization command) {
+        return OrganizationCreated
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(CreateOrganization command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getDisplayName())
+                .setDomain(command.getDomain())
+                .setTenant(command.getTenant())
+                .build();
     }
 
     @Test
-    @DisplayName("produce OrganizationCreated event")
-    void produceEvent() {
-        CreateOrganization command = message();
-        expectThat(
-                TestOrganizationFactory.createEmptyAggregate(ORG_ID)).producesEvent(OrganizationCreated.class, event -> {
-            assertEquals(command.getId(), event.getId());
-            assertEquals(command.getDisplayName(), event.getDisplayName());
-            assertEquals(command.getTenant(), event.getTenant());
-            assertEquals(command.getDomain(), event.getDomain());
-        });
-    }
-
-    @Test
-    @DisplayName("create an organization")
-    void changeState() {
-        CreateOrganization command = message();
-        expectThat(TestOrganizationFactory.createEmptyAggregate(ORG_ID)).hasState(state -> {
-            assertEquals(command.getId(), state.getId());
-            assertEquals(command.getDisplayName(), state.getDisplayName());
-            assertEquals(command.getTenant(), state.getTenant());
-            assertEquals(command.getDomain(), state.getDomain());
-        });
-    }
-
-    private static CreateOrganization createMessage() {
-        return createOrganization(ORG_ID);
+    @DisplayName("produce `OrganizationCreated` event and create the organization")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
     }
 }

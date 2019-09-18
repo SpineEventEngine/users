@@ -20,7 +20,9 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.event.GroupMoved;
 import org.junit.jupiter.api.DisplayName;
@@ -28,44 +30,40 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.moveGroup;
 import static io.spine.users.server.group.given.GroupTestEnv.groupParentOrgUnit;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("MoveGroup command should")
-class MoveGroupTest extends GroupCommandTest<MoveGroup> {
+@DisplayName("`MoveGroup` command should")
+class MoveGroupTest extends GroupCommandTest<MoveGroup, GroupMoved> {
 
     private static final OrganizationOrUnit NEW_PARENT = groupParentOrgUnit();
 
-    MoveGroupTest() {
-        super(createMessage());
-    }
-
     @Test
-    @DisplayName("produce GroupMoved event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        OrganizationOrUnit oldParent = aggregate.state()
-                                                .getOrgEntity();
-        expectThat(aggregate).producesEvent(GroupMoved.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewOrgEntity(), event.getNewOrgEntity());
-            assertEquals(oldParent, event.getOldOrgEntity());
-        });
+    @DisplayName("produce `GroupMoved` event and change the group parent OrgUnit")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the parent")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewOrgEntity(), state.getOrgEntity());
-        });
+    @Override
+    protected MoveGroup command(GroupId id) {
+        return moveGroup(id, NEW_PARENT);
     }
 
-    private static MoveGroup createMessage() {
-        return moveGroup(GROUP_ID, NEW_PARENT);
+    @Override
+    protected GroupMoved expectedEventAfter(MoveGroup command) {
+        return GroupMoved
+                .newBuilder()
+                .setId(command.getId())
+                .setNewOrgEntity(command.getNewOrgEntity())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(MoveGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setOrgEntity(command.getNewOrgEntity())
+                .build();
     }
 }

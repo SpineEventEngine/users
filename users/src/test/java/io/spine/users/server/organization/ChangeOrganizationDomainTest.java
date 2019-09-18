@@ -20,49 +20,47 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.net.InternetDomain;
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.ChangeOrganizationDomain;
 import io.spine.users.organization.event.OrganizationDomainChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationDomain;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeOrganizationDomain command should")
-class ChangeOrganizationDomainTest extends OrgCommandTest<ChangeOrganizationDomain> {
-
-    ChangeOrganizationDomainTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeOrganizationDomain` command should")
+class ChangeOrganizationDomainTest
+        extends OrganizationCommandTest<ChangeOrganizationDomain, OrganizationDomainChanged> {
 
     @Test
-    @DisplayName("produce OrganizationDomainChanged event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        InternetDomain oldDomain = aggregate.state()
-                                            .getDomain();
-        expectThat(aggregate).producesEvent(OrganizationDomainChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewDomain(), event.getNewDomain());
-            assertEquals(oldDomain, event.getOldDomain());
-        });
+    @DisplayName("produce `OrganizationDomainChanged` event and update the organization domain")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the domain")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewDomain(), state.getDomain());
-        });
+    @Override
+    protected ChangeOrganizationDomain command(OrganizationId id) {
+        return changeOrganizationDomain(id);
     }
 
-    private static ChangeOrganizationDomain createMessage() {
-        return changeOrganizationDomain(ORG_ID);
+    @Override
+    protected OrganizationDomainChanged expectedEventAfter(ChangeOrganizationDomain command) {
+        return OrganizationDomainChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDomain(command.getNewDomain())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(ChangeOrganizationDomain command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDomain(command.getNewDomain())
+                .build();
     }
 }

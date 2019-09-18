@@ -46,32 +46,14 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 
 /**
- * A Google Group process manager.
- *
- * <p>Translates the terminology of Google Groups into 'Users' bounded context language.
- *
- * <p>This process manager handles external events happened to a Google Group and transforms them
- * into native 'Users' commands:
- *
- * <ul>
- *     <li>{@link GoogleGroupCreated} event into {@link CreateGroup} command;
- *     <li>{@link GoogleGroupJoinedParentGroup} event into {@link JoinParentGroup} command;
- *     <li>{@link GoogleGroupLeftParentGroup} event into {@link JoinParentGroup} command;
- *     <li>{@link GoogleGroupRenamed} event into {@link RenameGroup} command;
- *     <li>{@link GoogleGroupDeleted} event into {@link DeleteGroup} command;
- *     <li>{@link GoogleGroupEmailChanged} event into {@link ChangeGroupEmail} command.
- * </ul>
- *
- * @author Vladyslav Lubenskyi
+ * Translates the terminology of Google Groups events into commands in
+ * the language of the Users Context.
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for a process manager.
 public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
                                                            GoogleGroupLifecycle,
                                                            GoogleGroupLifecycle.Builder> {
 
-    /**
-     * @see ProcessManager#ProcessManager(Object)
-     */
     GoogleGroupLifecyclePm(GroupId id) {
         super(id);
     }
@@ -80,11 +62,10 @@ public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
     CreateGroup on(GoogleGroupCreated event) {
         InternetDomain domain = event.getDomain();
         Optional<OrganizationId> organization = organizationByDomain(domain);
-        if (organization.isPresent()) {
-            return commands().createInternalGroup(event, organization.get());
-        } else {
-            return commands().createExternalGroup(event);
-        }
+        CreateGroup result =
+                organization.map(id -> commands().createInternalGroup(event, id))
+                            .orElseGet(() -> commands().createExternalGroup(event));
+        return result;
     }
 
     @Command
@@ -124,7 +105,7 @@ public class GoogleGroupLifecyclePm extends ProcessManager<GroupId,
         return empty();
     }
 
-    private static GoogleGroupCommandFactory commands() {
-        return GoogleGroupCommandFactory.instance();
+    private static CommandFactory commands() {
+        return CommandFactory.instance();
     }
 }

@@ -21,31 +21,33 @@
 package io.spine.users.server.role;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.base.EventMessage;
 import io.spine.users.RoleId;
 import io.spine.users.role.Role;
+import io.spine.users.server.CommandTest;
 
 import static io.spine.users.server.role.given.RoleTestEnv.createRoleId;
 
 /**
- * An implementation base for the {@link Role} aggregate command handler tests.
+ * An abstract base for the tests of {@code Role} commands and their implications.
  *
  * @param <C>
- *         the type of the command being tested
- * @author Vladyslav Lubenskyi
+ *         the type of the tested command
+ * @param <E>
+ *         the type of the expected event
  */
-public class RoleCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<RoleId, C, Role, RoleAggregate> {
+public abstract class RoleCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<RoleId, C, E, Role, RoleAggregate> {
 
-    static final RoleId ROLE_ID = createRoleId();
+    private static final RoleId ROLE_ID = createRoleId();
 
-    RoleCommandTest(C commandMessage) {
-        super(ROLE_ID, commandMessage);
+    @Override
+    protected RoleId entityId() {
+        return ROLE_ID;
     }
 
     @Override
-    protected Repository<RoleId, RoleAggregate> createRepository() {
-        return new RoleAggregateRepository();
+    protected Class<RoleAggregate> entityClass() {
+        return RoleAggregate.class;
     }
 }

@@ -84,6 +84,13 @@ public class GoogleGroupTestEnv {
                 .vBuild();
     }
 
+    static InternetDomain externalDomain() {
+        return InternetDomain
+                .newBuilder()
+                .setValue("another-spine.io")
+                .vBuild();
+    }
+
     public static EmailAddress alias() {
         return EmailAddress.newBuilder()
                            .setValue("developers@spine.eu")

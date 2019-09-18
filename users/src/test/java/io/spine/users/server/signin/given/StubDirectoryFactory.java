@@ -18,16 +18,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.organization;
+package io.spine.users.server.signin.given;
 
-import io.spine.server.aggregate.AggregateRepository;
-import io.spine.users.OrganizationId;
+import io.spine.users.DirectoryId;
+import io.spine.users.server.Directory;
+import io.spine.users.server.DirectoryFactory;
+
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
- * The repository for {@link OrganizationAggregate organizations}.
- *
- * @author Vladyslav Lubenskyi
+ * A factory that always returns the same passed directory.
  */
-public class OrganizationAggregateRepository
-        extends AggregateRepository<OrganizationId, OrganizationAggregate> {
+public final class StubDirectoryFactory implements DirectoryFactory {
+
+    private final Directory directory;
+
+    public StubDirectoryFactory(Directory directory) {
+        super();
+        this.directory = directory;
+    }
+
+    @Override
+    public Optional<Directory> get(DirectoryId id) {
+        return ofNullable(directory);
+    }
 }

@@ -18,33 +18,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group.google;
+package io.spine.users.server.given;
 
-import io.spine.base.EventMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.procman.PmCommandOnEventTest;
 import io.spine.users.GroupId;
-import io.spine.users.group.google.GoogleGroupLifecycle;
+import io.spine.users.OrgUnitId;
+import io.spine.users.OrganizationId;
 
-import static io.spine.users.server.group.google.given.GoogleGroupTestEnv.newGroupId;
+import static io.spine.base.Identifier.newUuid;
 
 /**
- * The implementation base for {@link GoogleGroupLifecyclePm} commanding method tests.
- *
- * @param <E> an event being tested
- * @author Vladyslav Lubenskyi
+ * Factory methods for creating test values of identifiers in Users bounded context.
  */
-abstract class GoogleGroupLifecycleEventTest<E extends EventMessage>
-        extends PmCommandOnEventTest<GroupId, E, GoogleGroupLifecycle, GoogleGroupLifecyclePm> {
+public class TestIdentifiers {
 
-    protected static final GroupId GROUP_ID = newGroupId();
-
-    GoogleGroupLifecycleEventTest(E eventMessage) {
-        super(GROUP_ID, eventMessage);
+    /** Prevents instantiation of this utility class. */
+    private TestIdentifiers() {
     }
 
-    @Override
-    protected Repository<GroupId, GoogleGroupLifecyclePm> createRepository() {
-        return new GoogleGroupLifecyclePmRepository();
+    public static OrganizationId orgId() {
+        return orgId("org-" + newUuid());
+    }
+
+    public static OrgUnitId orgUnitId() {
+        return OrgUnitId
+                .newBuilder()
+                .setValue(newUuid())
+                .vBuild();
+    }
+
+    public static OrganizationId orgId(String value) {
+        return OrganizationId
+                .newBuilder()
+                .setValue(value)
+                .vBuild();
+    }
+
+    public static GroupId groupId() {
+        return groupId("group-" + newUuid());
+    }
+
+    private static GroupId groupId(String value) {
+        return GroupId
+                .newBuilder()
+                .setValue(value)
+                .vBuild();
     }
 }

@@ -20,47 +20,47 @@
 
 package io.spine.users.server.organization;
 
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.RenameOrganization;
 import io.spine.users.organization.event.OrganizationRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.renameOrganization;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("RenameOrganization command should")
-class RenameOrganizationTest extends OrgCommandTest<RenameOrganization> {
-
-    RenameOrganizationTest() {
-        super(createMessage());
-    }
+@DisplayName("`RenameOrganization` command should")
+class RenameOrganizationTest
+        extends OrganizationCommandTest<RenameOrganization, OrganizationRenamed> {
 
     @Test
-    @DisplayName("produce OrganizationRenamed event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        String oldName = aggregate.state()
-                                  .getDisplayName();
-        expectThat(aggregate).producesEvent(OrganizationRenamed.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewName(), event.getNewName());
-            assertEquals(oldName, event.getOldName());
-        });
+    @DisplayName("produce `RenameOrganization` event and update the organization display name")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the name")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewName(), state.getDisplayName());
-        });
+    @Override
+    protected RenameOrganization command(OrganizationId id) {
+        return renameOrganization(id);
     }
 
-    private static RenameOrganization createMessage() {
-        return renameOrganization(ORG_ID);
+    @Override
+    protected OrganizationRenamed expectedEventAfter(RenameOrganization command) {
+        return OrganizationRenamed
+                .newBuilder()
+                .setId(command.getId())
+                .setNewName(command.getNewName())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(RenameOrganization command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setDisplayName(command.getNewName())
+                .build();
     }
 }

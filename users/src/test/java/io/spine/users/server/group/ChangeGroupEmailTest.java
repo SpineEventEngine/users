@@ -20,49 +20,46 @@
 
 package io.spine.users.server.group;
 
-import io.spine.net.EmailAddress;
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.event.GroupEmailChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.changeGroupEmail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeGroupEmail command should")
-class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail> {
-
-    ChangeGroupEmailTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeGroupEmail` command should")
+class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmailChanged> {
 
     @Test
-    @DisplayName("produce GroupEmailChanged event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        EmailAddress oldEmail = aggregate.state()
-                                         .getEmail();
-        expectThat(aggregate).producesEvent(GroupEmailChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewEmail(), event.getNewEmail());
-            assertEquals(oldEmail, event.getOldEmail());
-        });
+    @DisplayName("produce `GroupEmailChanged` event and set the updated email")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the email")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewEmail(), state.getEmail());
-        });
+    @Override
+    protected ChangeGroupEmail command(GroupId id) {
+        return changeGroupEmail(id);
     }
 
-    private static ChangeGroupEmail createMessage() {
-        return changeGroupEmail(GROUP_ID);
+    @Override
+    protected GroupEmailChanged expectedEventAfter(ChangeGroupEmail command) {
+        return GroupEmailChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewEmail(command.getNewEmail())
+                .buildPartial();
+    }
+
+    @Override
+    protected Group expectedStateAfter(ChangeGroupEmail command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setEmail(command.getNewEmail())
+                .build();
     }
 }

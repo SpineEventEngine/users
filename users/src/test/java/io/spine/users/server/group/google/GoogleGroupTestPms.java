@@ -20,7 +20,7 @@
 
 package io.spine.users.server.group.google;
 
-import io.spine.testing.server.entity.given.Given;
+//import io.spine.testing.server.entity.given.Given;
 import io.spine.users.GroupId;
 import io.spine.users.group.google.GoogleGroupLifecycle;
 
@@ -41,11 +41,11 @@ public class GoogleGroupTestPms {
      * @param id
      *         and ID of the process manager
      */
-    static GoogleGroupLifecyclePm emptyPm(GroupId id) {
-        return Given.processManagerOfClass(GoogleGroupLifecyclePm.class)
-                    .withState(lifecycle(id))
-                    .build();
-    }
+//    static GoogleGroupLifecyclePm emptyPm(GroupId id) {
+//        return Given.processManagerOfClass(GoogleGroupLifecyclePm.class)
+//                    .withState(lifecycle(id))
+//                    .build();
+//    }
 
     private static GoogleGroupLifecycle lifecycle(GroupId id) {
         return GoogleGroupLifecycle

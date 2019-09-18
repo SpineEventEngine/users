@@ -20,35 +20,62 @@
 
 package io.spine.users.server.signin;
 
-import io.spine.users.server.signin.given.SignInTestCommands;
+import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.server.Directory;
+import io.spine.users.server.signin.given.StubDirectory;
+import io.spine.users.signin.command.SignUserIn;
 import io.spine.users.signin.command.SignUserOut;
 import io.spine.users.signin.event.SignOutCompleted;
+import io.spine.users.user.Identity;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.signin.TestProcManFactory.directoryId;
-import static io.spine.users.server.signin.TestProcManFactory.withIdentity;
+import static io.spine.users.server.signin.Signals.signIn;
+import static io.spine.users.server.signin.given.SignInTestCommands.signOutCommand;
+import static io.spine.users.server.signin.given.SignInTestEnv.identity;
 import static io.spine.users.server.signin.given.SignInTestEnv.userId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.spine.users.server.user.given.UserTestEnv.profile;
 
-@DisplayName("SignInPm should, when SignUserOut")
-class SignUserOutCommandTest extends SignInPmCommandTest<SignUserOut> {
+@DisplayName("`SignInPm` should, when `SignUserOut` command is dispatched to it,")
+class SignUserOutCommandTest extends SignInProcessTest {
 
-    SignUserOutCommandTest() {
-        super(userId(), command());
+    private UserId userId;
+
+    @Override
+    protected @Nullable Directory createDirectory() {
+        Identity identity = identity();
+        return new StubDirectory()
+                .addIdentity(identity)
+                .allowSignInFor(identity)
+                .addProfile(identity, profile());
+    }
+
+    @BeforeEach
+    void signTheUserIn() {
+        userId = userId();
+        SignUserIn signIn = signIn(userId, identity());
+        context().receivesCommand(signIn);
     }
 
     @Test
-    @DisplayName("generate SignOutCompleted event")
-    void failProcess() {
-        SignInPm emptyProcMan = withIdentity(entityId(), directoryId("google.com"));
+    @DisplayName("emit `SignOutCompleted` event")
+    void emitSignOutCompleted() {
+        SignUserOut signOut = signOutCommand(userId);
+        MultitenantBlackBoxContext afterCommand = context().receivesCommand(signOut);
 
-        expectThat(emptyProcMan)
-                .producesEvent(SignOutCompleted.class,
-                               command -> assertEquals(message().getId(), command.getId()));
-    }
+        SignOutCompleted expectedEvent = SignOutCompleted
+                .newBuilder()
+                .setId(userId)
+                .build();
 
-    private static SignUserOut command() {
-        return SignInTestCommands.signOutCommand(userId());
+        afterCommand
+                 .assertEvents()
+                 .withType(expectedEvent.getClass())
+                 .message(0)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expectedEvent);
     }
 }

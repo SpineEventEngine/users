@@ -20,49 +20,47 @@
 
 package io.spine.users.server.organization;
 
-import io.spine.core.TenantId;
+import io.spine.users.OrganizationId;
+import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
 import io.spine.users.organization.event.OrganizationTenantChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.organization.given.OrganizationTestCommands.changeOrganizationTenant;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeOrganizationTenant command should")
-class ChangeOrganizationTenantTest extends OrgCommandTest<ChangeOrganizationTenant> {
-
-    ChangeOrganizationTenantTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeOrganizationTenant` command should")
+class ChangeOrganizationTenantTest
+        extends OrganizationCommandTest<ChangeOrganizationTenant, OrganizationTenantChanged> {
 
     @Test
-    @DisplayName("produce OrganizationTenantChanged event")
-    void produceEvent() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-        TenantId oldTenant = aggregate.state()
-                                      .getTenant();
-        expectThat(aggregate).producesEvent(OrganizationTenantChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getNewTenant(), event.getNewTenant());
-            assertEquals(oldTenant, event.getOldTenant());
-        });
+    @DisplayName("produce `OrganizationTenantChanged` event and update the organization tenant")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateOrganization();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the tenant")
-    void changeState() {
-        OrganizationAggregate aggregate = TestOrganizationFactory.createAggregate(ORG_ID);
-
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getNewTenant(), state.getTenant());
-        });
+    @Override
+    protected ChangeOrganizationTenant command(OrganizationId id) {
+        return changeOrganizationTenant(id);
     }
 
-    private static ChangeOrganizationTenant createMessage() {
-        return changeOrganizationTenant(ORG_ID);
+    @Override
+    protected OrganizationTenantChanged expectedEventAfter(ChangeOrganizationTenant command) {
+        return OrganizationTenantChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewTenant(command.getNewTenant())
+                .build();
+    }
+
+    @Override
+    protected Organization expectedStateAfter(ChangeOrganizationTenant command) {
+        return Organization
+                .newBuilder()
+                .setId(command.getId())
+                .setTenant(command.getNewTenant())
+                .build();
     }
 }

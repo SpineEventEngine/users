@@ -29,33 +29,13 @@ import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
 import io.spine.users.RoleId;
-import io.spine.users.server.Directory;
-import io.spine.users.server.DirectoryFactory;
-import io.spine.users.server.signin.SignInPm;
-import io.spine.users.server.user.UserPart;
-import io.spine.users.server.user.UserPartRepository;
-import io.spine.users.signin.SignInFailureReason;
+import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.user.Identity;
-import io.spine.users.user.User;
-import io.spine.users.user.UserVBuilder;
 
-import java.util.Optional;
-
-import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.testing.server.entity.given.Given.aggregatePartOfClass;
 import static io.spine.users.server.role.RoleIds.roleId;
-import static io.spine.users.server.user.UserRoot.getForTest;
-import static io.spine.users.signin.SignInFailureReason.SIGN_IN_NOT_AUTHORIZED;
-import static io.spine.users.user.User.Status.NOT_READY;
-import static io.spine.users.user.UserNature.PERSON;
-import static java.util.Optional.empty;
-import static java.util.Optional.ofNullable;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
- * The environment for the {@link SignInPm} tests.
+ * The environment for the {@link SignInProcess} tests.
  */
 public final class SignInTestEnv {
 
@@ -69,61 +49,8 @@ public final class SignInTestEnv {
         return GivenUserId.of("john.smith@example.com");
     }
 
-    public static UserPartRepository emptyUserRepo() {
-        UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = empty();
-        when(mock.find(any())).thenReturn(user);
-        return mock;
-    }
-
-    public static UserPartRepository nonEmptyUserRepo() {
-        UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = Optional.of(normalUserPart());
-        when(mock.find(any())).thenReturn(user);
-        return mock;
-    }
-
-    public static UserPartRepository noIdentityUserRepo() {
-        UserPartRepository mock = mock(UserPartRepository.class);
-        Optional<UserPart> user = Optional.of(noIdentityUserPart());
-        when(mock.find(any())).thenReturn(user);
-        return mock;
-    }
-
-    public static DirectoryFactory mockActiveDirectory() {
-        Directory mock = mock(Directory.class);
-        when(mock.hasIdentity(any())).thenReturn(true);
-        when(mock.isSignInAllowed(any())).thenReturn(true);
-        when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestDirectoryFactory(mock);
-    }
-
-    public static DirectoryFactory mockSuspendedDirectory() {
-        Directory mock = mock(Directory.class);
-        when(mock.hasIdentity(any())).thenReturn(true);
-        when(mock.isSignInAllowed(any())).thenReturn(false);
-        when(mock.fetchProfile(any())).thenReturn(profile());
-        return new TestDirectoryFactory(mock);
-    }
-
-    public static DirectoryFactory mockEmptyDirectory() {
-        Directory mock = mock(Directory.class);
-        when(mock.hasIdentity(any())).thenReturn(false);
-        when(mock.isSignInAllowed(any())).thenReturn(false);
-        when(mock.fetchProfile(any())).thenReturn(PersonProfile.getDefaultInstance());
-        return new TestDirectoryFactory(mock);
-    }
-
-    public static DirectoryFactory mockEmptyDirectoryFactory() {
-        return new TestDirectoryFactory(null);
-    }
-
     public static Identity identity() {
         return identity("123543", googleDirectoryId(), "j.s@google.com");
-    }
-
-    public static Identity secondaryIdentity() {
-        return identity("6987", googleDirectoryId(), "s.j@google.com");
     }
 
     public static Identity identity(String id, DirectoryId directoryId, String name) {
@@ -133,10 +60,6 @@ public final class SignInTestEnv {
                 .setDisplayName(name)
                 .setDirectoryId(directoryId)
                 .build();
-    }
-
-    public static SignInFailureReason failureReason() {
-        return SIGN_IN_NOT_AUTHORIZED;
     }
 
     static String displayName() {
@@ -151,44 +74,11 @@ public final class SignInTestEnv {
                 .build();
     }
 
-    static DirectoryId googleDirectoryId() {
+    private static DirectoryId googleDirectoryId() {
         return DirectoryId
                 .newBuilder()
                 .setValue("gmail.com")
                 .build();
-    }
-
-    private static UserPart normalUserPart() {
-        User state = userPartState().setPrimaryIdentity(identity())
-                                    .build();
-        UserPart aggregate = aggregatePartOfClass(UserPart.class)
-                .withRoot(getForTest(create(), userId()))
-                .withState(state)
-                .withId(userId())
-                .build();
-        return aggregate;
-    }
-
-    private static UserPart noIdentityUserPart() {
-        UserPart aggregate = aggregatePartOfClass(UserPart.class)
-                .withRoot(getForTest(create(), userId()))
-                .withState(userPartState().build())
-                .withId(userId())
-                .build();
-        return aggregate;
-    }
-
-    private static UserVBuilder userPartState() {
-        return UserVBuilder
-                .newBuilder()
-                .setId(userId())
-                .setOrgEntity(orgEntity())
-                .setDisplayName(displayName())
-                .setProfile(profile())
-                .setStatus(NOT_READY)
-                .addSecondaryIdentity(secondaryIdentity())
-                .addRole(adminRoleId())
-                .setNature(PERSON);
     }
 
     private static OrganizationOrUnit orgEntity() {
@@ -222,23 +112,5 @@ public final class SignInTestEnv {
                 .setGivenName("John")
                 .setFamilyName("Smith")
                 .vBuild();
-    }
-
-    /**
-     * A factory that always returns a single user directory.
-     */
-    static class TestDirectoryFactory implements DirectoryFactory {
-
-        private final Directory directory;
-
-        private TestDirectoryFactory(Directory directory) {
-            super();
-            this.directory = directory;
-        }
-
-        @Override
-        public Optional<Directory> get(DirectoryId id) {
-            return ofNullable(directory);
-        }
     }
 }

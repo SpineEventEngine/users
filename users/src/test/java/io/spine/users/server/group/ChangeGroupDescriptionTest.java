@@ -20,47 +20,47 @@
 
 package io.spine.users.server.group;
 
+import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.event.GroupDescriptionChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.group.given.GroupTestCommands.changeGroupDescription;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("ChangeGroupDescription command should")
-class ChangeGroupDescriptionTest extends GroupCommandTest<ChangeGroupDescription> {
-
-    ChangeGroupDescriptionTest() {
-        super(createMessage());
-    }
+@DisplayName("`ChangeGroupDescription` command should")
+class ChangeGroupDescriptionTest
+        extends GroupCommandTest<ChangeGroupDescription, GroupDescriptionChanged> {
 
     @Test
-    @DisplayName("produce GroupDescriptionChanged event")
-    void produceEvent() {
-        GroupPart aggregate = createPartWithState();
-        String oldDescription = aggregate.state()
-                                         .getDescription();
-        expectThat(aggregate).producesEvent(GroupDescriptionChanged.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getDescription(), event.getNewDescription());
-            assertEquals(oldDescription, event.getOldDescription());
-        });
+    @DisplayName("produce `GroupDescriptionChanged` event and set the updated description")
+    @Override
+    protected void produceEventAndChangeState() {
+        preCreateGroup();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("change the email")
-    void changeState() {
-        GroupPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(state -> {
-            assertEquals(message().getDescription(), state.getDescription());
-        });
+    @Override
+    protected ChangeGroupDescription command(GroupId id) {
+        return changeGroupDescription(id);
     }
 
-    private static ChangeGroupDescription createMessage() {
-        return changeGroupDescription(GROUP_ID);
+    @Override
+    protected GroupDescriptionChanged expectedEventAfter(ChangeGroupDescription command) {
+        return GroupDescriptionChanged
+                .newBuilder()
+                .setId(command.getId())
+                .setNewDescription(command.getDescription())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(ChangeGroupDescription command) {
+        return Group
+                .newBuilder()
+                .setId(command.getId())
+                .setDescription(command.getDescription())
+                .build();
     }
 }

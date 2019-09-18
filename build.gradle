@@ -93,8 +93,8 @@ subprojects {
     apply from: deps.scripts.modelCompiler
     apply from: deps.scripts.projectLicenseReport
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     defaultRepositories(project)
 
@@ -107,19 +107,25 @@ subprojects {
         implementation deps.build.guava
         implementation deps.build.checkerAnnotations
         implementation deps.build.errorProneAnnotations
-        implementation deps.build.slf4j
 
         compile group: 'io.spine', name: 'spine-server', version: spineVersion
 
-        // Use jdk14 bindings for test purposes only.
-        testImplementation deps.test.slf4j
-        testImplementation deps.test.hamcrest
-        testImplementation deps.test.mockito
-        testImplementation deps.test.guavaTestlib
         testImplementation deps.test.junit5Api
         testImplementation deps.test.junit5Runner
 
-        testCompile("io.spine:spine-testutil-server:${spineVersion}") {
+        // Depend on Truth directly to avoid the following error when running tests:
+        // java.lang.NoClassDefFoundError: Could not initialize class com.google.common.truth.Truth
+        //      The `Truth` class is a part of `com.google.truth:truth` artifact.
+        // This artifact IS provided transitively from `io.spine:spine-testlib` via `api`
+        // dependency. `spine-testlib` in tern is the `api` dependency of `testutil-core`, which is
+        // `api` dependency of `spine-testutil-client`, which is `api` dependency of
+        // `spine-testutil-server` on which we depend below.
+        //      Thus, the `Truth` library being transitive `api` dependency should be available
+        // on run-time, but it is not. This could be a Gradle issue, but assuming other things
+        // to be done in this library, it is more practical to add the missing dependency and
+        // address this "mystery" when time permits.
+        testImplementation deps.test.truth
+        testImplementation("io.spine:spine-testutil-server:${spineVersion}") {
             // We are using JUnit 5.x instead of 4.x dependency of Spine testing framework.
             exclude group: 'junit'
         }

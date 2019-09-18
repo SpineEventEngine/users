@@ -83,8 +83,6 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
  * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
- *
- * @author Vladyslav Lubenskyi
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
 public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
@@ -113,7 +111,7 @@ public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot
                 break;
             case ORIGIN_NOT_SET: // Fallthrough intended.
             default:
-                throw newIllegalArgumentException("No `origin` found in CreateUser command");
+                throw newIllegalArgumentException("No `origin` found in `CreateUser` command.");
         }
         return eventBuilder.vBuild();
     }

@@ -21,39 +21,55 @@
 package io.spine.users.server.group;
 
 import io.spine.base.CommandMessage;
-import io.spine.server.entity.Repository;
-import io.spine.testing.server.aggregate.AggregateCommandTest;
+import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
+import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
-
-import static io.spine.testing.server.TestBoundedContext.create;
-import static io.spine.users.server.group.given.GroupTestEnv.createGroupId;
+import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.server.CommandTest;
+import io.spine.users.server.given.TestIdentifiers;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
  *
- * @param <C> the type of the command being tested
- * @author Vladyslav Lubenskyi
+ * @param <C>
+ *         the type of the command being tested
  */
-abstract class GroupMembershipCommandTest<C extends CommandMessage>
-        extends AggregateCommandTest<GroupId, C, GroupMembership, GroupMembershipPart> {
+abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<GroupId, C, E, GroupMembership, GroupMembershipPart> {
 
-    static final GroupId GROUP_ID = createGroupId();
+    static final GroupId GROUP_ID = TestIdentifiers.groupId();
+    static final GroupId PARENT_GROUP_ID = TestIdentifiers.groupId();
 
-    GroupMembershipCommandTest(C commandMessage) {
-        super(GROUP_ID, commandMessage);
+    @Override
+    protected GroupId entityId() {
+        return GROUP_ID;
     }
 
     @Override
-    protected Repository<GroupId, GroupMembershipPart> createRepository() {
-        return new GroupMembershipPartRepository();
+    protected Class<GroupMembershipPart> entityClass() {
+        return GroupMembershipPart.class;
     }
 
-    protected GroupMembershipPart createPartWithState() {
-        return TestGroupFactory.createMembershipPart(root(GROUP_ID));
+    /**
+     * Creates the {@link GroupMembershipPart} with for the group with the {@link #GROUP_ID}
+     * identifier and a parent group with  {@link #PARENT_GROUP_ID} identifier.
+     */
+    void preCreateGroupMembership() {
+        preCreateGroupMembership(GROUP_ID, PARENT_GROUP_ID);
     }
 
-    private static GroupRoot root(GroupId id) {
-        return new GroupRoot(create(), id);
+    /**
+     * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
+     */
+    protected void preCreateGroupMembership(GroupId group, GroupId parentGroup) {
+        JoinParentGroup joinParentGroup = JoinParentGroup
+                .newBuilder()
+                .setId(group)
+                .setParentGroupId(parentGroup)
+                .vBuild();
+        context().receivesCommand(joinParentGroup);
     }
+
+
 }

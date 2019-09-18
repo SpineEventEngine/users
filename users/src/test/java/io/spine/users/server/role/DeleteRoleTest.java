@@ -20,45 +20,52 @@
 
 package io.spine.users.server.role;
 
+import io.spine.users.RoleId;
+import io.spine.users.role.Role;
+import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleDeleted;
-import io.spine.users.server.role.given.RoleTestCommands;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.role.TestRoleFactory.createAggregate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.spine.users.server.role.given.RoleTestCommands.createRole;
+import static io.spine.users.server.role.given.RoleTestCommands.deleteRole;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("DeleteRole command should")
-class DeleteRoleTest extends RoleCommandTest<DeleteRole> {
-
-    DeleteRoleTest() {
-        super(createMessage());
-    }
+@DisplayName("`DeleteRole` command should")
+class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
 
     @Test
-    @DisplayName("produce RoleDeleted event")
-    void produceEvent() {
-        RoleAggregate aggregate = createAggregate(ROLE_ID);
-        expectThat(aggregate).producesEvent(RoleDeleted.class, event -> {
-            assertEquals(message().getId(), event.getId());
-        });
+    @DisplayName("produce `RoleDeleted` event and delete the role")
+    @Override
+    protected void produceEventAndChangeState() {
+        CreateRole createRole = createRole(entityId());
+        context().receivesCommand(createRole);
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("delete the role")
-    void changeState() {
-        RoleAggregate aggregate = createAggregate(ROLE_ID);
-
-        expectThat(aggregate).hasState(state -> assertTrue(aggregate.getLifecycleFlags()
-                                                                    .getDeleted()));
+    @Override
+    protected DeleteRole command(RoleId id) {
+        return deleteRole(id);
     }
 
-    private static DeleteRole createMessage() {
-        return RoleTestCommands.deleteRole(ROLE_ID);
+    @Override
+    protected RoleDeleted expectedEventAfter(DeleteRole command) {
+        return RoleDeleted
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected Role expectedStateAfter(DeleteRole command) {
+        return Role
+                .newBuilder()
+                .setId(command.getId())
+                .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

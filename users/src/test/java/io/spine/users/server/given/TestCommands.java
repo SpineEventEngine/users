@@ -31,10 +31,10 @@ import io.spine.users.user.command.UnassignRoleFromUser;
 /**
  * Factory methods for creating of test commands.
  */
-public class GivenCommand {
+public class TestCommands {
 
     /** Prevents instantiation of this utility class. */
-    private GivenCommand() {
+    private TestCommands() {
     }
 
     public static AssignRoleToUser assignRoleToUser(UserId userId, RoleId roleId) {

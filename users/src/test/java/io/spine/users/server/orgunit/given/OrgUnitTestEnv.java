@@ -44,36 +44,36 @@ public final class OrgUnitTestEnv {
                 .build();
     }
 
-    public static String orgUnitName() {
+    static String orgUnitName() {
         return "Test OrgUnit 1";
     }
 
-    public static String orgUnitNewName() {
+    static String orgUnitNewName() {
         return "Test OrgUnit 1 Renamed";
     }
 
-    public static InternetDomain orgUnitDomain() {
+    static InternetDomain orgUnitDomain() {
         return InternetDomain
                 .newBuilder()
                 .setValue("unit.organization.com")
                 .vBuild();
     }
 
-    public static InternetDomain orgUnitNewDomain() {
+    static InternetDomain orgUnitNewDomain() {
         return InternetDomain
                 .newBuilder()
                 .setValue("unit-renamed.organization.com")
                 .vBuild();
     }
 
-    public static OrganizationOrUnit orgUnitParentEntity() {
+    static OrganizationOrUnit orgUnitParentEntity() {
         return OrganizationOrUnit
                 .newBuilder()
                 .setOrgUnit(organization())
                 .build();
     }
 
-    public static OrganizationOrUnit newOrgUnitParentEntity() {
+    static OrganizationOrUnit newOrgUnitParentEntity() {
         return OrganizationOrUnit
                 .newBuilder()
                 .setOrgUnit(createOrgUnitId())

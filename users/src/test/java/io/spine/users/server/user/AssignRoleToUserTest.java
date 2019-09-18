@@ -20,43 +20,66 @@
 
 package io.spine.users.server.user;
 
+import io.spine.core.UserId;
+import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.user.User;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.event.RoleAssignedToUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.assignRoleToUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author Vladyslav Lubenskyi
- */
-@DisplayName("AssignRoleToUser command should")
-class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser> {
+@DisplayName("`AssignRoleToUser` command should")
+class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAssignedToUser> {
 
-    AssignRoleToUserTest() {
-        super(createMessage());
-    }
-
+    @Override
     @Test
-    @DisplayName("generate RoleAssignedToUser event")
-    void generateEvent() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).producesEvent(RoleAssignedToUser.class, event -> {
-            assertEquals(message().getId(), event.getId());
-            assertEquals(message().getRoleId(), event.getRoleId());
-        });
+    @DisplayName("generate `RoleAssignedToUser` assign the role to the user")
+    protected void produceEventAndChangeState() {
+        preCreateUser();
+        super.produceEventAndChangeState();
     }
 
-    @Test
-    @DisplayName("add a new role")
-    void changeState() {
-        UserPart aggregate = createPartWithState();
-        expectThat(aggregate).hasState(
-                state -> assertEquals(message().getRoleId(), state.getRole(1)));
+    @Override
+    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
+                               RoleAssignedToUser expectedEvent) {
+        /*
+         The second event of {@code RoleAssignedToUser} type is checked,
+         as the {@link #preCreateUser} also leads to the {@code RoleAssignedToUser} event.
+         */
+        afterCommand.assertEvents()
+                    .withType(expectedEvent.getClass())
+                    .message(1)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expectedEvent);
     }
 
-    private static AssignRoleToUser createMessage() {
-        return assignRoleToUser(USER_ID);
+    @Override
+    protected AssignRoleToUser command(UserId id) {
+        return assignRoleToUser(id);
+    }
+
+    @Override
+    protected RoleAssignedToUser expectedEventAfter(AssignRoleToUser command) {
+        return RoleAssignedToUser
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .buildPartial();
+    }
+
+    @Override
+    protected User expectedStateAfter(AssignRoleToUser command) {
+        return User
+                .newBuilder()
+                .setId(command.getId())
+
+                // The role which was set originally.
+                .addRole(originalRole())
+
+                // The one expected to be added after the command dispatching.
+                .addRole(command.getRoleId())
+                .buildPartial();
     }
 }
