@@ -47,7 +47,7 @@ public final class GroupTestEnv {
         return NESTED_GROUP_ID;
     }
 
-    static String groupName() {
+    public static String groupName() {
         return "Developers";
     }
 
