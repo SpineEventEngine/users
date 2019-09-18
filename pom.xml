@@ -12,7 +12,7 @@ all modules and does not describe the project structure per-subproject.
 
 <groupId>io.spine</groupId>
 <artifactId>spine-users</artifactId>
-<version>1.1.1-SNAPSHOT+01</version>
+<version>0.0.1-SNAPSHOT+01</version>
 
 <inceptionYear>2015</inceptionYear>
 
