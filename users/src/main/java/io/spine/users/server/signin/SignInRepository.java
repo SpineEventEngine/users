@@ -46,10 +46,8 @@ public final class SignInRepository
     }
 
     @Override
-    protected SignInProcess findOrCreate(UserId id) {
-        SignInProcess processManager = super.findOrCreate(id);
-        processManager.setUsers(users);
-        processManager.setDirectoryFactory(directoryFactory);
-        return processManager;
+    protected void configure(SignInProcess process) {
+        process.setUsers(users);
+        process.setDirectoryFactory(directoryFactory);
     }
 }
