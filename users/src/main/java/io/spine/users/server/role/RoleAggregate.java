@@ -29,13 +29,14 @@ import io.spine.users.role.command.CreateRole;
 import io.spine.users.role.command.DeleteRole;
 import io.spine.users.role.event.RoleCreated;
 import io.spine.users.role.event.RoleDeleted;
+import io.spine.users.server.group.GroupAccount;
 
 /**
  * A role that can be assigned to {@linkplain io.spine.users.server.user.UserPart users} and
- * {@linkplain io.spine.users.server.group.GroupPart groups}, to perform access control.
+ * {@linkplain GroupAccount groups}, to perform access control.
  *
  * <p>Roles are assigned to {@link io.spine.users.server.user.UserPart users} and
- * {@link io.spine.users.server.group.GroupPart groups} directly and explicitly (please see
+ * {@link GroupAccount groups} directly and explicitly (please see
  * {@link io.spine.users.user.command.AssignRoleToUser AssignRoleToUser} and
  * {@link io.spine.users.group.command.AssignRoleToGroup AssignRoleToGroup} commands).
  *
@@ -44,11 +45,11 @@ import io.spine.users.role.event.RoleDeleted;
  * (or their child orgunits).
  *
  * <p><b>Access Control.</b> The roles assigned to
- * a {@linkplain io.spine.users.server.group.GroupPart group} are recursively propagated to all
+ * a {@linkplain GroupAccount group} are recursively propagated to all
  * members of the group. This propagation is implicit and is not reflected in aggregate states.
  *
  * <p>Therefore, when carrying out role-based access control, consider that a
- * {@link io.spine.users.server.user.UserPart User} and {@link io.spine.users.server.group.GroupPart
+ * {@link io.spine.users.server.user.UserPart User} and {@link GroupAccount
  * Group} aggregates have not only the roles listed in their aggregate states, but effectively all
  * the roles derived from parent groups.
  */

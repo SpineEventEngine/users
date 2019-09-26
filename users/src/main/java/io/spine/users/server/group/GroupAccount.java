@@ -66,9 +66,9 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * @see GroupMembershipPart for the part that handle group memberships
  */
 @SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
-public class GroupPart extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
+public class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
-    GroupPart(GroupRoot root) {
+    GroupAccount(GroupRoot root) {
         super(root);
     }
 

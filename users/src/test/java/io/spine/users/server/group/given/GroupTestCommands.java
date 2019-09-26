@@ -30,7 +30,7 @@ import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
-import io.spine.users.server.group.GroupPart;
+import io.spine.users.server.group.GroupAccount;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
@@ -41,7 +41,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 
 /**
- * Test commands for {@link GroupPart}.
+ * Test commands for {@link GroupAccount}.
  */
 public class GroupTestCommands {
 

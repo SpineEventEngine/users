@@ -43,8 +43,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * all nested group memberships must always form an acyclic graph.
  *
  * <p>Please see {@link JoinParentGroup} and {@link LeaveParentGroup} commands.
- *
- * @author Vladyslav Lubenskyi
  */
 public class GroupMembershipPart
         extends AggregatePart<GroupId, GroupMembership, GroupMembership.Builder, GroupRoot> {

@@ -32,10 +32,10 @@ import io.spine.users.user.event.UserLeftGroup;
 import static io.spine.server.route.EventRoute.withId;
 
 /**
- * The repository for {@link GroupRolesPropagationPm}.
+ * The repository for {@link RolePropagation}.
  */
-public class GroupRolesPropagationRepository
-        extends ProcessManagerRepository<GroupId, GroupRolesPropagationPm, GroupRolesPropagation> {
+public class RolePropagations
+        extends ProcessManagerRepository<GroupId, RolePropagation, GroupRolesPropagation> {
 
     @OverridingMethodsMustInvokeSuper
     @Override

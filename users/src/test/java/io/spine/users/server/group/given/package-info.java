@@ -19,7 +19,7 @@
  */
 
 /**
- * Test environment for {@link io.spine.users.server.group.GroupPart} tests.
+ * Test environment for {@link io.spine.users.server.group.GroupAccount} tests.
  */
 
 @ParametersAreNonnullByDefault

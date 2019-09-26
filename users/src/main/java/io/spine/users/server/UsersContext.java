@@ -26,8 +26,8 @@ import io.spine.server.BoundedContextBuilder;
 import io.spine.server.DefaultRepository;
 import io.spine.server.entity.Repository;
 import io.spine.users.server.group.GroupMembershipPart;
-import io.spine.users.server.group.GroupPart;
-import io.spine.users.server.group.GroupRolesPropagationRepository;
+import io.spine.users.server.group.GroupAccount;
+import io.spine.users.server.group.RolePropagations;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
@@ -77,9 +77,9 @@ public final class UsersContext {
                 .add(RoleAggregate.class)
                 .add(OrgUnitAggregate.class)
                 .add(OrganizationAggregate.class)
-                .add(GroupPart.class)
+                .add(GroupAccount.class)
                 .add(GroupMembershipPart.class)
-                .add(new GroupRolesPropagationRepository());
+                .add(new RolePropagations());
         if (directoryFactory != null) {
             builder.add(new SignInRepository(directoryFactory, userPartRepo));
         }

@@ -60,7 +60,7 @@ abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends Ev
     }
 
     /**
-     * Creates the {@link GroupPart} with the some predefined state and the specified identifier.
+     * Creates the {@link GroupAccount} with the some predefined state and the specified identifier.
      */
     protected void preCreateGroupMembership(GroupId group, GroupId parentGroup) {
         JoinParentGroup joinParentGroup = JoinParentGroup
