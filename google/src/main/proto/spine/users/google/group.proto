@@ -1,0 +1,97 @@
+//
+// Copyright 2019, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users.google;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.google";
+option java_outer_classname = "GoogleGroupProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/google/identifiers.proto";
+
+// A Google Group part.
+//
+// This part handles external events happen to a Google Groups and stores all information
+// that is specific for a Google Groups. For example:
+//
+// * an identifier of a group at Google;
+// * the list of email aliases.
+//
+message GoogleGroup {
+    option (entity).kind = AGGREGATE;
+
+    // An internal identifier of the group.
+    //
+    // Please use `GoogleIdMappingView` projection to match `google_id` and `id`.
+    //
+    GroupId id = 1;
+
+    // A unique identifier of the group at Google.
+    GoogleGroupId google_id = 2 [(required) = true, (validate) = true];
+
+    // A list of email aliases of the group.
+    repeated net.EmailAddress alias = 3;
+}
+
+// A process manager that translates the terminology of Google Groups into `Users` bounded context
+// language.
+//
+// This process manager handles external events happened with a Google Group and transforms them
+// into native `Users` commands:
+//
+// * `GoogleGroupCreated` event into `CreateGroup` command;
+// * `GoogleGroupJoinedParentGroup` event into `JoinParentGroup` command;
+// * `GoogleGroupLeftParentGroup` event into `JoinParentGroup` command;
+// * `GoogleGroupRenamed` event into `RenameGroup` command;
+// * `GoogleGroupDeleted` event into `DeleteGroup` command;
+// * `GoogleGroupEmailChanged` event into `ChangeGroupEmail` command;
+// * `GoogleGroupDescriptionChanged` event into `ChangeGroupDescription` command.
+//
+message GoogleGroupLifecycle {
+    option (entity).kind = PROCESS_MANAGER;
+
+    // An internal identifier of the group.
+    //
+    // Please use `GoogleIdMappingView` projection to match `google_id` and `id`.
+    //
+    GroupId id = 1;
+}
+
+// Maps a Google Group ID as obtained from Google Directory ID to corresponding
+// `GroupId` of the Users context.
+message IdMap {
+    option (entity).kind = PROJECTION;
+
+    // Singleton value, which must be of value `IdMap`.
+    string id = 1;
+
+    // A mapping of a single Google Group ID to a single `GroupId`.
+    //
+    // The key is a value of `GoogleGroupId`.
+    map<string, GroupId> groups = 2;
+}

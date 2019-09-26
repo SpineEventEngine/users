@@ -18,6 +18,24 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-apply from: "$projectDir/scripts/js.gradle"
+syntax = "proto3";
 
-apply from: deps.scripts.testArtifacts
+package spine.users.google;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.google";
+option java_outer_classname = "IdentifiersProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+// An identifier of a Google Group.
+//
+// Every `GoogleGroupId` has the corresponding `GroupId`.
+//
+message GoogleGroupId {
+
+    // The value of the ID.
+    string value = 1 [(required) = true];
+}

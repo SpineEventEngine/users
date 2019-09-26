@@ -28,8 +28,6 @@ import io.spine.server.entity.Repository;
 import io.spine.users.server.group.GroupMembershipPart;
 import io.spine.users.server.group.GroupPart;
 import io.spine.users.server.group.GroupRolesPropagationRepository;
-import io.spine.users.server.group.google.GoogleGroupLifecyclePm;
-import io.spine.users.server.group.google.GoogleIdMappingRepository;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
@@ -51,7 +49,7 @@ public final class UsersContext {
     public static final String NAME = "Users";
 
     /**
-     * Prevents instantiation of this factory.
+     * Prevents instantiation of this static factory.
      */
     private UsersContext() {
     }
@@ -81,9 +79,7 @@ public final class UsersContext {
                 .add(OrganizationAggregate.class)
                 .add(GroupPart.class)
                 .add(GroupMembershipPart.class)
-                .add(new GroupRolesPropagationRepository())
-                .add(GoogleGroupLifecyclePm.class)
-                .add(new GoogleIdMappingRepository());
+                .add(new GroupRolesPropagationRepository());
         if (directoryFactory != null) {
             builder.add(new SignInRepository(directoryFactory, userPartRepo));
         }
