@@ -35,67 +35,63 @@ import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// A new group was created.
-//
+// The new group was created.
 message GroupCreated {
 
     GroupId id = 1;
 
-    // A name of a group to display on UI.
+    // The name of the group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // A human-friendly description of a group.
+    // Human-friendly description of the group.
     string description = 3;
 
-    // An entity a group belongs to.
+    // The entity the group belongs to.
     oneof origin {
 
-        // An organization or orgunit in one of the tenant's domains.
+        // The organization or org. unit in one of the tenant's domains.
         OrganizationOrUnit org_entity = 4;
 
-        // An external domain.
+        //TODO:2019-09-30:alexander.yevsyukov: What is this?
+        // The external domain.
         net.InternetDomain external_domain = 5;
     }
 
-    // An email address of the group, if applicable.
+    // The email address of the group, if available.
     net.EmailAddress email = 6;
 }
 
-// A group was moved to another organization or orgunit.
-//
+// The group was moved to another organization or org. unit.
 message GroupMoved {
 
     GroupId id = 1;
 
-    // A new parent entity in the organizational structure.
+    // New parent entity in the organizational structure.
     OrganizationOrUnit new_org_entity = 2 [(required) = true];
 
-    // The former parent entity in the organizational structure.
+    // Former parent entity in the organizational structure.
     OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }
 
-// A group joined a parent group, that is, became a member of another group.
-//
+// The group joined a parent group, that is, became a member of another group.
 message JoinedParentGroup {
 
     GroupId id = 1;
 
-    // An ID of the parent group.
+    // The ID of the parent group.
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// A group left a parent group.
-//
+// The group left its parent group.
 message LeftParentGroup {
 
     GroupId id = 1;
 
-    // An ID of the parent group.
+    // The ID of the parent group.
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// A new group was deleted.
-//
+// The group was deleted.
 message GroupDeleted {
 
     GroupId id = 1;
@@ -111,8 +107,7 @@ message RoleAssignedToGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// A role of a group was inherited by a user.
-//
+// The role of the group was inherited by a user.
 message RoleInheritedByUser {
 
     GroupId id = 1;
@@ -124,8 +119,7 @@ message RoleInheritedByUser {
     core.UserId user_id = 3 [(required) = true];
 }
 
-// A role assignment was removed from the group.
-//
+// The role assignment was removed from the group.
 message RoleUnassignedFromGroup {
 
     GroupId id = 1;
@@ -134,34 +128,32 @@ message RoleUnassignedFromGroup {
     RoleId role_id = 2 [(required) = true];
 }
 
-// A user disinherited the role of a group.
-//
+//TODO:2019-09-30:alexander.yevsyukov: Rename this event.
+// The user disinherited the role of a group.
 message RoleDisinheritedByUser {
 
     GroupId id = 1;
 
-    // An ID of the disinherited role.
+    // The ID of the disinherited role.
     RoleId role_id = 2 [(required) = true];
 
-    // An ID of the user disinherited the role.
+    // Tghe ID of the user disinherited the role.
     core.UserId user_id = 3 [(required) = true];
 }
 
-// A group was renamed.
-//
+// The group was renamed.
 message GroupRenamed {
 
     GroupId id = 1;
 
-    // A new name.
+    // The new name.
     string new_name = 2 [(required) = true];
 
-    // An old name.
+    // The previous name.
     string old_name = 3 [(required) = true];
 }
 
-// A group email address was changed.
-//
+// The group email address was changed.
 message GroupEmailChanged {
 
     GroupId id = 1;
@@ -173,15 +165,14 @@ message GroupEmailChanged {
     net.EmailAddress old_email = 3 [(required) = true];
 }
 
-// A group description changed.
-//
+// The group description changed.
 message GroupDescriptionChanged {
 
     GroupId id = 1;
 
-    // A new human-friendly description of a group.
+    // A new human-friendly description of the group.
     string new_description = 2 [(required) = true];
 
-    // An old human-friendly description of a group.
+    // An old human-friendly description of the group.
     string old_description = 3 [(required) = true];
 }
