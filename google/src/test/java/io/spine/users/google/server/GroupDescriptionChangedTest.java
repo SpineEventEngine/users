@@ -21,35 +21,37 @@
 package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
-import io.spine.users.google.event.GoogleGroupRenamed;
+import io.spine.users.google.event.GoogleGroupDescriptionChanged;
+import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.command.RenameGroup;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
-import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupRenamed;
+import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 
-@DisplayName("`GoogleGroupPm` should, when `GoogleGroupRenamed`")
-class GoogleGroupRenamedTest extends UsersContextTest {
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupDescriptionChanged`")
+@Disabled("Until new API is introduced")
+class GroupDescriptionChangedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to `RenameGroup` command")
+    @DisplayName("translate it to `ChangeGroupDescription` command")
     void testBeTranslated() {
         GroupId groupId = newGroupId();
         CreateGroup createGroup = createGroup(groupId);
-        GoogleGroupRenamed event = googleGroupRenamed(groupId);
-        RenameGroup expectedCmd = RenameGroup
+        GoogleGroupDescriptionChanged event = googleGroupDescriptionChanged(groupId);
+        ChangeGroupDescription expectedCmd = ChangeGroupDescription
                 .newBuilder()
                 .setId(groupId)
-                .setNewName(event.getDisplayName())
+                .setDescription(event.getNewDescription())
                 .build();
         context().receivesCommand(createGroup)
                  .receivesEvent(event)
                  .assertCommands()
-                 .withType(RenameGroup.class)
+                 .withType(ChangeGroupDescription.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);

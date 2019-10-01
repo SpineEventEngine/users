@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupLeftParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,7 @@ import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupLeftParentGroup;
 
 @DisplayName("`GoogleGroupPm` should, when `GoogleGroupLeftParentGroup` is dispatched to it,")
+@Disabled("Until new API is introduced")
 class GoogleGroupLeftGroupTest extends UsersContextTest {
 
     @Test

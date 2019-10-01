@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupEmailChanged;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,8 @@ import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGro
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 
 @DisplayName("`GoogleGroupPm` should, when `GoogleGroupEmailChanged`")
-class GoogleGroupEmailChangedTest extends UsersContextTest {
+@Disabled("Until new API is introduced")
+class GroupEmailChangedTest extends UsersContextTest {
 
     @Test
     @DisplayName("translate it to `ChangeGroupEmail` command")

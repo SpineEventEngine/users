@@ -21,30 +21,37 @@
 package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
-import io.spine.users.google.event.GoogleGroupDeleted;
-import io.spine.users.group.command.DeleteGroup;
+import io.spine.users.google.event.GoogleGroupRenamed;
+import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.command.RenameGroup;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
-import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupDeleted;
+import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupRenamed;
+import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
 
-@DisplayName("`GoogleGroupPm` should, when GoogleGroupDeleted")
-class GoogleGroupDeletedTest extends UsersContextTest {
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupRenamed`")
+@Disabled("Until new API is introduced")
+class GroupRenamedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to `DeleteGroup` command")
+    @DisplayName("translate it to `RenameGroup` command")
     void testBeTranslated() {
         GroupId groupId = newGroupId();
-        GoogleGroupDeleted event = googleGroupDeleted(groupId);
-        DeleteGroup expectedCmd = DeleteGroup
+        CreateGroup createGroup = createGroup(groupId);
+        GoogleGroupRenamed event = googleGroupRenamed(groupId);
+        RenameGroup expectedCmd = RenameGroup
                 .newBuilder()
                 .setId(groupId)
+                .setNewName(event.getDisplayName())
                 .build();
-        context().receivesEvent(event)
+        context().receivesCommand(createGroup)
+                 .receivesEvent(event)
                  .assertCommands()
-                 .withType(DeleteGroup.class)
+                 .withType(RenameGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);

@@ -20,31 +20,36 @@
 
 package io.spine.users.google.server;
 
-import io.spine.users.google.event.GoogleGroupCreated;
-import io.spine.users.google.IdMap;
+import io.spine.users.GroupId;
+import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
+import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.google.server.given.GoogleIdMappingTestEvents.googleGroupCreated;
+import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
+import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupJoinedParentGroup;
 
-@DisplayName("`GoogleIdMappingProjection` should")
-class GoogleIdMappingProjectionTest extends UsersContextTest {
+@DisplayName("`GoogleGroupPm` should, when `GoogleGroupJoinedParentGroup`")
+@Disabled("Until new API is introduced")
+class GroupJoinedGroupTest extends UsersContextTest {
 
     @Test
-    @DisplayName("store `GoogleId`-`GroupId` pair when the Google group is created")
-    void testPair() {
-        GoogleGroupCreated event = googleGroupCreated();
-        IdMap expectedState = IdMap
+    @DisplayName("translate it to JoinParentGroup command")
+    void testBeTranslated() {
+        GroupId groupId = newGroupId();
+        GoogleGroupJoinedParentGroup event = googleGroupJoinedParentGroup(groupId);
+        JoinParentGroup expectedCmd = JoinParentGroup
                 .newBuilder()
-                .setId(IdMapping.ID)
-                .putGroups(event.getGoogleId()
-                                .getValue(), event.getId())
+                .setId(groupId)
+                .setParentGroupId(event.getNewParentId())
                 .build();
         context().receivesEvent(event)
-                 .assertEntityWithState(IdMap.class, expectedState.getId())
-                 .hasStateThat()
+                 .assertCommands()
+                 .withType(JoinParentGroup.class)
+                 .message(0)
                  .comparingExpectedFieldsOnly()
-                 .isEqualTo(expectedState);
+                 .isEqualTo(expectedCmd);
     }
 }

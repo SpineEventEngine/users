@@ -36,7 +36,8 @@ import static io.spine.users.google.server.given.GoogleGroupTestEvents.externalG
 import static io.spine.users.google.server.given.GoogleGroupTestEvents.internalGoogleGroupCreated;
 
 @DisplayName("`GoogleGroupPm` should, when")
-class GoogleGroupCreatedTest extends UsersContextTest {
+@Disabled("Until new API is introduced")
+class GroupCreatedTest extends UsersContextTest {
 
     private static final GroupId GROUP_ID = newGroupId();
 

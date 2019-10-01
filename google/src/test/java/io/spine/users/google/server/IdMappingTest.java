@@ -20,38 +20,33 @@
 
 package io.spine.users.google.server;
 
-import io.spine.users.GroupId;
-import io.spine.users.google.event.GoogleGroupDescriptionChanged;
-import io.spine.users.group.command.ChangeGroupDescription;
-import io.spine.users.group.command.CreateGroup;
+import io.spine.users.google.event.GoogleGroupCreated;
+import io.spine.users.google.IdMap;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
-import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
-import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.google.server.given.GoogleIdMappingTestEvents.googleGroupCreated;
 
-@DisplayName("`GoogleGroupPm` should, when `GoogleGroupDescriptionChanged`")
-class GoogleGroupDescriptionChangedTest extends UsersContextTest {
+@DisplayName("`GoogleIdMappingProjection` should")
+@Disabled("Until new API is introduced")
+class IdMappingTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to `ChangeGroupDescription` command")
-    void testBeTranslated() {
-        GroupId groupId = newGroupId();
-        CreateGroup createGroup = createGroup(groupId);
-        GoogleGroupDescriptionChanged event = googleGroupDescriptionChanged(groupId);
-        ChangeGroupDescription expectedCmd = ChangeGroupDescription
+    @DisplayName("store `GoogleId`-`GroupId` pair when the Google group is created")
+    void testPair() {
+        GoogleGroupCreated event = googleGroupCreated();
+        IdMap expectedState = IdMap
                 .newBuilder()
-                .setId(groupId)
-                .setDescription(event.getNewDescription())
+                .setId(IdMapping.ID)
+                .putGroups(event.getGoogleId()
+                                .getValue(), event.getId())
                 .build();
-        context().receivesCommand(createGroup)
-                 .receivesEvent(event)
-                 .assertCommands()
-                 .withType(ChangeGroupDescription.class)
-                 .message(0)
+        context().receivesEvent(event)
+                 .assertEntityWithState(IdMap.class, expectedState.getId())
+                 .hasStateThat()
                  .comparingExpectedFieldsOnly()
-                 .isEqualTo(expectedCmd);
+                 .isEqualTo(expectedState);
     }
 }

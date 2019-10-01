@@ -21,31 +21,32 @@
 package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
-import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.google.event.GoogleGroupDeleted;
+import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.server.UsersContextTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
-import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupJoinedParentGroup;
+import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupDeleted;
 
-@DisplayName("`GoogleGroupPm` should, when `GoogleGroupJoinedParentGroup`")
-class GoogleGroupJoinedGroupTest extends UsersContextTest {
+@DisplayName("`GoogleGroupPm` should, when GoogleGroupDeleted")
+@Disabled("Until new API is introduced")
+class GroupDeletedTest extends UsersContextTest {
 
     @Test
-    @DisplayName("translate it to JoinParentGroup command")
+    @DisplayName("translate it to `DeleteGroup` command")
     void testBeTranslated() {
         GroupId groupId = newGroupId();
-        GoogleGroupJoinedParentGroup event = googleGroupJoinedParentGroup(groupId);
-        JoinParentGroup expectedCmd = JoinParentGroup
+        GoogleGroupDeleted event = googleGroupDeleted(groupId);
+        DeleteGroup expectedCmd = DeleteGroup
                 .newBuilder()
                 .setId(groupId)
-                .setParentGroupId(event.getNewParentId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
-                 .withType(JoinParentGroup.class)
+                 .withType(DeleteGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);
