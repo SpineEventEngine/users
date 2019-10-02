@@ -37,10 +37,13 @@ import io.spine.client.grpc.SubscriptionServiceGrpc;
 import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceBlockingStub;
 import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceStub;
 import io.spine.core.Command;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -59,20 +62,44 @@ public class Client implements AutoCloseable {
     private final SubscriptionServiceStub subscriptionService;
     private final SubscriptionServiceBlockingStub blockingSubscriptionService;
 
-    public Client(String host, int port) {
-        this.channel = initChannel(host, port);
+    /**
+     * Creates a builder for a client connected to the specified address.
+     *
+     * <p>The returned builder will create {@code ManagedChannel} with the default configuration.
+     * For a channel with custom configuration please use {@link #usingChannel(ManagedChannel)}.
+     *
+     * @see #usingChannel(ManagedChannel)
+     */
+    public static Builder connectTo(String host, int port) {
+        checkNotEmptyOrBlank(host);
+        return new Builder(host, port);
+    }
+
+    /**
+     * Creates a builder for a client which will use the passed channel for the communication
+     * with the backend services.
+     *
+     * <p>Use this method when a channel with custom configuration is needed for your client
+     * application.
+     *
+     * @see #connectTo(String, int)
+     * @see ManagedChannel
+     */
+    public static Builder usingChannel(ManagedChannel channel) {
+        checkNotNull(channel);
+        return new Builder(channel);
+    }
+
+    /**
+     * Creates a new client which uses the passed channel for communications
+     * with the backend services.
+     */
+    private Client(ManagedChannel channel) {
+        this.channel = checkNotNull(channel);
         this.commandService = CommandServiceGrpc.newBlockingStub(channel);
         this.queryService = QueryServiceGrpc.newBlockingStub(channel);
         this.subscriptionService = SubscriptionServiceGrpc.newStub(channel);
         this.blockingSubscriptionService = SubscriptionServiceGrpc.newBlockingStub(channel);
-    }
-
-    private static ManagedChannel initChannel(String host, int port) {
-        ManagedChannel result = ManagedChannelBuilder
-                .forAddress(host, port)
-                .usePlaintext()
-                .build();
-        return result;
     }
 
     /**
@@ -99,7 +126,7 @@ public class Client implements AutoCloseable {
      * @param <M>
      *         the type of the result messages
      * @return the activated subscription
-     * @see #unSubscribe(Subscription)
+     * @see #cancel(Subscription)
      */
     public <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
         Subscription subscription = blockingSubscriptionService.subscribe(topic);
@@ -112,8 +139,8 @@ public class Client implements AutoCloseable {
      *
      * @see #subscribeTo(Topic, StreamObserver)
      */
-    public void unSubscribe(Subscription subscription) {
-        blockingSubscriptionService.cancel(subscription);
+    public void cancel(Subscription s) {
+        blockingSubscriptionService.cancel(s);
     }
 
     /**
@@ -134,5 +161,53 @@ public class Client implements AutoCloseable {
                 .map(EntityStateWithVersion::getState)
                 .collect(toList());
         return result;
+    }
+
+    /**
+     * The builder for the client.
+     */
+    public static final class Builder {
+
+        /**
+         * The channel to be used in the client.
+         */
+        private ManagedChannel channel;
+
+        /**
+         * The address of the host which will be used for creating an instance
+         * of {@code ManagedChannel}.
+         *
+         * <p>This field is {@code null} if the builder is created using already made
+         * {@code ManagedChannel}.
+         */
+        private @MonotonicNonNull String host;
+        private int port;
+
+        private Builder(ManagedChannel channel) {
+            this.channel = checkNotNull(channel);
+        }
+
+        private Builder(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
+
+        private static ManagedChannel createChannel(String host, int port) {
+            ManagedChannel result = ManagedChannelBuilder
+                    .forAddress(host, port)
+                    .build();
+            return result;
+        }
+
+        /**
+         * Creates a new instance of the client.
+         */
+        public Client build() {
+            if (channel == null) {
+                checkNotNull(host, "Either channel or host must be specified.");
+                channel = createChannel(host, port);
+            }
+            return new Client(channel);
+        }
     }
 }

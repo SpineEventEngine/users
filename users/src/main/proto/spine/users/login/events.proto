@@ -20,33 +20,33 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.signin;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.login.event";
+option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/core/user_id.proto";
+import "spine/users/user/identity.proto";
+import "spine/users/person_profile.proto";
 
-// Information about a human user of the application.
-//
-// Contents of this message are usually obtained from a user directory.
-//
-message PersonProfile {
+// The user is logged in to the application.
+message UserLoggedIn {
 
-    // The primary email address of the user which may be used by the application
-    // for communicating with the user.
-    net.EmailAddress email = 1;
+    // The ID of the user obtained from the login process.
+    //
+    // This is the identifier of the user in the application,
+    // NOT an ID obtained from a federated authentication or a directory service.
+    //
+    core.UserId id = 1;
 
-    // A name of the person, if available.
-    people.PersonName name = 2;
+    // The identity of the user checked by the authentication service.
+    Identity identity = 2 [(required) = true];
 
-    // The URL to the user's profile picture, if available.
-    net.Url avatar = 3;
+    // Information about the logged in user. Populated if the user is a human, not a computer.
+    PersonProfile user = 3;
 }

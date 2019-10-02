@@ -20,33 +20,37 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.login;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
-option java_outer_classname = "UserProfileProto";
+option java_package = "io.spine.users.login.command";
+option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/email_address.proto";
-import "spine/net/url.proto";
-import "spine/people/person_name.proto";
+import "spine/core/user_id.proto";
+import "spine/users/user/identity.proto";
 
-// Information about a human user of the application.
+// Log in the user with the passed identity.
 //
-// Contents of this message are usually obtained from a user directory.
+// The identity contains information obtained from the authentication service, after
+// the user was logged in by this service.
 //
-message PersonProfile {
+message LogUserIn {
 
-    // The primary email address of the user which may be used by the application
-    // for communicating with the user.
-    net.EmailAddress email = 1;
+    // Identity of the user obtained from the authentication service.
+    Identity identity = 1 [(validate) = true];
+}
 
-    // A name of the person, if available.
-    people.PersonName name = 2;
+// Log out the user with the specified ID.
+message LogUserOut {
 
-    // The URL to the user's profile picture, if available.
-    net.Url avatar = 3;
+    // The ID of the user obtained from the login process.
+    //
+    // This is the identifier of the user in the application,
+    // NOT an ID obtained during authentication or from a directory service.
+    //
+    core.UserId id = 1;
 }
