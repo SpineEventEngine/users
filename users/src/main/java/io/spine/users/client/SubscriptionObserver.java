@@ -39,12 +39,12 @@ import static io.spine.protobuf.AnyPacker.unpack;
  * @param <M>
  *         the type of the delegate observer messages
  */
-final class SubscriptionUpdateObserver<M extends Message>
+final class SubscriptionObserver<M extends Message>
         implements StreamObserver<SubscriptionUpdate> {
 
     private final StreamObserver<M> delegate;
 
-    SubscriptionUpdateObserver(StreamObserver<M> targetObserver) {
+    SubscriptionObserver(StreamObserver<M> targetObserver) {
         this.delegate = targetObserver;
     }
 

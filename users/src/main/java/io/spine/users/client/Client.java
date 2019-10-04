@@ -130,7 +130,7 @@ public class Client implements AutoCloseable {
      */
     public <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
         Subscription subscription = blockingSubscriptionService.subscribe(topic);
-        subscriptionService.activate(subscription, new SubscriptionUpdateObserver<>(observer));
+        subscriptionService.activate(subscription, new SubscriptionObserver<>(observer));
         return subscription;
     }
 
