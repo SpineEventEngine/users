@@ -20,16 +20,10 @@
 
 package io.spine.users.client;
 
-import com.google.protobuf.Descriptors;
-import com.google.protobuf.Descriptors.Descriptor;
 import io.spine.client.ActorRequestFactory;
 import io.spine.core.TenantId;
 import io.spine.core.UserId;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Utility class for client-side operations.
@@ -41,39 +35,6 @@ public final class Util {
 
     /** Prevents instantiation of this utility class. */
     private Util() {
-    }
-
-    /**
-     * Obtains the name of the field with the passed number in the message type specified
-     * by the passed descriptor.
-     *
-     * @param fieldNumber
-     *         the number of the field as defined in the proto message
-     * @param descriptor
-     *         the descriptor of the message
-     * @return the name of the field
-     * @throws IllegalStateException
-     *         if there is no field with the passed number in this message type
-     * @apiNote
-     *  This is temporary implementation, which later should migrate to be a part of
-     *  {@link io.spine.base.Field} class as a static factory method
-     *  {@code withNumberIn(int, Descriptor)}.
-     */
-    public static String fieldWithNumber(int fieldNumber, Descriptor descriptor) {
-        checkArgument(fieldNumber > 0);
-        checkNotNull(descriptor);
-        String result = descriptor
-                .getFields()
-                .stream()
-                .filter(f -> f.getIndex() == fieldNumber)
-                .findFirst()
-                .map(Descriptors.FieldDescriptor::getName)
-                .orElseThrow(() -> newIllegalStateException(
-                        "Unable to find the field with the index %d in the type `%s`.",
-                        fieldNumber,
-                        descriptor.getFullName()
-                ));
-        return result;
     }
 
     /**

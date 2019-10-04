@@ -22,6 +22,7 @@ package io.spine.users.client;
 
 import io.grpc.stub.StreamObserver;
 import io.spine.base.CommandMessage;
+import io.spine.base.Field;
 import io.spine.client.ActorRequestFactory;
 import io.spine.client.Subscription;
 import io.spine.client.Topic;
@@ -40,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
 import static io.spine.client.Filters.eq;
-import static io.spine.users.client.Util.fieldWithNumber;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -98,7 +98,7 @@ public final class Session implements AutoCloseable, Logging {
 
     private void subscribeToLoginEvent(Identity identity) {
         String fieldName =
-                fieldWithNumber(UserLoggedIn.IDENTITY_FIELD_NUMBER, UserLoggedIn.getDescriptor());
+                Field.nameOf(UserLoggedIn.IDENTITY_FIELD_NUMBER, UserLoggedIn.getDescriptor());
         Topic topic =
                 systemRequests.topic()
                               .select(UserLoggedIn.class)

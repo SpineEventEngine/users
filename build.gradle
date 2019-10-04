@@ -32,6 +32,13 @@ buildscript { final scriptHandler ->
         classpath "io.spine.tools:spine-proto-js-plugin:$spineBaseVersion"
     }
 
+    configurations.all {
+        resolutionStrategy {
+            force(
+                    "io.spine:spine-base:$spineBaseVersion"
+            )
+        }
+    }
     forceConfiguration(scriptHandler)
 }
 
@@ -58,12 +65,21 @@ ext {
 
 subprojects {
 
+    configurations.all {
+        resolutionStrategy {
+            force(
+                    "io.spine:spine-base:$spineBaseVersion"
+            )
+        }
+    }
+
     forceConfiguration(project)
     configurations {
         // Avoid collisions of Java classes defined both in `protobuf-lite` and `protobuf-java`
         runtime.exclude group: "com.google.protobuf", module: "protobuf-lite"
         testRuntime.exclude group: "com.google.protobuf", module: "protobuf-lite"
     }
+
 
     project.ext {
         sourcesRootDir = "$projectDir/src"
