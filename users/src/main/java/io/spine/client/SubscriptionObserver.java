@@ -18,14 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.client;
+package io.spine.client;
 
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
-import io.spine.client.EntityStateUpdate;
-import io.spine.client.SubscriptionUpdate;
+import io.spine.core.Event;
 
 import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.util.Exceptions.unsupported;
 
 /**
  * A {@link StreamObserver} of {@link SubscriptionUpdate} messages translating the message
@@ -51,12 +51,28 @@ final class SubscriptionObserver<M extends Message>
     @SuppressWarnings("unchecked") // Logically correct.
     @Override
     public void onNext(SubscriptionUpdate value) {
-        value.getEntityUpdates()
-             .getUpdateList()
-             .stream()
-             .map(EntityStateUpdate::getState)
-             .map(any -> (M) unpack(any))
-             .forEach(delegate::onNext);
+        SubscriptionUpdate.UpdateCase updateCase = value.getUpdateCase();
+        switch (updateCase) {
+            case ENTITY_UPDATES:
+                value.getEntityUpdates()
+                     .getUpdateList()
+                     .stream()
+                     .map(EntityStateUpdate::getState)
+                     .map(any -> (M) unpack(any))
+                     .forEach(delegate::onNext);
+                break;
+            case EVENT_UPDATES:
+                value.getEventUpdates()
+                     .getEventList()
+                     .stream()
+                     .map(Event::enclosedMessage)
+                     .map(e -> (M) e)
+                     .forEach(delegate::onNext);
+                break;
+            case UPDATE_NOT_SET:
+            default:
+                throw unsupported("Unsupported update case `%s`.", updateCase);
+        }
     }
 
     @Override

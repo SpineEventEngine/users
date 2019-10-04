@@ -24,6 +24,7 @@ import io.grpc.stub.StreamObserver;
 import io.spine.base.CommandMessage;
 import io.spine.base.Field;
 import io.spine.client.ActorRequestFactory;
+import io.spine.client.Client;
 import io.spine.client.Subscription;
 import io.spine.client.Topic;
 import io.spine.core.Command;
