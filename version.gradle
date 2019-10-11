@@ -34,7 +34,7 @@ final def VERSION_TO_PUBLISH = '0.0.2-SNAPSHOT'
 
 ext {
     spineBaseVersion = '1.1.4'
-    spineVersion = SPINE_VERSION
+    spineVersion = '1.1.5'
     versionToPublish = VERSION_TO_PUBLISH
     versionToPublishJs = VERSION_TO_PUBLISH
 }

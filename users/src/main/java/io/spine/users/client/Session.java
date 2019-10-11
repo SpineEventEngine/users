@@ -54,7 +54,6 @@ public final class Session implements AutoCloseable, Logging {
 
     private final @Nullable TenantId tenant;
     private final Client client;
-    private final ActorRequestFactory systemRequests;
     private @Nullable ActorRequestFactory requestFactory;
 
     /**
@@ -68,7 +67,6 @@ public final class Session implements AutoCloseable, Logging {
     public Session(@Nullable TenantId tenant, Client client) {
         this.tenant = tenant;
         this.client = checkNotNull(client);
-        this.systemRequests = Util.systemRequestFactoryFor(getClass(), tenant);
     }
 
     /**
@@ -100,11 +98,11 @@ public final class Session implements AutoCloseable, Logging {
     private void subscribeToLoginEvent(Identity identity) {
         String fieldName =
                 Field.nameOf(UserLoggedIn.IDENTITY_FIELD_NUMBER, UserLoggedIn.getDescriptor());
-        Topic topic =
-                systemRequests.topic()
-                              .select(UserLoggedIn.class)
-                              .where(eq(fieldName, identity))
-                              .build();
+        Topic topic = client.systemRequests()
+                            .topic()
+                            .select(UserLoggedIn.class)
+                            .where(eq(fieldName, identity))
+                            .build();
         //TODO:2019-10-02:alexander.yevsyukov: Encapsulate subscription and waiting.
         LoginObserver observer = new LoginObserver();
         Subscription loginSubscription = client.subscribeTo(topic, observer);
@@ -125,7 +123,7 @@ public final class Session implements AutoCloseable, Logging {
                 .newBuilder()
                 .setId(user)
                 .build();
-        client.postCommand(systemCommand(logOut));
+        client.postSystemCommand(logOut);
         // We do not wait for the `UserLoggedOut` event because it is of no importance for the
         // session. We just do not allow posting requests after we requested logout from the server.
         requestFactory = null;
@@ -146,7 +144,7 @@ public final class Session implements AutoCloseable, Logging {
     }
 
     private Command systemCommand(CommandMessage c) {
-        Command result = systemRequests.command().create(c);
+        Command result = client.systemRequests().command().create(c);
         return result;
     }
 

@@ -25,6 +25,7 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import io.spine.base.CommandMessage;
 import io.spine.client.grpc.CommandServiceGrpc;
 import io.spine.client.grpc.CommandServiceGrpc.CommandServiceBlockingStub;
 import io.spine.client.grpc.QueryServiceGrpc;
@@ -33,13 +34,16 @@ import io.spine.client.grpc.SubscriptionServiceGrpc;
 import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceBlockingStub;
 import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceStub;
 import io.spine.core.Command;
+import io.spine.core.TenantId;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import static io.spine.validate.Validate.checkNotDefault;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -53,10 +57,12 @@ public class Client implements AutoCloseable {
     private static final int TIMEOUT = 10;
 
     private final ManagedChannel channel;
+    private final @Nullable TenantId tenant;
     private final QueryServiceBlockingStub queryService;
     private final CommandServiceBlockingStub commandService;
     private final SubscriptionServiceStub subscriptionService;
     private final SubscriptionServiceBlockingStub blockingSubscriptionService;
+    private final ActorRequestFactory systemRequests;
 
     /**
      * Creates a builder for a client connected to the specified address.
@@ -90,12 +96,14 @@ public class Client implements AutoCloseable {
      * Creates a new client which uses the passed channel for communications
      * with the backend services.
      */
-    private Client(ManagedChannel channel) {
-        this.channel = checkNotNull(channel);
+    private Client(Builder builder) {
+        this.channel = checkNotNull(builder.channel);
+        this.tenant = builder.tenant;
         this.commandService = CommandServiceGrpc.newBlockingStub(channel);
         this.queryService = QueryServiceGrpc.newBlockingStub(channel);
         this.subscriptionService = SubscriptionServiceGrpc.newStub(channel);
         this.blockingSubscriptionService = SubscriptionServiceGrpc.newBlockingStub(channel);
+        this.systemRequests = ActorRequestFactory.forSystemRequests(getClass(), tenant);
     }
 
     /**
@@ -109,6 +117,10 @@ public class Client implements AutoCloseable {
         } catch (InterruptedException e) {
             throw illegalStateWithCauseOf(e);
         }
+    }
+
+    public ActorRequestFactory systemRequests() {
+        return systemRequests;
     }
 
     /**
@@ -147,6 +159,22 @@ public class Client implements AutoCloseable {
     }
 
     /**
+     * Allows to subscribe to the events that the passed command produces.
+     */
+    public EventSubscriptionsBuilder forCommand(Command c) {
+        checkNotNull(c);
+        return new EventSubscriptionsBuilder(client, c);
+    }
+
+    /**
+     * Creates and posts a command for the passed system command message.
+     */
+    public void postSystemCommand(CommandMessage c) {
+        Command command = systemRequests.command().create(c);
+        postCommand(command);
+    }
+
+    /**
      * Queries the read-side with the specified query.
      */
     public List<Any> query(Query query) {
@@ -166,6 +194,9 @@ public class Client implements AutoCloseable {
 
         /**
          * The channel to be used in the client.
+         *
+         * <p>If not set directly, the channel will be created using the assigned host and port
+         * values.
          */
         private ManagedChannel channel;
 
@@ -178,6 +209,13 @@ public class Client implements AutoCloseable {
          */
         private @MonotonicNonNull String host;
         private int port;
+
+        /**
+         * The ID of the tenant in a multi-tenant application.
+         *
+         * <p>Is {@code null} in single-tenant applications.
+         */
+        private @Nullable TenantId tenant;
 
         private Builder(ManagedChannel channel) {
             this.channel = checkNotNull(channel);
@@ -196,6 +234,19 @@ public class Client implements AutoCloseable {
         }
 
         /**
+         * Assigns the tenant for the client connection to be built.
+         *
+         * <p>This method should be called only in multi-tenant applications.
+         *
+         * @param tenant
+         *          a non-null ID of the tenant
+         */
+        public Builder forTenant(TenantId tenant) {
+            this.tenant = checkNotNull(tenant);
+            return this;
+        }
+
+        /**
          * Creates a new instance of the client.
          */
         public Client build() {
@@ -203,7 +254,7 @@ public class Client implements AutoCloseable {
                 checkNotNull(host, "Either channel or host must be specified.");
                 channel = createChannel(host, port);
             }
-            return new Client(channel);
+            return new Client(this);
         }
     }
 }
