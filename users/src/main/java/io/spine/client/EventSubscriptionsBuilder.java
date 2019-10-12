@@ -65,7 +65,7 @@ public final class EventSubscriptionsBuilder {
     }
 
     /**
-     * Adds the passed bi-consumer to the subscribers of the event of the passed type.
+     * Adds the passed event consumer to the subscribers of the event of the passed type.
      *
      * @param type
      *          the type of the event message to be received by the consumer
