@@ -37,8 +37,6 @@ import io.spine.users.login.event.UserLoggedIn;
 import io.spine.users.user.Identity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
 import static io.spine.client.Filters.eq;
