@@ -23,11 +23,9 @@ package io.spine.client;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
-import io.spine.core.EventContext;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,7 +39,7 @@ public final class EventSubscriptionsBuilder {
     private final Command command;
 
     private final
-    Map<Class<? extends EventMessage>, BiConsumer<? extends EventMessage, EventContext>>
+    Map<Class<? extends EventMessage>, EventConsumer<? extends EventMessage>>
             consumers = new HashMap<>();
 
     EventSubscriptionsBuilder(Client client, Command command) {
@@ -62,13 +60,8 @@ public final class EventSubscriptionsBuilder {
     public <E extends EventMessage> EventSubscriptionsBuilder
     observe(Class<E> type, Consumer<E> consumer) {
         checkNotNull(consumer);
-        consumers.put(type, toBiConsumer(consumer));
+        consumers.put(type, EventConsumer.fromConsumer(consumer));
         return this;
-    }
-
-    private static <E extends EventMessage>
-    BiConsumer<E, EventContext> toBiConsumer(Consumer<E> consumer) {
-        return (e, c) -> consumer.accept((E) e);
     }
 
     /**
@@ -82,7 +75,7 @@ public final class EventSubscriptionsBuilder {
      *          the type of the event
      */
     public <E extends EventMessage> EventSubscriptionsBuilder
-    observeWithContext(Class<E> type, BiConsumer<E, EventContext> consumer) {
+    observeWithContext(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
         consumers.put(type, consumer);
         return this;
@@ -101,7 +94,7 @@ public final class EventSubscriptionsBuilder {
     @CanIgnoreReturnValue
     private EventSubscription
     createSubscription(Class<? extends EventMessage> eventType,
-                       BiConsumer<? extends EventMessage, EventContext> consumer) {
+                       EventConsumer<? extends EventMessage> consumer) {
         return new EventSubscription(client, command, eventType, consumer);
     }
 }
