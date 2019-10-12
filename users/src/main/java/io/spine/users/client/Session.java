@@ -79,7 +79,7 @@ public final class Session implements AutoCloseable, Logging {
     /**
      * Logs in the user with the passed identity.
      */
-    public void logIn(Identity identity, long timeout, TimeUnit unit) {
+    public void logIn(Identity identity) {
         if (active()) {
             throw newIllegalStateException(
                     "The user with identity %s is already logged in.",

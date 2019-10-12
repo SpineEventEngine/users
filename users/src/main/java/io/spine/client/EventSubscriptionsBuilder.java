@@ -20,13 +20,12 @@
 
 package io.spine.client;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
 import io.spine.core.EventContext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -41,34 +40,68 @@ public final class EventSubscriptionsBuilder {
     private final Client client;
     private final Command command;
 
-    private final Map<? super EventMessage, Consumer<? extends EventMessage>>
+    private final
+    Map<Class<? extends EventMessage>, BiConsumer<? extends EventMessage, EventContext>>
             consumers = new HashMap<>();
-    private final Map<? extends EventMessage, BiConsumer<? extends EventMessage, EventContext>>
-            biConsumers = new HashMap<>();
 
     EventSubscriptionsBuilder(Client client, Command command) {
         this.client = client;
         this.command = command;
     }
 
+    /**
+     * Adds the passed consumer to the subscribers of the event of the passed type.
+     *
+     * @param type
+     *          the type of the event message to be received by the consumer
+     * @param consumer
+     *          the consumer
+     * @param <E>
+     *          the type of the event
+     */
     public <E extends EventMessage> EventSubscriptionsBuilder
     observe(Class<E> type, Consumer<E> consumer) {
+        checkNotNull(consumer);
+        consumers.put(type, toBiConsumer(consumer));
+        return this;
+    }
+
+    private static <E extends EventMessage>
+    BiConsumer<E, EventContext> toBiConsumer(Consumer<E> consumer) {
+        return (e, c) -> consumer.accept((E) e);
+    }
+
+    /**
+     * Adds the passed bi-consumer to the subscribers of the event of the passed type.
+     *
+     * @param type
+     *          the type of the event message to be received by the consumer
+     * @param consumer
+     *          the consumer of the event message and its context
+     * @param <E>
+     *          the type of the event
+     */
+    public <E extends EventMessage> EventSubscriptionsBuilder
+    observeWithContext(Class<E> type, BiConsumer<E, EventContext> consumer) {
         checkNotNull(consumer);
         consumers.put(type, consumer);
         return this;
     }
 
-    public <E extends EventMessage> EventSubscriptionsBuilder
-    observeWithContext(Class<E> type, BiConsumer<E, EventContext> consumer) {
-        checkNotNull(consumer);
-        biConsumers.add(consumer);
-        return this;
+    /**
+     * Creates subscriptions for all the consumers and then posts the command.
+     */
+    public void post() {
+        consumers.forEach(this::createSubscription);
+        client.postCommand(command);
     }
 
-    public void post() {
-        consumers.forEach(consumer -> new EventSubscription<?>(client, command));
-
-        //TODO:2019-10-11:alexander.yevsyukov: Subscribe to events using consumers and biconsumers.
-        client.postCommand(command);
+    @SuppressWarnings("unchecked")
+    /* The type of the event and is matched to the consumer when adding map entries. */
+    @CanIgnoreReturnValue
+    private EventSubscription
+    createSubscription(Class<? extends EventMessage> eventType,
+                       BiConsumer<? extends EventMessage, EventContext> consumer) {
+        return new EventSubscription(client, command, eventType, consumer);
     }
 }

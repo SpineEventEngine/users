@@ -68,6 +68,19 @@ final class EventSubscription<E extends EventMessage> implements Logging {
         this(client, command, eventType, (e, context) -> listener.accept(e));
     }
 
+    /**
+     * Obtains the path to the "context.past_message" field of {@code Event}.
+     *
+     * <p>This method is safer than using a string constant because it relies on field numbers,
+     * rather than names (that might be changed).
+     */
+    private static String pastMessageField() {
+        Field context = Field.withNumberIn(Event.CONTEXT_FIELD_NUMBER, Event.getDescriptor());
+        Field pastMessage = Field.withNumberIn(EventContext.PAST_MESSAGE_FIELD_NUMBER,
+                                               EventContext.getDescriptor());
+        return format("%s.%s", context.toString(), pastMessage.toString());
+    }
+
     private Subscription subscribeToEventsOf(Command command) {
         Topic topic = allEventsOf(command);
         return client.subscribeTo(topic, new EventObserver());
@@ -88,19 +101,6 @@ final class EventSubscription<E extends EventMessage> implements Logging {
     }
 
     /**
-     * Obtains the path to the "context.past_message" field of {@code Event}.
-     *
-     * <p>This method is safer than using a string constant because it relies on field numbers,
-     * rather than names (that might be changed).
-     */
-    private static String pastMessageField() {
-        Field context = Field.withNumberIn(Event.CONTEXT_FIELD_NUMBER, Event.getDescriptor());
-        Field pastMessage = Field.withNumberIn(EventContext.PAST_MESSAGE_FIELD_NUMBER,
-                                               EventContext.getDescriptor());
-        return format("%s.%s", context.toString(), pastMessage.toString());
-    }
-
-    /**
      * Passes the event to listener once the subscription is updated.
      */
     private final class EventObserver implements StreamObserver<Event> {
@@ -110,7 +110,7 @@ final class EventSubscription<E extends EventMessage> implements Logging {
             EventMessage eventMessage = e.enclosedMessage();
             if (eventType.isAssignableFrom(eventMessage.getClass())) {
                 @SuppressWarnings("unchecked") // protected by the subscription type
-                E cast = (E) eventMessage;
+                        E cast = (E) eventMessage;
                 listener.accept(cast, e.context());
             }
         }

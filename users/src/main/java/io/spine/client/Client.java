@@ -43,7 +43,6 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
-import static io.spine.validate.Validate.checkNotDefault;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -163,7 +162,7 @@ public class Client implements AutoCloseable {
      */
     public EventSubscriptionsBuilder forCommand(Command c) {
         checkNotNull(c);
-        return new EventSubscriptionsBuilder(client, c);
+        return new EventSubscriptionsBuilder(this, c);
     }
 
     /**
