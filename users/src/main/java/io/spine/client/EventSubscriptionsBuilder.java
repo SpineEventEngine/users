@@ -75,7 +75,7 @@ public final class EventSubscriptionsBuilder {
      *          the type of the event
      */
     public <E extends EventMessage> EventSubscriptionsBuilder
-    observeWithContext(Class<E> type, EventConsumer<E> consumer) {
+    observe(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
         consumers.put(type, consumer);
         return this;
