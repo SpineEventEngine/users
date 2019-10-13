@@ -39,6 +39,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
@@ -106,6 +107,14 @@ public class Client implements AutoCloseable {
     }
 
     /**
+     * Obtains the tenant of this client connection in a multitenant application,
+     * and empty {@code Optional} in a single-tenant one.
+     */
+    public Optional<TenantId> tenant() {
+        return Optional.ofNullable(tenant);
+    }
+
+    /**
      * Closes the client by shutting down the gRPC connection.
      */
     @Override
@@ -118,7 +127,7 @@ public class Client implements AutoCloseable {
         }
     }
 
-    public ActorRequestFactory systemRequests() {
+    ActorRequestFactory systemRequests() {
         return systemRequests;
     }
 
@@ -165,12 +174,22 @@ public class Client implements AutoCloseable {
         return new EventSubscriptionsBuilder(this, c);
     }
 
+    public EventSubscriptionsBuilder forSystemCommand(CommandMessage c) {
+        checkNotNull(c);
+        Command systemCommand = systemCommand(c);
+        return forCommand(systemCommand);
+    }
+
     /**
      * Creates and posts a command for the passed system command message.
      */
     public void postSystemCommand(CommandMessage c) {
-        Command command = systemRequests.command().create(c);
+        Command command = systemCommand(c);
         postCommand(command);
+    }
+
+    private Command systemCommand(CommandMessage c) {
+        return systemRequests.command().create(c);
     }
 
     /**

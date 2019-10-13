@@ -23,25 +23,29 @@ package io.spine.client;
 import io.spine.base.EventMessage;
 import io.spine.core.EventContext;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A consumer of an event message and its context.
- *
- * @param <E>
- *         the type of the event message
+ * Adapts a consumer of an event message to the {@link EventConsumer} interface.
  */
-@FunctionalInterface
-public interface EventConsumer<E extends EventMessage> extends BiConsumer<E, EventContext> {
+final class DelegatingEventConsumer<E extends EventMessage> implements EventConsumer<E> {
 
-    /**
-     * Converts the passed consumer of the event message to {@code EventConsumer}.
-     */
-    static <E extends EventMessage> EventConsumer<E> fromConsumer(Consumer<E> consumer) {
-        checkNotNull(consumer);
-        return new DelegatingEventConsumer<>(consumer);
+    private final Consumer<E> delegate;
+
+    DelegatingEventConsumer(Consumer<E> delegate) {
+        this.delegate = checkNotNull(delegate);
+    }
+
+    /** Obtains the consumer of the event message to which this consumer delegates. */
+    Consumer<E> delegate() {
+        return delegate;
+    }
+
+    /** Passes the event message to the associated consumer. */
+    @Override
+    public void accept(E e, EventContext context) {
+        delegate.accept(e);
     }
 }

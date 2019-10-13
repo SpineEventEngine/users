@@ -20,26 +20,22 @@
 
 package io.spine.users.client;
 
-import io.grpc.stub.StreamObserver;
 import io.spine.base.CommandMessage;
-import io.spine.base.Field;
 import io.spine.client.ActorRequestFactory;
 import io.spine.client.Client;
-import io.spine.client.Subscription;
-import io.spine.client.Topic;
-import io.spine.core.Command;
-import io.spine.core.TenantId;
-import io.spine.core.UserId;
+import io.spine.core.EventContext;
 import io.spine.logging.Logging;
+import io.spine.users.PersonProfile;
 import io.spine.users.login.command.LogUserIn;
 import io.spine.users.login.command.LogUserOut;
 import io.spine.users.login.event.UserLoggedIn;
 import io.spine.users.user.Identity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Optional;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
-import static io.spine.client.Filters.eq;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -50,20 +46,17 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  */
 public final class Session implements AutoCloseable, Logging {
 
-    private final @Nullable TenantId tenant;
     private final Client client;
     private @Nullable ActorRequestFactory requestFactory;
+    private @Nullable PersonProfile userProfile;
 
     /**
-     * Creates a client user session in a multi-tenant application.
+     * Creates a client user session.
      *
-     * @param tenant
-     *         the ID of the tenant in a multi-tenant application
      * @param client
-     *         the instance of the API for speaking with backend services
+     *         the instance of the API for speaking with the backend services of the application
      */
-    public Session(@Nullable TenantId tenant, Client client) {
-        this.tenant = tenant;
+    public Session(Client client) {
         this.client = checkNotNull(client);
     }
 
@@ -75,51 +68,66 @@ public final class Session implements AutoCloseable, Logging {
     }
 
     /**
-     * Logs in the user with the passed identity.
+     * Obtains the profile of the currently logged in user, or the profile the user
+     * who was last logged in.
      */
-    public void logIn(Identity identity) {
+    public Optional<PersonProfile> userProfile() {
+        return Optional.ofNullable(userProfile);
+    }
+
+    /**
+     * Request the log in of the user with the passed identity.
+     *
+     * <p>The method quits after the login command is posted.
+     * The user is logged in when the session becomes {@link #active()}.
+     *
+     * @see #logOut()
+     */
+    public void requestLogIn(Identity identity) {
         if (active()) {
             throw newIllegalStateException(
-                    "The user with identity %s is already logged in.",
+                    "The user with the identity `%s` is already logged in.",
                     shortDebugString(identity)
             );
         }
-        subscribeToLoginEvent(identity);
         CommandMessage logIn = LogUserIn
                 .newBuilder()
                 .setIdentity(identity)
                 .build();
-        client.postCommand(systemCommand(logIn));
-        //TODO:2019-10-02:alexander.yevsyukov: Wait till the arrival of the event.
+        client.forSystemCommand(logIn)
+              .observe(UserLoggedIn.class, this::handleLogin)
+              //TODO:2019-10-14:alexander.yevsyukov: Observe the rejection
+              // `UserAlreadyLoggedIn` which should also carry on the profile of the user.
+              // This is to handle the cases when a client app requests the login once again
+              // after the `LogOut` command was not handled by the server (for example, because
+              // the client failed to post it or a communication error occurred).
+              .post();
     }
 
-    private void subscribeToLoginEvent(Identity identity) {
-        String fieldName =
-                Field.nameOf(UserLoggedIn.IDENTITY_FIELD_NUMBER, UserLoggedIn.getDescriptor());
-        Topic topic = client.systemRequests()
-                            .topic()
-                            .select(UserLoggedIn.class)
-                            .where(eq(fieldName, identity))
-                            .build();
-        //TODO:2019-10-02:alexander.yevsyukov: Encapsulate subscription and waiting.
-        LoginObserver observer = new LoginObserver();
-        Subscription loginSubscription = client.subscribeTo(topic, observer);
-        observer.setSubscription(loginSubscription);
+    private void handleLogin(UserLoggedIn event, EventContext context) {
+        requestFactory = ActorRequestFactory
+                .newBuilder()
+                .setTenantId(client.tenant().orElse(null))
+                .setActor(event.getId())
+                .build();
+        userProfile = event.getUser();
     }
 
     /**
      * Logs out the user with the passed ID.
      *
-     * <p>After this method the session becomes {@link #active() inactive} and will not accept
-     * communication calls until
+     * <p>After this method quits the session becomes {@link #active() inactive} and will not accept
+     * communication calls until a user is logged in.
+     *
+     * @see #requestLogIn(Identity)
      */
-    public void logOut(UserId user) {
-        if (!active()) {
-            throw newIllegalStateException("The user `%s` is already logged out.", user.getValue());
+    public void logOut() {
+        if (requestFactory == null) {
+            throw newIllegalStateException("The user is already logged out.");
         }
         CommandMessage logOut = LogUserOut
                 .newBuilder()
-                .setId(user)
+                .setId(requestFactory.actor())
                 .build();
         client.postSystemCommand(logOut);
         // We do not wait for the `UserLoggedOut` event because it is of no importance for the
@@ -136,57 +144,8 @@ public final class Session implements AutoCloseable, Logging {
     @Override
     public void close() {
         if (active()) {
-            logOut(requestFactory.actor());
+            logOut();
         }
         client.close();
-    }
-
-    private Command systemCommand(CommandMessage c) {
-        Command result = client.systemRequests().command().create(c);
-        return result;
-    }
-
-    /**
-     * Creates {@code RequestsFactory} for the session when reciving {@link UserLoggedIn} event.
-     */
-    private final class LoginObserver implements StreamObserver<UserLoggedIn> {
-
-        private Subscription subscription;
-
-        /**
-         * Injects the instance of the subscription to be cancelled when the event is received.
-         */
-        private void setSubscription(Subscription subscription) {
-            this.subscription = checkNotNull(subscription);
-        }
-
-        @Override
-        public void onNext(UserLoggedIn value) {
-            UserId user = value.getId();
-            requestFactory = createRequestFactory(user);
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            _error().withCause(t)
-                    .log("Error notifying on the user logging in.");
-        }
-
-        /**
-         * Cancels the subscription to the event.
-         */
-        @Override
-        public void onCompleted() {
-            client.cancel(subscription);
-        }
-
-        private ActorRequestFactory createRequestFactory(UserId user) {
-            ActorRequestFactory result = ActorRequestFactory
-                    .newBuilder()
-                    .setTenantId(tenant)
-                    .setActor(user)
-                    .build();
-            return result;
-        }
     }
 }

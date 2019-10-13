@@ -24,8 +24,6 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -37,14 +35,12 @@ public final class EventSubscriptionsBuilder {
 
     private final Client client;
     private final Command command;
-
-    private final
-    Map<Class<? extends EventMessage>, EventConsumer<? extends EventMessage>>
-            consumers = new HashMap<>();
+    private final EventConsumers.Builder builder;
 
     EventSubscriptionsBuilder(Client client, Command command) {
         this.client = client;
         this.command = command;
+        this.builder = EventConsumers.newBuilder();
     }
 
     /**
@@ -60,7 +56,7 @@ public final class EventSubscriptionsBuilder {
     public <E extends EventMessage> EventSubscriptionsBuilder
     observe(Class<E> type, Consumer<E> consumer) {
         checkNotNull(consumer);
-        consumers.put(type, EventConsumer.fromConsumer(consumer));
+        builder.observe(type, consumer);
         return this;
     }
 
@@ -77,7 +73,7 @@ public final class EventSubscriptionsBuilder {
     public <E extends EventMessage> EventSubscriptionsBuilder
     observe(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
-        consumers.put(type, consumer);
+        builder.observe(type, consumer);
         return this;
     }
 
@@ -85,6 +81,7 @@ public final class EventSubscriptionsBuilder {
      * Creates subscriptions for all the consumers and then posts the command.
      */
     public void post() {
+        EventConsumers consumers = builder.build();
         consumers.forEach(this::createSubscription);
         client.postCommand(command);
     }
