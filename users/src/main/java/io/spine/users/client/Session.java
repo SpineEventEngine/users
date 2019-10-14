@@ -23,7 +23,6 @@ package io.spine.users.client;
 import io.spine.base.CommandMessage;
 import io.spine.client.ActorRequestFactory;
 import io.spine.client.Client;
-import io.spine.core.EventContext;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
 import io.spine.users.login.command.LogUserIn;
@@ -41,7 +40,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * A session of the user's work in a client-side application.
  *
- * <p>The session starts when the user logs-in into the application using a 3rd party auth.
+ * <p>The session starts when the user logs into the application using a 3rd-party auth.
  * service. The session is started using user credentials obtained upon successful authentication.
  */
 public final class Session implements AutoCloseable, Logging {
@@ -104,7 +103,7 @@ public final class Session implements AutoCloseable, Logging {
               .post();
     }
 
-    private void handleLogin(UserLoggedIn event, EventContext context) {
+    private void handleLogin(UserLoggedIn event) {
         requestFactory = ActorRequestFactory
                 .newBuilder()
                 .setTenantId(client.tenant().orElse(null))
