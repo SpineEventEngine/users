@@ -89,9 +89,9 @@ public final class EventSubscriptionsBuilder {
     @SuppressWarnings("unchecked")
     /* The type of the event and is matched to the consumer when adding map entries. */
     @CanIgnoreReturnValue
-    private EventSubscription
+    private EventAfterCommandSubscription
     createSubscription(Class<? extends EventMessage> eventType,
                        EventConsumer<? extends EventMessage> consumer) {
-        return new EventSubscription(client, command, eventType, consumer);
+        return new EventAfterCommandSubscription(client, command, eventType, consumer);
     }
 }

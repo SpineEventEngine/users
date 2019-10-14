@@ -28,44 +28,41 @@ import io.spine.core.Event;
 import io.spine.core.EventContext;
 import io.spine.logging.Logging;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
 import static io.spine.client.Filters.eq;
 import static java.lang.String.format;
 
 /**
- * Subscribes to an event which originates from the command with the given ID.
+ * Subscribes to events of the given type which originate from the given command.
  *
- * <p>Subscribes to the event by its type and removes the subscription once the event is
- * delivered.
+ * <p>If the command produces more than one event, all they will be delivered to the consumer
+ * of the subscription.
+ *
+ * <p>Once the events are delivered the subscription is cancelled. This done so because the
+ * subscription was made only for the passed command (which has a unique ID),
+ * and no more updates would be sent after ever.
  *
  * @param <E>
  *         the type of the event
  */
-final class EventSubscription<E extends EventMessage> implements Logging {
+final class EventAfterCommandSubscription<E extends EventMessage> implements Logging {
 
     private final Client client;
     private final Command command;
     private final Class<E> eventType;
     private final Subscription subscription;
-    private final BiConsumer<E, EventContext> listener;
+    private final EventConsumer<E> consumer;
 
-    EventSubscription(Client client,
-                      Command command,
-                      Class<E> eventType,
-                      BiConsumer<E, EventContext> listener) {
+    EventAfterCommandSubscription(Client client,
+                                  Command command,
+                                  Class<E> eventType,
+                                  EventConsumer<E> consumer) {
         this.client = checkNotNull(client);
         this.command = command;
         this.eventType = checkNotNull(eventType);
-        this.listener = checkNotNull(listener);
+        this.consumer = checkNotNull(consumer);
         this.subscription = subscribeToEventsOf(command);
-    }
-
-    EventSubscription(Client client, Command command, Class<E> eventType, Consumer<E> listener) {
-        this(client, command, eventType, (e, context) -> listener.accept(e));
     }
 
     /**
@@ -111,7 +108,7 @@ final class EventSubscription<E extends EventMessage> implements Logging {
             if (eventType.isAssignableFrom(eventMessage.getClass())) {
                 @SuppressWarnings("unchecked") // protected by the subscription type
                         E cast = (E) eventMessage;
-                listener.accept(cast, e.context());
+                consumer.accept(cast, e.context());
             }
         }
 
