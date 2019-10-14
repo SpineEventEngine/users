@@ -22,7 +22,6 @@ package io.spine.client;
 
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
-import io.spine.core.Event;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.util.Exceptions.unsupported;
@@ -37,7 +36,8 @@ import static io.spine.util.Exceptions.unsupported;
  * and sent to the delegate observer one by one.
  *
  * @param <M>
- *         the type of the delegate observer messages
+ *         the type of the delegate observer messages, which could be unpacked entity state
+ *         or {@code Event}
  */
 final class SubscriptionObserver<M extends Message>
         implements StreamObserver<SubscriptionUpdate> {
@@ -65,7 +65,6 @@ final class SubscriptionObserver<M extends Message>
                 value.getEventUpdates()
                      .getEventList()
                      .stream()
-                     .map(Event::enclosedMessage)
                      .map(e -> (M) e)
                      .forEach(delegate::onNext);
                 break;
