@@ -26,11 +26,14 @@ import io.spine.base.Field;
 import io.spine.core.Command;
 import io.spine.core.Event;
 import io.spine.core.EventContext;
+import io.spine.core.UserId;
 import io.spine.logging.Logging;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
 import static io.spine.client.Filters.eq;
+import static io.spine.validate.Validate.isDefault;
 import static java.lang.String.format;
 
 /**
@@ -49,16 +52,20 @@ import static java.lang.String.format;
 final class EventAfterCommandSubscription<E extends EventMessage> implements Logging {
 
     private final Client client;
+    private final UserId user;
     private final Command command;
     private final Class<E> eventType;
     private final Subscription subscription;
     private final EventConsumer<E> consumer;
 
     EventAfterCommandSubscription(Client client,
+                                  UserId user,
                                   Command command,
                                   Class<E> eventType,
                                   EventConsumer<E> consumer) {
         this.client = checkNotNull(client);
+        checkArgument(!isDefault(user));
+        this.user = user;
         this.command = command;
         this.eventType = checkNotNull(eventType);
         this.consumer = checkNotNull(consumer);
@@ -89,7 +96,7 @@ final class EventAfterCommandSubscription<E extends EventMessage> implements Log
     private Topic allEventsOf(Command c) {
         String fieldName = pastMessageField();
         Topic topic =
-                client.systemRequests()
+                client.onBehalfOf(user)
                       .topic()
                       .select(Event.class)
                       .where(eq(fieldName, c.asMessageOrigin()))

@@ -23,6 +23,7 @@ package io.spine.client;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
+import io.spine.core.UserId;
 
 import java.util.function.Consumer;
 
@@ -33,11 +34,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class EventSubscriptionsBuilder {
 
+    private final UserId user;
     private final Client client;
     private final Command command;
     private final EventConsumers.Builder builder;
 
-    EventSubscriptionsBuilder(Client client, Command command) {
+    EventSubscriptionsBuilder(Client client, UserId user, Command command) {
+        this.user = user;
         this.client = client;
         this.command = command;
         this.builder = EventConsumers.newBuilder();
@@ -92,6 +95,6 @@ public final class EventSubscriptionsBuilder {
     private EventAfterCommandSubscription
     createSubscription(Class<? extends EventMessage> eventType,
                        EventConsumer<? extends EventMessage> consumer) {
-        return new EventAfterCommandSubscription(client, command, eventType, consumer);
+        return new EventAfterCommandSubscription(client, user, command, eventType, consumer);
     }
 }

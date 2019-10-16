@@ -25,7 +25,6 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
-import io.spine.base.CommandMessage;
 import io.spine.client.grpc.CommandServiceGrpc;
 import io.spine.client.grpc.CommandServiceGrpc.CommandServiceBlockingStub;
 import io.spine.client.grpc.QueryServiceGrpc;
@@ -35,15 +34,18 @@ import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceBlockingS
 import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceStub;
 import io.spine.core.Command;
 import io.spine.core.TenantId;
+import io.spine.core.UserId;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import static io.spine.validate.Validate.isDefault;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -62,7 +64,7 @@ public class Client implements AutoCloseable {
     private final CommandServiceBlockingStub commandService;
     private final SubscriptionServiceStub subscriptionService;
     private final SubscriptionServiceBlockingStub blockingSubscriptionService;
-    private final ActorRequestFactory systemRequests;
+    private final UserId guestUser;
 
     /**
      * Creates a builder for a client connected to the specified address.
@@ -103,7 +105,7 @@ public class Client implements AutoCloseable {
         this.queryService = QueryServiceGrpc.newBlockingStub(channel);
         this.subscriptionService = SubscriptionServiceGrpc.newStub(channel);
         this.blockingSubscriptionService = SubscriptionServiceGrpc.newBlockingStub(channel);
-        this.systemRequests = ActorRequestFactory.forSystemRequests(getClass(), tenant);
+        this.guestUser = builder.guestUser;
     }
 
     /**
@@ -112,6 +114,14 @@ public class Client implements AutoCloseable {
      */
     public Optional<TenantId> tenant() {
         return Optional.ofNullable(tenant);
+    }
+
+    /**
+     * Obtains the ID of the user for performing requests on behalf of the user
+     * who is not logged in yet.
+     */
+    public UserId guestUser() {
+        return guestUser;
     }
 
     /**
@@ -127,8 +137,17 @@ public class Client implements AutoCloseable {
         }
     }
 
-    ActorRequestFactory systemRequests() {
-        return systemRequests;
+    /**
+     * Creates a new request factory for the requests to be sent on behalf of the passed user.
+     *
+     * <p>
+     */
+    public ActorRequestFactory onBehalfOf(UserId user) {
+        return ActorRequestFactory
+                .newBuilder()
+                .setTenantId(tenant)
+                .setActor(user)
+                .build();
     }
 
     /**
@@ -171,25 +190,11 @@ public class Client implements AutoCloseable {
      */
     public EventSubscriptionsBuilder forCommand(Command c) {
         checkNotNull(c);
-        return new EventSubscriptionsBuilder(this, c);
-    }
-
-    public EventSubscriptionsBuilder forSystemCommand(CommandMessage c) {
-        checkNotNull(c);
-        Command systemCommand = systemCommand(c);
-        return forCommand(systemCommand);
-    }
-
-    /**
-     * Creates and posts a command for the passed system command message.
-     */
-    public void postSystemCommand(CommandMessage c) {
-        Command command = systemCommand(c);
-        postCommand(command);
-    }
-
-    private Command systemCommand(CommandMessage c) {
-        return systemRequests.command().create(c);
+        UserId actor =
+                c.getContext()
+                 .getActorContext()
+                 .getActor();
+        return new EventSubscriptionsBuilder(this, actor, c);
     }
 
     /**
@@ -235,6 +240,11 @@ public class Client implements AutoCloseable {
          */
         private @Nullable TenantId tenant;
 
+        /** The ID of the user for performing requests on behalf of a non-logged in user. */
+        private UserId guestUser = UserId.newBuilder()
+                                         .setValue("guest")
+                                         .build();
+
         private Builder(ManagedChannel channel) {
             this.channel = checkNotNull(channel);
         }
@@ -262,6 +272,18 @@ public class Client implements AutoCloseable {
         public Builder forTenant(TenantId tenant) {
             this.tenant = checkNotNull(tenant);
             return this;
+        }
+
+        /**
+         * Assigns the ID of the user for performing requests on behalf of non-logged in user.
+         *
+         * <p>If the not set directly, the {@code UserId} withe value {@code "guest"} will be used.
+         */
+        public Builder withGuestId(UserId guestUser) {
+           checkNotNull(guestUser);
+           checkArgument(!isDefault(guestUser), "Guest user ID cannot be a default value.");
+           this.guestUser = guestUser;
+           return this;
         }
 
         /**

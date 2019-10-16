@@ -20,9 +20,9 @@
 
 package io.spine.users.client;
 
-import io.spine.base.CommandMessage;
-import io.spine.client.ActorRequestFactory;
 import io.spine.client.Client;
+import io.spine.core.Command;
+import io.spine.core.UserId;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
 import io.spine.users.login.command.LogUserIn;
@@ -46,7 +46,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 public final class Session implements AutoCloseable, Logging {
 
     private final Client client;
-    private @Nullable ActorRequestFactory requestFactory;
+    private @Nullable UserId user;
     private @Nullable PersonProfile userProfile;
 
     /**
@@ -63,7 +63,7 @@ public final class Session implements AutoCloseable, Logging {
      * Verifies if the user is logged into the application.
      */
     public boolean active() {
-        return requestFactory != null;
+        return user != null;
     }
 
     /**
@@ -85,15 +85,20 @@ public final class Session implements AutoCloseable, Logging {
     public void requestLogIn(Identity identity) {
         if (active()) {
             throw newIllegalStateException(
-                    "The user with the identity `%s` is already logged in.",
-                    shortDebugString(identity)
+                    "The user with the identity `%s` is already logged in with the id `%s`.",
+                    shortDebugString(identity),
+                    user.getValue()
             );
         }
-        CommandMessage logIn = LogUserIn
-                .newBuilder()
-                .setIdentity(identity)
-                .build();
-        client.forSystemCommand(logIn)
+
+        Command command =
+                client.onBehalfOf(client.guestUser())
+                      .command()
+                      .create(LogUserIn.newBuilder()
+                                       .setIdentity(identity)
+                                       .build());
+
+        client.forCommand(command)
               .observe(UserLoggedIn.class, this::handleLogin)
               //TODO:2019-10-14:alexander.yevsyukov: Observe the rejection
               // `UserAlreadyLoggedIn` which should also carry on the profile of the user.
@@ -104,12 +109,8 @@ public final class Session implements AutoCloseable, Logging {
     }
 
     private void handleLogin(UserLoggedIn event) {
-        requestFactory = ActorRequestFactory
-                .newBuilder()
-                .setTenantId(client.tenant().orElse(null))
-                .setActor(event.getId())
-                .build();
-        userProfile = event.getUser();
+        this.user  = event.getId();
+        this.userProfile = event.getUser();
     }
 
     /**
@@ -121,17 +122,20 @@ public final class Session implements AutoCloseable, Logging {
      * @see #requestLogIn(Identity)
      */
     public void logOut() {
-        if (requestFactory == null) {
+        UserId user = this.user;
+        if (user == null) {
             throw newIllegalStateException("The user is already logged out.");
         }
-        CommandMessage logOut = LogUserOut
-                .newBuilder()
-                .setId(requestFactory.actor())
-                .build();
-        client.postSystemCommand(logOut);
+        Command logOut =
+                client.onBehalfOf(user)
+                      .command()
+                      .create(LogUserOut.newBuilder()
+                                        .setId(user)
+                                        .build());
+        client.postCommand(logOut);
         // We do not wait for the `UserLoggedOut` event because it is of no importance for the
         // session. We just do not allow posting requests after we requested logout from the server.
-        requestFactory = null;
+        this.user = null;
     }
 
     /**
