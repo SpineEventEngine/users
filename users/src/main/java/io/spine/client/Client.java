@@ -120,7 +120,7 @@ public class Client implements AutoCloseable {
      * Obtains the ID of the user for performing requests on behalf of the user
      * who is not logged in yet.
      */
-    public UserId guestUser() {
+    private UserId guestUser() {
         return guestUser;
     }
 
@@ -140,7 +140,7 @@ public class Client implements AutoCloseable {
     /**
      * Creates a new request factory for the requests to be sent on behalf of the passed user.
      */
-    public ActorRequestFactory onBehalfOf(UserId user) {
+    ActorRequestFactory requestOf(UserId user) {
         return ActorRequestFactory
                 .newBuilder()
                 .setTenantId(tenant)
@@ -149,9 +149,17 @@ public class Client implements AutoCloseable {
     }
 
     /**
-     * Creates a new factory for posting guest requests.
+     * Creates a builder for requests on behalf of the passed user.
      */
-    public ActorRequestFactory asGuest() {
+    public RequestBuilder onBehalfOf(UserId user) {
+        Util.checkNotDefault(user);
+        return new RequestBuilder(user, this);
+    }
+
+    /**
+     * Creates a builder for posting guest requests.
+     */
+    public RequestBuilder asGuest() {
         return onBehalfOf(guestUser());
     }
 
@@ -186,20 +194,8 @@ public class Client implements AutoCloseable {
     /**
      * Posts the command to the {@code CommandService}.
      */
-    public void postCommand(Command c) {
+    void postCommand(Command c) {
         commandService.post(c);
-    }
-
-    /**
-     * Allows to subscribe to the events that the passed command produces.
-     */
-    public EventSubscriptionsBuilder forCommand(Command c) {
-        checkNotNull(c);
-        UserId actor =
-                c.getContext()
-                 .getActorContext()
-                 .getActor();
-        return new EventSubscriptionsBuilder(this, actor, c);
     }
 
     /**

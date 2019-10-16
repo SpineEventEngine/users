@@ -96,7 +96,7 @@ final class EventAfterCommandSubscription<E extends EventMessage> implements Log
     private Topic allEventsOf(Command c) {
         String fieldName = pastMessageField();
         Topic topic =
-                client.onBehalfOf(user)
+                client.requestOf(user)
                       .topic()
                       .select(Event.class)
                       .where(eq(fieldName, c.asMessageOrigin()))

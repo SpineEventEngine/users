@@ -21,9 +21,9 @@
 package io.spine.client;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
-import io.spine.core.UserId;
 
 import java.util.function.Consumer;
 
@@ -32,17 +32,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Allows the client code to subscribe to events originating from a command.
  */
-public final class EventSubscriptionsBuilder {
+public final class CommandRequestBuilder extends RequestBuilder {
 
-    private final UserId user;
-    private final Client client;
-    private final Command command;
+    private final CommandMessage commandMessage;
     private final EventConsumers.Builder builder;
 
-    EventSubscriptionsBuilder(Client client, UserId user, Command command) {
-        this.user = user;
-        this.client = client;
-        this.command = command;
+    CommandRequestBuilder(RequestBuilder parent, CommandMessage c) {
+        super(parent.user(), parent.client());
+        this.commandMessage = c;
         this.builder = EventConsumers.newBuilder();
     }
 
@@ -56,7 +53,7 @@ public final class EventSubscriptionsBuilder {
      * @param <E>
      *          the type of the event
      */
-    public <E extends EventMessage> EventSubscriptionsBuilder
+    public <E extends EventMessage> CommandRequestBuilder
     observe(Class<E> type, Consumer<E> consumer) {
         checkNotNull(consumer);
         builder.observe(type, consumer);
@@ -73,7 +70,7 @@ public final class EventSubscriptionsBuilder {
      * @param <E>
      *          the type of the event
      */
-    public <E extends EventMessage> EventSubscriptionsBuilder
+    public <E extends EventMessage> CommandRequestBuilder
     observe(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
         builder.observe(type, consumer);
@@ -85,8 +82,12 @@ public final class EventSubscriptionsBuilder {
      */
     public void post() {
         EventConsumers consumers = builder.build();
-        consumers.forEach(this::createSubscription);
-        client.postCommand(command);
+        Client client = client();
+        Command command = client.requestOf(user())
+                                .command()
+                                .create(this.commandMessage);
+        consumers.forEach((e, c) -> createSubscription(e, c, command));
+        client().postCommand(command);
     }
 
     @SuppressWarnings("unchecked")
@@ -94,7 +95,8 @@ public final class EventSubscriptionsBuilder {
     @CanIgnoreReturnValue
     private EventAfterCommandSubscription
     createSubscription(Class<? extends EventMessage> eventType,
-                       EventConsumer<? extends EventMessage> consumer) {
-        return new EventAfterCommandSubscription(client, user, command, eventType, consumer);
+                       EventConsumer<? extends EventMessage> consumer,
+                       Command cmd) {
+        return new EventAfterCommandSubscription(client(), user(), cmd, eventType, consumer);
     }
 }

@@ -21,7 +21,6 @@
 package io.spine.users.client;
 
 import io.spine.client.Client;
-import io.spine.core.Command;
 import io.spine.core.UserId;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
@@ -91,14 +90,10 @@ public final class Session implements AutoCloseable, Logging {
             );
         }
 
-        Command command =
-                client.asGuest()
-                      .command()
-                      .create(LogUserIn.newBuilder()
-                                       .setIdentity(identity)
-                                       .build());
-
-        client.forCommand(command)
+        client.asGuest()
+              .command(LogUserIn.newBuilder()
+                                .setIdentity(identity)
+                                .build())
               .observe(UserLoggedIn.class, this::handleLogin)
               //TODO:2019-10-14:alexander.yevsyukov: Observe the rejection
               // `UserAlreadyLoggedIn` which should also carry on the profile of the user.
@@ -126,13 +121,11 @@ public final class Session implements AutoCloseable, Logging {
         if (user == null) {
             throw newIllegalStateException("The user is already logged out.");
         }
-        Command logOut =
-                client.onBehalfOf(user)
-                      .command()
-                      .create(LogUserOut.newBuilder()
-                                        .setId(user)
-                                        .build());
-        client.postCommand(logOut);
+        client.onBehalfOf(user)
+               .command(LogUserOut.newBuilder()
+                                  .setId(user)
+                                  .build())
+               .post();
         // We do not wait for the `UserLoggedOut` event because it is of no importance for the
         // session. We just do not allow posting requests after we requested logout from the server.
         this.user = null;
