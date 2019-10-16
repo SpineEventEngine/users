@@ -139,8 +139,6 @@ public class Client implements AutoCloseable {
 
     /**
      * Creates a new request factory for the requests to be sent on behalf of the passed user.
-     *
-     * <p>
      */
     public ActorRequestFactory onBehalfOf(UserId user) {
         return ActorRequestFactory
@@ -148,6 +146,13 @@ public class Client implements AutoCloseable {
                 .setTenantId(tenant)
                 .setActor(user)
                 .build();
+    }
+
+    /**
+     * Creates a new factory for posting guest requests.
+     */
+    public ActorRequestFactory asGuest() {
+        return onBehalfOf(guestUser());
     }
 
     /**

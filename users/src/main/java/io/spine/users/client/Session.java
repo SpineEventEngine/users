@@ -92,7 +92,7 @@ public final class Session implements AutoCloseable, Logging {
         }
 
         Command command =
-                client.onBehalfOf(client.guestUser())
+                client.asGuest()
                       .command()
                       .create(LogUserIn.newBuilder()
                                        .setIdentity(identity)
