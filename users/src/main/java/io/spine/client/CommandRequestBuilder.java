@@ -30,7 +30,8 @@ import java.util.function.Consumer;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Allows the client code to subscribe to events originating from a command.
+ * Allows to post a command optionally subscribing to events that are immediate results
+ * of handling this command.
  */
 public final class CommandRequestBuilder extends RequestBuilder {
 
@@ -78,7 +79,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
     }
 
     /**
-     * Creates subscriptions for all the consumers and then posts the command.
+     * Creates subscriptions for all event consumers and then sends the command to the server.
      */
     public void post() {
         EventConsumers consumers = builder.build();
