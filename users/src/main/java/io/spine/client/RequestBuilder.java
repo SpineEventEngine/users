@@ -20,6 +20,8 @@
 
 package io.spine.client;
 
+import com.google.protobuf.Message;
+import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 
@@ -27,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @SuppressWarnings("ClassReferencesSubclass")
 // we want to have DSL for calls encapsulated in this class.
+@Experimental
 public class RequestBuilder {
 
     private final UserId user;
@@ -38,8 +41,19 @@ public class RequestBuilder {
         this.client = checkNotNull(client);
     }
 
+    /**
+     * Creates a builder for customizing command request.
+     */
     public CommandRequestBuilder command(CommandMessage c) {
         return new CommandRequestBuilder(this, c);
+    }
+
+    /**
+     * Creates a builder for customizing subscription for the passed type.
+     */
+    public <M extends Message>
+    SubscriptionRequestBuilder subscribeTo(Class<M> messageType) {
+        return new SubscriptionRequestBuilder<>(this, messageType);
     }
 
     /**
