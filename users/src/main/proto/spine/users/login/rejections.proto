@@ -25,23 +25,23 @@ package spine.users.login;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.login.event";
-option java_outer_classname = "EventsProto";
-option java_multiple_files = true;
+option java_package = "io.spine.users.login.rejection";
+option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/user/identity.proto";
 import "spine/users/person_profile.proto";
 
-// The user is logged in to the application.
-message UserLoggedIn {
+// The user is already logged in.
+//
+// This rejection handles the cases when a client app requests the login once again
+// after the `LogUserOut` command was not handled by the server. It could happen, for example,
+// because the client application failed to post the command or a communication error occurred.
+//
+message UserAlreadyLoggedIn {
 
-    // The ID of the user obtained from the login process.
-    //
-    // This is the identifier of the user in the application,
-    // NOT an ID obtained from a federated authentication or a directory service.
-    //
+    // The ID with which the user with the identity is logged into the system.
     core.UserId id = 1;
 
     // The identity of the user checked by the authentication service.

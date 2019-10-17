@@ -27,6 +27,7 @@ import io.spine.users.PersonProfile;
 import io.spine.users.login.command.LogUserIn;
 import io.spine.users.login.command.LogUserOut;
 import io.spine.users.login.event.UserLoggedIn;
+import io.spine.users.login.rejection.Rejections.UserAlreadyLoggedIn;
 import io.spine.users.user.Identity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -94,18 +95,19 @@ public final class Session implements AutoCloseable, Logging {
               .command(LogUserIn.newBuilder()
                                 .setIdentity(identity)
                                 .build())
-              .observe(UserLoggedIn.class, this::handleLogin)
-              //TODO:2019-10-14:alexander.yevsyukov: Observe the rejection
-              // `UserAlreadyLoggedIn` which should also carry on the profile of the user.
-              // This is to handle the cases when a client app requests the login once again
-              // after the `LogOut` command was not handled by the server (for example, because
-              // the client failed to post it or a communication error occurred).
+              .observe(UserLoggedIn.class, this::onLoggedIn)
+              .observe(UserAlreadyLoggedIn.class, this::onAlreadyLoggedIn)
               .post();
     }
 
-    private void handleLogin(UserLoggedIn event) {
+    private void onLoggedIn(UserLoggedIn event) {
         this.user  = event.getId();
         this.userProfile = event.getUser();
+    }
+
+    private void onAlreadyLoggedIn(UserAlreadyLoggedIn rejection) {
+        this.user = rejection.getId();
+        this.userProfile = rejection.getUser();
     }
 
     /**
