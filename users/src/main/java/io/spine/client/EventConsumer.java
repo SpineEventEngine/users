@@ -20,6 +20,7 @@
 
 package io.spine.client;
 
+import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.EventContext;
 
@@ -34,6 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <E>
  *         the type of the event message
  */
+@Experimental
 @FunctionalInterface
 public interface EventConsumer<E extends EventMessage> extends BiConsumer<E, EventContext> {
 

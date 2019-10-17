@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.TextFormat;
+import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.Event;
 import io.spine.core.EventContext;
@@ -42,6 +43,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>A consumer of an event can accept {@linkplain EventConsumer event message and its context}
  * or {@linkplain java.util.function.Consumer only event message}.
  */
+@Experimental
 public final class EventConsumers implements Logging {
 
     private final

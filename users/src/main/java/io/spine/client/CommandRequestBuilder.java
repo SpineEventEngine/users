@@ -21,6 +21,7 @@
 package io.spine.client;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
@@ -33,6 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Allows to post a command optionally subscribing to events that are immediate results
  * of handling this command.
  */
+@Experimental
 public final class CommandRequestBuilder extends RequestBuilder {
 
     private final CommandMessage commandMessage;

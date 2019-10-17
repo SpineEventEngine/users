@@ -25,6 +25,7 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import io.spine.annotation.Experimental;
 import io.spine.client.grpc.CommandServiceGrpc;
 import io.spine.client.grpc.CommandServiceGrpc.CommandServiceBlockingStub;
 import io.spine.client.grpc.QueryServiceGrpc;
@@ -53,6 +54,7 @@ import static java.util.stream.Collectors.toList;
  * The gRPC-based gateway for backend services such as {@code CommandService} or
  * {@code QueryService}.
  */
+@Experimental
 public class Client implements AutoCloseable {
 
     /** The number of seconds to wait when {@linkplain #close() closing} the client. */
@@ -242,9 +244,10 @@ public class Client implements AutoCloseable {
         private @Nullable TenantId tenant;
 
         /** The ID of the user for performing requests on behalf of a non-logged in user. */
-        private UserId guestUser = UserId.newBuilder()
-                                         .setValue("guest")
-                                         .build();
+        private UserId guestUser = UserId
+                .newBuilder()
+                .setValue("guest")
+                .build();
 
         private Builder(ManagedChannel channel) {
             this.channel = checkNotNull(channel);
