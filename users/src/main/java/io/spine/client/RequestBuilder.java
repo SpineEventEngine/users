@@ -52,8 +52,13 @@ public class RequestBuilder {
      * Creates a builder for customizing subscription for the passed type.
      */
     public <M extends Message>
-    SubscriptionRequestBuilder subscribeTo(Class<M> messageType) {
-        return new SubscriptionRequestBuilder<>(this, messageType);
+    SubscriptionRequestBuilder subscribeTo(Class<M> type) {
+        return new SubscriptionRequestBuilder<>(this, type);
+    }
+
+    public <M extends Message>
+    QueryRequestBuilder<M> select(Class<M> type) {
+        return new QueryRequestBuilder<>(this, type);
     }
 
     /**

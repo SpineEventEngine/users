@@ -35,13 +35,13 @@ FilteringRequestBuilder<M extends Message,
                         B extends FilteringRequestBuilder<M, F, R, B>> extends RequestBuilder {
 
     private final Class<M> messageType;
-    private final TopicFactory factory;
+    private final ActorRequestFactory factory;
     private final Supplier<R> builder;
 
     FilteringRequestBuilder(RequestBuilder parent, Class<M> type) {
         super(parent.user(), parent.client());
         this.messageType = type;
-        this.factory = client().requestOf(user()).topic();
+        this.factory = client().requestOf(user());
         this.builder = memoize(this::createBuilder);
     }
 
@@ -53,7 +53,7 @@ FilteringRequestBuilder<M extends Message,
         return messageType;
     }
 
-    final TopicFactory factory() {
+    final ActorRequestFactory factory() {
         return factory;
     }
 
