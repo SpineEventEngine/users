@@ -20,7 +20,6 @@
 
 package io.spine.client;
 
-import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -36,6 +35,7 @@ import io.spine.client.grpc.SubscriptionServiceGrpc.SubscriptionServiceStub;
 import io.spine.core.Command;
 import io.spine.core.TenantId;
 import io.spine.core.UserId;
+import io.spine.protobuf.AnyPacker;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -154,7 +154,7 @@ public class Client implements AutoCloseable {
      * Creates a builder for requests on behalf of the passed user.
      */
     public RequestBuilder onBehalfOf(UserId user) {
-        Util.checkNotDefault(user);
+        Util.checkNotDefaultArg(user);
         return new RequestBuilder(user, this);
     }
 
@@ -178,7 +178,7 @@ public class Client implements AutoCloseable {
      * @return the activated subscription
      * @see #cancel(Subscription)
      */
-    public <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
+    <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
         Subscription subscription = blockingSubscriptionService.subscribe(topic);
         subscriptionService.activate(subscription, new SubscriptionObserver<>(observer));
         return subscription;
@@ -203,12 +203,16 @@ public class Client implements AutoCloseable {
     /**
      * Queries the read-side with the specified query.
      */
-    public List<Any> query(Query query) {
-        List<Any> result = queryService
+    <M extends Message> List<M> query(Query query) {
+        @SuppressWarnings("unchecked")
+        // The caller is responsible for matching the type with the query.
+        List<M> result = queryService
                 .read(query)
                 .getMessageList()
                 .stream()
                 .map(EntityStateWithVersion::getState)
+                .map(AnyPacker::unpack)
+                .map(message -> (M) message)
                 .collect(toList());
         return result;
     }

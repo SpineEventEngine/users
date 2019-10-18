@@ -20,11 +20,11 @@
 
 package io.spine.client;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Consumer;
 
@@ -39,6 +39,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
 
     private final CommandMessage commandMessage;
     private final EventConsumers.Builder builder;
+    private @Nullable Consumer<Throwable> errorHandler;
 
     CommandRequestBuilder(RequestBuilder parent, CommandMessage c) {
         super(parent.user(), parent.client());
@@ -81,25 +82,40 @@ public final class CommandRequestBuilder extends RequestBuilder {
     }
 
     /**
-     * Creates subscriptions for all event consumers and then sends the command to the server.
+     * Assigns a handler for errors occurred when delivering events.
      */
-    public void post() {
-        EventConsumers consumers = builder.build();
-        Client client = client();
-        Command command = client.requestOf(user())
-                                .command()
-                                .create(this.commandMessage);
-        consumers.forEach((e, c) -> createSubscription(e, c, command));
-        client().postCommand(command);
+    public CommandRequestBuilder onError(Consumer<Throwable> errorHandler) {
+        this.errorHandler = checkNotNull(errorHandler);
+        return this;
     }
 
-    @SuppressWarnings("unchecked")
-    /* The type of the event and is matched to the consumer when adding map entries. */
-    @CanIgnoreReturnValue
-    private EventAfterCommandSubscription
-    createSubscription(Class<? extends EventMessage> eventType,
-                       EventConsumer<? extends EventMessage> consumer,
-                       Command cmd) {
-        return new EventAfterCommandSubscription(client(), user(), cmd, eventType, consumer);
+    /**
+     * Subscribes the consumers to events to receive events resulting from the command as
+     * the happen, then sends the command to the server.
+     *
+     * <p>The returned {@code Subscription} instance should be
+     * {@linkplain Client#cancel(Subscription) canceled} after the requesting code receives all
+     * the expected events, or after a reasonable timeout.
+     *
+     * @return the subscription to all the events
+     * @implNote Subscriptions should be cancelled to free up client and server resources required
+     * for their maintenance. It is not possible to cancel the returned subscription in an automatic
+     * way because of the following. Subscriptions by nature are asynchronous and infinite requests.
+     * Even that we know expected types of the events produced by the command, only the
+     * client code “knows” how many of them it expects. Also, some events may not arrive because of
+     * communication of business logic reasons. That's why the returned subscription should be
+     * cancelled by the client code when it no longer needs it.
+     */
+    public Subscription post() {
+        EventConsumers consumers = builder.build();
+        Client client = client();
+        Command command =
+                client.requestOf(user())
+                      .command()
+                      .create(this.commandMessage);
+        Subscription result =
+                EventsAfterCommand.subscribe(client, command, consumers, errorHandler);
+        client().postCommand(command);
+        return result;
     }
 }

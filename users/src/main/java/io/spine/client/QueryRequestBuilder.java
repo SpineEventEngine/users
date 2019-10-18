@@ -21,43 +21,42 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
-import io.grpc.stub.StreamObserver;
 
-/**
- * Allows to subscribe to updates of messages using filtering conditions.
- */
-public final class SubscriptionRequestBuilder<M extends Message>
-        extends FilteringRequestBuilder<M,
-                                        Topic,
-                                        TopicBuilder,
-                                        SubscriptionRequestBuilder<M>> {
+import java.util.List;
 
-    SubscriptionRequestBuilder(RequestBuilder parent, Class<M> type) {
+public final class QueryRequestBuilder<M extends Message>
+    extends FilteringRequestBuilder<M,
+                                    Query,
+                                    QueryBuilder,
+                                    QueryRequestBuilder<M>> {
+
+    QueryRequestBuilder(RequestBuilder parent, Class<M> type) {
         super(parent, type);
     }
 
-    private Subscription subscribe(Topic topic, StreamObserver<M> observer) {
-        Subscription subscription = client().subscribeTo(topic, observer);
-        return subscription;
+    public QueryRequestBuilder<M> orderBy(String column, OrderBy.Direction direction) {
+        builder().orderBy(column, direction);
+        return this;
     }
 
-    public Subscription observe(StreamObserver<M> observer) {
-        Topic topic = builder().build();
-        return subscribe(topic, observer);
+    public QueryRequestBuilder<M> limit(int count) {
+        builder().limit(count);
+        return this;
     }
 
-    public Subscription all(StreamObserver<M> observer) {
-        Topic topic = factory().topic().allOf(messageType());
-        return subscribe(topic, observer);
-    }
-
-    @Override
-    TopicBuilder createBuilder() {
-        return factory().topic().select(messageType());
+    public List<M> query() {
+        Query query = builder().build();
+        List<M> result = client().query(query);
+        return result;
     }
 
     @Override
-    SubscriptionRequestBuilder<M> self() {
+    QueryBuilder createBuilder() {
+        return factory().query().select(messageType());
+    }
+
+    @Override
+    QueryRequestBuilder<M> self() {
         return this;
     }
 }

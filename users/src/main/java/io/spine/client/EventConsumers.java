@@ -25,17 +25,19 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.protobuf.TextFormat;
+import io.grpc.stub.StreamObserver;
 import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.Event;
 import io.spine.core.EventContext;
 import io.spine.logging.Logging;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.protobuf.TextFormat.shortDebugString;
 
 /**
  * An association of event types to their consumers which also delivers events.
@@ -76,6 +78,29 @@ public final class EventConsumers implements Logging {
     }
 
     /**
+     * Creates an observer that would deliver events to all the consumers.
+     *
+     * <p>Errors that may occur when delivering events will be logged. In order to handle
+     * the errors, please use the method which accepts {@code Consumer<Throwable>}.
+     *
+     * @see #toObserver(Consumer)
+     */
+    public StreamObserver<Event> toObserver() {
+        return new EventObserver(null);
+    }
+
+    /**
+     * Creates an observer that would deliver events to all the consumers.
+     *
+     * @param errorHandler
+     *         the handler for possible errors reported by the server.
+     *         If null the error will be simply logged.
+     */
+    public StreamObserver<Event> toObserver(@Nullable Consumer<Throwable> errorHandler) {
+        return new EventObserver(errorHandler);
+    }
+
+    /**
      * Delivers the event to all the subscribed consumers.
      *
      * <p>If one of the consumers would cause an error when handling the event, the error will
@@ -104,7 +129,7 @@ public final class EventConsumers implements Logging {
      * the real consumer will be reported in the log.
      */
     private void logError(EventConsumer consumer, Event event, Throwable throwable) {
-        String eventDiags = TextFormat.shortDebugString(event);
+        String eventDiags = shortDebugString(event);
         Object consumerToReport = consumer instanceof DelegatingEventConsumer
             ? ((DelegatingEventConsumer) consumer).delegate()
             : consumer;
@@ -151,6 +176,40 @@ public final class EventConsumers implements Logging {
          */
         public EventConsumers build() {
             return new EventConsumers(this);
+        }
+    }
+
+    /**
+     * Passes the event to listener once the subscription is updated, then cancels the subscription.
+     */
+    private final class EventObserver implements StreamObserver<Event> {
+
+        private final Consumer<Throwable> errorHandler;
+
+        private EventObserver(@Nullable Consumer<Throwable> handler) {
+            this.errorHandler = nullToDefault(handler);
+        }
+
+        private Consumer<Throwable> nullToDefault(@Nullable Consumer<Throwable> handler) {
+            if (handler != null) {
+                return handler;
+            }
+            return throwable -> _error().withCause(throwable).log("Error receiving event.");
+        }
+
+        @Override
+        public void onNext(Event e) {
+            deliver(e);
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            errorHandler.accept(t);
+        }
+
+        @Override
+        public void onCompleted() {
+            // Do nothing.
         }
     }
 }
