@@ -178,7 +178,7 @@ public class Client implements AutoCloseable {
      * @return the activated subscription
      * @see #cancel(Subscription)
      */
-    public <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
+    <M extends Message> Subscription subscribeTo(Topic topic, StreamObserver<M> observer) {
         Subscription subscription = blockingSubscriptionService.subscribe(topic);
         subscriptionService.activate(subscription, new SubscriptionObserver<>(observer));
         return subscription;
