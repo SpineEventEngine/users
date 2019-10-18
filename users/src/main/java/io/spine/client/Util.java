@@ -30,7 +30,7 @@ public class Util {
     private Util() {
     }
 
-    public static void checkNotDefault(Message message) {
+    public static void checkNotDefaultArg(Message message) {
         checkArgument(!isDefault(message));
     }
 }

@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.protobuf.TextFormat;
+import io.grpc.stub.StreamObserver;
 import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.Event;
@@ -36,6 +36,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.protobuf.TextFormat.shortDebugString;
 
 /**
  * An association of event types to their consumers which also delivers events.
@@ -76,6 +77,13 @@ public final class EventConsumers implements Logging {
     }
 
     /**
+     * Creates an observer that would deliver events to all the consumers.
+     */
+    public StreamObserver<Event> toObserver() {
+        return new EventObserver();
+    }
+
+    /**
      * Delivers the event to all the subscribed consumers.
      *
      * <p>If one of the consumers would cause an error when handling the event, the error will
@@ -104,7 +112,7 @@ public final class EventConsumers implements Logging {
      * the real consumer will be reported in the log.
      */
     private void logError(EventConsumer consumer, Event event, Throwable throwable) {
-        String eventDiags = TextFormat.shortDebugString(event);
+        String eventDiags = shortDebugString(event);
         Object consumerToReport = consumer instanceof DelegatingEventConsumer
             ? ((DelegatingEventConsumer) consumer).delegate()
             : consumer;
@@ -151,6 +159,28 @@ public final class EventConsumers implements Logging {
          */
         public EventConsumers build() {
             return new EventConsumers(this);
+        }
+    }
+
+    /**
+     * Passes the event to listener once the subscription is updated, then cancels the subscription.
+     */
+    private final class EventObserver implements StreamObserver<Event> {
+
+        @Override
+        public void onNext(Event e) {
+            deliver(e);
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            _error().withCause(t)
+                    .log("Error receiving event.");
+        }
+
+        @Override
+        public void onCompleted() {
+            // Do nothing.
         }
     }
 }

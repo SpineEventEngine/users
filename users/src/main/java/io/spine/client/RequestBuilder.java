@@ -36,7 +36,7 @@ public class RequestBuilder {
     private final Client client;
 
     RequestBuilder(UserId user, Client client) {
-        Util.checkNotDefault(user);
+        Util.checkNotDefaultArg(user);
         this.user = user;
         this.client = checkNotNull(client);
     }

@@ -154,7 +154,7 @@ public class Client implements AutoCloseable {
      * Creates a builder for requests on behalf of the passed user.
      */
     public RequestBuilder onBehalfOf(UserId user) {
-        Util.checkNotDefault(user);
+        Util.checkNotDefaultArg(user);
         return new RequestBuilder(user, this);
     }
 
