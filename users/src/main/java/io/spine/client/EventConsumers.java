@@ -31,6 +31,7 @@ import io.spine.base.EventMessage;
 import io.spine.core.Event;
 import io.spine.core.EventContext;
 import io.spine.logging.Logging;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -78,9 +79,25 @@ public final class EventConsumers implements Logging {
 
     /**
      * Creates an observer that would deliver events to all the consumers.
+     *
+     * <p>Errors that may occur when delivering events will be logged. In order to handle
+     * the errors, please use the method which accepts {@code Consumer<Throwable>}.
+     *
+     * @see #toObserver(Consumer)
      */
     public StreamObserver<Event> toObserver() {
-        return new EventObserver();
+        return new EventObserver(null);
+    }
+
+    /**
+     * Creates an observer that would deliver events to all the consumers.
+     *
+     * @param errorHandler
+     *         the handler for possible errors reported by the server.
+     *         If null the error will be simply logged.
+     */
+    public StreamObserver<Event> toObserver(@Nullable Consumer<Throwable> errorHandler) {
+        return new EventObserver(errorHandler);
     }
 
     /**
@@ -167,6 +184,19 @@ public final class EventConsumers implements Logging {
      */
     private final class EventObserver implements StreamObserver<Event> {
 
+        private final Consumer<Throwable> errorHandler;
+
+        private EventObserver(@Nullable Consumer<Throwable> handler) {
+            this.errorHandler = nullToDefault(handler);
+        }
+
+        private Consumer<Throwable> nullToDefault(@Nullable Consumer<Throwable> handler) {
+            if (handler != null) {
+                return handler;
+            }
+            return throwable -> _error().withCause(throwable).log("Error receiving event.");
+        }
+
         @Override
         public void onNext(Event e) {
             deliver(e);
@@ -174,8 +204,7 @@ public final class EventConsumers implements Logging {
 
         @Override
         public void onError(Throwable t) {
-            _error().withCause(t)
-                    .log("Error receiving event.");
+            errorHandler.accept(t);
         }
 
         @Override

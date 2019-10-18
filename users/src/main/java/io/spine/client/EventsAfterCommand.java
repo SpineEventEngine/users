@@ -27,6 +27,9 @@ import io.spine.core.Event;
 import io.spine.core.EventContext;
 import io.spine.core.UserId;
 import io.spine.logging.Logging;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.client.Filters.eq;
@@ -54,14 +57,18 @@ final class EventsAfterCommand implements Logging {
         this.consumers = checkNotNull(consumers);
     }
 
-    static Subscription subscribe(Client client, Command command, EventConsumers consumers) {
-        Subscription result = new EventsAfterCommand(client, command, consumers).subscribe();
+    static Subscription subscribe(Client client,
+                                  Command command,
+                                  EventConsumers consumers,
+                                  @Nullable Consumer<Throwable> errorHandler) {
+        EventsAfterCommand commandOutcome = new EventsAfterCommand(client, command, consumers);
+        Subscription result = commandOutcome.subscribeWith(errorHandler);
         return result;
     }
 
-    private Subscription subscribe() {
+    private Subscription subscribeWith(@Nullable Consumer<Throwable> errorHandler) {
         Topic topic = allEventsOf(command);
-        StreamObserver<Event> observer = consumers.toObserver();
+        StreamObserver<Event> observer = consumers.toObserver(errorHandler);
         return client.subscribeTo(topic, observer);
     }
 

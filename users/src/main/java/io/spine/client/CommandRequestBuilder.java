@@ -24,6 +24,7 @@ import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Consumer;
 
@@ -38,6 +39,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
 
     private final CommandMessage commandMessage;
     private final EventConsumers.Builder builder;
+    private @Nullable Consumer<Throwable> errorHandler;
 
     CommandRequestBuilder(RequestBuilder parent, CommandMessage c) {
         super(parent.user(), parent.client());
@@ -80,6 +82,14 @@ public final class CommandRequestBuilder extends RequestBuilder {
     }
 
     /**
+     * Assigns a handler for errors occurred when delivering events.
+     */
+    public CommandRequestBuilder onError(Consumer<Throwable> errorHandler) {
+        this.errorHandler = checkNotNull(errorHandler);
+        return this;
+    }
+
+    /**
      * Subscribes the consumers to events to receive events resulting from the command as
      * the happen, then sends the command to the server.
      *
@@ -103,7 +113,8 @@ public final class CommandRequestBuilder extends RequestBuilder {
                 client.requestOf(user())
                       .command()
                       .create(this.commandMessage);
-        Subscription result = EventsAfterCommand.subscribe(client, command, consumers);
+        Subscription result =
+                EventsAfterCommand.subscribe(client, command, consumers, errorHandler);
         client().postCommand(command);
         return result;
     }
