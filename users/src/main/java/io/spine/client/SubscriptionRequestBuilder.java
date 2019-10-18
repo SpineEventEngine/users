@@ -23,30 +23,17 @@ package io.spine.client;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 
-import java.util.Arrays;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Allows to subscribe to updates of messages using filtering conditions.
  */
-public class SubscriptionRequestBuilder<M extends Message> extends RequestBuilder {
-
-    private final Class<M> messageType;
-    private final TopicFactory factory;
-    /** The builder for the case of selecting not all instances. */
-    private final TopicBuilder topic;
+public class SubscriptionRequestBuilder<M extends Message>
+        extends FilteringRequestBuilder<M,
+                                        Topic,
+                                        TopicBuilder,
+                                        SubscriptionRequestBuilder<M>> {
 
     SubscriptionRequestBuilder(RequestBuilder parent, Class<M> type) {
-        super(parent.user(), parent.client());
-        this.messageType = type;
-        this.factory = client().requestOf(user()).topic();
-        this.topic = factory.select(type);
-    }
-
-    public Subscription all(StreamObserver<M> observer) {
-        Topic topic = factory.allOf(messageType);
-        return subscribe(topic, observer);
+        super(parent, type);
     }
 
     private Subscription subscribe(Topic topic, StreamObserver<M> observer) {
@@ -54,54 +41,23 @@ public class SubscriptionRequestBuilder<M extends Message> extends RequestBuilde
         return subscription;
     }
 
-    private SubscriptionRequestBuilder<M> withIds(Iterable<?> ids) {
-        checkNotNull(ids);
-        topic.byId(ids);
-        return this;
-    }
-
-    public SubscriptionRequestBuilder<M> byId(Iterable<?> ids) {
-        return withIds(ids);
-    }
-
-    public SubscriptionRequestBuilder<M> byId(Message... ids) {
-        return withIds(Arrays.asList(ids));
-    }
-
-    public SubscriptionRequestBuilder<M> byId(Long... ids) {
-        return withIds(Arrays.asList(ids));
-    }
-
-    public SubscriptionRequestBuilder<M> byId(Integer... ids) {
-        return withIds(Arrays.asList(ids));
-    }
-
-    public SubscriptionRequestBuilder<M> byId(String... ids) {
-        return withIds(Arrays.asList(ids));
-    }
-
-    public SubscriptionRequestBuilder<M> where(Filter... filter) {
-        topic.where(filter);
-        return this;
-    }
-
-    public SubscriptionRequestBuilder<M> where(CompositeFilter... filter) {
-        topic.where(filter);
-        return this;
-    }
-
-    public SubscriptionRequestBuilder<M> withMask(Iterable<String> fieldNames) {
-        topic.withMask(fieldNames);
-        return this;
-    }
-
-    public SubscriptionRequestBuilder<M> withMask(String... fieldNames) {
-        topic.withMask(fieldNames);
-        return this;
-    }
-
     public Subscription observe(StreamObserver<M> observer) {
-        Topic topic = this.topic.build();
+        Topic topic = builder().build();
         return subscribe(topic, observer);
+    }
+
+    public Subscription all(StreamObserver<M> observer) {
+        Topic topic = factory().allOf(messageType());
+        return subscribe(topic, observer);
+    }
+
+    @Override
+    TopicBuilder createBuilder() {
+        return factory().select(messageType());
+    }
+
+    @Override
+    SubscriptionRequestBuilder<M> self() {
+        return this;
     }
 }

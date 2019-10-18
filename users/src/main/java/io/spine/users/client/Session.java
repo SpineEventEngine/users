@@ -21,6 +21,7 @@
 package io.spine.users.client;
 
 import io.spine.client.Client;
+import io.spine.client.RequestBuilder;
 import io.spine.core.UserId;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
@@ -75,6 +76,20 @@ public final class Session implements AutoCloseable, Logging {
     }
 
     /**
+     * Obtains the builder for creating a request on behalf of the current user.
+     *
+     * <p>If the user is logged in, the ID of the user {@linkplain Client#onBehalfOf(UserId)
+     * will be used}. Otherwise, a {@linkplain Client#asGuest() guest user ID} will be used.
+     */
+    public RequestBuilder userRequest() {
+        RequestBuilder result =
+                active()
+                ? client.onBehalfOf(user)
+                : client.asGuest();
+        return result;
+    }
+
+    /**
      * Request the log in of the user with the passed identity.
      *
      * <p>The method quits after the login command is posted.
@@ -90,7 +105,6 @@ public final class Session implements AutoCloseable, Logging {
                     user.getValue()
             );
         }
-
         client.asGuest()
               .command(LogUserIn.newBuilder()
                                 .setIdentity(identity)
@@ -113,8 +127,8 @@ public final class Session implements AutoCloseable, Logging {
     /**
      * Logs out the user with the passed ID.
      *
-     * <p>After this method quits the session becomes {@link #active() inactive} and will not accept
-     * communication calls until a user is logged in.
+     * <p>After this method quits the session becomes {@link #active() inactive} and
+     * will not accept communication calls until a user is logged in.
      *
      * @see #requestLogIn(Identity)
      */
@@ -124,10 +138,10 @@ public final class Session implements AutoCloseable, Logging {
             throw newIllegalStateException("The user is already logged out.");
         }
         client.onBehalfOf(user)
-               .command(LogUserOut.newBuilder()
-                                  .setId(user)
-                                  .build())
-               .post();
+              .command(LogUserOut.newBuilder()
+                                 .setId(user)
+                                 .build())
+              .post();
         // We do not wait for the `UserLoggedOut` event because it is of no importance for the
         // session. We just do not allow posting requests after we requested logout from the server.
         this.user = null;
