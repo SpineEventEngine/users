@@ -20,7 +20,6 @@
 
 package io.spine.client;
 
-import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
@@ -34,15 +33,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Allows to post a command optionally subscribing to events that are immediate results
  * of handling this command.
  */
-@Experimental
-public final class CommandRequestBuilder extends RequestBuilder {
+public final class CommandRequest extends ClientRequest {
 
     private final CommandMessage commandMessage;
     private final EventConsumers.Builder builder;
     private @Nullable Consumer<Throwable> errorHandler;
 
-    CommandRequestBuilder(RequestBuilder parent, CommandMessage c) {
-        super(parent.user(), parent.client());
+    CommandRequest(ClientRequest parent, CommandMessage c) {
+        super(parent);
         this.commandMessage = c;
         this.builder = EventConsumers.newBuilder();
     }
@@ -57,7 +55,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
      * @param <E>
      *          the type of the event
      */
-    public <E extends EventMessage> CommandRequestBuilder
+    public <E extends EventMessage> CommandRequest
     observe(Class<E> type, Consumer<E> consumer) {
         checkNotNull(consumer);
         builder.observe(type, consumer);
@@ -74,7 +72,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
      * @param <E>
      *          the type of the event
      */
-    public <E extends EventMessage> CommandRequestBuilder
+    public <E extends EventMessage> CommandRequest
     observe(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
         builder.observe(type, consumer);
@@ -84,7 +82,7 @@ public final class CommandRequestBuilder extends RequestBuilder {
     /**
      * Assigns a handler for errors occurred when delivering events.
      */
-    public CommandRequestBuilder onError(Consumer<Throwable> errorHandler) {
+    public CommandRequest onError(Consumer<Throwable> errorHandler) {
         this.errorHandler = checkNotNull(errorHandler);
         return this;
     }

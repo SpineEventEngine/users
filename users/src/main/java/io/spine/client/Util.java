@@ -21,6 +21,7 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static io.spine.validate.Validate.isDefault;
@@ -30,7 +31,21 @@ public class Util {
     private Util() {
     }
 
-    public static void checkNotDefaultArg(Message message) {
+    /**
+     * Ensures that the passed message is not in the default state.
+     *
+     * @param message
+     *         the message to check
+     * @param <T>
+     *         the type of the message
+     * @return the passed message
+     * @throws IllegalArgumentException
+     *          if the passed message has the default state
+     * @throws NullPointerException
+     *          if the passed message is {@code null}
+     */
+    public static <T extends @NonNull Message> T checkNotDefaultArg(T message) {
         checkArgument(!isDefault(message));
+        return message;
     }
 }

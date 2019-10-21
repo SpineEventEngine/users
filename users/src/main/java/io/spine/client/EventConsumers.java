@@ -45,7 +45,6 @@ import static com.google.protobuf.TextFormat.shortDebugString;
  * <p>A consumer of an event can accept {@linkplain EventConsumer event message and its context}
  * or {@linkplain java.util.function.Consumer only event message}.
  */
-@Experimental
 public final class EventConsumers implements Logging {
 
     private final

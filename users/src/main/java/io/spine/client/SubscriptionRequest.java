@@ -23,16 +23,15 @@ package io.spine.client;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 
+import java.util.function.Function;
+
 /**
  * Allows to subscribe to updates of messages using filtering conditions.
  */
-public final class SubscriptionRequestBuilder<M extends Message>
-        extends FilteringRequestBuilder<M,
-                                        Topic,
-                                        TopicBuilder,
-                                        SubscriptionRequestBuilder<M>> {
+public final class SubscriptionRequest<M extends Message>
+        extends FilteringRequest<M, Topic, TopicBuilder, SubscriptionRequest<M>> {
 
-    SubscriptionRequestBuilder(RequestBuilder parent, Class<M> type) {
+    SubscriptionRequest(ClientRequest parent, Class<M> type) {
         super(parent, type);
     }
 
@@ -52,12 +51,12 @@ public final class SubscriptionRequestBuilder<M extends Message>
     }
 
     @Override
-    TopicBuilder createBuilder() {
-        return factory().topic().select(messageType());
+    Function<ActorRequestFactory, TopicBuilder> builderFn() {
+        return (f) -> f.topic().select(messageType());
     }
 
     @Override
-    SubscriptionRequestBuilder<M> self() {
+    SubscriptionRequest<M> self() {
         return this;
     }
 }

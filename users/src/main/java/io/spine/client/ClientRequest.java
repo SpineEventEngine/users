@@ -21,44 +21,54 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
-import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Entry point for creating client requests.
+ *
+ * <p>An instance of this class is obtained via
+ * {@link Client#onBehalfOf(UserId)} or {@link Client#asGuest()} methods and then used for creating
+ * a specific client request e.g. for {@linkplain ClientRequest#command(CommandMessage) posting
+ * a command} or {@linkplain ClientRequest#select(Class) running a query}.
+ *
+ * @see Client
+ */
 @SuppressWarnings("ClassReferencesSubclass")
 // we want to have DSL for calls encapsulated in this class.
-@Experimental
-public class RequestBuilder {
+public class ClientRequest {
 
     private final UserId user;
     private final Client client;
 
-    RequestBuilder(UserId user, Client client) {
+    ClientRequest(UserId user, Client client) {
         Util.checkNotDefaultArg(user);
         this.user = user;
         this.client = checkNotNull(client);
     }
 
+    ClientRequest(ClientRequest parent) {
+        this(parent.user, parent.client);
+    }
+
     /**
      * Creates a builder for customizing command request.
      */
-    public CommandRequestBuilder command(CommandMessage c) {
-        return new CommandRequestBuilder(this, c);
+    public CommandRequest command(CommandMessage c) {
+        return new CommandRequest(this, c);
     }
 
     /**
      * Creates a builder for customizing subscription for the passed type.
      */
-    public <M extends Message>
-    SubscriptionRequestBuilder subscribeTo(Class<M> type) {
-        return new SubscriptionRequestBuilder<>(this, type);
+    public <M extends Message> SubscriptionRequest subscribeTo(Class<M> type) {
+        return new SubscriptionRequest<>(this, type);
     }
 
-    public <M extends Message>
-    QueryRequestBuilder<M> select(Class<M> type) {
-        return new QueryRequestBuilder<>(this, type);
+    public <M extends Message> QueryRequest<M> select(Class<M> type) {
+        return new QueryRequest<>(this, type);
     }
 
     /**

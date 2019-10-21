@@ -35,7 +35,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <E>
  *         the type of the event message
  */
-@Experimental
 @FunctionalInterface
 public interface EventConsumer<E extends EventMessage> extends BiConsumer<E, EventContext> {
 
