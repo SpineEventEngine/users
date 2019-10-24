@@ -35,7 +35,9 @@ buildscript { final scriptHandler ->
     configurations.all {
         resolutionStrategy {
             force(
-                    "io.spine:spine-base:$spineBaseVersion"
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$spineBaseVersion",
+                    "io.spine.tools:spine-model-compiler:$spineBaseVersion"
             )
         }
     }
