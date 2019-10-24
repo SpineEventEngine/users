@@ -43,9 +43,10 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
+import static io.spine.util.Preconditions2.checkNotDefaultArg;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
-import static io.spine.validate.Validate.isDefault;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -152,7 +153,7 @@ public class Client implements AutoCloseable {
      * Creates a builder for requests on behalf of the passed user.
      */
     public ClientRequest onBehalfOf(UserId user) {
-        Util.checkNotDefaultArg(user);
+        checkNotDefaultArg(user);
         return new ClientRequest(user, this);
     }
 

@@ -32,7 +32,7 @@ import static com.google.common.base.Suppliers.memoize;
 /**
  * Abstract base for client request builders that may filter messages by certain criteria.
  *
- * <p>This class warps around {@link AbstractTargetBuilder} for providing fluent API for
+ * <p>This class warps around {@link TargetBuilder} for providing fluent API for
  * client request composition and placement.
  *
  * @param <M>
@@ -47,7 +47,7 @@ import static com.google.common.base.Suppliers.memoize;
 public abstract class
 FilteringRequest<M extends Message,
                  R extends Message,
-                 A extends AbstractTargetBuilder<R, A>,
+                 A extends TargetBuilder<R, A>,
                  B extends FilteringRequest<M, R, A, B>> extends ClientRequest {
 
     /** The type of messages returned by the request. */

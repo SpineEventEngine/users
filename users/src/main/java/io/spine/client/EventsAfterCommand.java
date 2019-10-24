@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.client.Filters.eq;
-import static io.spine.client.Util.checkNotDefaultArg;
+import static io.spine.util.Preconditions2.checkNotDefaultArg;
 import static java.lang.String.format;
 
 /**
@@ -49,8 +49,7 @@ final class EventsAfterCommand implements Logging {
 
     private EventsAfterCommand(Client client, Command cmd, EventConsumers consumers) {
         this.client = checkNotNull(client);
-        checkNotDefaultArg(cmd);
-        this.command = cmd;
+        this.command = checkNotDefaultArg(cmd);
         this.user = cmd.getContext()
                        .getActorContext()
                        .getActor();

@@ -25,6 +25,7 @@ import io.spine.base.CommandMessage;
 import io.spine.core.UserId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotDefaultArg;
 
 /**
  * Entry point for creating client requests.
@@ -44,7 +45,7 @@ public class ClientRequest {
     private final Client client;
 
     ClientRequest(UserId user, Client client) {
-        Util.checkNotDefaultArg(user);
+        checkNotDefaultArg(user);
         this.user = user;
         this.client = checkNotNull(client);
     }
