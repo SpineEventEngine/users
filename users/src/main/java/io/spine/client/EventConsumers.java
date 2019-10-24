@@ -26,7 +26,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.grpc.stub.StreamObserver;
-import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.Event;
 import io.spine.core.EventContext;

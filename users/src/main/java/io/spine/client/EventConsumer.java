@@ -20,7 +20,6 @@
 
 package io.spine.client;
 
-import io.spine.annotation.Experimental;
 import io.spine.base.EventMessage;
 import io.spine.core.EventContext;
 
