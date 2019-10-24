@@ -20,9 +20,11 @@
 
 package io.spine.client;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -31,8 +33,11 @@ import java.util.function.Function;
 public final class SubscriptionRequest<M extends Message>
         extends FilteringRequest<M, Topic, TopicBuilder, SubscriptionRequest<M>> {
 
+    private final Consumers.Builder<M> consumers;
+
     SubscriptionRequest(ClientRequest parent, Class<M> type) {
         super(parent, type);
+        this.consumers = Consumers.newBuilder();
     }
 
     private Subscription subscribe(Topic topic, StreamObserver<M> observer) {
@@ -40,13 +45,61 @@ public final class SubscriptionRequest<M extends Message>
         return subscription;
     }
 
-    public Subscription observe(StreamObserver<M> observer) {
+    @CanIgnoreReturnValue
+    public SubscriptionRequest<M> observe(Consumer<M> consumer) {
+        consumers.add(consumer);
+        return self();
+    }
+
+    /**
+     * Assigns a handler for the error reported to
+     * {@link io.grpc.stub.StreamObserver#onError(Throwable)} of
+     * the {@link io.grpc.stub.StreamObserver} responsible for delivering messages
+     * to the consumers.
+     *
+     * <p>Once this handler is called, no more messages will be delivered to consumers.
+     *
+     * @see #onConsumingError(ErrorHandler)
+     */
+    @CanIgnoreReturnValue
+    public SubscriptionRequest<M> onStreamingError(ErrorHandler handler) {
+        consumers.onStreamingError(handler);
+        return self();
+    }
+
+    /**
+     * Assigns a handler for an error that may occur in the code of one of the consumers.
+     *
+     * <p>After this handler called, remaining consumers will get the message as usually.
+     *
+     * @see #onStreamingError(ErrorHandler)
+     */
+    @CanIgnoreReturnValue
+    SubscriptionRequest<M> onConsumingError(ErrorHandler handler) {
+        consumers.onConsumingError(handler);
+        return self();
+    }
+
+    /**
+     * Creates and posts the subscription request to the server.
+     */
+    public Subscription subscribe() {
         Topic topic = builder().build();
+        StreamObserver<M> observer = createObserver();
         return subscribe(topic, observer);
     }
 
-    public Subscription all(StreamObserver<M> observer) {
+    private StreamObserver<M> createObserver() {
+        Consumers<M> consumers = this.consumers.build();
+        return consumers.toObserver();
+    }
+
+    /**
+     * Subscribes to receive all messages of the specified type.
+     */
+    public Subscription all() {
         Topic topic = factory().topic().allOf(messageType());
+        StreamObserver<M> observer = createObserver();
         return subscribe(topic, observer);
     }
 

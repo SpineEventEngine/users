@@ -32,7 +32,6 @@ import io.spine.core.EventContext;
 import io.spine.logging.Logging;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -44,7 +43,7 @@ import static com.google.protobuf.TextFormat.shortDebugString;
  * <p>A consumer of an event can accept {@linkplain EventConsumer event message and its context}
  * or {@linkplain java.util.function.Consumer only event message}.
  */
-public final class EventConsumers implements Logging {
+public final class MultiEventConsumers implements Logging {
 
     private final
     ImmutableMultimap<Class<? extends EventMessage>, EventConsumer<? extends EventMessage>> map;
@@ -53,7 +52,7 @@ public final class EventConsumers implements Logging {
         return new Builder();
     }
 
-    private EventConsumers(Builder builder) {
+    private MultiEventConsumers(Builder builder) {
         this.map = ImmutableMultimap.copyOf(builder.map);
     }
 
@@ -66,22 +65,12 @@ public final class EventConsumers implements Logging {
     }
 
     /**
-     * Performs the passed actions for all the consumers.
-     */
-    public void
-    forEach(BiConsumer<? super Class<? extends EventMessage>,
-            ? super EventConsumer<? extends EventMessage>> action) {
-        checkNotNull(action);
-        map.forEach(action);
-    }
-
-    /**
      * Creates an observer that would deliver events to all the consumers.
      *
      * <p>Errors that may occur when delivering events will be logged. In order to handle
      * the errors, please use the method which accepts {@code Consumer<Throwable>}.
      *
-     * @see #toObserver(Consumer)
+     * @see #toObserver(ErrorHandler)
      */
     public StreamObserver<Event> toObserver() {
         return new EventObserver(null);
@@ -90,12 +79,12 @@ public final class EventConsumers implements Logging {
     /**
      * Creates an observer that would deliver events to all the consumers.
      *
-     * @param errorHandler
+     * @param handler
      *         the handler for possible errors reported by the server.
      *         If null the error will be simply logged.
      */
-    public StreamObserver<Event> toObserver(@Nullable Consumer<Throwable> errorHandler) {
-        return new EventObserver(errorHandler);
+    public StreamObserver<Event> toObserver(@Nullable ErrorHandler handler) {
+        return new EventObserver(handler);
     }
 
     /**
@@ -137,7 +126,7 @@ public final class EventConsumers implements Logging {
     }
 
     /**
-     * The builder for {@link EventConsumers}.
+     * The builder for {@link MultiEventConsumers}.
      */
     public static final class Builder {
 
@@ -172,8 +161,8 @@ public final class EventConsumers implements Logging {
         /**
          * Creates the new instance.
          */
-        public EventConsumers build() {
-            return new EventConsumers(this);
+        public MultiEventConsumers build() {
+            return new MultiEventConsumers(this);
         }
     }
 
@@ -182,13 +171,13 @@ public final class EventConsumers implements Logging {
      */
     private final class EventObserver implements StreamObserver<Event> {
 
-        private final Consumer<Throwable> errorHandler;
+        private final ErrorHandler errorHandler;
 
-        private EventObserver(@Nullable Consumer<Throwable> handler) {
+        private EventObserver(@Nullable ErrorHandler handler) {
             this.errorHandler = nullToDefault(handler);
         }
 
-        private Consumer<Throwable> nullToDefault(@Nullable Consumer<Throwable> handler) {
+        private ErrorHandler nullToDefault(@Nullable ErrorHandler handler) {
             if (handler != null) {
                 return handler;
             }

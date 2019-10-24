@@ -20,6 +20,7 @@
 
 package io.spine.client;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.Command;
@@ -36,13 +37,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class CommandRequest extends ClientRequest {
 
     private final CommandMessage commandMessage;
-    private final EventConsumers.Builder builder;
-    private @Nullable Consumer<Throwable> errorHandler;
+    private final MultiEventConsumers.Builder builder;
+    private @Nullable ErrorHandler streamingErrorHandler;
 
     CommandRequest(ClientRequest parent, CommandMessage c) {
         super(parent);
         this.commandMessage = c;
-        this.builder = EventConsumers.newBuilder();
+        this.builder = MultiEventConsumers.newBuilder();
     }
 
     /**
@@ -55,6 +56,7 @@ public final class CommandRequest extends ClientRequest {
      * @param <E>
      *          the type of the event
      */
+    @CanIgnoreReturnValue
     public <E extends EventMessage> CommandRequest
     observe(Class<E> type, Consumer<E> consumer) {
         checkNotNull(consumer);
@@ -72,6 +74,7 @@ public final class CommandRequest extends ClientRequest {
      * @param <E>
      *          the type of the event
      */
+    @CanIgnoreReturnValue
     public <E extends EventMessage> CommandRequest
     observe(Class<E> type, EventConsumer<E> consumer) {
         checkNotNull(consumer);
@@ -82,8 +85,9 @@ public final class CommandRequest extends ClientRequest {
     /**
      * Assigns a handler for errors occurred when delivering events.
      */
-    public CommandRequest onError(Consumer<Throwable> errorHandler) {
-        this.errorHandler = checkNotNull(errorHandler);
+    @CanIgnoreReturnValue
+    public CommandRequest onStreamingError(ErrorHandler handler) {
+        this.streamingErrorHandler = checkNotNull(handler);
         return this;
     }
 
@@ -105,14 +109,14 @@ public final class CommandRequest extends ClientRequest {
      * cancelled by the client code when it no longer needs it.
      */
     public Subscription post() {
-        EventConsumers consumers = builder.build();
+        MultiEventConsumers consumers = builder.build();
         Client client = client();
         Command command =
                 client.requestOf(user())
                       .command()
                       .create(this.commandMessage);
         Subscription result =
-                EventsAfterCommand.subscribe(client, command, consumers, errorHandler);
+                EventsAfterCommand.subscribe(client, command, consumers, streamingErrorHandler);
         client().postCommand(command);
         return result;
     }
