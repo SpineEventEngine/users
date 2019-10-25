@@ -52,6 +52,19 @@ abstract class DelegatingConsumer<M extends Message, C extends MessageContext>
         this.delegate = checkNotNull(delegate);
     }
 
+    /**
+     * Obtains the reference to the consumer of a message, which will be used for
+     * diagnostic purposes.
+     *
+     * <p>If the passed instance is a {@code DelegatingConsumer}, its delegate will be returned.
+     * Otherwise, the method returns the passed instance.
+     */
+    static Object toRealConsumer(MessageConsumer<?, ?> consumer) {
+        return consumer instanceof DelegatingConsumer
+               ? ((DelegatingConsumer) consumer).delegate()
+               : consumer;
+    }
+
     /** Obtains the consumer of the event message to which this consumer delegates. */
     final Consumer<M> delegate() {
         return delegate;

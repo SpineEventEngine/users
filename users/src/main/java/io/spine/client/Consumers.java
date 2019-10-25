@@ -57,19 +57,6 @@ abstract class Consumers<M extends Message, C extends MessageContext> implements
     abstract StreamObserver<M> toObserver();
 
     /**
-     * Obtains the reference to the consumer of a message, which will be used for
-     * diagnostic purposes.
-     *
-     * <p>If the passed instance is a {@link DelegatingConsumer}, its delegate will be returned.
-     * Otherwise, the method returns the passed instance.
-     */
-    static Object toRealConsumer(MessageConsumer<?, ?> consumer) {
-        return consumer instanceof DelegatingConsumer
-               ? ((DelegatingConsumer) consumer).delegate()
-               : consumer;
-    }
-
-    /**
      * Delivers messages to all the consumers.
      *
      * <p>If a streaming error occurs, passes it to {@link Consumers#streamingErrorHandler}.

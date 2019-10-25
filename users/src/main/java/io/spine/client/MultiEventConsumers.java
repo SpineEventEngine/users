@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
-import static io.spine.client.Consumers.toRealConsumer;
+import static io.spine.client.DelegatingConsumer.toRealConsumer;
 
 /**
  * An association of event types to their consumers which also delivers events.

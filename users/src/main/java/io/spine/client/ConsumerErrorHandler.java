@@ -26,7 +26,7 @@ import com.google.protobuf.Message;
 
 import java.util.function.BiConsumer;
 
-import static io.spine.client.Consumers.toRealConsumer;
+import static io.spine.client.DelegatingConsumer.toRealConsumer;
 
 /**
  * Functional interface for handlers of errors caused by consumers of messages.
