@@ -20,49 +20,51 @@
 
 package io.spine.client;
 
-import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
-import io.spine.core.EmptyContext;
+import io.spine.base.EventMessage;
+import io.spine.core.Event;
+import io.spine.core.EventContext;
 
-final class StateConsumers<S extends Message> extends Consumers<S, EmptyContext, S> {
+public class EventConsumers<E extends EventMessage> extends Consumers<E, EventContext, Event> {
 
-    static <S extends Message> Builder<S> newBuilder() {
+    static <E extends EventMessage> Builder<E> newBuilder() {
         return new Builder<>();
     }
 
-    private StateConsumers(Builder<S> builder) {
+    private EventConsumers(Builder<E> builder) {
         super(builder);
     }
 
     @Override
-    StreamObserver<S> toObserver() {
-        return new StateObserver();
+    StreamObserver<Event> toObserver() {
+        return new EventObserver();
     }
 
-    private final class StateObserver extends DeliveringObserver {
+    private final class EventObserver extends DeliveringObserver {
 
+        @SuppressWarnings("unchecked") // The correct type is provided by subscription impl.
         @Override
-        S toMessage(S outer) {
-            return outer;
+        E toMessage(Event event) {
+            return (E) event.enclosedMessage();
         }
 
         @Override
-        EmptyContext toContext(S outer) {
-            return EmptyContext.getDefaultInstance();
+        EventContext toContext(Event event) {
+            return event.context();
         }
     }
 
-    static final class Builder<S extends Message>
-            extends Consumers.Builder<S, EmptyContext, S, Builder<S>> {
+    static final class Builder<E extends EventMessage>
+        extends Consumers.Builder<E, EventContext, Event, Builder<E>> {
 
         @Override
-        Builder<S> self() {
+        Builder<E> self() {
             return this;
         }
 
         @Override
-        StateConsumers<S> build() {
-            return new StateConsumers<>(this);
+        Consumers<E, EventContext, Event> build() {
+            return new EventConsumers<>(this);
         }
     }
 }

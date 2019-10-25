@@ -20,45 +20,47 @@
 
 package io.spine.client;
 
-import com.google.protobuf.Message;
-import io.spine.core.EmptyContext;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.base.EventMessage;
+import io.spine.core.Event;
+import io.spine.core.EventContext;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Allows to subscribe to updates of entity states using filtering conditions.
- *
- * @param <S>
- *         the type of entity state to subscribe
- */
-public final class SubscriptionRequest<S extends Message>
-        extends SubscribingRequest<S, EmptyContext, S, SubscriptionRequest<S>> {
+public final class EventSubscriptionRequest<E extends EventMessage>
+    extends SubscribingRequest<E, EventContext, Event, EventSubscriptionRequest<E>> {
 
-    private final StateConsumers.Builder<S> consumers;
+    private final EventConsumers.Builder<E> consumers;
 
-    SubscriptionRequest(ClientRequest parent, Class<S> type) {
+    EventSubscriptionRequest(ClientRequest parent, Class<E> type) {
         super(parent, type);
-        this.consumers = StateConsumers.newBuilder();
+        this.consumers = EventConsumers.newBuilder();
     }
 
     @Override
-    StateConsumers.Builder<S> consumers() {
+    EventConsumers.Builder<E> consumers() {
         return consumers;
     }
 
     @Override
-    StateConsumer<S> toMessageConsumer(Consumer<S> consumer) {
-        return StateConsumer.from(consumer);
+    MessageConsumer<E, EventContext> toMessageConsumer(Consumer<E> consumer) {
+        return EventConsumer.from(consumer);
     }
 
-    @Override
-    SubscriptionRequest<S> self() {
-        return this;
+    @CanIgnoreReturnValue
+    public EventSubscriptionRequest<E> observe(EventConsumer<E> consumer) {
+        consumers().add(consumer);
+        return self();
     }
 
     @Override
     Function<ActorRequestFactory, TopicBuilder> builderFn() {
         return (factory) -> factory.topic().select(messageType());
+    }
+
+    @Override
+    EventSubscriptionRequest<E> self() {
+        return this;
     }
 }

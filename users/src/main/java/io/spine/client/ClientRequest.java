@@ -22,6 +22,7 @@ package io.spine.client;
 
 import com.google.protobuf.Message;
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -62,12 +63,24 @@ public class ClientRequest {
     }
 
     /**
-     * Creates a builder for customizing subscription for the passed type.
+     * Creates a builder for customizing subscription for the passed entity state type.
      */
     public <M extends Message> SubscriptionRequest subscribeTo(Class<M> type) {
+        checkNotNull(type);
         return new SubscriptionRequest<>(this, type);
     }
 
+    /**
+     * Creates a builder for customizing subscription for the passed event type.
+     */
+    public <E extends EventMessage> EventSubscriptionRequest<E> subscribeToEvent(Class<E> type) {
+        checkNotNull(type);
+        return new EventSubscriptionRequest<>(this, type);
+    }
+
+    /**
+     * Creates a builder for constructing a query for messages of the specified type.
+     */
     public <M extends Message> QueryRequest<M> select(Class<M> type) {
         return new QueryRequest<>(this, type);
     }

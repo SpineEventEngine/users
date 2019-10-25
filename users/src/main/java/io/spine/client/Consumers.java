@@ -32,13 +32,14 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-abstract class Consumers<M extends Message, C extends MessageContext> implements Logging {
+abstract class Consumers<M extends Message, C extends MessageContext, O extends Message>
+        implements Logging {
 
     private final ImmutableSet<MessageConsumer<M, C>> consumers;
     private final ErrorHandler streamingErrorHandler;
     private final ConsumerErrorHandler<M> consumingErrorHandler;
 
-    Consumers(Builder<M, C, ?> builder) {
+    Consumers(Builder<M, C, ?, ?> builder) {
         this.consumers = builder.consumers.build();
         this.streamingErrorHandler =
                 Optional.ofNullable(builder.streamingErrorHandler)
@@ -54,18 +55,19 @@ abstract class Consumers<M extends Message, C extends MessageContext> implements
                         ));
     }
 
-    abstract StreamObserver<M> toObserver();
+    abstract StreamObserver<O> toObserver();
 
     /**
      * Delivers messages to all the consumers.
      *
      * <p>If a streaming error occurs, passes it to {@link Consumers#streamingErrorHandler}.
      */
-    abstract class DeliveringObserver<O extends Message> implements StreamObserver<O> {
+    abstract class DeliveringObserver implements StreamObserver<O> {
 
         abstract M toMessage(O outer);
 
         abstract C toContext(O outer);
+
         @Override
         public void onNext(O value) {
             M msg = toMessage(value);
@@ -99,7 +101,6 @@ abstract class Consumers<M extends Message, C extends MessageContext> implements
         public void onCompleted() {
             // Do nothing.
         }
-
     }
 
     /**
@@ -108,8 +109,10 @@ abstract class Consumers<M extends Message, C extends MessageContext> implements
      * @param <M>
      *         the type of the messages delivered to consumers
      */
-    abstract static class Builder<M extends Message, C extends MessageContext,
-                        B extends Builder> {
+    abstract static class Builder<M extends Message,
+                                  C extends MessageContext,
+                                  O extends Message,
+                                  B extends Builder> {
 
         private final ImmutableSet.Builder<MessageConsumer<M, C>> consumers =
                 ImmutableSet.builder();
@@ -117,7 +120,7 @@ abstract class Consumers<M extends Message, C extends MessageContext> implements
         private @Nullable ConsumerErrorHandler<M> consumingErrorHandler;
 
         abstract B self();
-        abstract Consumers<M, C> build();
+        abstract Consumers<M, C, O> build();
 
         @CanIgnoreReturnValue
         B add(MessageConsumer<M, C> consumer) {

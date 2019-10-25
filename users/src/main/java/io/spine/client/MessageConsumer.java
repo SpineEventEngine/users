@@ -24,7 +24,6 @@ import com.google.protobuf.Message;
 import io.spine.base.MessageContext;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Functional interface for consumers of messages.

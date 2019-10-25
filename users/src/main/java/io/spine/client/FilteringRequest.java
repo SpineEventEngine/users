@@ -21,7 +21,6 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -59,8 +58,6 @@ FilteringRequest<M extends Message,
 
     /** Provides the {@linkplain #builderFn() builder} for the request. */
     private final Supplier<A> builder;
-
-    private  @Nullable ErrorHandler streamingErrorHandler;
 
     FilteringRequest(ClientRequest parent, Class<M> type) {
         super(parent);
