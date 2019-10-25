@@ -39,6 +39,6 @@ public interface EventConsumer<E extends EventMessage> extends MessageConsumer<E
     /** Converts the passed consumer of the event message to {@code EventConsumer}. */
     static <E extends EventMessage> EventConsumer<E> from(Consumer<E> consumer) {
         checkNotNull(consumer);
-        return new DelegatingEventConsumer<>(consumer);
+        return DelegatingConsumer.ofEvent(consumer);
     }
 }

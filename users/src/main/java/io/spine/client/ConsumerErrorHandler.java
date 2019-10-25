@@ -26,6 +26,8 @@ import com.google.protobuf.Message;
 
 import java.util.function.BiConsumer;
 
+import static io.spine.client.Consumers.toRealConsumer;
+
 /**
  * Functional interface for handlers of errors caused by consumers of messages.
  *
@@ -53,12 +55,11 @@ public interface ConsumerErrorHandler<M extends Message>
     logError(FluentLogger logger, String messageFormat) {
         return (consumer, throwable) -> {
             Class<? super M> type = new TypeToken<M>(){}.getRawType();
-            Object consumerToReport = consumer instanceof DelegatingMessageConsumer
-                    ? ((DelegatingMessageConsumer) consumer).delegate()
-                    : consumer;
+            Object consumerToReport = toRealConsumer(consumer);
             logger.atSevere()
                   .withCause(throwable)
                   .log(messageFormat, consumerToReport, type);
         };
     }
+
 }

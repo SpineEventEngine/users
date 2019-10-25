@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.protobuf.TextFormat.shortDebugString;
+import static io.spine.client.Consumers.toRealConsumer;
 
 /**
  * An association of event types to their consumers which also delivers events.
@@ -115,11 +116,9 @@ public final class MultiEventConsumers implements Logging {
      * <p>If the passed consumer is an instance of {@code DelegatingEventConsumer}
      * the real consumer will be reported in the log.
      */
-    private void logError(EventConsumer consumer, Event event, Throwable throwable) {
+    private void logError(EventConsumer<?> consumer, Event event, Throwable throwable) {
         String eventDiags = shortDebugString(event);
-        Object consumerToReport = consumer instanceof DelegatingEventConsumer
-            ? ((DelegatingEventConsumer) consumer).delegate()
-            : consumer;
+        Object consumerToReport = toRealConsumer(consumer);
         _error().withCause(throwable)
                 .log("The consumer `%s` could not handle the event `%s`.",
                      consumerToReport, eventDiags);

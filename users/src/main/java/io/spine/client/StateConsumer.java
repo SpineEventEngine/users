@@ -39,7 +39,7 @@ public interface StateConsumer<S extends Message>
 
     static <S extends Message> StateConsumer<S> from(Consumer<S> consumer) {
         checkNotNull(consumer);
-        return new DelegatingStateConsumer<S>(consumer);
+        return DelegatingConsumer.ofState(consumer);
     }
 
     @Override

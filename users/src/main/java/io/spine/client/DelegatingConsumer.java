@@ -21,7 +21,10 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
+import io.spine.base.EventMessage;
 import io.spine.base.MessageContext;
+import io.spine.core.EmptyContext;
+import io.spine.core.EventContext;
 
 import java.util.function.Consumer;
 
@@ -30,12 +33,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Adapts a consumer of an event message to the {@link EventConsumer} interface.
  */
-abstract class DelegatingMessageConsumer<M extends Message, C extends MessageContext>
+abstract class DelegatingConsumer<M extends Message, C extends MessageContext>
         implements MessageConsumer<M, C> {
 
     private final Consumer<M> delegate;
 
-    DelegatingMessageConsumer(Consumer<M> delegate) {
+    static <E extends EventMessage> EventConsumer<E> ofEvent(Consumer<E> consumer) {
+        checkNotNull(consumer);
+        return new DelegatingEventConsumer<>(consumer);
+    }
+
+    static <S extends Message> StateConsumer<S> ofState(Consumer<S> consumer) {
+        checkNotNull(consumer);
+        return new DelegatingStateConsumer<>(consumer);
+    }
+
+    private DelegatingConsumer(Consumer<M> delegate) {
         this.delegate = checkNotNull(delegate);
     }
 
@@ -48,5 +61,31 @@ abstract class DelegatingMessageConsumer<M extends Message, C extends MessageCon
     @Override
     public void accept(M m, C context) {
         delegate.accept(m);
+    }
+
+    /**
+     * Adapts a consumer of an event message to the {@link EventConsumer} interface.
+     */
+    private static final class DelegatingEventConsumer<E extends EventMessage>
+            extends DelegatingConsumer<E, EventContext>
+            implements EventConsumer<E> {
+
+        private DelegatingEventConsumer(Consumer<E> delegate) {
+            super(delegate);
+        }
+    }
+
+    private static final class DelegatingStateConsumer<S extends Message>
+            extends DelegatingConsumer<S, EmptyContext>
+            implements StateConsumer<S> {
+
+        private DelegatingStateConsumer(Consumer<S> delegate) {
+            super(delegate);
+        }
+
+        @Override
+        public void accept(S s) {
+            accept(s, EmptyContext.getDefaultInstance());
+        }
     }
 }
