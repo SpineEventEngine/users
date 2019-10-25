@@ -20,25 +20,30 @@
 
 package io.spine.client;
 
-import io.spine.base.EventMessage;
-import io.spine.core.EventContext;
+import com.google.protobuf.Message;
+import io.spine.core.EmptyContext;
 
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Represents an operation which accepts an event message and its context.
+ * Represents an operation that accepts a state of an entity.
  *
- * @param <E>
- *         the type of the event message
+ * @param <S>
+ *         the type of the entity state
  */
 @FunctionalInterface
-public interface EventConsumer<E extends EventMessage> extends MessageConsumer<E, EventContext> {
+public interface StateConsumer<S extends Message>
+        extends Consumer<S>, MessageConsumer<S, EmptyContext> {
 
-    /** Converts the passed consumer of the event message to {@code EventConsumer}. */
-    static <E extends EventMessage> EventConsumer<E> from(Consumer<E> consumer) {
+    static <S extends Message> StateConsumer<S> from(Consumer<S> consumer) {
         checkNotNull(consumer);
-        return new DelegatingEventConsumer<>(consumer);
+        return new DelegatingStateConsumer<S>(consumer);
+    }
+
+    @Override
+    default void accept(S s, EmptyContext ignored) {
+        accept(s);
     }
 }

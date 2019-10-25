@@ -20,25 +20,20 @@
 
 package io.spine.client;
 
-import io.spine.base.EventMessage;
-import io.spine.core.EventContext;
+import com.google.protobuf.Message;
+import io.spine.base.MessageContext;
 
-import java.util.function.Consumer;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.function.BiConsumer;
 
 /**
- * Represents an operation which accepts an event message and its context.
+ * Functional interface for consumers of messages.
  *
- * @param <E>
- *         the type of the event message
+ * @param <M>
+ *     the type of the messages consumed
+ * @param <C>
+ *     the type of the context of messages
  */
 @FunctionalInterface
-public interface EventConsumer<E extends EventMessage> extends MessageConsumer<E, EventContext> {
-
-    /** Converts the passed consumer of the event message to {@code EventConsumer}. */
-    static <E extends EventMessage> EventConsumer<E> from(Consumer<E> consumer) {
-        checkNotNull(consumer);
-        return new DelegatingEventConsumer<>(consumer);
-    }
+interface MessageConsumer<M extends Message, C extends MessageContext>
+        extends BiConsumer<M, C> {
 }

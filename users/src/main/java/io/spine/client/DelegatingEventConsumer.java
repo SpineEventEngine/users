@@ -25,27 +25,14 @@ import io.spine.core.EventContext;
 
 import java.util.function.Consumer;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Adapts a consumer of an event message to the {@link EventConsumer} interface.
  */
-final class DelegatingEventConsumer<E extends EventMessage> implements EventConsumer<E> {
-
-    private final Consumer<E> delegate;
+final class DelegatingEventConsumer<E extends EventMessage>
+        extends DelegatingMessageConsumer<E, EventContext>
+        implements EventConsumer<E> {
 
     DelegatingEventConsumer(Consumer<E> delegate) {
-        this.delegate = checkNotNull(delegate);
-    }
-
-    /** Obtains the consumer of the event message to which this consumer delegates. */
-    Consumer<E> delegate() {
-        return delegate;
-    }
-
-    /** Passes the event message to the associated consumer. */
-    @Override
-    public void accept(E e, EventContext context) {
-        delegate.accept(e);
+        super(delegate);
     }
 }

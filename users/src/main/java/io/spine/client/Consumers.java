@@ -22,86 +22,71 @@ package io.spine.client;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
+import io.spine.base.MessageContext;
 import io.spine.logging.Logging;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.function.Consumer;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-final class Consumers<M extends Message> implements Logging {
+abstract class Consumers<M extends Message, C extends MessageContext> implements Logging {
 
-    private final ImmutableSet<Consumer<M>> consumers;
+    private final ImmutableSet<MessageConsumer<M, C>> consumers;
     private final ErrorHandler streamingErrorHandler;
-    private final ErrorHandler consumingErrorHandler;
+    private final ConsumerErrorHandler<M> consumingErrorHandler;
 
-    static <M extends Message> Builder<M> newBuilder() {
-        return new Builder<>();
-    }
-
-    private Consumers(Builder<M> builder) {
+    Consumers(Builder<M, C, ?> builder) {
         this.consumers = builder.consumers.build();
-        Class<? super M> type = new TypeToken<M>(){}.getRawType();
-        this.streamingErrorHandler = nullToDefault(
-                builder.streamingErrorHandler,
-                "Error receiving a message of the type `%s`.",
-                type
-        );
-        this.consumingErrorHandler = nullToDefault(
-                builder.consumingErrorHandler,
-                "Error consuming the message of the type `%s`.",
-                type
-        );
+        this.streamingErrorHandler =
+                Optional.ofNullable(builder.streamingErrorHandler)
+                        .orElseGet(() -> ErrorHandler.logError(
+                                this.logger(),
+                                "Error receiving a message of the type `%s`."
+                        ));
+        this.consumingErrorHandler =
+                Optional.ofNullable(builder.consumingErrorHandler)
+                        .orElseGet(() -> ConsumerErrorHandler.logError(
+                                this.logger(),
+                                "The consumer `%s` could not handle the message of the type `%s`."
+                        ));
     }
 
-    /**
-     * If the passed handler is non-null returns it; otherwise creates a handler which
-     * logs a reported error.
-     *
-     * @param handler
-     *         the handler to check
-     * @param errorMessageFormat
-     *         the error message containing a single placeholder ("%s") for the name of the type
-     *         of delivered messages
-     * @return the passed handler, if it's not {@code null} or t
-     */
-    private ErrorHandler nullToDefault(@Nullable ErrorHandler handler,
-                                       String errorMessageFormat,
-                                       Object... args) {
-        if (handler != null) {
-            return handler;
-        }
-        return throwable -> _error().withCause(throwable)
-                                    .log(errorMessageFormat, args);
-    }
-
-    void deliver(M message) {
-        consumers.forEach(consumer -> {
-            try {
-                consumer.accept(message);
-            } catch (Throwable t) {
-                consumingErrorHandler.accept(t);
-            }
-        });
-    }
-
-    StreamObserver<M> toObserver() {
-        return new DeliveringObserver();
-    }
+    abstract StreamObserver<M> toObserver();
 
     /**
      * Delivers messages to all the consumers.
      *
      * <p>If a streaming error occurs, passes it to {@link Consumers#streamingErrorHandler}.
      */
-    private final class DeliveringObserver implements StreamObserver<M> {
+    abstract class DeliveringObserver<O extends Message> implements StreamObserver<O> {
+
+        abstract M toMessage(O outer);
+        abstract C toContext(O outer);
 
         @Override
-        public void onNext(M value) {
-            deliver(value);
+        public void onNext(O value) {
+            M msg = toMessage(value);
+            C ctx = toContext(value);
+            deliver(msg, ctx);
+        }
+
+        /**
+         * Delivers the message to consumers.
+         *
+         * <p>If a consumer method throws, the {@code Throwable} is passed
+         * to {@link #consumingErrorHandler}, and the message is passed to remaining consumers.
+         */
+        private void deliver(M message, C context) {
+            consumers.forEach(consumer -> {
+                try {
+                    consumer.accept(message, context);
+                } catch (Throwable t) {
+                    consumingErrorHandler.accept(consumer, t);
+                }
+            });
         }
 
         @Override
@@ -110,6 +95,7 @@ final class Consumers<M extends Message> implements Logging {
         }
 
         @Override
+        @SuppressWarnings("NoopMethodInAbstractClass")
         public void onCompleted() {
             // Do nothing.
         }
@@ -121,16 +107,21 @@ final class Consumers<M extends Message> implements Logging {
      * @param <M>
      *         the type of the messages delivered to consumers
      */
-    static final class Builder<M extends Message> {
+    abstract static class Builder<M extends Message, C extends MessageContext,
+                        B extends Builder> {
 
-        private final ImmutableSet.Builder<Consumer<M>> consumers = ImmutableSet.builder();
+        private final ImmutableSet.Builder<MessageConsumer<M, C>> consumers =
+                ImmutableSet.builder();
         private @Nullable ErrorHandler streamingErrorHandler;
-        private @Nullable ErrorHandler consumingErrorHandler;
+        private @Nullable ConsumerErrorHandler<M> consumingErrorHandler;
+
+        abstract B self();
+        abstract Consumers<M, C> build();
 
         @CanIgnoreReturnValue
-        Builder<M> add(Consumer<M> consumer) {
+        B add(MessageConsumer<M, C> consumer) {
             consumers.add(checkNotNull(consumer));
-            return this;
+            return self();
         }
 
         /**
@@ -141,12 +132,12 @@ final class Consumers<M extends Message> implements Logging {
          *
          * <p>Once this handler is called, no more messages will be delivered to consumers.
          *
-         * @see #onConsumingError(ErrorHandler)
+         * @see #onConsumingError(ConsumerErrorHandler)
          */
         @CanIgnoreReturnValue
-        Builder<M> onStreamingError(ErrorHandler handler) {
+        B onStreamingError(ErrorHandler handler) {
             streamingErrorHandler = checkNotNull(handler);
-            return this;
+            return self();
         }
 
         /**
@@ -157,13 +148,9 @@ final class Consumers<M extends Message> implements Logging {
          * @see #onStreamingError(ErrorHandler)
          */
         @CanIgnoreReturnValue
-        Builder<M> onConsumingError(ErrorHandler handler) {
+        B onConsumingError(ConsumerErrorHandler<M> handler) {
             consumingErrorHandler = checkNotNull(handler);
-            return this;
-        }
-
-        Consumers<M> build() {
-            return new Consumers<>(this);
+            return self();
         }
     }
 }

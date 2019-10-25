@@ -30,24 +30,24 @@ import java.util.function.Function;
 /**
  * Allows to subscribe to updates of messages using filtering conditions.
  */
-public final class SubscriptionRequest<M extends Message>
-        extends FilteringRequest<M, Topic, TopicBuilder, SubscriptionRequest<M>> {
+public final class SubscriptionRequest<S extends Message>
+        extends FilteringRequest<S, Topic, TopicBuilder, SubscriptionRequest<S>> {
 
-    private final Consumers.Builder<M> consumers;
+    private final StateConsumers.Builder<S> consumers;
 
-    SubscriptionRequest(ClientRequest parent, Class<M> type) {
+    SubscriptionRequest(ClientRequest parent, Class<S> type) {
         super(parent, type);
-        this.consumers = Consumers.newBuilder();
+        this.consumers = StateConsumers.newBuilder();
     }
 
-    private Subscription subscribe(Topic topic, StreamObserver<M> observer) {
+    private Subscription subscribe(Topic topic, StreamObserver<S> observer) {
         Subscription subscription = client().subscribeTo(topic, observer);
         return subscription;
     }
 
     @CanIgnoreReturnValue
-    public SubscriptionRequest<M> observe(Consumer<M> consumer) {
-        consumers.add(consumer);
+    public SubscriptionRequest<S> observe(Consumer<S> consumer) {
+        consumers.add(StateConsumer.from(consumer));
         return self();
     }
 
@@ -59,10 +59,10 @@ public final class SubscriptionRequest<M extends Message>
      *
      * <p>Once this handler is called, no more messages will be delivered to consumers.
      *
-     * @see #onConsumingError(ErrorHandler)
+     * @see #onConsumingError(ConsumerErrorHandler)
      */
     @CanIgnoreReturnValue
-    public SubscriptionRequest<M> onStreamingError(ErrorHandler handler) {
+    public SubscriptionRequest<S> onStreamingError(ErrorHandler handler) {
         consumers.onStreamingError(handler);
         return self();
     }
@@ -75,7 +75,7 @@ public final class SubscriptionRequest<M extends Message>
      * @see #onStreamingError(ErrorHandler)
      */
     @CanIgnoreReturnValue
-    SubscriptionRequest<M> onConsumingError(ErrorHandler handler) {
+    SubscriptionRequest<S> onConsumingError(ConsumerErrorHandler<S> handler) {
         consumers.onConsumingError(handler);
         return self();
     }
@@ -85,12 +85,12 @@ public final class SubscriptionRequest<M extends Message>
      */
     public Subscription subscribe() {
         Topic topic = builder().build();
-        StreamObserver<M> observer = createObserver();
+        StreamObserver<S> observer = createObserver();
         return subscribe(topic, observer);
     }
 
-    private StreamObserver<M> createObserver() {
-        Consumers<M> consumers = this.consumers.build();
+    private StreamObserver<S> createObserver() {
+        StateConsumers<S> consumers = this.consumers.build();
         return consumers.toObserver();
     }
 
@@ -99,7 +99,7 @@ public final class SubscriptionRequest<M extends Message>
      */
     public Subscription all() {
         Topic topic = factory().topic().allOf(messageType());
-        StreamObserver<M> observer = createObserver();
+        StreamObserver<S> observer = createObserver();
         return subscribe(topic, observer);
     }
 
@@ -109,7 +109,7 @@ public final class SubscriptionRequest<M extends Message>
     }
 
     @Override
-    SubscriptionRequest<M> self() {
+    SubscriptionRequest<S> self() {
         return this;
     }
 }

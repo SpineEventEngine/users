@@ -21,16 +21,20 @@
 package io.spine.client;
 
 import com.google.common.flogger.FluentLogger;
-import com.google.gson.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
 import com.google.protobuf.Message;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
- * Functional interface for error handlers.
+ * Functional interface for handlers of errors caused by consumers of messages.
+ *
+ * @param <M>
+ *         the type of messages delivered to consumers
  */
 @FunctionalInterface
-public interface ErrorHandler extends Consumer<Throwable> {
+public interface ConsumerErrorHandler<M extends Message>
+        extends BiConsumer<MessageConsumer<M, ?>, Throwable> {
 
     /**
      * Logs the fact of the error using the {@linkplain FluentLogger#atSevere() server} level
@@ -39,19 +43,22 @@ public interface ErrorHandler extends Consumer<Throwable> {
      * @param logger
      *         the instance of the logger to use for reporting the error
      * @param messageFormat
-     *         the formatting message where the sole parameter is the type of
-     *         the message which caused the error
+     *         the formatting message where the first parameter is the consumer which caused
+     *         the error, and the second parameter is the type of the message which caused the error
      * @param <M>
      *         the type of the messages delivered to the consumer
      * @return the logging error handler
      */
-    static <M extends Message> ErrorHandler
+    static <M extends Message> ConsumerErrorHandler<M>
     logError(FluentLogger logger, String messageFormat) {
-        return (throwable) -> {
+        return (consumer, throwable) -> {
             Class<? super M> type = new TypeToken<M>(){}.getRawType();
+            Object consumerToReport = consumer instanceof DelegatingMessageConsumer
+                    ? ((DelegatingMessageConsumer) consumer).delegate()
+                    : consumer;
             logger.atSevere()
                   .withCause(throwable)
-                  .log(messageFormat, type);
+                  .log(messageFormat, consumerToReport, type);
         };
     }
 }

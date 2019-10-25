@@ -142,7 +142,7 @@ public final class MultiEventConsumers implements Logging {
         Builder observe(Class<E> eventType, Consumer<E> consumer) {
             checkNotNull(eventType);
             checkNotNull(consumer);
-            map.put(eventType, EventConsumer.fromConsumer(consumer));
+            map.put(eventType, EventConsumer.from(consumer));
             return this;
         }
 
