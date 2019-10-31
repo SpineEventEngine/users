@@ -25,7 +25,13 @@ import io.spine.base.EventMessage;
 import io.spine.core.Event;
 import io.spine.core.EventContext;
 
-public class EventConsumers<E extends EventMessage> extends Consumers<E, EventContext, Event> {
+/**
+ * A collection of event consumers that delivers messages to them.
+ *
+ * @param <E>
+ *         the type of event messages
+ */
+final class EventConsumers<E extends EventMessage> extends Consumers<E, EventContext, Event> {
 
     static <E extends EventMessage> Builder<E> newBuilder() {
         return new Builder<>();
@@ -40,6 +46,9 @@ public class EventConsumers<E extends EventMessage> extends Consumers<E, EventCo
         return new EventObserver();
     }
 
+    /**
+     * The observer to be supplied to gRPC API.
+     */
     private final class EventObserver extends DeliveringObserver {
 
         @SuppressWarnings("unchecked") // The correct type is provided by subscription impl.
@@ -54,6 +63,12 @@ public class EventConsumers<E extends EventMessage> extends Consumers<E, EventCo
         }
     }
 
+    /**
+     * The builder for consumers of events.
+     *
+     * @param <E>
+     *         the type of event messages
+     */
     static final class Builder<E extends EventMessage>
         extends Consumers.Builder<E, EventContext, Event, Builder<E>> {
 

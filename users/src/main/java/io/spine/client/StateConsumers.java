@@ -24,6 +24,12 @@ import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 import io.spine.core.EmptyContext;
 
+/**
+ * A collection of entity state consumers that delivers messages to them.
+ *
+ * @param <S>
+ *         the type of entity state messages
+ */
 final class StateConsumers<S extends Message> extends Consumers<S, EmptyContext, S> {
 
     static <S extends Message> Builder<S> newBuilder() {
@@ -52,7 +58,7 @@ final class StateConsumers<S extends Message> extends Consumers<S, EmptyContext,
         }
     }
 
-    static final class Builder<S extends Message>
+    public static final class Builder<S extends Message>
             extends Consumers.Builder<S, EmptyContext, S, Builder<S>> {
 
         @Override
@@ -61,7 +67,7 @@ final class StateConsumers<S extends Message> extends Consumers<S, EmptyContext,
         }
 
         @Override
-        StateConsumers<S> build() {
+        public StateConsumers<S> build() {
             return new StateConsumers<>(this);
         }
     }
