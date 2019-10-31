@@ -27,22 +27,39 @@ import io.spine.base.MessageContext;
 
 import java.util.function.Consumer;
 
-abstract class SubscribingRequest<M extends Message,
-                                  C extends MessageContext,
-                                  O extends Message,
-                                  B extends SubscribingRequest<M, C, O, B>>
-               extends FilteringRequest<M, Topic, TopicBuilder, SubscribingRequest<M, C, O, B>> {
+/**
+ * Abstract base for client requests that subscribe to messages.
+ *
+ * @param <M>
+ *         the type of the subscribed messages
+ * @param <C>
+ *         the type of the context of messages or {@link io.spine.core.EmptyContext} if
+ *         messages do not have a context
+ * @param <W>
+ *         the type of the message that wraps a message and its context
+ *         (e.g. {@link io.spine.core.Event}); if subscribed message type does not have a context,
+ *         this parameter is likely to be the same as {@code M}
+ * @param <B>
+ *         the type of this requests for return type covariance
+ */
+
+public abstract class
+SubscribingRequest<M extends Message,
+                   C extends MessageContext,
+                   W extends Message,
+                   B extends SubscribingRequest<M, C, W, B>>
+        extends FilteringRequest<M, Topic, TopicBuilder, SubscribingRequest<M, C, W, B>> {
 
     SubscribingRequest(ClientRequest parent, Class<M> type) {
         super(parent, type);
     }
 
-    abstract Consumers.Builder<M, C, O, ?> consumers();
+    abstract Consumers.Builder<M, C, W, ?> consumers();
 
     abstract MessageConsumer<M, C> toMessageConsumer(Consumer<M> consumer);
 
     @CanIgnoreReturnValue
-    public SubscribingRequest<M, C, O, B> observe(Consumer<M> consumer) {
+    public SubscribingRequest<M, C, W, B> observe(Consumer<M> consumer) {
         consumers().add(toMessageConsumer(consumer));
         return self();
     }
@@ -58,7 +75,7 @@ abstract class SubscribingRequest<M extends Message,
      * @see #onConsumingError(ConsumerErrorHandler)
      */
     @CanIgnoreReturnValue
-    public SubscribingRequest<M, C, O, B> onStreamingError(ErrorHandler handler) {
+    public SubscribingRequest<M, C, W, B> onStreamingError(ErrorHandler handler) {
         consumers().onStreamingError(handler);
         return self();
     }
@@ -71,7 +88,7 @@ abstract class SubscribingRequest<M extends Message,
      * @see #onStreamingError(ErrorHandler)
      */
     @CanIgnoreReturnValue
-    SubscribingRequest<M, C, O, B> onConsumingError(ConsumerErrorHandler<M> handler) {
+    SubscribingRequest<M, C, W, B> onConsumingError(ConsumerErrorHandler<M> handler) {
         consumers().onConsumingError(handler);
         return self();
     }
@@ -81,7 +98,7 @@ abstract class SubscribingRequest<M extends Message,
      */
     public Subscription subscribe() {
         Topic topic = builder().build();
-        StreamObserver<O> observer = createObserver();
+        StreamObserver<W> observer = createObserver();
         return subscribe(topic, observer);
     }
 
@@ -90,15 +107,15 @@ abstract class SubscribingRequest<M extends Message,
      */
     public Subscription all() {
         Topic topic = factory().topic().allOf(messageType());
-        StreamObserver<O> observer = createObserver();
+        StreamObserver<W> observer = createObserver();
         return subscribe(topic, observer);
     }
 
-    private StreamObserver<O> createObserver() {
+    private StreamObserver<W> createObserver() {
         return consumers().build().toObserver();
     }
 
-    private Subscription subscribe(Topic topic, StreamObserver<O> observer) {
+    private Subscription subscribe(Topic topic, StreamObserver<W> observer) {
         Subscription subscription = client().subscribeTo(topic, observer);
         return subscription;
     }

@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Suppliers.memoize;
 
 /**
- * Abstract base for client request builders that may filter messages by certain criteria.
+ * Abstract base for client requests that may filter messages by certain criteria.
  *
  * <p>This class warps around {@link TargetBuilder} for providing fluent API for
  * client request composition and placement.
@@ -42,13 +42,15 @@ import static com.google.common.base.Suppliers.memoize;
  * @param <A>
  *         the type of the builder of the request
  * @param <B>
- *         the type of this client request builder (which wraps over type {@code <A>}
+ *         the type of this client request (which wraps over type {@code <A>} for
+ *         return type covariance
  */
 public abstract class
 FilteringRequest<M extends Message,
                  R extends Message,
                  A extends TargetBuilder<R, A>,
-                 B extends FilteringRequest<M, R, A, B>> extends ClientRequest {
+                 B extends FilteringRequest<M, R, A, B>>
+        extends ClientRequest {
 
     /** The type of messages returned by the request. */
     private final Class<M> messageType;

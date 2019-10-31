@@ -36,6 +36,8 @@ import static io.spine.util.Preconditions2.checkNotDefaultArg;
  * a specific client request e.g. for {@linkplain ClientRequest#command(CommandMessage) posting
  * a command} or {@linkplain ClientRequest#select(Class) running a query}.
  *
+ * <p>A client request is customizing using fluent API, which is provided by the derived classes.
+ *
  * @see Client
  */
 @SuppressWarnings("ClassReferencesSubclass")
