@@ -20,44 +20,47 @@
 
 package io.spine.client;
 
-import com.google.protobuf.Message;
-import io.grpc.stub.StreamObserver;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.base.EventMessage;
+import io.spine.core.Event;
+import io.spine.core.EventContext;
 
-/**
- * Allows to subscribe to updates of messages using filtering conditions.
- */
-public final class SubscriptionRequestBuilder<M extends Message>
-        extends FilteringRequestBuilder<M,
-                                        Topic,
-                                        TopicBuilder,
-                                        SubscriptionRequestBuilder<M>> {
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-    SubscriptionRequestBuilder(RequestBuilder parent, Class<M> type) {
+public final class EventSubscriptionRequest<E extends EventMessage>
+    extends SubscribingRequest<E, EventContext, Event, EventSubscriptionRequest<E>> {
+
+    private final EventConsumers.Builder<E> consumers;
+
+    EventSubscriptionRequest(ClientRequest parent, Class<E> type) {
         super(parent, type);
-    }
-
-    private Subscription subscribe(Topic topic, StreamObserver<M> observer) {
-        Subscription subscription = client().subscribeTo(topic, observer);
-        return subscription;
-    }
-
-    public Subscription observe(StreamObserver<M> observer) {
-        Topic topic = builder().build();
-        return subscribe(topic, observer);
-    }
-
-    public Subscription all(StreamObserver<M> observer) {
-        Topic topic = factory().topic().allOf(messageType());
-        return subscribe(topic, observer);
+        this.consumers = EventConsumers.newBuilder();
     }
 
     @Override
-    TopicBuilder createBuilder() {
-        return factory().topic().select(messageType());
+    EventConsumers.Builder<E> consumers() {
+        return consumers;
     }
 
     @Override
-    SubscriptionRequestBuilder<M> self() {
+    MessageConsumer<E, EventContext> toMessageConsumer(Consumer<E> consumer) {
+        return EventConsumer.from(consumer);
+    }
+
+    @CanIgnoreReturnValue
+    public EventSubscriptionRequest<E> observe(EventConsumer<E> consumer) {
+        consumers().add(consumer);
+        return self();
+    }
+
+    @Override
+    Function<ActorRequestFactory, TopicBuilder> builderFn() {
+        return (factory) -> factory.topic().select(messageType());
+    }
+
+    @Override
+    EventSubscriptionRequest<E> self() {
         return this;
     }
 }

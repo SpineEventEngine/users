@@ -21,7 +21,7 @@
 package io.spine.users.client;
 
 import io.spine.client.Client;
-import io.spine.client.RequestBuilder;
+import io.spine.client.ClientRequest;
 import io.spine.core.UserId;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
@@ -81,8 +81,8 @@ public final class Session implements AutoCloseable, Logging {
      * <p>If the user is logged in, the ID of the user {@linkplain Client#onBehalfOf(UserId)
      * will be used}. Otherwise, a {@linkplain Client#asGuest() guest user ID} will be used.
      */
-    public RequestBuilder userRequest() {
-        RequestBuilder result =
+    public ClientRequest userRequest() {
+        ClientRequest result =
                 active()
                 ? client.onBehalfOf(user)
                 : client.asGuest();

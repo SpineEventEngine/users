@@ -21,44 +21,70 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
-import io.spine.annotation.Experimental;
 import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotDefaultArg;
 
+/**
+ * Entry point for creating client requests.
+ *
+ * <p>An instance of this class is obtained via
+ * {@link Client#onBehalfOf(UserId)} or {@link Client#asGuest()} methods and then used for creating
+ * a specific client request e.g. for {@linkplain ClientRequest#command(CommandMessage) posting
+ * a command} or {@linkplain ClientRequest#select(Class) running a query}.
+ *
+ * <p>A client request is customizing using fluent API, which is provided by the derived classes.
+ *
+ * @see Client
+ */
 @SuppressWarnings("ClassReferencesSubclass")
 // we want to have DSL for calls encapsulated in this class.
-@Experimental
-public class RequestBuilder {
+public class ClientRequest {
 
     private final UserId user;
     private final Client client;
 
-    RequestBuilder(UserId user, Client client) {
-        Util.checkNotDefaultArg(user);
+    ClientRequest(UserId user, Client client) {
+        checkNotDefaultArg(user);
         this.user = user;
         this.client = checkNotNull(client);
+    }
+
+    ClientRequest(ClientRequest parent) {
+        this(parent.user, parent.client);
     }
 
     /**
      * Creates a builder for customizing command request.
      */
-    public CommandRequestBuilder command(CommandMessage c) {
-        return new CommandRequestBuilder(this, c);
+    public CommandRequest command(CommandMessage c) {
+        return new CommandRequest(this, c);
     }
 
     /**
-     * Creates a builder for customizing subscription for the passed type.
+     * Creates a builder for customizing subscription for the passed entity state type.
      */
-    public <M extends Message>
-    SubscriptionRequestBuilder subscribeTo(Class<M> type) {
-        return new SubscriptionRequestBuilder<>(this, type);
+    public <M extends Message> SubscriptionRequest subscribeTo(Class<M> type) {
+        checkNotNull(type);
+        return new SubscriptionRequest<>(this, type);
     }
 
-    public <M extends Message>
-    QueryRequestBuilder<M> select(Class<M> type) {
-        return new QueryRequestBuilder<>(this, type);
+    /**
+     * Creates a builder for customizing subscription for the passed event type.
+     */
+    public <E extends EventMessage> EventSubscriptionRequest<E> subscribeToEvent(Class<E> type) {
+        checkNotNull(type);
+        return new EventSubscriptionRequest<>(this, type);
+    }
+
+    /**
+     * Creates a builder for constructing a query for messages of the specified type.
+     */
+    public <M extends Message> QueryRequest<M> select(Class<M> type) {
+        return new QueryRequest<>(this, type);
     }
 
     /**

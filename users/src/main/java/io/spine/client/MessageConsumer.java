@@ -21,42 +21,19 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
+import io.spine.base.MessageContext;
 
-import java.util.List;
+import java.util.function.BiConsumer;
 
-public final class QueryRequestBuilder<M extends Message>
-    extends FilteringRequestBuilder<M,
-                                    Query,
-                                    QueryBuilder,
-                                    QueryRequestBuilder<M>> {
-
-    QueryRequestBuilder(RequestBuilder parent, Class<M> type) {
-        super(parent, type);
-    }
-
-    public QueryRequestBuilder<M> orderBy(String column, OrderBy.Direction direction) {
-        builder().orderBy(column, direction);
-        return this;
-    }
-
-    public QueryRequestBuilder<M> limit(int count) {
-        builder().limit(count);
-        return this;
-    }
-
-    public List<M> query() {
-        Query query = builder().build();
-        List<M> result = client().query(query);
-        return result;
-    }
-
-    @Override
-    QueryBuilder createBuilder() {
-        return factory().query().select(messageType());
-    }
-
-    @Override
-    QueryRequestBuilder<M> self() {
-        return this;
-    }
+/**
+ * Functional interface for consumers of messages.
+ *
+ * @param <M>
+ *     the type of the messages consumed
+ * @param <C>
+ *     the type of the context of messages
+ */
+@FunctionalInterface
+interface MessageConsumer<M extends Message, C extends MessageContext>
+        extends BiConsumer<M, C> {
 }

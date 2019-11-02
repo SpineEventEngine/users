@@ -21,16 +21,29 @@
 package io.spine.client;
 
 import com.google.protobuf.Message;
+import io.spine.core.EmptyContext;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static io.spine.validate.Validate.isDefault;
+import java.util.function.Consumer;
 
-public class Util {
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    private Util() {
+/**
+ * Represents an operation that accepts a state of an entity.
+ *
+ * @param <S>
+ *         the type of the entity state
+ */
+@FunctionalInterface
+public interface StateConsumer<S extends Message>
+        extends Consumer<S>, MessageConsumer<S, EmptyContext> {
+
+    static <S extends Message> StateConsumer<S> from(Consumer<S> consumer) {
+        checkNotNull(consumer);
+        return DelegatingConsumer.ofState(consumer);
     }
 
-    public static void checkNotDefaultArg(Message message) {
-        checkArgument(!isDefault(message));
+    @Override
+    default void accept(S s, EmptyContext ignored) {
+        accept(s);
     }
 }

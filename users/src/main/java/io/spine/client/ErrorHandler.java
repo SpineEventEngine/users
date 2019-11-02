@@ -20,25 +20,38 @@
 
 package io.spine.client;
 
-import io.spine.base.EventMessage;
-import io.spine.core.EventContext;
+import com.google.common.flogger.FluentLogger;
+import com.google.gson.reflect.TypeToken;
+import com.google.protobuf.Message;
 
 import java.util.function.Consumer;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
- * Represents an operation which accepts an event message and its context.
- *
- * @param <E>
- *         the type of the event message
+ * Functional interface for error handlers.
  */
 @FunctionalInterface
-public interface EventConsumer<E extends EventMessage> extends MessageConsumer<E, EventContext> {
+public interface ErrorHandler extends Consumer<Throwable> {
 
-    /** Converts the passed consumer of the event message to {@code EventConsumer}. */
-    static <E extends EventMessage> EventConsumer<E> from(Consumer<E> consumer) {
-        checkNotNull(consumer);
-        return DelegatingConsumer.ofEvent(consumer);
+    /**
+     * Logs the fact of the error using the {@linkplain FluentLogger#atSevere() server} level
+     * of the passed logger.
+     *
+     * @param logger
+     *         the instance of the logger to use for reporting the error
+     * @param messageFormat
+     *         the formatting message where the sole parameter is the type of
+     *         the message which caused the error
+     * @param <M>
+     *         the type of the messages delivered to the consumer
+     * @return the logging error handler
+     */
+    static <M extends Message> ErrorHandler
+    logError(FluentLogger logger, String messageFormat) {
+        return (throwable) -> {
+            Class<? super M> type = new TypeToken<M>(){}.getRawType();
+            logger.atSevere()
+                  .withCause(throwable)
+                  .log(messageFormat, type);
+        };
     }
 }

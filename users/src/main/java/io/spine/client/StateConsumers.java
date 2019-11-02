@@ -20,66 +20,55 @@
 
 package io.spine.client;
 
+import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
-import io.spine.base.EventMessage;
-import io.spine.core.Event;
-import io.spine.core.EventContext;
+import io.spine.core.EmptyContext;
 
 /**
- * A collection of event consumers that delivers messages to them.
+ * A collection of entity state consumers that delivers messages to them.
  *
- * @param <E>
- *         the type of event messages
+ * @param <S>
+ *         the type of entity state messages
  */
-final class EventConsumers<E extends EventMessage> extends Consumers<E, EventContext, Event> {
+final class StateConsumers<S extends Message> extends Consumers<S, EmptyContext, S> {
 
-    static <E extends EventMessage> Builder<E> newBuilder() {
+    static <S extends Message> Builder<S> newBuilder() {
         return new Builder<>();
     }
 
-    private EventConsumers(Builder<E> builder) {
+    private StateConsumers(Builder<S> builder) {
         super(builder);
     }
 
     @Override
-    StreamObserver<Event> toObserver() {
-        return new EventObserver();
+    StreamObserver<S> toObserver() {
+        return new StateObserver();
     }
 
-    /**
-     * The observer to be supplied to gRPC API.
-     */
-    private final class EventObserver extends DeliveringObserver {
+    private final class StateObserver extends DeliveringObserver {
 
-        @SuppressWarnings("unchecked") // The correct type is provided by subscription impl.
         @Override
-        E toMessage(Event event) {
-            return (E) event.enclosedMessage();
+        S toMessage(S outer) {
+            return outer;
         }
 
         @Override
-        EventContext toContext(Event event) {
-            return event.context();
+        EmptyContext toContext(S outer) {
+            return EmptyContext.getDefaultInstance();
         }
     }
 
-    /**
-     * The builder for consumers of events.
-     *
-     * @param <E>
-     *         the type of event messages
-     */
-    static final class Builder<E extends EventMessage>
-        extends Consumers.Builder<E, EventContext, Event, Builder<E>> {
+    public static final class Builder<S extends Message>
+            extends Consumers.Builder<S, EmptyContext, S, Builder<S>> {
 
         @Override
-        Builder<E> self() {
+        Builder<S> self() {
             return this;
         }
 
         @Override
-        Consumers<E, EventContext, Event> build() {
-            return new EventConsumers<>(this);
+        public StateConsumers<S> build() {
+            return new StateConsumers<>(this);
         }
     }
 }

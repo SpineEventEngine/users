@@ -24,7 +24,6 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
-import io.spine.annotation.Experimental;
 import io.spine.client.grpc.CommandServiceGrpc;
 import io.spine.client.grpc.CommandServiceGrpc.CommandServiceBlockingStub;
 import io.spine.client.grpc.QueryServiceGrpc;
@@ -44,9 +43,10 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
+import static io.spine.util.Preconditions2.checkNotDefaultArg;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
-import static io.spine.validate.Validate.isDefault;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -54,7 +54,6 @@ import static java.util.stream.Collectors.toList;
  * The gRPC-based gateway for backend services such as {@code CommandService} or
  * {@code QueryService}.
  */
-@Experimental
 public class Client implements AutoCloseable {
 
     /** The number of seconds to wait when {@linkplain #close() closing} the client. */
@@ -153,15 +152,15 @@ public class Client implements AutoCloseable {
     /**
      * Creates a builder for requests on behalf of the passed user.
      */
-    public RequestBuilder onBehalfOf(UserId user) {
-        Util.checkNotDefaultArg(user);
-        return new RequestBuilder(user, this);
+    public ClientRequest onBehalfOf(UserId user) {
+        checkNotDefaultArg(user);
+        return new ClientRequest(user, this);
     }
 
     /**
      * Creates a builder for posting guest requests.
      */
-    public RequestBuilder asGuest() {
+    public ClientRequest asGuest() {
         return onBehalfOf(guestUser());
     }
 

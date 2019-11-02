@@ -17,24 +17,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-/**
- * Declares the version of the artifacts to publish and versions of
- * project-specific general dependencies.
- *
- * This file is used in both module `build.gradle` scripts and in the integration tests,
- * as we want to manage the versions in a single source.
- *
- * This file is copied to the root of the project ONLY if there's no file with such a name
- * already in the root directory.
- */
+package spine.core;
 
-final def SPINE_VERSION = '1.1.2'
-final def VERSION_TO_PUBLISH = '0.0.2-SNAPSHOT'
+import "spine/options.proto";
 
-ext {
-    spineBaseVersion = '1.1.9'
-    spineVersion = '1.1.12'
-    versionToPublish = VERSION_TO_PUBLISH
-    versionToPublishJs = VERSION_TO_PUBLISH
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.core";
+option java_multiple_files = true;
+option java_outer_classname = "EmptyContextProto";
+
+// This types is used with message types that do not have a context.
+//
+// The primary purpose of this type is to serve as a generic parameter in Java code when
+// `MessageContext` is needed.
+// What `google.protobuf.Empty` is for message, this type is for `io.spine.base.MessageContext`.
+//
+message EmptyContext {
+    option (is).java_type = "io.spine.base.MessageContext";
 }

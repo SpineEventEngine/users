@@ -20,32 +20,45 @@
 
 package io.spine.client;
 
-import io.spine.base.EventMessage;
-import io.spine.core.EventContext;
+import com.google.protobuf.Message;
+import io.spine.core.EmptyContext;
 
 import java.util.function.Consumer;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.function.Function;
 
 /**
- * Adapts a consumer of an event message to the {@link EventConsumer} interface.
+ * Allows to subscribe to updates of entity states using filtering conditions.
+ *
+ * @param <S>
+ *         the type of entity state to subscribe
  */
-final class DelegatingEventConsumer<E extends EventMessage> implements EventConsumer<E> {
+public final class SubscriptionRequest<S extends Message>
+        extends SubscribingRequest<S, EmptyContext, S, SubscriptionRequest<S>> {
 
-    private final Consumer<E> delegate;
+    private final StateConsumers.Builder<S> consumers;
 
-    DelegatingEventConsumer(Consumer<E> delegate) {
-        this.delegate = checkNotNull(delegate);
+    SubscriptionRequest(ClientRequest parent, Class<S> type) {
+        super(parent, type);
+        this.consumers = StateConsumers.newBuilder();
     }
 
-    /** Obtains the consumer of the event message to which this consumer delegates. */
-    Consumer<E> delegate() {
-        return delegate;
-    }
-
-    /** Passes the event message to the associated consumer. */
     @Override
-    public void accept(E e, EventContext context) {
-        delegate.accept(e);
+    StateConsumers.Builder<S> consumers() {
+        return consumers;
+    }
+
+    @Override
+    StateConsumer<S> toMessageConsumer(Consumer<S> consumer) {
+        return StateConsumer.from(consumer);
+    }
+
+    @Override
+    SubscriptionRequest<S> self() {
+        return this;
+    }
+
+    @Override
+    Function<ActorRequestFactory, TopicBuilder> builderFn() {
+        return (factory) -> factory.topic().select(messageType());
     }
 }
