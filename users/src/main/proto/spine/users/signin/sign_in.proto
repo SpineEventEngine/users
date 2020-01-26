@@ -62,7 +62,7 @@ message SignIn {
     Status status = 2;
 
     // A user identity used to sign-in.
-    Identity identity = 3 [(required) = true];
+    Identity identity = 3;
 
     // A reason why the process failed, if applicable.
     SignInFailureReason failure_reason = 4;
