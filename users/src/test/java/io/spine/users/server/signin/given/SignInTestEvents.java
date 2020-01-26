@@ -21,6 +21,7 @@
 package io.spine.users.server.signin.given;
 
 import io.spine.core.UserId;
+import io.spine.net.InternetDomains;
 import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.user.event.UserCreated;
 
@@ -51,7 +52,7 @@ public final class SignInTestEvents {
                 .setDisplayName(displayName())
                 .setPrimaryIdentity(identity())
                 .setNature(PERSON)
-                .setExternalDomain(valueOf("teamvdev.com"))
+                .setExternalDomain(InternetDomains.valueOf("teamvdev.com"))
                 .build();
     }
 }

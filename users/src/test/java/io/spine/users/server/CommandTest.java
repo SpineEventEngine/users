@@ -20,8 +20,8 @@
 
 package io.spine.users.server;
 
-import com.google.protobuf.Message;
 import io.spine.base.CommandMessage;
+import io.spine.base.EntityState;
 import io.spine.base.EventMessage;
 import io.spine.server.entity.Entity;
 import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
@@ -42,7 +42,7 @@ import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
  *         the class of the entity
  */
 public abstract class CommandTest<I, C extends CommandMessage, E extends EventMessage,
-        S extends Message, Z extends Entity<I, S>>
+        S extends EntityState, Z extends Entity<I, S>>
         extends UsersContextTest {
 
     /**
