@@ -46,7 +46,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-server</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.11</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -76,7 +76,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-testutil-server</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.11</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -116,7 +116,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protoc</artifactId>
-    <version>3.11.1</version>
+    <version>3.11.3</version>
   </dependency>
   <dependency>
     <groupId>io.grpc</groupId>
@@ -126,7 +126,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-protoc-plugin</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.10</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
