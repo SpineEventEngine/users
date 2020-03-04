@@ -6,6 +6,9 @@
       <item index="1" class="java.lang.String" itemvalue="io.spine.server.command.Command" />
     </list>
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>

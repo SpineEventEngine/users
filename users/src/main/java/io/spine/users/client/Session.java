@@ -20,6 +20,7 @@
 
 package io.spine.users.client;
 
+import com.google.common.collect.ImmutableSet;
 import io.spine.client.Client;
 import io.spine.client.ClientRequest;
 import io.spine.client.Subscription;
@@ -51,7 +52,7 @@ public final class Session implements AutoCloseable, Logging {
     private @Nullable UserId user;
     private @Nullable PersonProfile userProfile;
 
-    private @Nullable Subscription loginSubscription;
+    private @Nullable ImmutableSet<Subscription> loginSubscriptions;
 
     /**
      * Creates a client user session.
@@ -108,7 +109,7 @@ public final class Session implements AutoCloseable, Logging {
                     user.getValue()
             );
         }
-        loginSubscription =
+        loginSubscriptions =
                 client.asGuest()
                       .command(LogUserIn.newBuilder()
                                         .setIdentity(identity)
@@ -131,9 +132,9 @@ public final class Session implements AutoCloseable, Logging {
     }
 
     private void cancelLoginSubscription() {
-        if (loginSubscription != null) {
-            client.cancel(loginSubscription);
-            loginSubscription = null;
+        if (loginSubscriptions != null) {
+            loginSubscriptions.forEach(client::cancel);
+            loginSubscriptions = null;
         }
     }
 
