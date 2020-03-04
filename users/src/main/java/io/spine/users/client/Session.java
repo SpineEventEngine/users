@@ -22,6 +22,7 @@ package io.spine.users.client;
 
 import io.spine.client.Client;
 import io.spine.client.ClientRequest;
+import io.spine.client.Subscription;
 import io.spine.core.UserId;
 import io.spine.logging.Logging;
 import io.spine.users.PersonProfile;
@@ -49,6 +50,8 @@ public final class Session implements AutoCloseable, Logging {
     private final Client client;
     private @Nullable UserId user;
     private @Nullable PersonProfile userProfile;
+
+    private @Nullable Subscription loginSubscription;
 
     /**
      * Creates a client user session.
@@ -105,23 +108,33 @@ public final class Session implements AutoCloseable, Logging {
                     user.getValue()
             );
         }
-        client.asGuest()
-              .command(LogUserIn.newBuilder()
-                                .setIdentity(identity)
-                                .build())
-              .observe(UserLoggedIn.class, this::onLoggedIn)
-              .observe(UserAlreadyLoggedIn.class, this::onAlreadyLoggedIn)
-              .post();
+        loginSubscription =
+                client.asGuest()
+                      .command(LogUserIn.newBuilder()
+                                        .setIdentity(identity)
+                                        .build())
+                      .observe(UserLoggedIn.class, this::onLoggedIn)
+                      .observe(UserAlreadyLoggedIn.class, this::onAlreadyLoggedIn)
+                      .post();
     }
 
     private void onLoggedIn(UserLoggedIn event) {
         this.user  = event.getId();
         this.userProfile = event.getUser();
+        cancelLoginSubscription();
     }
 
     private void onAlreadyLoggedIn(UserAlreadyLoggedIn rejection) {
         this.user = rejection.getId();
         this.userProfile = rejection.getUser();
+        cancelLoginSubscription();
+    }
+
+    private void cancelLoginSubscription() {
+        if (loginSubscription != null) {
+            client.cancel(loginSubscription);
+            loginSubscription = null;
+        }
     }
 
     /**
@@ -137,13 +150,13 @@ public final class Session implements AutoCloseable, Logging {
         if (user == null) {
             throw newIllegalStateException("The user is already logged out.");
         }
+        //TODO:2019-11-04:alexander.yevsyukov: Subscribe to UserLoggedOut and cancel the subscription
+        // when the event is received.
         client.onBehalfOf(user)
               .command(LogUserOut.newBuilder()
                                  .setId(user)
                                  .build())
               .post();
-        // We do not wait for the `UserLoggedOut` event because it is of no importance for the
-        // session. We just do not allow posting requests after we requested logout from the server.
         this.user = null;
     }
 
