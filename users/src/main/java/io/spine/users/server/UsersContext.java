@@ -25,18 +25,15 @@ import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.server.DefaultRepository;
 import io.spine.server.entity.Repository;
-import io.spine.users.server.group.GroupMembershipPart;
 import io.spine.users.server.group.GroupAccount;
+import io.spine.users.server.group.GroupMembershipPart;
 import io.spine.users.server.group.RolePropagations;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
-import io.spine.users.server.signin.SignInRepository;
 import io.spine.users.server.user.UserMembershipPart;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.server.user.UserRolesRepository;
-
-import javax.annotation.Nullable;
 
 /**
  * A factory of {@code Users} bounded context.
@@ -57,17 +54,9 @@ public final class UsersContext {
     /**
      * Creates a builder of the {@code Users} Context along with the registered repositories.
      *
-     * <p>This method optionally accepts {@link DirectoryFactory} instance. In case it is supplied,
-     * the {@link SignInRepository SignInPmRepository} is registered
-     * with the supplied factory instance as a constructor argument.
-     *
-     * <p>If the passed {@code DirectoryFactory} instance is {@code null},
-     * the {@code SignInPmRepository} is not registered in the resulting builder instance.
-     *
      * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
      */
-    @SuppressWarnings("OverlyCoupledMethod")    // OK, as references all the repositories.
-    public static BoundedContextBuilder newBuilder(@Nullable DirectoryFactory directoryFactory) {
+    public static BoundedContextBuilder newBuilder() {
         Repository<UserId, UserPart> userPartRepo = DefaultRepository.of(UserPart.class);
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
@@ -80,22 +69,6 @@ public final class UsersContext {
                 .add(GroupAccount.class)
                 .add(GroupMembershipPart.class)
                 .add(new RolePropagations());
-        if (directoryFactory != null) {
-            builder.add(new SignInRepository(directoryFactory, userPartRepo));
-        }
         return builder;
-    }
-
-    /**
-     * Creates a builder of {@code Users} Bounded Context along with the registered repositories.
-     *
-     * <p>Registers all the entity repositories except for
-     * {@link SignInRepository SignInPmRepository}.
-     *
-     * @return a new instance of {@code BoundedContextBuilder} for this BoundedContext
-     * @see #newBuilder(DirectoryFactory)
-     */
-    public static BoundedContextBuilder newBuilder() {
-        return newBuilder(null);
     }
 }

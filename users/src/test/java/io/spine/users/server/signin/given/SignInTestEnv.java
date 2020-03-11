@@ -29,14 +29,10 @@ import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
 import io.spine.users.RoleId;
-import io.spine.users.server.signin.SignInProcess;
 import io.spine.users.user.Identity;
 
 import static io.spine.users.server.role.RoleIds.roleId;
 
-/**
- * The environment for the {@link SignInProcess} tests.
- */
 public final class SignInTestEnv {
 
     /**
