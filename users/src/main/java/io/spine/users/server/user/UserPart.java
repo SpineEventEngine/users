@@ -26,10 +26,8 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.RoleId;
-import io.spine.users.group.Group;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
-import io.spine.users.role.Role;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
@@ -68,24 +66,13 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 /**
  * An aggregate for user of the application, either a person or machine.
  *
- * <h3>Group And Roles</h3>
- *
- * <p>To reflect a user's functions and functional roles in the organization, the user can be
- * assigned multiple {@link Role Roles} (please see {@link AssignRoleToUser} and
- * {@link UnassignRoleFromUser} commands).
- *
- * <p>However, if a user share its functions and functional roles with
- * a number of other users it can also join one or more {@link Group groups}
- * (please see {@link io.spine.users.user.command.JoinGroup JoinGroup} and
- * {@link io.spine.users.user.command.LeaveGroup LeaveGroup} commands).
- *
  * <h3>Organizational Structure</h3>
  *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
  * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
  */
 @SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
+public final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
     UserPart(UserRoot root) {
         super(root);

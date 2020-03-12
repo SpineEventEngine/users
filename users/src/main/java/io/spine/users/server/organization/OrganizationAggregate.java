@@ -43,18 +43,9 @@ import io.spine.users.orgunit.OrgUnit;
  *
  * <p>An organization aggregates users and groups directly or in hierarchy of
  * {@linkplain OrgUnit organizational units}.
- *
- * @author Vladyslav Lubenskyi
  */
-public class OrganizationAggregate
+public final class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, Organization.Builder> {
-
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
-    OrganizationAggregate(OrganizationId id) {
-        super(id);
-    }
 
     @Assign
     OrganizationCreated handle(CreateOrganization command, CommandContext context) {

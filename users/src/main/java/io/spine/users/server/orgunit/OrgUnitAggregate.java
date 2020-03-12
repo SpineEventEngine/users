@@ -46,19 +46,9 @@ import io.spine.users.server.organization.OrganizationAggregate;
  *
  * <p>It is forbidden to include an organizational unit into itself directly or indirectly. In other
  * words, the organizational structure must always be an acyclic graph.
- *
- * @author Vladyslav Lubenskyi
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
-public class OrgUnitAggregate
+public final class OrgUnitAggregate
         extends Aggregate<OrgUnitId, OrgUnit, OrgUnit.Builder> {
-
-    /**
-     * @see OrgUnitAggregate#OrgUnitAggregate(OrgUnitId)
-     */
-    OrgUnitAggregate(OrgUnitId id) {
-        super(id);
-    }
 
     @Assign
     OrgUnitCreated handle(CreateOrgUnit command, CommandContext context) {

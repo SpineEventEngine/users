@@ -43,12 +43,8 @@ import static java.util.stream.Collectors.toList;
  *
  * <p>The process manager emits events, which explicitly state the fact of a role propagation.
  */
-public class RolePropagation
+final class RolePropagation
         extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagation.Builder> {
-
-    protected RolePropagation(GroupId id) {
-        super(id);
-    }
 
     @React
     Collection<RoleInheritedByUser> on(UserJoinedGroup event) {

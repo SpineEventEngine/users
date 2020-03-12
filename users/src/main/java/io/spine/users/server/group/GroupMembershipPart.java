@@ -44,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * <p>Please see {@link JoinParentGroup} and {@link LeaveParentGroup} commands.
  */
-public class GroupMembershipPart
+public final class GroupMembershipPart
         extends AggregatePart<GroupId, GroupMembership, GroupMembership.Builder, GroupRoot> {
 
     /**

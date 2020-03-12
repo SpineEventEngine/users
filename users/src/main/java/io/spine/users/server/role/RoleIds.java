@@ -28,7 +28,7 @@ import io.spine.users.RoleId;
 /**
  * Factory methods for producing {@linkplain RoleId role IDs}.
  */
-public class RoleIds {
+public final class RoleIds {
 
     /** Prevents instantiation of this utility class. */
     private RoleIds() {

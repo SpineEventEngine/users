@@ -26,15 +26,10 @@ import io.spine.users.GroupId;
 
 /**
  * The {@link io.spine.users.group.Group Group} aggregate root.
- *
- * @author Vladyslav Lubenskyi
  */
-public class GroupRoot extends AggregateRoot<GroupId> {
+public final class GroupRoot extends AggregateRoot<GroupId> {
 
-    /**
-     * @see AggregateRoot#AggregateRoot(BoundedContext, Object)
-     */
-    public GroupRoot(BoundedContext boundedContext, GroupId id) {
-        super(boundedContext, id);
+    public GroupRoot(BoundedContext context, GroupId id) {
+        super(context, id);
     }
 }

@@ -43,7 +43,7 @@ import static io.spine.users.user.RoleInGroup.MEMBER;
  * <p>If a user shares its functions and roles with a number of other users they can join
  * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
  */
-public class UserMembershipPart
+public final class UserMembershipPart
         extends AggregatePart<UserId, UserMembership, UserMembership.Builder, UserRoot> {
 
     UserMembershipPart(UserRoot root) {

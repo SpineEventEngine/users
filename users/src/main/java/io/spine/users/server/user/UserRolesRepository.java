@@ -34,15 +34,15 @@ import static io.spine.server.route.EventRoute.withId;
 /**
  * The repository for {@link UserRolesProjection}.
  */
-public class UserRolesRepository
+public final class UserRolesRepository
         extends ProjectionRepository<UserId, UserRolesProjection, UserRoles> {
 
     @OverridingMethodsMustInvokeSuper
     @Override
     protected void setupEventRouting(EventRouting<UserId> routing) {
         super.setupEventRouting(routing);
-        routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
-        routing.route(RoleInheritedByUser.class, (message, context) -> withId(message.getUserId()));
-        routing.route(RoleDisinheritedByUser.class, (message, context) -> withId(message.getUserId()));
+        routing.replaceDefault(EventRoute.byFirstMessageField(idClass()))
+               .route(RoleInheritedByUser.class, (event, context) -> withId(event.getUserId()))
+               .route(RoleDisinheritedByUser.class, (event, context) -> withId(event.getUserId()));
     }
 }

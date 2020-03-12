@@ -53,14 +53,7 @@ import io.spine.users.server.group.GroupAccount;
  * Group} aggregates have not only the roles listed in their aggregate states, but effectively all
  * the roles derived from parent groups.
  */
-public class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
-
-    /**
-     * @see Aggregate#Aggregate(Object)
-     */
-    protected RoleAggregate(RoleId id) {
-        super(id);
-    }
+public final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
 
     @Assign
     RoleCreated handle(CreateRole command) {

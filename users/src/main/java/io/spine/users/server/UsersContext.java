@@ -20,11 +20,8 @@
 
 package io.spine.users.server;
 
-import io.spine.core.UserId;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.server.DefaultRepository;
-import io.spine.server.entity.Repository;
 import io.spine.users.server.group.GroupAccount;
 import io.spine.users.server.group.GroupMembershipPart;
 import io.spine.users.server.group.RolePropagations;
@@ -57,10 +54,9 @@ public final class UsersContext {
      * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
      */
     public static BoundedContextBuilder newBuilder() {
-        Repository<UserId, UserPart> userPartRepo = DefaultRepository.of(UserPart.class);
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
-                .add(userPartRepo)
+                .add(UserPart.class)
                 .add(UserMembershipPart.class)
                 .add(new UserRolesRepository())
                 .add(RoleAggregate.class)
