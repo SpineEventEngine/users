@@ -24,13 +24,13 @@ import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.server.group.GroupAccount;
 import io.spine.users.server.group.GroupMembershipPart;
-import io.spine.users.server.group.RolePropagations;
+import io.spine.users.server.role.RolePropagations;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
 import io.spine.users.server.role.RoleAggregate;
 import io.spine.users.server.user.UserMembershipPart;
 import io.spine.users.server.user.UserPart;
-import io.spine.users.server.user.UserRolesRepository;
+import io.spine.users.server.role.UserRolesRepository;
 
 /**
  * A factory of {@code Users} bounded context.

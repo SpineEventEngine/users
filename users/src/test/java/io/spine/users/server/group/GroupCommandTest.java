@@ -38,9 +38,8 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrgan
  *
  * @param <C>
  *         the type of the command being tested
- * @author Vladyslav Lubenskyi
  */
-abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
+public abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<GroupId, C, E, Group, GroupAccount> {
 
     private static final GroupId GROUP_ID = TestIdentifiers.groupId();

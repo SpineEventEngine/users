@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server.role;
 
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
@@ -26,6 +26,7 @@ import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.server.UsersContextTest;
+import io.spine.users.server.role.UserRolesProjection;
 import io.spine.users.server.user.given.UserRolesProjectionTestEnv;
 import io.spine.users.user.UserRoles;
 import org.junit.jupiter.api.BeforeEach;

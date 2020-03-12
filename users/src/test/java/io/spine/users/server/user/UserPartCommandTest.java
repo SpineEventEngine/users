@@ -45,9 +45,8 @@ import static io.spine.users.user.UserNature.PERSON;
  *
  * @param <C>
  *         the type of the command being tested
- * @author Vladyslav Lubenskyi
  */
-abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMessage>
+public abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<UserId, C, E, User, UserPart> {
 
     private static final UserId USER_ID = userId();
@@ -86,7 +85,7 @@ abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMess
         context().receivesCommands(createUser, addSecondaryIdentity, assignRole);
     }
 
-    RoleId originalRole() {
+    protected RoleId originalRole() {
         return adminRoleId();
     }
 
