@@ -39,7 +39,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
- * A process manager performing the propagation of group roles.
+ * Propagates roles assigned to the group to enclosed users and groups.
  *
  * <p>The process manager emits events, which explicitly state the fact of a role propagation.
  */
@@ -125,9 +125,8 @@ public class RolePropagation
         return builder().getRoleList();
     }
 
-    private static RoleInheritedByUser roleInherited(GroupId group,
-                                                     UserId member,
-                                                     RoleId role) {
+    private static RoleInheritedByUser
+    roleInherited(GroupId group, UserId member, RoleId role) {
         return RoleInheritedByUser
                 .newBuilder()
                 .setId(group)
@@ -136,9 +135,8 @@ public class RolePropagation
                 .vBuild();
     }
 
-    private static RoleDisinheritedByUser roleDisinherited(GroupId group,
-                                                           UserId member,
-                                                           RoleId role) {
+    private static RoleDisinheritedByUser
+    roleDisinherited(GroupId group, UserId member, RoleId role) {
         return RoleDisinheritedByUser
                 .newBuilder()
                 .setId(group)
