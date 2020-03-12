@@ -18,6 +18,4 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-apply from: "$projectDir/scripts/js.gradle"
-
 apply from: deps.scripts.testArtifacts
