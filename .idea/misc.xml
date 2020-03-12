@@ -9,6 +9,7 @@
       <item index="4" class="java.lang.String" itemvalue="io.spine.server.event.React" />
     </list>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
