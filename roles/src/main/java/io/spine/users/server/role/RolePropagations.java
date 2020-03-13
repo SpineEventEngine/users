@@ -25,7 +25,7 @@ import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
 import io.spine.users.GroupId;
-import io.spine.users.group.GroupRolesPropagation;
+import io.spine.users.role.GroupRolesPropagation;
 import io.spine.users.user.event.UserJoinedGroup;
 import io.spine.users.user.event.UserLeftGroup;
 

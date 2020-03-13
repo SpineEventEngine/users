@@ -82,7 +82,7 @@ message Group {
     // An entity a group belongs to.
     oneof origin {
 
-        // An organization or orgunit in one of the tenant's domains.
+        // An organization or org. unit in one of the tenant's domains.
         OrganizationOrUnit org_entity = 5;
 
         // An external domain.
@@ -109,20 +109,3 @@ message GroupMembership {
     repeated GroupId membership = 2;
 }
 
-// A process manager stating facts of the group roles propagation.
-//
-// The roles, assigned to a `Group` are implicitly inherited by all group members.
-// This process manager, it its turn, explicitly states the fact of the propagation.
-// So, entities interested in implicitly inherited roles can listen to these statements (events).
-//
-message GroupRolesPropagation {
-    option (entity).kind = PROCESS_MANAGER;
-
-    GroupId id = 1 [(set_once) = false];
-
-    // A list of `User` members. Only direct members of the group are included.
-    repeated core.UserId user_member = 2;
-
-    // Roles explicitly assigned to a group.
-    repeated RoleId role = 3;
-}

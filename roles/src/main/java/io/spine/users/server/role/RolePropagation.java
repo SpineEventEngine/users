@@ -25,7 +25,7 @@ import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
-import io.spine.users.group.GroupRolesPropagation;
+import io.spine.users.role.GroupRolesPropagation;
 import io.spine.users.group.event.RoleAssignedToGroup;
 import io.spine.users.group.event.RoleDisinheritedByUser;
 import io.spine.users.group.event.RoleInheritedByUser;
