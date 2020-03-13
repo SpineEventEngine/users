@@ -3,6 +3,7 @@ rootProject.name = 'spine-users'
 include(
         'client',
         'server',
-        'roles',
+        'roles-client',
+        'roles-server',
         'google'
 ) 

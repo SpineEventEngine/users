@@ -19,6 +19,7 @@
  */
 
 dependencies {
+    api project(path: ':roles-client')
     implementation project(path: ':server')
     testImplementation project(path: ':server', configuration: 'testArtifacts')
 }
