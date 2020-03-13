@@ -40,13 +40,6 @@ import "spine/users/user/identity.proto";
 
 // A user of the application, either a person or machine.
 //
-// ## Roles
-//
-// To reflect a user's functions and functional roles in the organization, the user can be assigned
-// multiple `Role`s (please see `AssignRoleToUser`, `UnassignRoleFromUser` commands).
-//
-// ## Organizational Structure
-//
 // A user is a leaf in the hierarchical structure of the organization. It can have either
 // a single `Organization` or single `OrgUnit` as a parent organizational entity.
 //
