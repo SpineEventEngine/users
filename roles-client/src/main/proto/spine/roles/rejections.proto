@@ -20,34 +20,24 @@
 
 syntax = "proto3";
 
-package spine.users.group;
+package spine.roles;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.group.rejection";
+option java_package = "io.spine.roles.rejection";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when joining a parent group forms a cycle.
+// The rejection is generated when trying to remove a role that isn't assigned to a group.
 //
-message GroupsCannotFormCycles {
+message RoleIsNotAssignedToGroup {
 
-    GroupId id = 1;
+    users.GroupId id = 1;
 
-    // A group that closes a cycle.
-    GroupId closing_group = 2 [(required) = true];
-}
-
-// The rejection to moving an external user.
-//
-message CannotMoveExternalGroup {
-
-    GroupId id = 1;
-
-    // An external domain the group belongs to.
-    net.InternetDomain external_domain = 2 [(required) = true];
+    // An ID of the role.
+    users.RoleId role_id = 2 [(required) = true];
 }
