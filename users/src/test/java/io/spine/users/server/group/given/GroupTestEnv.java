@@ -23,12 +23,10 @@ package io.spine.users.server.group.given;
 import io.spine.net.EmailAddress;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
 import io.spine.users.server.given.TestIdentifiers;
 
-import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
 import static io.spine.users.server.given.TestIdentifiers.orgId;
-import static io.spine.users.server.role.RoleIds.roleId;
+import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
 
 /**
  * The environment for the {@link GroupPart} tests.
@@ -70,10 +68,6 @@ public final class GroupTestEnv {
                 .newBuilder()
                 .setOrgUnit(orgUnitId())
                 .vBuild();
-    }
-
-    public static RoleId groupRole() {
-        return roleId(groupOrgEntityOrganization(), "administrator");
     }
 
     public static String groupDescription() {

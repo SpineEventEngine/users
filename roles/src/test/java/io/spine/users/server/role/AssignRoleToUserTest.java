@@ -22,17 +22,18 @@ package io.spine.users.server.role;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
-import io.spine.users.server.user.UserPartCommandTest;
+import io.spine.users.RoleId;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.event.RoleAssignedToUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.user.given.UserTestCommands.assignRoleToUser;
+import static io.spine.users.server.role.RoleIds.roleId;
+import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 
 @DisplayName("`AssignRoleToUser` command should")
-class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAssignedToUser> {
+class AssignRoleToUserTest extends UserRolePartCommandTest<AssignRoleToUser, RoleAssignedToUser> {
 
     @Override
     @Test
@@ -82,5 +83,17 @@ class AssignRoleToUserTest extends UserPartCommandTest<AssignRoleToUser, RoleAss
                 // The one expected to be added after the command dispatching.
                 .addRole(command.getRoleId())
                 .buildPartial();
+    }
+
+    static AssignRoleToUser assignRoleToUser(UserId id) {
+        return AssignRoleToUser
+                .newBuilder()
+                .setId(id)
+                .setRoleId(editorRoleId())
+                .build();
+    }
+
+    static RoleId editorRoleId() {
+        return roleId(userOrgEntity(), "editor_role");
     }
 }

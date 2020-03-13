@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,35 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@ParametersAreNonnullByDefault
+@CheckReturnValue
 package io.spine.users.server.role.given;
 
-import io.spine.users.RoleId;
-import io.spine.users.role.command.CreateRole;
-import io.spine.users.role.command.DeleteRole;
-import io.spine.users.server.role.RoleAggregate;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-/**
- * Test commands for {@link RoleAggregate}.
- */
-public final class RoleTestCommands {
-
-    /**
-     * Prevents instantiation.
-     */
-    private RoleTestCommands() {
-    }
-
-    public static CreateRole createRole(RoleId id) {
-        return CreateRole
-                .newBuilder()
-                .setId(id)
-                .vBuild();
-    }
-
-    public static DeleteRole deleteRole(RoleId id) {
-        return DeleteRole
-                .newBuilder()
-                .setId(id)
-                .vBuild();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

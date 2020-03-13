@@ -22,12 +22,12 @@ package io.spine.users.server.role;
 
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
+import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.server.UsersContextTest;
-import io.spine.users.server.role.UserRolesProjection;
-import io.spine.users.server.user.given.UserRolesProjectionTestEnv;
+import io.spine.users.server.role.given.UserRolesProjectionTestEnv;
 import io.spine.users.user.UserRoles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,14 +39,14 @@ import static io.spine.users.server.given.TestCommands.assignRoleToUser;
 import static io.spine.users.server.given.TestCommands.unassignRoleFromGroup;
 import static io.spine.users.server.given.TestCommands.unassignRoleFromUser;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
-import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createGroup;
-import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createRole;
-import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.createUser;
-import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.joinGroup;
-import static io.spine.users.server.user.given.UserRolesProjectionTestCommands.leaveGroup;
-import static io.spine.users.server.user.given.UserRolesProjectionTestEnv.roleUuid;
-import static io.spine.users.server.user.given.UserRolesProjectionTestEnv.userUuid;
-import static io.spine.users.server.user.given.UserRolesProjectionTestEnv.userWithRole;
+import static io.spine.users.server.role.given.UserRolesProjectionTestCommands.createGroup;
+import static io.spine.users.server.role.given.UserRolesProjectionTestCommands.createRole;
+import static io.spine.users.server.role.given.UserRolesProjectionTestCommands.createUser;
+import static io.spine.users.server.role.given.UserRolesProjectionTestCommands.joinGroup;
+import static io.spine.users.server.role.given.UserRolesProjectionTestCommands.leaveGroup;
+import static io.spine.users.server.role.given.UserRolesProjectionTestEnv.roleUuid;
+import static io.spine.users.server.role.given.UserRolesProjectionTestEnv.userUuid;
+import static io.spine.users.server.role.given.UserRolesProjectionTestEnv.userWithRole;
 
 /**
  * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
@@ -58,6 +58,11 @@ class UserRolesProjectionIntegrationTest extends UsersContextTest {
     private RoleId role;
     private GroupId group;
     private UserRoles expectedRole;
+
+    @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return UsersContextWithRoles.extend(super.contextBuilder());
+    }
 
     @BeforeEach
     void createUserRoleAndGroup() {

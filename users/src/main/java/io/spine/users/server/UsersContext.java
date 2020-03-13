@@ -24,13 +24,10 @@ import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.server.group.GroupAccount;
 import io.spine.users.server.group.GroupMembershipPart;
-import io.spine.users.server.role.RolePropagations;
 import io.spine.users.server.organization.OrganizationAggregate;
 import io.spine.users.server.orgunit.OrgUnitAggregate;
-import io.spine.users.server.role.RoleAggregate;
 import io.spine.users.server.user.UserMembershipPart;
 import io.spine.users.server.user.UserPart;
-import io.spine.users.server.role.UserRolesRepository;
 
 /**
  * A factory of {@code Users} bounded context.
@@ -58,13 +55,10 @@ public final class UsersContext {
                 .multitenant(NAME)
                 .add(UserPart.class)
                 .add(UserMembershipPart.class)
-                .add(new UserRolesRepository())
-                .add(RoleAggregate.class)
                 .add(OrgUnitAggregate.class)
                 .add(OrganizationAggregate.class)
                 .add(GroupAccount.class)
-                .add(GroupMembershipPart.class)
-                .add(new RolePropagations());
+                .add(GroupMembershipPart.class);
         return builder;
     }
 }

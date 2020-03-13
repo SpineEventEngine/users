@@ -30,12 +30,10 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
-import io.spine.users.RoleId;
 import io.spine.users.server.user.UserPart;
 import io.spine.users.user.Identity;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.role.RoleIds.roleId;
 
 /**
  * The environment for the {@link UserPart} tests.
@@ -108,10 +106,6 @@ public class UserTestEnv {
                 .vBuild();
     }
 
-    public static RoleId adminRoleId() {
-        return roleId(userOrgEntity(), "admin_role");
-    }
-
     static Identity githubIdentity() {
         return Identity
                 .newBuilder()
@@ -119,10 +113,6 @@ public class UserTestEnv {
                 .setDirectoryId(githubDirectoryId())
                 .setUserId(USER_UUID)
                 .vBuild();
-    }
-
-    static RoleId editorRoleId() {
-        return roleId(userOrgEntity(), "editor_role");
     }
 
     private static DirectoryId googleDirectoryId() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,7 +26,7 @@ import io.spine.users.RoleId;
 import io.spine.users.role.Role;
 import io.spine.users.server.CommandTest;
 
-import static io.spine.users.server.role.given.RoleTestEnv.createRoleId;
+import static io.spine.users.server.role.given.TestEnv.createRoleId;
 
 /**
  * An abstract base for the tests of {@code Role} commands and their implications.

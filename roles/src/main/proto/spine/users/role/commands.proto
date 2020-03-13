@@ -33,14 +33,12 @@ option java_generate_equals_and_hash = true;
 import "spine/users/identifiers.proto";
 
 // Creates a role.
-//
 message CreateRole {
 
     RoleId id = 1;
 }
 
 // Deletes a role.
-//
 message DeleteRole {
 
     RoleId id = 1;

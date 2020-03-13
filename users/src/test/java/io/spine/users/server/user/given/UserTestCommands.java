@@ -25,7 +25,6 @@ import io.spine.users.server.user.UserPart;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User.Status;
 import io.spine.users.user.command.AddSecondaryIdentity;
-import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.ChangePrimaryIdentity;
 import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.command.CreateUser;
@@ -35,11 +34,8 @@ import io.spine.users.user.command.LeaveGroup;
 import io.spine.users.user.command.MoveUser;
 import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
-import io.spine.users.user.command.UnassignRoleFromUser;
 import io.spine.users.user.command.UpdatePersonProfile;
 
-import static io.spine.users.server.user.given.UserTestEnv.adminRoleId;
-import static io.spine.users.server.user.given.UserTestEnv.editorRoleId;
 import static io.spine.users.server.user.given.UserTestEnv.firstGroupId;
 import static io.spine.users.server.user.given.UserTestEnv.githubIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
@@ -109,22 +105,6 @@ public class UserTestCommands {
         return DeleteUser
                 .newBuilder()
                 .setId(id)
-                .build();
-    }
-
-    public static AssignRoleToUser assignRoleToUser(UserId id) {
-        return AssignRoleToUser
-                .newBuilder()
-                .setId(id)
-                .setRoleId(editorRoleId())
-                .build();
-    }
-
-    public static UnassignRoleFromUser unassignRoleFromUser(UserId id) {
-        return UnassignRoleFromUser
-                .newBuilder()
-                .setId(id)
-                .setRoleId(adminRoleId())
                 .build();
     }
 

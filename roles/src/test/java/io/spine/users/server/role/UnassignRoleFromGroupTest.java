@@ -20,6 +20,7 @@
 
 package io.spine.users.server.role;
 
+import io.spine.server.BoundedContextBuilder;
 import io.spine.users.GroupId;
 import io.spine.users.RoleId;
 import io.spine.users.group.Group;
@@ -35,7 +36,7 @@ import static io.spine.base.Identifier.newUuid;
 import static io.spine.users.server.given.TestCommands.assignRoleToGroup;
 import static io.spine.users.server.given.TestCommands.unassignRoleFromGroup;
 import static io.spine.users.server.given.TestIdentifiers.orgId;
-import static io.spine.users.server.group.given.GroupTestEnv.groupRole;
+import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.server.role.RoleIds.roleId;
 
 @DisplayName("`UnassignRoleFromGroup` command should")
@@ -43,6 +44,15 @@ class UnassignRoleFromGroupTest
         extends GroupCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
 
     private static final RoleId ROLE_ID = roleId(orgId(), newUuid());
+
+    static RoleId groupRole() {
+        return roleId(groupOrgEntityOrganization(), "administrator");
+    }
+
+    @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return UsersContextWithRoles.extend(super.contextBuilder());
+    }
 
     @Test
     @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")

@@ -20,47 +20,58 @@
 
 package io.spine.users.server.role;
 
-import io.spine.core.UserId;
-import io.spine.users.server.user.UserPartCommandTest;
-import io.spine.users.user.User;
-import io.spine.users.user.command.UnassignRoleFromUser;
-import io.spine.users.user.event.RoleUnassignedFromUser;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.users.RoleId;
+import io.spine.users.role.Role;
+import io.spine.users.role.command.CreateRole;
+import io.spine.users.role.command.DeleteRole;
+import io.spine.users.role.event.RoleDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.user.given.UserTestCommands.unassignRoleFromUser;
+import static io.spine.users.server.role.given.TestCommands.createRole;
+import static io.spine.users.server.role.given.TestCommands.deleteRole;
 
-@DisplayName("`UnassignRoleFromUser` command should")
-class UnassignRoleFromUserTest
-        extends UserPartCommandTest<UnassignRoleFromUser, RoleUnassignedFromUser> {
+@DisplayName("`DeleteRole` command should")
+class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
 
     @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return UsersContextWithRoles.extend(super.contextBuilder());
+    }
+
     @Test
-    @DisplayName("generate `RoleUnassignedFromUser` and unassign the role from the user")
+    @DisplayName("produce `RoleDeleted` event and delete the role")
+    @Override
     protected void produceEventAndChangeState() {
-        preCreateUser();
+        CreateRole createRole = createRole(entityId());
+        context().receivesCommand(createRole);
         super.produceEventAndChangeState();
     }
 
     @Override
-    protected UnassignRoleFromUser command(UserId id) {
-        return unassignRoleFromUser(id);
+    protected DeleteRole command(RoleId id) {
+        return deleteRole(id);
     }
 
     @Override
-    protected RoleUnassignedFromUser expectedEventAfter(UnassignRoleFromUser command) {
-        return RoleUnassignedFromUser
+    protected RoleDeleted expectedEventAfter(DeleteRole command) {
+        return RoleDeleted
                 .newBuilder()
                 .setId(command.getId())
-                .setRoleId(command.getRoleId())
-                .buildPartial();
+                .build();
     }
 
     @Override
-    protected User expectedStateAfter(UnassignRoleFromUser command) {
-        return User
+    protected Role expectedStateAfter(DeleteRole command) {
+        return Role
                 .newBuilder()
                 .setId(command.getId())
-                .buildPartial();
+                .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

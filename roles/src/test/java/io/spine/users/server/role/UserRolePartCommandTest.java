@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,47 +18,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user.given;
+package io.spine.users.server.role;
 
-import io.spine.core.UserId;
-import io.spine.testing.core.given.GivenUserId;
+import com.google.common.collect.ImmutableList;
+import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
 import io.spine.users.RoleId;
-import io.spine.users.user.UserRoles;
+import io.spine.users.server.user.UserPartCommandTest;
+import io.spine.users.user.command.AssignRoleToUser;
 
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.role.RoleIds.roleId;
+import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 
-public class UserRolesProjectionTestEnv {
+public abstract class UserRolePartCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends UserPartCommandTest<C, E> {
 
-    /** Prevents instantiation of this utility class. */
-    private UserRolesProjectionTestEnv() {
-    }
-
-    public static UserId userUuid() {
-        return GivenUserId.newUuid();
-    }
-
-    public static UserRoles userWithoutRoles(UserId user) {
-        return UserRoles
+    @Override
+    protected Iterable<CommandMessage> setupCommands() {
+        AssignRoleToUser assignRole = AssignRoleToUser
                 .newBuilder()
-                .setId(user)
+                .setId(entityId())
+                .setRoleId(originalRole())
                 .vBuild();
+        ImmutableList.Builder<CommandMessage> commands = ImmutableList.builder();
+        commands.addAll(super.setupCommands())
+                .add(assignRole);
+        return commands.build();
     }
 
-    public static UserRoles userWithRole(UserId userId, RoleId roleId) {
-        return UserRoles
-                .newBuilder()
-                .setId(userId)
-                .addRole(roleId)
-                .vBuild();
+    static RoleId adminRoleId() {
+        return roleId(userOrgEntity(), "admin_role");
     }
 
-    public static String roleNameUuid() {
-        return "Role-" + newUuid();
-    }
-
-    public static RoleId roleUuid() {
-        return roleId(orgId(), roleNameUuid());
+    RoleId originalRole() {
+        return adminRoleId();
     }
 }

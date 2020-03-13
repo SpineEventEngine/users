@@ -18,45 +18,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.role;
+package io.spine.users.server.role.given;
 
+import io.spine.users.OrganizationOrUnit;
 import io.spine.users.RoleId;
-import io.spine.users.role.Role;
-import io.spine.users.role.command.CreateRole;
-import io.spine.users.role.event.RoleCreated;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.users.server.given.TestIdentifiers;
+import io.spine.users.server.role.RoleAggregate;
 
-import static io.spine.users.server.role.given.RoleTestCommands.createRole;
+import static io.spine.base.Identifier.newUuid;
+import static io.spine.users.server.role.RoleIds.roleId;
 
-@DisplayName("`CreateRole` command should")
-class CreateRoleTest extends RoleCommandTest<CreateRole, RoleCreated> {
+/**
+ * The environment for the {@link RoleAggregate} tests.
+ */
+public final class TestEnv {
 
-    @Test
-    @DisplayName("produce `RoleCreated` event and create the role")
-    @Override
-    protected void produceEventAndChangeState() {
-        super.produceEventAndChangeState();
+    /**
+     * Prevents instantiation.
+     */
+    private TestEnv() {
     }
 
-    @Override
-    protected CreateRole command(RoleId id) {
-        return createRole(id);
+    public static RoleId createRoleId() {
+        return roleId(roleParent(), newUuid());
     }
 
-    @Override
-    protected RoleCreated expectedEventAfter(CreateRole command) {
-        return RoleCreated
+    private static OrganizationOrUnit roleParent() {
+        return OrganizationOrUnit
                 .newBuilder()
-                .setId(command.getId())
-                .build();
-    }
-
-    @Override
-    protected Role expectedStateAfter(CreateRole command) {
-        return Role
-                .newBuilder()
-                .setId(command.getId())
-                .build();
+                .setOrganization(TestIdentifiers.orgId())
+                .vBuild();
     }
 }

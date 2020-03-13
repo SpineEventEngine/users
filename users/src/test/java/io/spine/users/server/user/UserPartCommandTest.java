@@ -20,18 +20,16 @@
 
 package io.spine.users.server.user;
 
+import com.google.common.collect.ImmutableList;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.users.RoleId;
 import io.spine.users.server.CommandTest;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
-import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.CreateUser;
 
-import static io.spine.users.server.user.given.UserTestEnv.adminRoleId;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
@@ -61,7 +59,11 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
         return UserPart.class;
     }
 
-    protected void preCreateUser() {
+    /**
+     * Obtains commands that {@link #context()} should execute in order to set up
+     * the test environment for the user.
+     */
+    protected Iterable<CommandMessage> setupCommands() {
         CreateUser createUser = CreateUser
                 .newBuilder()
                 .setId(USER_ID)
@@ -77,16 +79,11 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
                 .setId(USER_ID)
                 .setIdentity(originalSecondaryIdentity())
                 .vBuild();
-        AssignRoleToUser assignRole = AssignRoleToUser
-                .newBuilder()
-                .setId(USER_ID)
-                .setRoleId(originalRole())
-                .vBuild();
-        context().receivesCommands(createUser, addSecondaryIdentity, assignRole);
+        return ImmutableList.of(createUser, addSecondaryIdentity);
     }
 
-    protected RoleId originalRole() {
-        return adminRoleId();
+    protected void preCreateUser() {
+        setupCommands().forEach(context()::receivesCommand);
     }
 
     Identity originalSecondaryIdentity() {
