@@ -60,7 +60,7 @@ allprojects {
 }
 
 ext {
-    projectsToPublish = ["users"]
+    projectsToPublish = ["client", "server"]
 }
 
 subprojects {
