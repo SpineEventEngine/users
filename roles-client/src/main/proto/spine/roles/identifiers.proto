@@ -25,61 +25,19 @@ package spine.roles;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.roles.command";
-option java_outer_classname = "CommandsProto";
+option java_package = "io.spine.roles";
+option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
-import "spine/roles/identifiers.proto";
 
-// Creates a role.
-message CreateRole {
+// The ID of a role, which is unique in the scope of an organization or a unit.
+message RoleId {
 
-    // The ID of the new role.
-    RoleId id = 1;
-}
+    // An organization or organizational unit the role belongs to.
+    users.OrganizationOrUnit org_entity = 1 [(required) = true];
 
-// Deletes a role.
-message DeleteRole {
-
-    // The ID of the role to delete.
-    RoleId id = 1;
-}
-
-// Assigns a role to a user.
-message AssignRoleToUser {
-
-    core.UserId id = 1;
-
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// Removes a role assignment from a user.
-message UnassignRoleFromUser {
-
-    core.UserId id = 1;
-
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// Assigns a role to the group.
-message AssignRoleToGroup {
-
-    users.GroupId id = 1;
-
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// Removes a role assignment from the group.
-message UnassignRoleFromGroup {
-
-    users.GroupId id = 1;
-
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
+    // A name of the role.
+    string name = 2 [(required) = true];
 }

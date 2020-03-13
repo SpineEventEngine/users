@@ -32,20 +32,21 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
+import "spine/roles/identifiers.proto";
 
 // A new role was created.
 //
 message RoleCreated {
 
     // The ID of the new role.
-    users.RoleId id = 1;
+    RoleId id = 1;
 }
 
 // A role was deleted.
 message RoleDeleted {
 
     // The ID of the deleted role.
-    users.RoleId id = 1;
+    RoleId id = 1;
 }
 
 // A role was assigned to a user.
@@ -55,7 +56,7 @@ message RoleAssignedToUser {
     core.UserId id = 1;
 
     // An ID of the assigned role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 }
 
 // A role assignment was removed from a user.
@@ -64,7 +65,7 @@ message RoleUnassignedFromUser {
     core.UserId id = 1;
 
     // An ID of the unassigned role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 }
 
 // A role was assigned to the group.
@@ -74,7 +75,7 @@ message RoleAssignedToGroup {
     users.GroupId id = 1;
 
     // An ID of the assigned role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 }
 
 // The role of the group was inherited by a user.
@@ -83,7 +84,7 @@ message RoleInheritedByUser {
     users.GroupId id = 1;
 
     // An ID of the inherited role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 
     // An ID of the user inherited the role.
     core.UserId user_id = 3 [(required) = true];
@@ -95,7 +96,7 @@ message RoleUnassignedFromGroup {
     users.GroupId id = 1;
 
     // An ID of the unassigned role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 }
 
 //TODO:2019-09-30:alexander.yevsyukov: Rename this event.
@@ -105,7 +106,7 @@ message RoleDisinheritedByUser {
     users.GroupId id = 1;
 
     // The ID of the disinherited role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
 
     // The ID of the user disinherited the role.
     core.UserId user_id = 3 [(required) = true];

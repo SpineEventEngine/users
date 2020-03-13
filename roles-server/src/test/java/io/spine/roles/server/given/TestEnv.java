@@ -21,7 +21,7 @@
 package io.spine.roles.server.given;
 
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.users.server.given.TestIdentifiers;
 import io.spine.roles.server.RoleAggregate;
 

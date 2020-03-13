@@ -25,7 +25,7 @@ import io.spine.core.UserId;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
 import io.spine.users.GroupId;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.users.server.UsersContextTest;
 import io.spine.roles.server.given.UserRolesProjectionTestEnv;
 import io.spine.roles.UserRoles;

@@ -30,8 +30,8 @@ import io.spine.roles.event.RoleUnassignedFromUser;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.RoleId;
-import io.spine.users.user.rejection.RoleIsNotAssignedToUser;
+import io.spine.roles.RoleId;
+import io.spine.roles.rejection.RoleIsNotAssignedToUser;
 
 import java.util.List;
 

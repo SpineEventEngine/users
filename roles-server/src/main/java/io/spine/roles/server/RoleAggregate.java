@@ -23,7 +23,7 @@ package io.spine.roles.server;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.Role;
 import io.spine.roles.command.CreateRole;
 import io.spine.roles.command.DeleteRole;

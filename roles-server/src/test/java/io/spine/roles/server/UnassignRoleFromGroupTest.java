@@ -25,7 +25,7 @@ import io.spine.roles.command.UnassignRoleFromGroup;
 import io.spine.roles.event.RoleUnassignedFromGroup;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.GroupId;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.rejection.Rejections.RoleIsNotAssignedToGroup;
 import io.spine.users.server.given.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;

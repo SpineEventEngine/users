@@ -23,7 +23,7 @@ package io.spine.roles.server;
 import io.spine.core.Subscribe;
 import io.spine.core.UserId;
 import io.spine.server.projection.Projection;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.event.RoleDisinheritedByUser;
 import io.spine.roles.event.RoleInheritedByUser;
 import io.spine.roles.UserRoles;

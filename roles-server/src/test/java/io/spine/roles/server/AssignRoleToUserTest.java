@@ -23,7 +23,7 @@ package io.spine.roles.server;
 import io.spine.core.UserId;
 import io.spine.roles.UserRolesV2;
 import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.event.RoleAssignedToUser;
 import org.junit.jupiter.api.DisplayName;

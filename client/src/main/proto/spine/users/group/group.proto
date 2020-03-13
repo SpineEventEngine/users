@@ -30,7 +30,6 @@ option java_outer_classname = "GroupProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
@@ -64,9 +63,6 @@ message Group {
         // An external domain.
         net.InternetDomain external_domain = 6;
     }
-
-    // Roles explicitly assigned to the group.
-    repeated RoleId role = 7;
 }
 
 // A group's membership in other groups, a part of the `Group` aggregate.

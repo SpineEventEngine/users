@@ -23,7 +23,7 @@ package io.spine.roles.server;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 
 /**
  * Factory methods for producing {@linkplain RoleId role IDs}.

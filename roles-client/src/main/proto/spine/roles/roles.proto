@@ -32,6 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
+import "spine/roles/identifiers.proto";
 
 // A role that can be assigned to `Users` and `Groups`, to perform access control.
 //
@@ -83,7 +84,7 @@ import "spine/users/identifiers.proto";
 message Role {
     option (entity).kind = AGGREGATE;
 
-    users.RoleId id = 1;
+    RoleId id = 1;
 
     // A name of the role to be displayed on UI.
     string display_name = 2 [(required) = true];
@@ -100,7 +101,7 @@ message UserRoles {
     core.UserId id = 1;
 
     // Explicitly and implicitly assigned roles.
-    repeated users.RoleId role = 2;
+    repeated RoleId role = 2;
 }
 
 // Provides information on roles that a user has.
@@ -115,7 +116,7 @@ message UserRolesV2 {
     core.UserId user = 1;
 
     // Explicitly assigned roles.
-    repeated users.RoleId explicit_role = 2;
+    repeated RoleId explicit_role = 2;
 
     //TODO:2020-03-13:alexander.yevsyukov: Add implicit roles
 }
@@ -132,7 +133,7 @@ message GroupRolesV2 {
     users.GroupId group = 1;
 
     // Explicitly assigned roles.
-    repeated users.RoleId explicit_role = 3;
+    repeated RoleId explicit_role = 3;
 
     //TODO:2020-03-13:alexander.yevsyukov: Add implicit roles
 }

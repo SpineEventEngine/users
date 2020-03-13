@@ -24,7 +24,7 @@ import io.spine.core.UserId;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.roles.command.CreateRole;
 import io.spine.users.server.group.given.GroupTestEnv;

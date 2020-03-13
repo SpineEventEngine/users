@@ -54,27 +54,24 @@ message User {
     // A user name to be displayed on UI.
     string display_name = 3 [(required) = true];
 
-    // Roles explicitly assigned to the user.
-    repeated RoleId role = 4;
-
     // An email address of a user.
-    net.EmailAddress email = 5;
+    net.EmailAddress email = 4;
 
     // An entity a user belongs to.
     oneof origin {
 
-        // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 6;
+        // An organization or org. unit in one of the tenant's domains.
+        OrganizationOrUnit org_entity = 5;
 
         // An external domain.
-        net.InternetDomain external_domain = 7;
+        net.InternetDomain external_domain = 6;
     }
 
     // General profile information for a user, if applicable.
-    PersonProfile profile = 8;
+    PersonProfile profile = 7;
 
     // The current status of a user.
-    Status status = 9 [(required) = true];
+    Status status = 8 [(required) = true];
 
     // The primary user identity.
     //
@@ -87,13 +84,13 @@ message User {
     // A user without the primary identity can't authenticate and therefore perform any actions.
     // This is only applicable for users from external domains.
     //
-    Identity primary_identity = 10;
+    Identity primary_identity = 9;
 
     // Secondary identities of a user; used solely for authentication.
-    repeated Identity secondary_identity = 11;
+    repeated Identity secondary_identity = 10;
 
     // A moment in time when a user was created.
-    google.protobuf.Timestamp when_created = 12;
+    google.protobuf.Timestamp when_created = 11;
 
     // A status of a user.
     //

@@ -22,7 +22,7 @@ package io.spine.roles.server;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.Role;
 import io.spine.users.server.CommandTest;
 

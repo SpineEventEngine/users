@@ -22,7 +22,7 @@ package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.UserRoles;
 
 import static io.spine.base.Identifier.newUuid;

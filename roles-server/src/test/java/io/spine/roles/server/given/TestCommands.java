@@ -24,7 +24,7 @@ import io.spine.core.UserId;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.command.UnassignRoleFromUser;
 import io.spine.users.GroupId;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.command.AssignRoleToGroup;
 import io.spine.roles.command.UnassignRoleFromGroup;
 import io.spine.roles.command.CreateRole;

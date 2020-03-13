@@ -34,7 +34,6 @@ import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
 // The rejection to accessing an identity that doesn't exist.
-//
 message IdentityDoesNotExist {
 
     core.UserId id = 1;
@@ -46,18 +45,7 @@ message IdentityDoesNotExist {
     string user_id = 3 [(required) = true];
 }
 
-// The rejection to removing a role that isn't assigned to a user.
-//
-message RoleIsNotAssignedToUser {
-
-    core.UserId id = 1;
-
-    // An ID of a role.
-    RoleId role_id = 2 [(required) = true];
-}
-
 // The rejection to moving an external user.
-//
 message CannotMoveExternalUser {
 
     core.UserId id = 1;

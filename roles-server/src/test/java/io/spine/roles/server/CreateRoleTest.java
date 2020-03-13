@@ -21,7 +21,7 @@
 package io.spine.roles.server;
 
 import io.spine.server.BoundedContextBuilder;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.roles.Role;
 import io.spine.roles.command.CreateRole;
 import io.spine.roles.event.RoleCreated;

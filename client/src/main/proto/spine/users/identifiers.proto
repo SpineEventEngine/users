@@ -30,23 +30,10 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "spine/core/user_id.proto";
-
 // The ID of a user group.
 message GroupId {
 
     string value = 1;
-}
-
-// The ID of a role, which is unique in the scope of an organization or a unit.
-//
-message RoleId {
-
-    // An organization or organizational unit the role belongs to.
-    OrganizationOrUnit org_entity = 1 [(required) = true];
-
-    // A name of the role.
-    string name = 2 [(required) = true];
 }
 
 // The ID of an organization.

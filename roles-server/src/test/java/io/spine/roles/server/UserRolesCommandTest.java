@@ -27,7 +27,7 @@ import io.spine.core.UserId;
 import io.spine.roles.UserRolesV2;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.users.RoleId;
+import io.spine.roles.RoleId;
 import io.spine.users.server.CommandTest;
 
 import static io.spine.roles.server.RoleIds.roleId;

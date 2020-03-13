@@ -29,15 +29,24 @@ option java_package = "io.spine.roles.rejection";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/internet_domain.proto";
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
+import "spine/roles/identifiers.proto";
 
 // The rejection is generated when trying to remove a role that isn't assigned to a group.
-//
 message RoleIsNotAssignedToGroup {
 
     users.GroupId id = 1;
 
     // An ID of the role.
-    users.RoleId role_id = 2 [(required) = true];
+    RoleId role_id = 2 [(required) = true];
+}
+
+// The rejection to removing a role that isn't assigned to a user.
+message RoleIsNotAssignedToUser {
+
+    core.UserId id = 1;
+
+    // An ID of a role.
+    RoleId role_id = 2 [(required) = true];
 }
