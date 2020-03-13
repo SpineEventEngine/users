@@ -39,6 +39,7 @@ import "spine/people/person_name.proto";
 // Contents of this message are usually obtained from a user directory.
 //
 message PersonProfile {
+    option (required_field) = "email|name";
 
     // The primary email address of the user which may be used by the application
     // for communicating with the user.
