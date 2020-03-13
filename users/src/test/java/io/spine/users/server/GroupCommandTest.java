@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,14 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.users.server.CommandTest;
 import io.spine.users.server.given.TestIdentifiers;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;

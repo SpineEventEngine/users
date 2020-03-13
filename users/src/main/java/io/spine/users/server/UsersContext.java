@@ -22,12 +22,6 @@ package io.spine.users.server;
 
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.users.server.group.GroupAccount;
-import io.spine.users.server.group.GroupMembershipPart;
-import io.spine.users.server.organization.OrganizationAggregate;
-import io.spine.users.server.orgunit.OrgUnitAggregate;
-import io.spine.users.server.user.UserMembershipPart;
-import io.spine.users.server.user.UserPart;
 
 /**
  * A factory of {@code Users} bounded context.
@@ -39,9 +33,7 @@ public final class UsersContext {
      */
     public static final String NAME = "Users";
 
-    /**
-     * Prevents instantiation of this static factory.
-     */
+    /** Prevents instantiation of this static factory. */
     private UsersContext() {
     }
 

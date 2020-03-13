@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server;
 
 import io.spine.core.CommandContext;
 import io.spine.core.UserId;
@@ -66,13 +66,10 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 /**
  * An aggregate for user of the application, either a person or machine.
  *
- * <h3>Organizational Structure</h3>
- *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
  * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
  */
-@SuppressWarnings({"OverlyCoupledClass", "ClassWithTooManyMethods"}) // It is OK for aggregate.
-public final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
+final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
     UserPart(UserRoot root) {
         super(root);

@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.event.GroupDescriptionChanged;
+import io.spine.users.server.GroupCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

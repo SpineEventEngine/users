@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,13 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * This package contains classes and interfaces related to organizational units.
- */
-
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.server.orgunit;
+package io.spine.users.server.group;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

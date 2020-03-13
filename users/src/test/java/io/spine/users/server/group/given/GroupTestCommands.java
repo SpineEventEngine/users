@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -30,7 +30,6 @@ import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
-import io.spine.users.server.group.GroupAccount;
 
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
@@ -41,7 +40,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 
 /**
- * Test commands for {@link GroupAccount}.
+ * Test commands for {@code GroupAccount}.
  */
 public class GroupTestCommands {
 

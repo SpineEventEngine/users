@@ -26,7 +26,7 @@ import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupAliasesChanged;
 import io.spine.users.google.event.GoogleGroupCreated;
 import io.spine.users.google.GoogleGroup;
-import io.spine.users.server.group.GroupRoot;
+import io.spine.users.server.GroupRoot;
 
 /**
  * A Google Group part.

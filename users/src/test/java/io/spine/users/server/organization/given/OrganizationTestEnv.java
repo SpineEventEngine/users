@@ -24,12 +24,11 @@ import io.spine.core.TenantId;
 import io.spine.net.EmailAddress;
 import io.spine.net.InternetDomain;
 import io.spine.users.OrganizationId;
-import io.spine.users.server.organization.OrganizationAggregate;
 
 import static io.spine.base.Identifier.newUuid;
 
 /**
- * The environment for the {@link OrganizationAggregate} tests.
+ * The environment for the {@code OrganizationAggregate} tests.
  *
  * @author Vladyslav Lubenskyi
  */

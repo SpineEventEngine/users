@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,14 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server;
+
+import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
+import io.spine.core.UserId;
+import io.spine.users.user.UserMembership;
+
+import static io.spine.users.server.user.given.UserTestEnv.userId;
+
 /**
- * This package contains classes and interfaces related to organizations.
+ * An implementation base for the {@link User} aggregate command handler tests.
+ *
+ * @param <C>
+ *         the type of the command being tested
  */
+public abstract class UserMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<UserId, C, E, UserMembership, UserMembershipPart> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-package io.spine.users.server.organization;
+    static final UserId USER_ID = userId();
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    @Override
+    protected UserId entityId() {
+        return USER_ID;
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    protected Class<UserMembershipPart> entityClass() {
+        return UserMembershipPart.class;
+    }
+}

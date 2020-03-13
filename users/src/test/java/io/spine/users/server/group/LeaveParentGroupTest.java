@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.LeftParentGroup;
+import io.spine.users.server.GroupMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

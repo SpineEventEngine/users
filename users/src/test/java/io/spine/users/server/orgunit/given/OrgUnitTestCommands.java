@@ -28,9 +28,7 @@ import io.spine.users.orgunit.command.MoveOrgUnit;
 import io.spine.users.orgunit.command.RenameOrgUnit;
 
 /**
- * Test commands for {@link io.spine.users.server.orgunit.OrgUnitAggregate}.
- *
- * @author Vladyslav Lubenskyi
+ * Test commands for {@code OrgUnitAggregate}.
  */
 public final class OrgUnitTestCommands {
 
@@ -48,7 +46,6 @@ public final class OrgUnitTestCommands {
                 .setDomain(OrgUnitTestEnv.orgUnitDomain())
                 .setParentEntity(OrgUnitTestEnv.orgUnitParentEntity())
                 .build();
-
     }
 
     public static DeleteOrgUnit deleteOrgUnit(OrgUnitId id) {

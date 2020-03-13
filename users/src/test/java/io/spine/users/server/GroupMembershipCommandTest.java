@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
@@ -26,7 +26,6 @@ import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
-import io.spine.users.server.CommandTest;
 import io.spine.users.server.given.TestIdentifiers;
 
 /**
@@ -35,11 +34,11 @@ import io.spine.users.server.given.TestIdentifiers;
  * @param <C>
  *         the type of the command being tested
  */
-abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
+public abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<GroupId, C, E, GroupMembership, GroupMembershipPart> {
 
-    static final GroupId GROUP_ID = TestIdentifiers.groupId();
-    static final GroupId PARENT_GROUP_ID = TestIdentifiers.groupId();
+    protected static final GroupId GROUP_ID = TestIdentifiers.groupId();
+    protected static final GroupId PARENT_GROUP_ID = TestIdentifiers.groupId();
 
     @Override
     protected GroupId entityId() {
@@ -55,7 +54,7 @@ abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends Ev
      * Creates the {@link GroupMembershipPart} with for the group with the {@link #GROUP_ID}
      * identifier and a parent group with  {@link #PARENT_GROUP_ID} identifier.
      */
-    void preCreateGroupMembership() {
+    protected void preCreateGroupMembership() {
         preCreateGroupMembership(GROUP_ID, PARENT_GROUP_ID);
     }
 
@@ -70,6 +69,4 @@ abstract class GroupMembershipCommandTest<C extends CommandMessage, E extends Ev
                 .vBuild();
         context().receivesCommand(joinParentGroup);
     }
-
-
 }

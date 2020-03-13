@@ -24,6 +24,7 @@ import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.DeleteOrganization;
 import io.spine.users.organization.event.OrganizationDeleted;
+import io.spine.users.server.OrganizationCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -26,10 +26,9 @@ import io.spine.users.organization.command.ChangeOrganizationTenant;
 import io.spine.users.organization.command.CreateOrganization;
 import io.spine.users.organization.command.DeleteOrganization;
 import io.spine.users.organization.command.RenameOrganization;
-import io.spine.users.server.organization.OrganizationAggregate;
 
 /**
- * Test commands for {@link OrganizationAggregate}.
+ * Test commands for {@code OrganizationAggregate}.
  *
  * @author Vladyslav Lubenskyi
  */

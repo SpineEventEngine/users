@@ -21,6 +21,7 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.users.server.UserMembershipCommandTest;
 import io.spine.users.user.UserMembership;
 import io.spine.users.user.UserMembershipRecord;
 import io.spine.users.user.command.JoinGroup;

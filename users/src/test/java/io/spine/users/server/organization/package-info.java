@@ -18,12 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Test environment for {@link io.spine.users.server.group.GroupAccount} tests.
- */
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.server.group.given;
+package io.spine.users.server.organization;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

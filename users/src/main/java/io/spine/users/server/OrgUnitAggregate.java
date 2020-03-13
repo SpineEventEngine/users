@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.orgunit;
+package io.spine.users.server;
 
 import io.spine.core.CommandContext;
 import io.spine.server.aggregate.Aggregate;
@@ -36,7 +36,6 @@ import io.spine.users.orgunit.event.OrgUnitDeleted;
 import io.spine.users.orgunit.event.OrgUnitDomainChanged;
 import io.spine.users.orgunit.event.OrgUnitMoved;
 import io.spine.users.orgunit.event.OrgUnitRenamed;
-import io.spine.users.server.organization.OrganizationAggregate;
 
 /**
  * An organizational unit (aka orgunit).
@@ -47,7 +46,7 @@ import io.spine.users.server.organization.OrganizationAggregate;
  * <p>It is forbidden to include an organizational unit into itself directly or indirectly. In other
  * words, the organizational structure must always be an acyclic graph.
  */
-public final class OrgUnitAggregate
+final class OrgUnitAggregate
         extends Aggregate<OrgUnitId, OrgUnit, OrgUnit.Builder> {
 
     @Assign

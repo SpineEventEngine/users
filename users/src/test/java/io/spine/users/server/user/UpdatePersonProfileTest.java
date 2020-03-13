@@ -21,6 +21,7 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.users.server.UserPartCommandTest;
 import io.spine.users.user.User;
 import io.spine.users.user.command.UpdatePersonProfile;
 import io.spine.users.user.event.PersonProfileUpdated;

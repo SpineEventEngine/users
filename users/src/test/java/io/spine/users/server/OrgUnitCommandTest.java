@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,35 +18,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
-import io.spine.core.UserId;
-import io.spine.users.server.CommandTest;
-import io.spine.users.user.UserMembership;
+import io.spine.users.OrgUnitId;
+import io.spine.users.orgunit.OrgUnit;
 
-import static io.spine.users.server.user.given.UserTestEnv.userId;
+import static io.spine.users.server.orgunit.given.OrgUnitTestCommands.createOrgUnit;
+import static io.spine.users.server.orgunit.given.OrgUnitTestEnv.createOrgUnitId;
 
 /**
- * An implementation base for the {@link User} aggregate command handler tests.
+ * An abstract base for the tests of {@code OrgUnit} commands and their implications.
  *
  * @param <C>
- *         the type of the command being tested
- * @author Vladyslav Lubenskyi
+ *         the type of the tested command
+ * @param <E>
+ *         the type of the expected event
  */
-abstract class UserMembershipCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<UserId, C, E, UserMembership, UserMembershipPart> {
+public abstract class OrgUnitCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<OrgUnitId, C, E, OrgUnit, OrgUnitAggregate> {
 
-    static final UserId USER_ID = userId();
+    private static final OrgUnitId ORG_UNIT_ID = createOrgUnitId();
 
     @Override
-    protected UserId entityId() {
-        return USER_ID;
+    protected OrgUnitId entityId() {
+        return ORG_UNIT_ID;
     }
 
     @Override
-    protected Class<UserMembershipPart> entityClass() {
-        return UserMembershipPart.class;
+    protected Class<OrgUnitAggregate> entityClass() {
+        return OrgUnitAggregate.class;
+    }
+
+    protected void preCreateOrgUnit() {
+        context().receivesCommand(createOrgUnit(ORG_UNIT_ID));
     }
 }

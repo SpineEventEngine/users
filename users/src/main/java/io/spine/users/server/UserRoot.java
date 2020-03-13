@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,14 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server;
+
+import io.spine.core.UserId;
+import io.spine.server.BoundedContext;
+import io.spine.server.aggregate.AggregateRoot;
+
 /**
- * This package contains classes and interfaces related to groups.
+ * The {@link io.spine.users.user.User} aggregate root.
  */
+public final class UserRoot extends AggregateRoot<UserId> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-package io.spine.users.server.group;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    UserRoot(BoundedContext context, UserId id) {
+        super(context, id);
+    }
+}

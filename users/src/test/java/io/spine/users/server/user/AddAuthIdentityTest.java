@@ -22,6 +22,7 @@ package io.spine.users.server.user;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.users.server.UserPartCommandTest;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.event.SecondaryIdentityAdded;

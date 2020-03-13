@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.users.RoleId;
-import io.spine.users.server.user.UserPartCommandTest;
+import io.spine.users.server.UserPartCommandTest;
 import io.spine.users.user.command.AssignRoleToUser;
 
 import static io.spine.users.server.role.RoleIds.roleId;

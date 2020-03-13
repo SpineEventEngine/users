@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server;
 
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
@@ -37,13 +37,13 @@ import java.util.Optional;
 import static io.spine.users.user.RoleInGroup.MEMBER;
 
 /**
- * A user membership in multiple {@linkplain io.spine.users.server.group.GroupRoot groups},
+ * A user membership in multiple {@linkplain GroupRoot groups},
  * a part of {@linkplain UserRoot User} aggregate.
  *
  * <p>If a user shares its functions and roles with a number of other users they can join
  * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
  */
-public final class UserMembershipPart
+final class UserMembershipPart
         extends AggregatePart<UserId, UserMembership, UserMembership.Builder, UserRoot> {
 
     UserMembershipPart(UserRoot root) {

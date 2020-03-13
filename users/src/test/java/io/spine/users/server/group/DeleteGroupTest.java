@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.group.event.GroupDeleted;
+import io.spine.users.server.GroupCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

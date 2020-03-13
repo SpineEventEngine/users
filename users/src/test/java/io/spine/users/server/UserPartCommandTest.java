@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,13 +18,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.users.server.CommandTest;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
@@ -86,7 +85,7 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
         setupCommands().forEach(context()::receivesCommand);
     }
 
-    Identity originalSecondaryIdentity() {
+    protected Identity originalSecondaryIdentity() {
         return googleIdentity();
     }
 }

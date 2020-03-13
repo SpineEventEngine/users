@@ -24,6 +24,7 @@ import io.spine.users.OrganizationId;
 import io.spine.users.organization.Organization;
 import io.spine.users.organization.command.ChangeOrganizationTenant;
 import io.spine.users.organization.event.OrganizationTenantChanged;
+import io.spine.users.server.OrganizationCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

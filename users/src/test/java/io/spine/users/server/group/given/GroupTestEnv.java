@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -21,28 +21,18 @@
 package io.spine.users.server.group.given;
 
 import io.spine.net.EmailAddress;
-import io.spine.users.GroupId;
 import io.spine.users.OrganizationOrUnit;
-import io.spine.users.server.given.TestIdentifiers;
 
 import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
 
 /**
- * The environment for the {@link GroupPart} tests.
+ * The environment for the {@code GroupPart} tests.
  */
 public final class GroupTestEnv {
 
-    private static final GroupId NESTED_GROUP_ID = TestIdentifiers.groupId();
-
-    /**
-     * Prevents instantiation.
-     */
+    /** Prevents instantiation. */
     private GroupTestEnv() {
-    }
-
-    public static GroupId upperGroupId() {
-        return NESTED_GROUP_ID;
     }
 
     public static String groupName() {

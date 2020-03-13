@@ -24,6 +24,7 @@ import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;
+import io.spine.users.server.GroupMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -21,7 +21,6 @@
 package io.spine.users.server.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.server.user.UserPart;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User.Status;
 import io.spine.users.user.command.AddSecondaryIdentity;
@@ -50,19 +49,14 @@ import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
 /**
- * Test commands for {@link UserPart}.
+ * Test commands for {@code UserPart}.
  */
 public class UserTestCommands {
 
-    /**
-     * Prevents direct instantiation.
-     */
+    /** Prevents instantiation of this utility class. */
     private UserTestCommands() {
     }
 
-    /**
-     * Creates new {@link CreateUser} command.
-     */
     public static CreateUser createUser(UserId id) {
         return CreateUser
                 .newBuilder()

@@ -25,6 +25,7 @@ import io.spine.users.OrganizationOrUnit;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.event.GroupMoved;
+import io.spine.users.server.GroupCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

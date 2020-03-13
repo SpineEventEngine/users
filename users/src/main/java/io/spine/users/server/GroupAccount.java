@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server;
 
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
@@ -46,7 +46,6 @@ import io.spine.users.group.rejection.CannotMoveExternalGroup;
 import io.spine.users.group.rejection.RoleIsNotAssignedToGroup;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
-import io.spine.users.server.user.UserPart;
 
 import java.util.List;
 
@@ -65,8 +64,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  *
  * @see GroupMembershipPart for the part that handle group memberships
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for an aggregate.
-public final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
+final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
     GroupAccount(GroupRoot root) {
         super(root);

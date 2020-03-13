@@ -24,6 +24,7 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.orgunit.command.RenameOrgUnit;
 import io.spine.users.orgunit.event.OrgUnitRenamed;
+import io.spine.users.server.OrgUnitCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -27,7 +27,7 @@ import io.spine.users.OrganizationOrUnit;
 import static io.spine.base.Identifier.newUuid;
 
 /**
- * The environment for the {@link io.spine.users.server.orgunit.OrgUnitAggregate} tests.
+ * The environment for the {@code OrgUnitAggregate} tests.
  */
 public final class OrgUnitTestEnv {
 

@@ -30,13 +30,12 @@ import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
-import io.spine.users.server.user.UserPart;
 import io.spine.users.user.Identity;
 
 import static io.spine.base.Identifier.newUuid;
 
 /**
- * The environment for the {@link UserPart} tests.
+ * The environment for the {@code UserPart} tests.
  */
 public class UserTestEnv {
 
