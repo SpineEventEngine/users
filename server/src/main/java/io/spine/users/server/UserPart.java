@@ -25,13 +25,9 @@ import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.RoleId;
-import io.spine.users.organization.Organization;
-import io.spine.users.orgunit.OrgUnit;
 import io.spine.users.user.Identity;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
-import io.spine.users.user.command.AssignRoleToUser;
 import io.spine.users.user.command.ChangePrimaryIdentity;
 import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.command.CreateUser;
@@ -39,12 +35,9 @@ import io.spine.users.user.command.DeleteUser;
 import io.spine.users.user.command.MoveUser;
 import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
-import io.spine.users.user.command.UnassignRoleFromUser;
 import io.spine.users.user.command.UpdatePersonProfile;
 import io.spine.users.user.event.PersonProfileUpdated;
 import io.spine.users.user.event.PrimaryIdentityChanged;
-import io.spine.users.user.event.RoleAssignedToUser;
-import io.spine.users.user.event.RoleUnassignedFromUser;
 import io.spine.users.user.event.SecondaryIdentityAdded;
 import io.spine.users.user.event.SecondaryIdentityRemoved;
 import io.spine.users.user.event.UserCreated;
@@ -54,7 +47,6 @@ import io.spine.users.user.event.UserRenamed;
 import io.spine.users.user.event.UserStatusChanged;
 import io.spine.users.user.rejection.CannotMoveExternalUser;
 import io.spine.users.user.rejection.IdentityDoesNotExist;
-import io.spine.users.user.rejection.RoleIsNotAssignedToUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +59,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * An aggregate for user of the application, either a person or machine.
  *
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
- * a single {@link Organization} or single {@link OrgUnit} as a parent organizational entity.
+ * a single {@code Organization} or single {@code OrgUnit} as a parent organizational entity.
  */
 final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot> {
 
@@ -75,7 +67,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
         super(root);
     }
 
-    // TODO:2018-08-27:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/13
     @Assign
     UserCreated handle(CreateUser command, CommandContext context) {
         UserCreated.Builder eventBuilder = UserCreated
@@ -123,36 +114,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
         UserDeleted event = UserDeleted
                 .newBuilder()
                 .setId(command.getId())
-                .vBuild();
-        return event;
-    }
-
-    @Assign
-    RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
-        RoleAssignedToUser event = RoleAssignedToUser
-                .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
-                .vBuild();
-        return event;
-    }
-
-    @Assign
-    RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context)
-            throws RoleIsNotAssignedToUser {
-        List<RoleId> roles = state().getRoleList();
-        RoleId roleId = command.getRoleId();
-        if (!roles.contains(roleId)) {
-            throw RoleIsNotAssignedToUser
-                    .newBuilder()
-                    .setId(id())
-                    .setRoleId(roleId)
-                    .build();
-        }
-        RoleUnassignedFromUser event = RoleUnassignedFromUser
-                .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
                 .vBuild();
         return event;
     }
@@ -260,16 +221,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
     }
 
     @Apply
-    private void on(RoleAssignedToUser event) {
-        builder().addRole(event.getRoleId());
-    }
-
-    @Apply
-    private void on(RoleUnassignedFromUser event) {
-        removeRole(event.getRoleId());
-    }
-
-    @Apply
     private void on(UserStatusChanged event) {
         builder().setStatus(event.getNewStatus());
     }
@@ -306,14 +257,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
                       .findFirst();
     }
 
-    private void removeRole(RoleId roleId) {
-        List<RoleId> roles = builder().getRoleList();
-        if (roles.contains(roleId)) {
-            int index = roles.indexOf(roleId);
-            builder().removeRole(index);
-        }
-    }
-
     private void removeIdentity(Identity identity) {
         List<Identity> identities = builder().getSecondaryIdentityList();
         if (identities.contains(identity)) {
@@ -332,8 +275,7 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
         };
     }
 
-    private static IdentityDoesNotExist identityDoesNotExist(
-            RemoveSecondaryIdentity command) {
+    private static IdentityDoesNotExist identityDoesNotExist(RemoveSecondaryIdentity command) {
         return IdentityDoesNotExist
                 .newBuilder()
                 .setId(command.getId())

@@ -1,0 +1,112 @@
+//
+// Copyright 2019, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.roles;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.roles.event";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+
+// A new role was created.
+//
+message RoleCreated {
+
+    // The ID of the new role.
+    users.RoleId id = 1;
+}
+
+// A role was deleted.
+message RoleDeleted {
+
+    // The ID of the deleted role.
+    users.RoleId id = 1;
+}
+
+// A role was assigned to a user.
+message RoleAssignedToUser {
+
+    // The ID of the user.
+    core.UserId id = 1;
+
+    // An ID of the assigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// A role assignment was removed from a user.
+message RoleUnassignedFromUser {
+
+    core.UserId id = 1;
+
+    // An ID of the unassigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// A role was assigned to the group.
+//
+message RoleAssignedToGroup {
+
+    users.GroupId id = 1;
+
+    // An ID of the assigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+// The role of the group was inherited by a user.
+message RoleInheritedByUser {
+
+    users.GroupId id = 1;
+
+    // An ID of the inherited role.
+    users.RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user inherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}
+
+// The role assignment was removed from the group.
+message RoleUnassignedFromGroup {
+
+    users.GroupId id = 1;
+
+    // An ID of the unassigned role.
+    users.RoleId role_id = 2 [(required) = true];
+}
+
+//TODO:2019-09-30:alexander.yevsyukov: Rename this event.
+// The user disinherited the role of a group.
+message RoleDisinheritedByUser {
+
+    users.GroupId id = 1;
+
+    // The ID of the disinherited role.
+    users.RoleId role_id = 2 [(required) = true];
+
+    // The ID of the user disinherited the role.
+    core.UserId user_id = 3 [(required) = true];
+}

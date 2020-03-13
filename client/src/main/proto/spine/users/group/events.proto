@@ -97,50 +97,6 @@ message GroupDeleted {
     GroupId id = 1;
 }
 
-// A role was assigned to the group.
-//
-message RoleAssignedToGroup {
-
-    GroupId id = 1;
-
-    // An ID of the assigned role.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// The role of the group was inherited by a user.
-message RoleInheritedByUser {
-
-    GroupId id = 1;
-
-    // An ID of the inherited role.
-    RoleId role_id = 2 [(required) = true];
-
-    // An ID of the user inherited the role.
-    core.UserId user_id = 3 [(required) = true];
-}
-
-// The role assignment was removed from the group.
-message RoleUnassignedFromGroup {
-
-    GroupId id = 1;
-
-    // An ID of the unassigned role.
-    RoleId role_id = 2 [(required) = true];
-}
-
-//TODO:2019-09-30:alexander.yevsyukov: Rename this event.
-// The user disinherited the role of a group.
-message RoleDisinheritedByUser {
-
-    GroupId id = 1;
-
-    // The ID of the disinherited role.
-    RoleId role_id = 2 [(required) = true];
-
-    // Tghe ID of the user disinherited the role.
-    core.UserId user_id = 3 [(required) = true];
-}
-
 // The group was renamed.
 message GroupRenamed {
 

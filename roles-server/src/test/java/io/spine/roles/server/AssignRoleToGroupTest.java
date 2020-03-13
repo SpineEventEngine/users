@@ -1,0 +1,74 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+package io.spine.roles.server;
+
+import io.spine.roles.GroupRolesV2;
+import io.spine.roles.command.AssignRoleToGroup;
+import io.spine.roles.event.RoleAssignedToGroup;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.users.GroupId;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static io.spine.base.Identifier.newUuid;
+import static io.spine.roles.server.RoleIds.roleId;
+import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
+
+@DisplayName("`AssignRoleToGroup` command should")
+class AssignRoleToGroupTest extends GroupRolesCommandTest<AssignRoleToGroup, RoleAssignedToGroup> {
+
+    @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return UsersContextWithRoles.extend(super.contextBuilder());
+    }
+
+    @Override
+    protected AssignRoleToGroup command(GroupId id) {
+        return assignRoleToGroup(id,
+                                 roleId(orgId(), newUuid()));
+    }
+
+    @Override
+    protected RoleAssignedToGroup expectedEventAfter(AssignRoleToGroup command) {
+        return RoleAssignedToGroup
+                .newBuilder()
+                .setId(command.getId())
+                .setRoleId(command.getRoleId())
+                .build();
+    }
+
+    @Override
+    protected GroupRolesV2 expectedStateAfter(AssignRoleToGroup command) {
+        return GroupRolesV2
+                .newBuilder()
+                .setGroup(command.getId())
+                .addExplicitRole(command.getRoleId())
+                .build();
+    }
+
+    @Test
+    @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
+    @Override
+    protected void produceEventAndChangeState() {
+        super.produceEventAndChangeState();
+    }
+}

@@ -18,16 +18,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.given;
+package io.spine.roles.server.given;
+
+import io.spine.users.OrganizationOrUnit;
+import io.spine.users.RoleId;
+import io.spine.users.server.given.TestIdentifiers;
+import io.spine.roles.server.RoleAggregate;
+
+import static io.spine.base.Identifier.newUuid;
+import static io.spine.roles.server.RoleIds.roleId;
 
 /**
- * Factory methods for creating of test commands.
+ * The environment for the {@link RoleAggregate} tests.
  */
-public class TestCommands {
+public final class TestEnv {
 
-    /** Prevents instantiation of this utility class. */
-    private TestCommands() {
+    /**
+     * Prevents instantiation.
+     */
+    private TestEnv() {
     }
 
+    public static RoleId createRoleId() {
+        return roleId(roleParent(), newUuid());
+    }
 
+    private static OrganizationOrUnit roleParent() {
+        return OrganizationOrUnit
+                .newBuilder()
+                .setOrganization(TestIdentifiers.orgId())
+                .vBuild();
+    }
 }

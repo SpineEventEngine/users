@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,16 +18,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.given;
+package io.spine.roles.server;
+
+import io.spine.server.BoundedContextBuilder;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Factory methods for creating of test commands.
+ * Extends {@link io.spine.users.server.UsersContext UsersContext} with types related to
+ * role management.
  */
-public class TestCommands {
+public class UsersContextWithRoles {
 
     /** Prevents instantiation of this utility class. */
-    private TestCommands() {
+    private UsersContextWithRoles() {
     }
 
-
+    public static BoundedContextBuilder extend(BoundedContextBuilder usersContext) {
+        checkNotNull(usersContext);
+        usersContext.add(new UserRolesRepository())
+                    .add(RoleAggregate.class)
+                    .add(UserRolesAggregate.class)
+                    .add(GroupRolesAggregate.class)
+                    .add(new RolePropagations());
+        return usersContext;
+    }
 }

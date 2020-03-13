@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,16 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.given;
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.roles.server.given;
 
-/**
- * Factory methods for creating of test commands.
- */
-public class TestCommands {
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /** Prevents instantiation of this utility class. */
-    private TestCommands() {
-    }
-
-
-}
+import javax.annotation.ParametersAreNonnullByDefault;

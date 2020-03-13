@@ -39,7 +39,6 @@ import "spine/users/person_profile.proto";
 import "spine/users/user/identity.proto";
 
 // A new user was created.
-//
 message UserCreated {
 
     core.UserId id = 1;
@@ -74,7 +73,6 @@ message UserCreated {
 }
 
 // A user was moved to another organization or organizational unit.
-//
 message UserMoved {
 
     core.UserId id = 1;
@@ -87,7 +85,6 @@ message UserMoved {
 }
 
 // A user joined a group.
-//
 message UserJoinedGroup {
 
     core.UserId id = 1;
@@ -100,7 +97,6 @@ message UserJoinedGroup {
 }
 
 // A user left a group.
-//
 message UserLeftGroup {
 
     core.UserId id = 1;
@@ -110,34 +106,12 @@ message UserLeftGroup {
 }
 
 // A user was deleted.
-//
 message UserDeleted {
 
     core.UserId id = 1;
 }
 
-// A role was assigned to a user.
-//
-message RoleAssignedToUser {
-
-    core.UserId id = 1;
-
-    // An ID of the assigned role.
-    users.RoleId role_id = 2 [(required) = true];
-}
-
-// A role assignment was removed from a user.
-//
-message RoleUnassignedFromUser {
-
-    core.UserId id = 1;
-
-    // An ID of the unassigned role.
-    users.RoleId role_id = 2 [(required) = true];
-}
-
 // The status of a user was changed.
-//
 message UserStatusChanged {
 
     core.UserId id = 1;
@@ -150,7 +124,6 @@ message UserStatusChanged {
 }
 
 // A new secondary identity was added.
-//
 message SecondaryIdentityAdded {
 
     core.UserId id = 1;
@@ -160,7 +133,6 @@ message SecondaryIdentityAdded {
 }
 
 // A secondary identity was removed.
-//
 message SecondaryIdentityRemoved {
 
     core.UserId id = 1;
@@ -170,7 +142,6 @@ message SecondaryIdentityRemoved {
 }
 
 // The primary identity was changed.
-//
 message PrimaryIdentityChanged {
 
     core.UserId id = 1;
@@ -180,7 +151,6 @@ message PrimaryIdentityChanged {
 }
 
 // A user was renamed.
-//
 message UserRenamed {
 
     core.UserId id = 1;
@@ -193,7 +163,6 @@ message UserRenamed {
 }
 
 // A user profile was updated.
-//
 message PersonProfileUpdated {
 
     core.UserId id = 1;

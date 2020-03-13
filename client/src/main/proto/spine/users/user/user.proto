@@ -144,18 +144,6 @@ message UserMembershipRecord {
     RoleInGroup role = 2 [(required) = true];
 }
 
-// All roles of a user (both explicitly and implicitly assigned).
-//
-message UserRoles {
-    option (entity).kind = PROJECTION;
-
-    // The ID of the user.
-    core.UserId id = 1;
-
-    // Explicitly and implicitly assigned roles.
-    repeated RoleId role = 2;
-}
-
 // A role of the `User` as a member of the group.
 //
 // This role defines whether a user is a regular member or can manage the group.

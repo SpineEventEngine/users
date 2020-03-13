@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,16 +18,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.given;
+package io.spine.roles.server;
+
+import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
+import io.spine.users.RoleId;
+import io.spine.roles.Role;
+import io.spine.users.server.CommandTest;
+
+import static io.spine.roles.server.given.TestEnv.createRoleId;
 
 /**
- * Factory methods for creating of test commands.
+ * An abstract base for the tests of {@code Role} commands and their implications.
+ *
+ * @param <C>
+ *         the type of the tested command
+ * @param <E>
+ *         the type of the expected event
  */
-public class TestCommands {
+public abstract class RoleCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<RoleId, C, E, Role, RoleAggregate> {
 
-    /** Prevents instantiation of this utility class. */
-    private TestCommands() {
+    private static final RoleId ROLE_ID = createRoleId();
+
+    @Override
+    protected RoleId entityId() {
+        return ROLE_ID;
     }
 
-
+    @Override
+    protected Class<RoleAggregate> entityClass() {
+        return RoleAggregate.class;
+    }
 }

@@ -24,30 +24,22 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
-import io.spine.users.RoleId;
 import io.spine.users.group.Group;
-import io.spine.users.group.command.AssignRoleToGroup;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
-import io.spine.users.group.command.UnassignRoleFromGroup;
 import io.spine.users.group.event.GroupCreated;
 import io.spine.users.group.event.GroupDeleted;
 import io.spine.users.group.event.GroupDescriptionChanged;
 import io.spine.users.group.event.GroupEmailChanged;
 import io.spine.users.group.event.GroupMoved;
 import io.spine.users.group.event.GroupRenamed;
-import io.spine.users.group.event.RoleAssignedToGroup;
-import io.spine.users.group.event.RoleUnassignedFromGroup;
 import io.spine.users.group.rejection.CannotMoveExternalGroup;
-import io.spine.users.group.rejection.RoleIsNotAssignedToGroup;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
-
-import java.util.List;
 
 import static io.spine.users.group.Group.OriginCase.EXTERNAL_DOMAIN;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
@@ -108,35 +100,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
                 .build();
     }
 
-    @Assign
-    RoleAssignedToGroup handle(AssignRoleToGroup command) {
-        return RoleAssignedToGroup
-                .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
-                .build();
-    }
-
-    @Assign
-    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command)
-            throws RoleIsNotAssignedToGroup {
-        List<RoleId> roles = state().getRoleList();
-        RoleId roleId = command.getRoleId();
-        if (!roles.contains(roleId)) {
-            throw RoleIsNotAssignedToGroup
-                    .newBuilder()
-                    .setId(id())
-                    .setRoleId(roleId)
-                    .build();
-        }
-        return RoleUnassignedFromGroup
-                .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
-                .build();
-    }
-
-    @Assign
+   @Assign
     GroupRenamed handle(RenameGroup command) {
         return GroupRenamed
                 .newBuilder()
@@ -194,24 +158,8 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     }
 
     @Apply
-    private void on(@SuppressWarnings("unused") // Event data is not required.
-                    GroupDeleted event) {
+    private void on(@SuppressWarnings("unused") GroupDeleted event) {
         setDeleted(true);
-    }
-
-    @Apply
-    private void on(RoleAssignedToGroup event) {
-        builder().addRole(event.getRoleId());
-    }
-
-    @Apply
-    private void on(RoleUnassignedFromGroup event) {
-        RoleId roleId = event.getRoleId();
-        List<RoleId> roles = builder().getRoleList();
-        if (roles.contains(roleId)) {
-            int index = roles.indexOf(roleId);
-            builder().removeRole(index);
-        }
     }
 
     @Apply

@@ -39,7 +39,6 @@ import "spine/users/person_profile.proto";
 import "spine/users/user/identity.proto";
 
 // Creates a new user.
-//
 message CreateUser {
 
     core.UserId id = 1;
@@ -74,7 +73,6 @@ message CreateUser {
 }
 
 // Moves a user from one organization or organizational unit to another.
-//
 message MoveUser {
 
     core.UserId id = 1;
@@ -84,7 +82,6 @@ message MoveUser {
 }
 
 // Joins a group.
-//
 message JoinGroup {
 
     core.UserId id = 1;
@@ -97,7 +94,6 @@ message JoinGroup {
 }
 
 // Leaves a group.
-//
 message LeaveGroup {
 
     core.UserId id = 1;
@@ -107,34 +103,13 @@ message LeaveGroup {
 }
 
 // Deletes a user.
-//
 message DeleteUser {
 
     core.UserId id = 1;
 }
 
-// Assigns a role to a user.
-//
-message AssignRoleToUser {
-
-    core.UserId id = 1;
-
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// Removes a role assignment from a user.
-//
-message UnassignRoleFromUser {
-
-    core.UserId id = 1;
-
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
-}
 
 // Changes the user status.
-//
 message ChangeUserStatus {
 
     core.UserId id = 1;
@@ -144,7 +119,6 @@ message ChangeUserStatus {
 }
 
 // Adds a new secondary identity to the user.
-//
 message AddSecondaryIdentity {
 
     core.UserId id = 1;
@@ -154,7 +128,6 @@ message AddSecondaryIdentity {
 }
 
 // Removes a secondary identity of the user.
-//
 message RemoveSecondaryIdentity {
 
     core.UserId id = 1;

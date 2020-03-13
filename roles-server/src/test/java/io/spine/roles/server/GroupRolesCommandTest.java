@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,16 +18,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.given;
+package io.spine.roles.server;
 
-/**
- * Factory methods for creating of test commands.
- */
-public class TestCommands {
+import io.spine.base.CommandMessage;
+import io.spine.base.EventMessage;
+import io.spine.roles.GroupRolesV2;
+import io.spine.users.GroupId;
+import io.spine.users.server.CommandTest;
+import io.spine.users.server.given.TestIdentifiers;
 
-    /** Prevents instantiation of this utility class. */
-    private TestCommands() {
+public abstract class GroupRolesCommandTest<C extends CommandMessage, E extends EventMessage>
+        extends CommandTest<GroupId, C, E, GroupRolesV2, GroupRolesAggregate> {
+
+    private static final GroupId GROUP_ID = TestIdentifiers.groupId();
+
+    @Override
+    protected GroupId entityId() {
+        return GROUP_ID;
     }
 
-
+    @Override
+    protected Class<GroupRolesAggregate> entityClass() {
+        return GroupRolesAggregate.class;
+    }
 }

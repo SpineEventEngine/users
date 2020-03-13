@@ -34,7 +34,6 @@ import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 
 // Creates a group.
-//
 message CreateGroup {
 
     GroupId id = 1;
@@ -59,8 +58,7 @@ message CreateGroup {
     net.EmailAddress email = 6;
 }
 
-// Moves a group from one organization or orgunit to another.
-//
+// Moves a group from one organization or org. unit to another.
 message MoveGroup {
 
     GroupId id = 1;
@@ -70,14 +68,12 @@ message MoveGroup {
 }
 
 // Deletes a group.
-//
 message DeleteGroup {
 
     GroupId id = 1;
 }
 
 // Joins a parent group.
-//
 message JoinParentGroup {
 
     GroupId id = 1;
@@ -87,7 +83,6 @@ message JoinParentGroup {
 }
 
 // Leaves a parent group.
-//
 message LeaveParentGroup {
 
     GroupId id = 1;
@@ -96,28 +91,7 @@ message LeaveParentGroup {
     GroupId parent_group_id = 2 [(required) = true];
 }
 
-// Assigns a role to the group.
-//
-message AssignRoleToGroup {
-
-    GroupId id = 1;
-
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
-}
-
-// Removes a role assignment from the group.
-//
-message UnassignRoleFromGroup {
-
-    GroupId id = 1;
-
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
-}
-
 // Renames a group.
-//
 message RenameGroup {
 
     GroupId id = 1;
@@ -127,7 +101,6 @@ message RenameGroup {
 }
 
 // Changes a group email address.
-//
 message ChangeGroupEmail {
 
     GroupId id = 1;
@@ -137,7 +110,6 @@ message ChangeGroupEmail {
 }
 
 // Changes a description of a group.
-//
 message ChangeGroupDescription {
 
     GroupId id = 1;

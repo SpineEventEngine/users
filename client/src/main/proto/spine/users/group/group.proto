@@ -38,30 +38,6 @@ import "spine/users/identifiers.proto";
 // A `Group` is a way to group users by their common functions and functional roles inside of
 // an organization or organizational unit.
 //
-// The roles, assigned to a `Group` are implicitly inherited by all members of the group,
-// including sub-groups.
-//
-// ## Usage Example
-//
-// For example, a software development department of a company may well have the following groups:
-//
-// * Developers
-//      ```
-//      {
-//          display_name: "Developers",
-//          email: "developers@department.company.com",
-//          role: ["github-contributor", "test-server-admin"],
-//      }
-//      ```
-// * Support Engineers
-//      ```
-//      {
-//          display_name: "Support Team",
-//          email: "support@department.company.com",
-//          role: ["bugtracker-contributor"],
-//      }
-//      ```
-//
 message Group {
     option (entity).kind = AGGREGATE;
 
@@ -98,8 +74,6 @@ message Group {
 // It is forbidden for groups to directly or indirectly join themselves; in other words,
 // all nested group memberships must always form an acyclic graph.
 //
-// Please see `JoinParentGroup` and `LeaveParentGroup` commands.
-//
 message GroupMembership {
     option (entity).kind = AGGREGATE;
 
@@ -108,4 +82,3 @@ message GroupMembership {
     // Other groups this group is a member of.
     repeated GroupId membership = 2;
 }
-
