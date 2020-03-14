@@ -61,7 +61,7 @@ class UserRolesProjectionIntegrationTest extends UsersContextTest {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return UsersContextWithRoles.extend(super.contextBuilder());
+        return RolesContext.extend(super.contextBuilder());
     }
 
     @BeforeEach

@@ -19,13 +19,16 @@
  */
 
 /**
- * This package contains classes and interfaces related to roles.
+ * Contains server-side implementation of the Roles Bounded Context.
  */
 
 @ParametersAreNonnullByDefault
 @CheckReturnValue
+@BoundedContext(RolesContext.NAME)
 package io.spine.roles.server;
 
 import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.core.BoundedContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+

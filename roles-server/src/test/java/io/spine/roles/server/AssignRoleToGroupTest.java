@@ -38,13 +38,12 @@ class AssignRoleToGroupTest extends GroupRolesCommandTest<AssignRoleToGroup, Rol
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return UsersContextWithRoles.extend(super.contextBuilder());
+        return RolesContext.extend(super.contextBuilder());
     }
 
     @Override
     protected AssignRoleToGroup command(GroupId id) {
-        return assignRoleToGroup(id,
-                                 roleId(orgId(), newUuid()));
+        return assignRoleToGroup(id, roleId(orgId(), newUuid()));
     }
 
     @Override

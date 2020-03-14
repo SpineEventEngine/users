@@ -25,13 +25,17 @@ import io.spine.server.BoundedContextBuilder;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Extends {@link io.spine.users.server.UsersContext UsersContext} with types related to
- * role management.
+ * Specifies the Roles Bounded Context.
  */
-public class UsersContextWithRoles {
+public class RolesContext {
+
+    /**
+     * The name of the context.
+     */
+    public static final String NAME = "Roles";
 
     /** Prevents instantiation of this utility class. */
-    private UsersContextWithRoles() {
+    private RolesContext() {
     }
 
     public static BoundedContextBuilder extend(BoundedContextBuilder usersContext) {

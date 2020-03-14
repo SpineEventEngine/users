@@ -33,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * An abstract base for tests in {@code Users} Bounded Context.
  */
-public class UsersContextTest {
+public abstract class UsersContextTest {
 
     private MultitenantBlackBoxContext context;
 
@@ -44,7 +44,7 @@ public class UsersContextTest {
         context.withTenant(tenantId());
     }
 
-    private static TenantId tenantId() {
+    protected TenantId tenantId() {
         InternetDomain domain = InternetDomain
                 .newBuilder()
                 .setValue("gmail.com")
