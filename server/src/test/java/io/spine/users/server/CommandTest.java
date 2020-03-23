@@ -24,7 +24,7 @@ import io.spine.base.CommandMessage;
 import io.spine.base.EntityState;
 import io.spine.base.EventMessage;
 import io.spine.server.entity.Entity;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.testing.server.blackbox.BlackBoxContext;
 
 /**
  * An abstract base for tests of {@code Users} Bounded Context, which test that a certain command
@@ -93,7 +93,7 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
     protected void produceEventAndChangeState() {
         I id = entityId();
         C command = command(id);
-        MultitenantBlackBoxContext afterCommand = context().receivesCommand(command);
+        BlackBoxContext afterCommand = context().receivesCommand(command);
         E expectedEvent = expectedEventAfter(command);
 
         assertEvent(afterCommand, expectedEvent);
@@ -112,7 +112,7 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
                     .isEqualTo(isDeletedAfterCommand());
     }
 
-    protected void assertEvent(MultitenantBlackBoxContext afterCommand, E expectedEvent) {
+    protected void assertEvent(BlackBoxContext afterCommand, E expectedEvent) {
         afterCommand.assertEvents()
                     .withType(expectedEvent.getClass())
                     .message(0)

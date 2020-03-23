@@ -22,13 +22,12 @@ package io.spine.roles.server;
 
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
-import io.spine.users.GroupId;
 import io.spine.roles.RoleId;
-import io.spine.users.server.UsersContextTest;
-import io.spine.roles.server.given.UserRolesProjectionTestEnv;
 import io.spine.roles.UserRoles;
+import io.spine.roles.server.given.UserRolesProjectionTestEnv;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.users.GroupId;
+import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +37,6 @@ import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
 import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
 import static io.spine.roles.server.given.TestCommands.unassignRoleFromGroup;
 import static io.spine.roles.server.given.TestCommands.unassignRoleFromUser;
-import static io.spine.users.server.given.TestIdentifiers.groupId;
 import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createGroup;
 import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createRole;
 import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createUser;
@@ -47,9 +45,10 @@ import static io.spine.roles.server.given.UserRolesProjectionTestCommands.leaveG
 import static io.spine.roles.server.given.UserRolesProjectionTestEnv.roleUuid;
 import static io.spine.roles.server.given.UserRolesProjectionTestEnv.userUuid;
 import static io.spine.roles.server.given.UserRolesProjectionTestEnv.userWithRole;
+import static io.spine.users.server.given.TestIdentifiers.groupId;
 
 /**
- * {@link BlackBoxBoundedContext Integration tests} of {@link UserRolesProjection}.
+ * Integration tests of {@link UserRolesProjection}.
  */
 @DisplayName("UserRolesProjection should")
 class UserRolesProjectionIntegrationTest extends UsersContextTest {

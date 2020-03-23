@@ -21,7 +21,7 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.server.UserPartCommandTest;
 import io.spine.users.user.User;
 import io.spine.users.user.command.AddSecondaryIdentity;
@@ -44,8 +44,7 @@ class AddAuthIdentityTest
     }
 
     @Override
-    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
-                               SecondaryIdentityAdded expectedEvent) {
+    protected void assertEvent(BlackBoxContext afterCommand, SecondaryIdentityAdded expectedEvent) {
         /*
          The second event of {@code SecondaryIdentityAdded} type is checked,
          as the {@link #preCreateUser} also leads to the {@code SecondaryIdentityAdded} event.

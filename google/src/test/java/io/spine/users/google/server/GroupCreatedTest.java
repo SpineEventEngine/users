@@ -21,7 +21,7 @@
 package io.spine.users.google.server;
 
 import com.google.common.truth.extensions.proto.ProtoSubject;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupCreated;
 import io.spine.users.group.command.CreateGroup;
@@ -50,7 +50,7 @@ class GroupCreatedTest extends UsersContextTest {
         @DisplayName("translate it to `CreateGroup` command")
         void testBeTranslated() {
             GoogleGroupCreated event = internalGoogleGroupCreated(GROUP_ID);
-            MultitenantBlackBoxContext afterEvent = context().receivesEvent(event);
+            BlackBoxContext afterEvent = context().receivesEvent(event);
 
             ProtoSubject assertCommand =
                     afterEvent.assertCommands()

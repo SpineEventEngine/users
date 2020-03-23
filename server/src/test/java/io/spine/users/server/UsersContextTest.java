@@ -23,8 +23,7 @@ package io.spine.users.server;
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.BlackBoxBoundedContext;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.testing.server.blackbox.BlackBoxContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -35,12 +34,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class UsersContextTest {
 
-    private MultitenantBlackBoxContext context;
+    private BlackBoxContext context;
 
     @BeforeEach
     void createContext() {
         BoundedContextBuilder builder = contextBuilder();
-        context = (MultitenantBlackBoxContext) BlackBoxBoundedContext.from(builder);
+        context = BlackBoxContext.from(builder);
         context.withTenant(tenantId());
     }
 
@@ -64,7 +63,7 @@ public abstract class UsersContextTest {
         context.close();
     }
 
-    protected MultitenantBlackBoxContext context() {
+    protected BlackBoxContext context() {
         return checkNotNull(context);
     }
 }

@@ -22,7 +22,7 @@ package io.spine.roles.server;
 
 import io.spine.core.UserId;
 import io.spine.roles.UserRolesV2;
-import io.spine.testing.server.blackbox.MultitenantBlackBoxContext;
+import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.roles.RoleId;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.event.RoleAssignedToUser;
@@ -44,7 +44,7 @@ class AssignRoleToUserTest extends UserRolesCommandTest<AssignRoleToUser, RoleAs
     }
 
     @Override
-    protected void assertEvent(MultitenantBlackBoxContext afterCommand,
+    protected void assertEvent(BlackBoxContext afterCommand,
                                RoleAssignedToUser expectedEvent) {
         /*
          The second event of {@code RoleAssignedToUser} type is checked,
