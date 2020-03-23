@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,21 +18,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.roles.server;
 
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.BlackBoxContext;
+import io.spine.users.server.UsersContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * An abstract base for tests in {@code Users} Bounded Context.
- */
-public abstract class UsersContextTest {
+public abstract class RolesContextTest {
 
     private BlackBoxContext context;
 
@@ -46,7 +44,7 @@ public abstract class UsersContextTest {
     protected TenantId tenantId() {
         InternetDomain domain = InternetDomain
                 .newBuilder()
-                .setValue("users.spine.io")
+                .setValue("roles.spine.io")
                 .vBuild();
         return TenantId
                 .newBuilder()

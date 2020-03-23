@@ -37,7 +37,7 @@ class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.extend(super.contextBuilder());
+        return RolesContext.newBuilder();
     }
 
     @Test

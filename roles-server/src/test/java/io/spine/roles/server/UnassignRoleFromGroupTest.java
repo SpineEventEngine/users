@@ -50,7 +50,7 @@ class UnassignRoleFromGroupTest
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.extend(super.contextBuilder());
+        return RolesContext.newBuilder();
     }
 
     @Test

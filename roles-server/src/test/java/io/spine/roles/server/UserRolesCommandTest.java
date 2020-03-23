@@ -51,7 +51,7 @@ public abstract class UserRolesCommandTest<C extends CommandMessage, E extends E
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.extend(super.contextBuilder());
+        return RolesContext.newBuilder();
     }
 
     protected Iterable<CommandMessage> setupCommands() {

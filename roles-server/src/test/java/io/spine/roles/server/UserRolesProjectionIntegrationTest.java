@@ -27,7 +27,6 @@ import io.spine.roles.UserRoles;
 import io.spine.roles.server.given.UserRolesProjectionTestEnv;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.GroupId;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -51,7 +50,7 @@ import static io.spine.users.server.given.TestIdentifiers.groupId;
  * Integration tests of {@link UserRolesProjection}.
  */
 @DisplayName("UserRolesProjection should")
-class UserRolesProjectionIntegrationTest extends UsersContextTest {
+class UserRolesProjectionIntegrationTest extends RolesContextTest {
 
     private UserId user;
     private RoleId role;
@@ -60,7 +59,7 @@ class UserRolesProjectionIntegrationTest extends UsersContextTest {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.extend(super.contextBuilder());
+        return RolesContext.newBuilder();
     }
 
     @BeforeEach

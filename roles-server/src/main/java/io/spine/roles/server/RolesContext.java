@@ -20,9 +20,8 @@
 
 package io.spine.roles.server;
 
+import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Specifies the Roles Bounded Context.
@@ -38,13 +37,13 @@ public class RolesContext {
     private RolesContext() {
     }
 
-    public static BoundedContextBuilder extend(BoundedContextBuilder usersContext) {
-        checkNotNull(usersContext);
-        usersContext.add(new UserRolesRepository())
-                    .add(RoleAggregate.class)
-                    .add(UserRolesAggregate.class)
-                    .add(GroupRolesAggregate.class)
-                    .add(new RolePropagations());
-        return usersContext;
+    public static BoundedContextBuilder newBuilder() {
+        BoundedContextBuilder result = BoundedContext.multitenant(NAME);
+        result.add(new UserRolesRepository())
+              .add(RoleAggregate.class)
+              .add(UserRolesAggregate.class)
+              .add(GroupRolesAggregate.class)
+              .add(new RolePropagations());
+        return result;
     }
 }

@@ -35,7 +35,7 @@ class CreateRoleTest extends RoleCommandTest<CreateRole, RoleCreated> {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.extend(super.contextBuilder());
+        return RolesContext.newBuilder();
     }
 
     @Test
