@@ -23,9 +23,8 @@ package io.spine.roles.server;
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
 import io.spine.roles.RoleId;
-import io.spine.roles.UserRoles;
-import io.spine.roles.server.given.UserRolesProjectionTestEnv;
-import io.spine.server.BoundedContextBuilder;
+import io.spine.roles.UserRolesV2;
+import io.spine.roles.server.given.Given;
 import io.spine.users.GroupId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,48 +35,43 @@ import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
 import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
 import static io.spine.roles.server.given.TestCommands.unassignRoleFromGroup;
 import static io.spine.roles.server.given.TestCommands.unassignRoleFromUser;
-import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createGroup;
-import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createRole;
-import static io.spine.roles.server.given.UserRolesProjectionTestCommands.createUser;
-import static io.spine.roles.server.given.UserRolesProjectionTestCommands.joinGroup;
-import static io.spine.roles.server.given.UserRolesProjectionTestCommands.leaveGroup;
-import static io.spine.roles.server.given.UserRolesProjectionTestEnv.roleUuid;
-import static io.spine.roles.server.given.UserRolesProjectionTestEnv.userUuid;
-import static io.spine.roles.server.given.UserRolesProjectionTestEnv.userWithRole;
+import static io.spine.roles.server.given.GivenCommand.createGroup;
+import static io.spine.roles.server.given.GivenCommand.createRole;
+import static io.spine.roles.server.given.GivenCommand.createUser;
+import static io.spine.roles.server.given.GivenCommand.joinGroup;
+import static io.spine.roles.server.given.GivenCommand.leaveGroup;
+import static io.spine.roles.server.given.Given.roleUuid;
+import static io.spine.roles.server.given.Given.userUuid;
+import static io.spine.roles.server.given.Given.userWithRole;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
 
 /**
  * Integration tests of {@link UserRolesProjection}.
  */
-@DisplayName("UserRolesProjection should")
-class UserRolesProjectionIntegrationTest extends RolesContextTest {
+@DisplayName("`UserRolesAggregate` should")
+class UserRolesTest extends RolesContextTest {
 
     private UserId user;
-    private RoleId role;
     private GroupId group;
-    private UserRoles expectedRole;
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return RolesContext.newBuilder();
-    }
+    private RoleId role;
+    private UserRolesV2 expectedRoles;
 
     @BeforeEach
     void createUserRoleAndGroup() {
         user =  userUuid();
-        role = roleUuid();
         group = groupId();
-        context().receivesCommands(
+        usersContext().receivesCommands(
                 createUser(user),
-                createRole(role),
                 createGroup(group)
         );
-        expectedRole = userWithRole(user, role);
+        role = roleUuid();
+        rolesContext().receivesCommand(createRole(role));
+        expectedRoles = userWithRole(user, role);
     }
 
     private ProtoFluentAssertion assertRoles() {
-        return context()
-                .assertEntityWithState(UserRoles.class, user)
+        return rolesContext()
+                .assertEntityWithState(UserRolesV2.class, user)
                 .hasStateThat()
                 .comparingExpectedFieldsOnly();
     }
@@ -85,46 +79,44 @@ class UserRolesProjectionIntegrationTest extends RolesContextTest {
     @Test
     @DisplayName("have explicitly assigned roles")
     void assignExplicitRoles() {
-        context().receivesCommand(assignRoleToUser(user, role));
+        rolesContext().receivesCommand(assignRoleToUser(user, role));
 
-        assertRoles().isEqualTo(expectedRole);
+        assertRoles().isEqualTo(expectedRoles);
     }
 
     @Test
     @DisplayName("inherit group roles when joining a group")
     void inheritAlreadyPresentGroupRoles() {
-        context().receivesCommands(
-                assignRoleToGroup(group, role),
-                 // Join a group after the role assigned.
-                 joinGroup(user, group)
-        );
+        rolesContext().receivesCommand(assignRoleToGroup(group, role));
+        // Join a group after the role assigned.
+        usersContext().receivesCommand(joinGroup(user, group));
 
-        assertRoles().isEqualTo(expectedRole);
+        assertRoles().isEqualTo(expectedRoles);
     }
 
     @Test
     @DisplayName("inherit a group role after its assignment")
     void trackRoleChangesOfGroup() {
-        context().receivesCommand(joinGroup(user, group))
-                 // Assign a role when a user already joined a group
-                 .receivesCommand(assignRoleToGroup(group, role));
+        usersContext().receivesCommand(joinGroup(user, group));
+        // Assign a role when a user already joined a group
+        rolesContext().receivesCommand(assignRoleToGroup(group, role));
 
-        assertRoles().isEqualTo(expectedRole);
+        assertRoles().isEqualTo(expectedRoles);
     }
 
     @Nested
-    @DisplayName("when user has a role")
+    @DisplayName("when a user has a role")
     class UserWithRole {
 
         @BeforeEach
         void assigningRoleToUser() {
-            context().receivesCommand(assignRoleToUser(user, role));
+            rolesContext().receivesCommand(assignRoleToUser(user, role));
         }
 
         @Test
         @DisplayName("remove if it is unassigned")
         void removeUnassignedRole() {
-            context().receivesCommand(unassignRoleFromUser(user, role));
+            rolesContext().receivesCommand(unassignRoleFromUser(user, role));
 
             assertRoles().isEqualTo(userWithoutRoles());
         }
@@ -136,16 +128,14 @@ class UserRolesProjectionIntegrationTest extends RolesContextTest {
 
         @BeforeEach
         void joinGroupAndAssignRoleToGroup() {
-            context().receivesCommands(
-                    joinGroup(user, group),
-                    assignRoleToGroup(group, role)
-            );
+            usersContext().receivesCommand(joinGroup(user, group));
+            rolesContext().receivesCommand(assignRoleToGroup(group, role));
         }
 
         @Test
         @DisplayName("remove role if it is unassigned from group")
         void removeUnassignedGroupRole() {
-            context().receivesCommand(unassignRoleFromGroup(group, role));
+            rolesContext().receivesCommand(unassignRoleFromGroup(group, role));
 
             assertRoles().isEqualTo(userWithoutRoles());
         }
@@ -153,13 +143,13 @@ class UserRolesProjectionIntegrationTest extends RolesContextTest {
         @Test
         @DisplayName("remove role if user leaves group")
         void removeRoleOfLeftGroup() {
-            context().receivesCommand(leaveGroup(user, group));
+            usersContext().receivesCommand(leaveGroup(user, group));
 
             assertRoles().isEqualTo(userWithoutRoles());
         }
     }
 
-    private UserRoles userWithoutRoles() {
-        return UserRolesProjectionTestEnv.userWithoutRoles(user);
+    private UserRolesV2 userWithoutRoles() {
+        return Given.userWithoutRoles(user);
     }
 }

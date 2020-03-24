@@ -37,10 +37,10 @@ import io.spine.users.user.command.LeaveGroup;
 
 import static io.spine.users.server.given.TestIdentifiers.orgId;
 
-public class UserRolesProjectionTestCommands {
+public class GivenCommand {
 
     /** Prevents instantiation of this utility class. */
-    private UserRolesProjectionTestCommands() {
+    private GivenCommand() {
     }
 
     public static CreateUser createUser(UserId userId) {

@@ -46,7 +46,7 @@ import static java.util.stream.Collectors.toList;
 final class RolePropagation
         extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagation.Builder> {
 
-    @React
+    @React(external = true)
     Collection<RoleInheritedByUser> on(UserJoinedGroup event) {
         UserId newMember = event.getId();
         GroupId groupId = event.getGroupId();
@@ -59,11 +59,11 @@ final class RolePropagation
         return commands;
     }
 
-    @React
+    @React(external = true)
     Collection<RoleDisinheritedByUser> on(UserLeftGroup event) {
         UserId leftMember = event.getId();
         GroupId groupId = event.getGroupId();
-        removeMember(leftMember);
+        removeUser(leftMember);
         List<RoleDisinheritedByUser> commands = roles()
                 .stream()
                 .map(role -> roleDisinherited(groupId, leftMember, role))
@@ -77,7 +77,7 @@ final class RolePropagation
         GroupId groupId = event.getId();
         builder().setId(groupId)
                  .addRole(assignedRole);
-        List<RoleInheritedByUser> commands = members()
+        List<RoleInheritedByUser> commands = users()
                 .stream()
                 .map(member -> roleInherited(groupId, member, assignedRole))
                 .collect(toList());
@@ -85,18 +85,18 @@ final class RolePropagation
     }
 
     @React
-    List<RoleDisinheritedByUser> on(RoleUnassignedFromGroup event) {
+    Collection<RoleDisinheritedByUser> on(RoleUnassignedFromGroup event) {
         RoleId unassignedRole = event.getRoleId();
         GroupId groupId = event.getId();
         removeRole(unassignedRole);
-        List<RoleDisinheritedByUser> commands = members()
+        List<RoleDisinheritedByUser> commands = users()
                 .stream()
                 .map(member -> roleDisinherited(groupId, member, unassignedRole))
                 .collect(toList());
         return commands;
     }
 
-    private void removeMember(UserId member) {
+    private void removeUser(UserId member) {
         GroupRolesPropagation.Builder builder = builder();
         List<UserId> members = builder.getUserMemberList();
         int memberIndex = members.indexOf(member);
@@ -110,7 +110,7 @@ final class RolePropagation
         builder.removeRole(roleIndex);
     }
 
-    private List<UserId> members() {
+    private List<UserId> users() {
         return builder().getUserMemberList();
     }
 

@@ -118,7 +118,8 @@ message UserRolesV2 {
     // Explicitly assigned roles.
     repeated RoleId explicit_role = 2;
 
-    //TODO:2020-03-13:alexander.yevsyukov: Add implicit roles
+    // Roles that the user obtains through membership in groups.
+    repeated RoleId implicit_role = 3;
 }
 
 // Provides information on roles that a group has.
@@ -133,7 +134,8 @@ message GroupRolesV2 {
     users.GroupId group = 1;
 
     // Explicitly assigned roles.
-    repeated RoleId explicit_role = 3;
+    repeated RoleId explicit_role = 2;
 
-    //TODO:2020-03-13:alexander.yevsyukov: Add implicit roles
+    // Roles that the group obtains through membership in other groups.
+    repeated RoleId implicit_role = 3;
 }

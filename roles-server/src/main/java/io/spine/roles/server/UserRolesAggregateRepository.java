@@ -20,31 +20,20 @@
 
 package io.spine.roles.server;
 
-import io.spine.server.BoundedContext;
-import io.spine.server.BoundedContextBuilder;
+import io.spine.core.UserId;
+import io.spine.roles.event.RoleDisinheritedByUser;
+import io.spine.roles.event.RoleInheritedByUser;
+import io.spine.server.aggregate.AggregateRepository;
+import io.spine.server.route.EventRouting;
 
-/**
- * Specifies the Roles Bounded Context.
- */
-public class RolesContext {
+import static io.spine.server.route.EventRoute.withId;
 
-    /**
-     * The name of the context.
-     */
-    public static final String NAME = "Roles";
+public class UserRolesAggregateRepository extends AggregateRepository<UserId, UserRolesAggregate> {
 
-    /** Prevents instantiation of this utility class. */
-    private RolesContext() {
-    }
-
-    /** Creates a new builder fro the Roles context. */
-    public static BoundedContextBuilder newBuilder() {
-        BoundedContextBuilder result = BoundedContext.multitenant(NAME);
-        result.add(new UserRolesRepository())
-              .add(RoleAggregate.class)
-              .add(new UserRolesAggregateRepository())
-              .add(GroupRolesAggregate.class)
-              .add(new RolePropagations());
-        return result;
+    @Override
+    protected void setupEventRouting(EventRouting<UserId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(RoleInheritedByUser.class, (event, context) -> withId(event.getUserId()))
+               .route(RoleDisinheritedByUser.class, (event, context) -> withId(event.getUserId()));
     }
 }

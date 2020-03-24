@@ -26,12 +26,16 @@ import io.spine.roles.UserRolesV2;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.command.UnassignRoleFromUser;
 import io.spine.roles.event.RoleAssignedToUser;
+import io.spine.roles.event.RoleDisinheritedByUser;
+import io.spine.roles.event.RoleInheritedByUser;
 import io.spine.roles.event.RoleUnassignedFromUser;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.roles.RoleId;
 import io.spine.roles.rejection.RoleIsNotAssignedToUser;
+import io.spine.server.event.React;
+import io.spine.server.model.Nothing;
 
 import java.util.List;
 
@@ -68,20 +72,41 @@ final class UserRolesAggregate extends Aggregate<UserId, UserRolesV2, UserRolesV
     }
 
     @Apply
-    private void on(RoleAssignedToUser event) {
+    void on(RoleAssignedToUser event) {
         builder().addExplicitRole(event.getRoleId());
     }
 
     @Apply
-    private void on(RoleUnassignedFromUser event) {
-        removeRole(event.getRoleId());
+    void on(RoleUnassignedFromUser event) {
+        removeExplicitRole(event.getRoleId());
     }
 
-    private void removeRole(RoleId roleId) {
-        List<RoleId> roles = builder().getExplicitRoleList();
-        if (roles.contains(roleId)) {
-            int index = roles.indexOf(roleId);
+    @React
+    Nothing on(RoleInheritedByUser event) {
+        builder().addImplicitRole(event.getRoleId());
+        return nothing();
+    }
+
+    @React
+    Nothing on(RoleDisinheritedByUser event) {
+        final RoleId role = event.getRoleId();
+        removeImplicitRole(role);
+        return nothing();
+    }
+
+    private void removeExplicitRole(RoleId role) {
+        int index = state().getExplicitRoleList()
+                           .indexOf(role);
+        if (index != -1) {
             builder().removeExplicitRole(index);
+        }
+    }
+
+    private void removeImplicitRole(RoleId role) {
+        int index = state().getImplicitRoleList()
+                           .indexOf(role);
+        if (index != -1) {
+            builder().removeImplicitRole(index);
         }
     }
 }

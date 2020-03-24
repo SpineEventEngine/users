@@ -21,36 +21,36 @@
 package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
-import io.spine.testing.core.given.GivenUserId;
 import io.spine.roles.RoleId;
-import io.spine.roles.UserRoles;
+import io.spine.roles.UserRolesV2;
+import io.spine.testing.core.given.GivenUserId;
 
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.roles.server.RoleIds.roleId;
+import static io.spine.users.server.given.TestIdentifiers.orgId;
 
-public class UserRolesProjectionTestEnv {
+public class Given {
 
     /** Prevents instantiation of this utility class. */
-    private UserRolesProjectionTestEnv() {
+    private Given() {
     }
 
     public static UserId userUuid() {
         return GivenUserId.newUuid();
     }
 
-    public static UserRoles userWithoutRoles(UserId user) {
-        return UserRoles
+    public static UserRolesV2 userWithoutRoles(UserId user) {
+        return UserRolesV2
                 .newBuilder()
-                .setId(user)
+                .setUser(user)
                 .vBuild();
     }
 
-    public static UserRoles userWithRole(UserId userId, RoleId roleId) {
-        return UserRoles
+    public static UserRolesV2 userWithRole(UserId userId, RoleId roleId) {
+        return UserRolesV2
                 .newBuilder()
-                .setId(userId)
-                .addRole(roleId)
+                .setUser(userId)
+                .addExplicitRole(roleId)
                 .vBuild();
     }
 

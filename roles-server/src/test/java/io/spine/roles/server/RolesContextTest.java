@@ -22,7 +22,8 @@ package io.spine.roles.server;
 
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
-import io.spine.server.BoundedContextBuilder;
+import io.spine.server.BoundedContext;
+import io.spine.server.integration.IntegrationBroker;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.server.UsersContext;
 import org.junit.jupiter.api.AfterEach;
@@ -30,18 +31,29 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * The base for Roles Context tests.
+ *
+ * <p>Since the Roles Context works in cooperation with the Users Context, two contexts are
+ * {@link #createContexts() created} before each test.
+ */
 public abstract class RolesContextTest {
 
-    private BlackBoxContext context;
+    private BlackBoxContext rolesContext;
+    private BlackBoxContext usersContext;
 
     @BeforeEach
-    void createContext() {
-        BoundedContextBuilder builder = contextBuilder();
-        context = BlackBoxContext.from(builder);
-        context.withTenant(tenantId());
+    protected void createContexts() {
+        final TenantId tenant = tenantId();
+        usersContext = BlackBoxContext
+                .from(UsersContext.newBuilder())
+                .withTenant(tenant);
+        rolesContext = BlackBoxContext
+                .from(RolesContext.newBuilder())
+                .withTenant(tenant);
     }
 
-    protected TenantId tenantId() {
+    private static TenantId tenantId() {
         InternetDomain domain = InternetDomain
                 .newBuilder()
                 .setValue("roles.spine.io")
@@ -52,16 +64,17 @@ public abstract class RolesContextTest {
                 .vBuild();
     }
 
-    protected BoundedContextBuilder contextBuilder() {
-        return UsersContext.newBuilder();
-    }
-
     @AfterEach
-    void closeContext() {
-        context.close();
+    protected void closeContexts() {
+        rolesContext.close();
+        usersContext.close();
     }
 
-    protected BlackBoxContext context() {
-        return checkNotNull(context);
+    protected final BlackBoxContext rolesContext() {
+        return checkNotNull(rolesContext);
+    }
+
+    protected final BlackBoxContext usersContext() {
+        return checkNotNull(usersContext);
     }
 }

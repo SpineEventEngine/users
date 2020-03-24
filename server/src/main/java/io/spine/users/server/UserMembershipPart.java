@@ -72,7 +72,7 @@ final class UserMembershipPart
     }
 
     @Apply
-    private void on(UserJoinedGroup event) {
+    void on(UserJoinedGroup event) {
         UserMembershipRecord membershipRecord = UserMembershipRecord
                 .newBuilder()
                 .setGroupId(event.getGroupId())
@@ -84,7 +84,7 @@ final class UserMembershipPart
     }
 
     @Apply
-    private void on(UserLeftGroup event) {
+    void on(UserLeftGroup event) {
         Optional<UserMembershipRecord> membership = findMembership(event.getGroupId());
         membership.ifPresent(this::removeMembership);
     }

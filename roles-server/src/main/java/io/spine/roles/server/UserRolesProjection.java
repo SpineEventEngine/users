@@ -32,7 +32,7 @@ import io.spine.roles.event.RoleUnassignedFromUser;
 import io.spine.users.user.event.UserCreated;
 
 /**
- * Aggregates all all user roles assigned both explicitly and implicitly.
+ * Combines all all user roles assigned both explicitly and implicitly.
  */
 public final class UserRolesProjection extends Projection<UserId, UserRoles, UserRoles.Builder> {
 
