@@ -25,7 +25,6 @@ import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
 import io.spine.users.GroupId;
-import io.spine.roles.GroupRolesPropagation;
 import io.spine.users.user.event.UserJoinedGroup;
 import io.spine.users.user.event.UserLeftGroup;
 
@@ -34,7 +33,7 @@ import static io.spine.server.route.EventRoute.withId;
 /**
  * The repository for {@link RolePropagation}.
  */
-public class RolePropagations
+final class RolePropagations
         extends ProcessManagerRepository<GroupId, RolePropagation, GroupRolesPropagation> {
 
     @OverridingMethodsMustInvokeSuper

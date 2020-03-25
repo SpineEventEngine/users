@@ -26,8 +26,8 @@ import io.spine.roles.UserRolesV2;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.command.UnassignRoleFromUser;
 import io.spine.roles.event.RoleAssignedToUser;
-import io.spine.roles.event.RoleDisinheritedByUser;
-import io.spine.roles.event.RoleInheritedByUser;
+import io.spine.roles.server.event.RoleDisinheritedByUser;
+import io.spine.roles.server.event.RoleInheritedByUser;
 import io.spine.roles.event.RoleUnassignedFromUser;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
@@ -72,12 +72,12 @@ final class UserRolesAggregate extends Aggregate<UserId, UserRolesV2, UserRolesV
     }
 
     @Apply
-    void on(RoleAssignedToUser event) {
+    private void on(RoleAssignedToUser event) {
         builder().addExplicitRole(event.getRoleId());
     }
 
     @Apply
-    void on(RoleUnassignedFromUser event) {
+    private void on(RoleUnassignedFromUser event) {
         removeExplicitRole(event.getRoleId());
     }
 

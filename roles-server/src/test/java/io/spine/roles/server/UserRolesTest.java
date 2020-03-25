@@ -45,9 +45,6 @@ import static io.spine.roles.server.given.Given.userUuid;
 import static io.spine.roles.server.given.Given.userWithRole;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
 
-/**
- * Integration tests of {@link UserRolesProjection}.
- */
 @DisplayName("`UserRolesAggregate` should")
 class UserRolesTest extends RolesContextTest {
 

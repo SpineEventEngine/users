@@ -39,12 +39,10 @@ public class RolesContext {
 
     /** Creates a new builder fro the Roles context. */
     public static BoundedContextBuilder newBuilder() {
-        BoundedContextBuilder result = BoundedContext.multitenant(NAME);
-        result.add(new UserRolesRepository())
-              .add(RoleAggregate.class)
-              .add(new UserRolesAggregateRepository())
-              .add(GroupRolesAggregate.class)
-              .add(new RolePropagations());
-        return result;
+        return BoundedContext.multitenant(NAME)
+                             .add(RoleAggregate.class)
+                             .add(new UserRolesAggregateRepository())
+                             .add(GroupRolesAggregate.class)
+                             .add(new RolePropagations());
     }
 }

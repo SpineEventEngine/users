@@ -21,14 +21,14 @@
 package io.spine.roles.server;
 
 import io.spine.core.UserId;
-import io.spine.roles.event.RoleDisinheritedByUser;
-import io.spine.roles.event.RoleInheritedByUser;
+import io.spine.roles.server.event.RoleDisinheritedByUser;
+import io.spine.roles.server.event.RoleInheritedByUser;
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.server.route.EventRouting;
 
 import static io.spine.server.route.EventRoute.withId;
 
-public class UserRolesAggregateRepository extends AggregateRepository<UserId, UserRolesAggregate> {
+final class UserRolesAggregateRepository extends AggregateRepository<UserId, UserRolesAggregate> {
 
     @Override
     protected void setupEventRouting(EventRouting<UserId> routing) {

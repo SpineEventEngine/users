@@ -25,11 +25,10 @@ import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
 import io.spine.roles.RoleId;
-import io.spine.roles.GroupRolesPropagation;
 import io.spine.roles.event.RoleAssignedToGroup;
-import io.spine.roles.event.RoleDisinheritedByUser;
-import io.spine.roles.event.RoleInheritedByUser;
-import io.spine.roles.event.RoleUnassignedFromGroup;
+import io.spine.roles.server.event.RoleDisinheritedByUser;
+import io.spine.roles.server.event.RoleInheritedByUser;
+import io.spine.roles.server.event.RoleUnassignedFromGroup;
 import io.spine.users.user.event.UserJoinedGroup;
 import io.spine.users.user.event.UserLeftGroup;
 

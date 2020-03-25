@@ -1,5 +1,5 @@
 //
-// Copyright 2019, TeamDev. All rights reserved.
+// Copyright 2020, TeamDev. All rights reserved.
 //
 // Redistribution and use in source and/or binary forms, with or without
 // modification, must retain the above copyright notice and the following
@@ -25,8 +25,8 @@ package spine.roles;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.roles.event";
-option java_outer_classname = "EventsProto";
+option java_package = "io.spine.roles.server.event";
+option java_outer_classname = "PropagationEventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
@@ -34,46 +34,36 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/roles/identifiers.proto";
 
-// A new role was created.
-//
-message RoleCreated {
+// The role of the group was inherited by a user.
+message RoleInheritedByUser {
 
-    // The ID of the new role.
-    RoleId id = 1;
-}
+    users.GroupId id = 1;
 
-// A role was deleted.
-message RoleDeleted {
-
-    // The ID of the deleted role.
-    RoleId id = 1;
-}
-
-// A role was assigned to a user.
-message RoleAssignedToUser {
-
-    // The ID of the user.
-    core.UserId id = 1;
-
-    // An ID of the assigned role.
+    // An ID of the inherited role.
     RoleId role_id = 2 [(required) = true];
+
+    // An ID of the user inherited the role.
+    core.UserId user_id = 3 [(required) = true];
 }
 
-// A role assignment was removed from a user.
-message RoleUnassignedFromUser {
+// The role assignment was removed from the group.
+message RoleUnassignedFromGroup {
 
-    core.UserId id = 1;
+    users.GroupId id = 1;
 
     // An ID of the unassigned role.
     RoleId role_id = 2 [(required) = true];
 }
 
-// A role was assigned to the group.
-//
-message RoleAssignedToGroup {
+//TODO:2019-09-30:alexander.yevsyukov: Rename this event.
+// The user disinherited the role of a group.
+message RoleDisinheritedByUser {
 
     users.GroupId id = 1;
 
-    // An ID of the assigned role.
+    // The ID of the disinherited role.
     RoleId role_id = 2 [(required) = true];
+
+    // The ID of the user disinherited the role.
+    core.UserId user_id = 3 [(required) = true];
 }

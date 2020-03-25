@@ -22,7 +22,7 @@ package io.spine.roles.server;
 
 import io.spine.roles.GroupRolesV2;
 import io.spine.roles.command.UnassignRoleFromGroup;
-import io.spine.roles.event.RoleUnassignedFromGroup;
+import io.spine.roles.server.event.RoleUnassignedFromGroup;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.GroupId;
 import io.spine.roles.RoleId;

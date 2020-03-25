@@ -29,7 +29,7 @@ import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.roles.RoleId;
 import io.spine.roles.event.RoleAssignedToGroup;
-import io.spine.roles.event.RoleUnassignedFromGroup;
+import io.spine.roles.server.event.RoleUnassignedFromGroup;
 import io.spine.roles.rejection.RoleIsNotAssignedToGroup;
 
 import java.util.List;
