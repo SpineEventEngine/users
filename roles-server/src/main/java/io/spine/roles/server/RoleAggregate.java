@@ -54,7 +54,7 @@ public final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
     RoleCreated handle(CreateRole command) {
         RoleCreated event = RoleCreated
                 .newBuilder()
-                .setId(command.getId())
+                .setRole(command.getRole())
                 .vBuild();
         return event;
     }
@@ -63,23 +63,21 @@ public final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
     RoleDeleted handle(DeleteRole command) {
         RoleDeleted event = RoleDeleted
                 .newBuilder()
-                .setId(command.getId())
+                .setRole(command.getRole())
                 .vBuild();
         return event;
     }
 
     @Apply
     private void on(RoleCreated event) {
-        RoleId id = event.getId();
+        RoleId id = event.getRole();
         builder().setId(id)
-                 .setDisplayName(id.getName())
-                 .setOrgEntity(id.getOrgEntity())
+                 .setDisplayName(event.getDisplayName())
                  .build();
     }
 
     @Apply
-    private void on(@SuppressWarnings("unused") // Event data is not required.
-                    RoleDeleted event) {
+    private void on(@SuppressWarnings("unused") RoleDeleted event) {
         setDeleted(true);
     }
 }

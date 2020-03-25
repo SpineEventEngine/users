@@ -22,12 +22,8 @@ package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
 import io.spine.roles.RoleId;
-import io.spine.roles.UserRolesV2;
+import io.spine.roles.UserRoles;
 import io.spine.testing.core.given.GivenUserId;
-
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.roles.server.RoleIds.roleId;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
 
 public class Given {
 
@@ -39,26 +35,18 @@ public class Given {
         return GivenUserId.newUuid();
     }
 
-    public static UserRolesV2 userWithoutRoles(UserId user) {
-        return UserRolesV2
+    public static UserRoles userWithoutRoles(UserId user) {
+        return UserRoles
                 .newBuilder()
                 .setUser(user)
                 .vBuild();
     }
 
-    public static UserRolesV2 userWithRole(UserId userId, RoleId roleId) {
-        return UserRolesV2
+    public static UserRoles userWithRole(UserId user, RoleId role) {
+        return UserRoles
                 .newBuilder()
-                .setUser(userId)
-                .addExplicitRole(roleId)
+                .setUser(user)
+                .addAssigned(role)
                 .vBuild();
-    }
-
-    private static String roleNameUuid() {
-        return "Role-" + newUuid();
-    }
-
-    public static RoleId roleUuid() {
-        return roleId(orgId(), roleNameUuid());
     }
 }

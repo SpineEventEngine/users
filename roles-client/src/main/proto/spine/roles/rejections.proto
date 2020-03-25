@@ -33,20 +33,22 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/roles/identifiers.proto";
 
-// The rejection is generated when trying to remove a role that isn't assigned to a group.
+// The role assignment cannot be removed from the group because the role is not assigned.
 message RoleIsNotAssignedToGroup {
 
-    users.GroupId id = 1;
+    // The group from which the command attempted to remove the role assignment.
+    users.GroupId group = 1;
 
-    // An ID of the role.
-    RoleId role_id = 2 [(required) = true];
+    // The role removal of assignment of which was requested.
+    RoleId role = 2 [(required) = true];
 }
 
-// The rejection to removing a role that isn't assigned to a user.
+// The role assignment cannot be removed from the user because the role is not assigned.
 message RoleIsNotAssignedToUser {
 
-    core.UserId id = 1;
+    // The user from whom the command attempted to remove the role assignment.
+    core.UserId user = 1;
 
-    // An ID of a role.
-    RoleId role_id = 2 [(required) = true];
+    // The role removal of assignment of which was requested.
+    RoleId role = 2 [(required) = true];
 }

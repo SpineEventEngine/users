@@ -20,93 +20,96 @@
 
 package io.spine.roles.server;
 
-import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.roles.UserRolesV2;
+import io.spine.roles.RoleId;
+import io.spine.roles.UserRoles;
 import io.spine.roles.command.AssignRoleToUser;
-import io.spine.roles.command.UnassignRoleFromUser;
+import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.roles.event.RoleAssignedToUser;
-import io.spine.roles.server.event.RoleDisinheritedByUser;
-import io.spine.roles.server.event.RoleInheritedByUser;
-import io.spine.roles.event.RoleUnassignedFromUser;
+import io.spine.roles.event.RoleAssignmentRemovedFromUser;
+import io.spine.roles.rejection.RoleIsNotAssignedToUser;
+import io.spine.roles.server.event.RolePropagatedToUser;
+import io.spine.roles.server.event.RolePropagationCanceledForUser;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.roles.RoleId;
-import io.spine.roles.rejection.RoleIsNotAssignedToUser;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 
 import java.util.List;
 
-final class UserRolesAggregate extends Aggregate<UserId, UserRolesV2, UserRolesV2.Builder> {
+/**
+ * Manages role assignment and propagation for a user.
+ */
+final class UserRolesAggregate extends Aggregate<UserId, UserRoles, UserRoles.Builder> {
 
     @Assign
-    RoleAssignedToUser handle(AssignRoleToUser command, CommandContext context) {
+    RoleAssignedToUser handle(AssignRoleToUser c) {
         RoleAssignedToUser event = RoleAssignedToUser
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setUser(c.getUser())
+                .setRole(c.getRole())
                 .vBuild();
         return event;
     }
 
     @Assign
-    RoleUnassignedFromUser handle(UnassignRoleFromUser command, CommandContext context)
+    RoleAssignmentRemovedFromUser handle(RemoveRoleAssignmentFromUser c)
             throws RoleIsNotAssignedToUser {
-        List<RoleId> roles = state().getExplicitRoleList();
-        RoleId roleId = command.getRoleId();
-        if (!roles.contains(roleId)) {
+        List<RoleId> roles = state().getAssignedList();
+        RoleId role = c.getRole();
+        final UserId user = id();
+        if (!roles.contains(role)) {
             throw RoleIsNotAssignedToUser
                     .newBuilder()
-                    .setId(id())
-                    .setRoleId(roleId)
+                    .setUser(user)
+                    .setRole(role)
                     .build();
         }
-        RoleUnassignedFromUser event = RoleUnassignedFromUser
+        RoleAssignmentRemovedFromUser event = RoleAssignmentRemovedFromUser
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setUser(user)
+                .setRole(role)
                 .vBuild();
         return event;
     }
 
     @Apply
-    private void on(RoleAssignedToUser event) {
-        builder().addExplicitRole(event.getRoleId());
+    private void on(RoleAssignedToUser e) {
+        builder().addAssigned(e.getRole());
     }
 
     @Apply
-    private void on(RoleUnassignedFromUser event) {
-        removeExplicitRole(event.getRoleId());
+    private void on(RoleAssignmentRemovedFromUser e) {
+        removeAssignedRole(e.getRole());
     }
 
     @React
-    Nothing on(RoleInheritedByUser event) {
-        builder().addImplicitRole(event.getRoleId());
+    Nothing on(RolePropagatedToUser e) {
+        builder().addPropagated(e.getRole());
         return nothing();
     }
 
     @React
-    Nothing on(RoleDisinheritedByUser event) {
-        final RoleId role = event.getRoleId();
-        removeImplicitRole(role);
+    Nothing on(RolePropagationCanceledForUser e) {
+        final RoleId role = e.getRole();
+        removePropagatedRole(role);
         return nothing();
     }
 
-    private void removeExplicitRole(RoleId role) {
-        int index = state().getExplicitRoleList()
+    private void removeAssignedRole(RoleId role) {
+        int index = state().getAssignedList()
                            .indexOf(role);
         if (index != -1) {
-            builder().removeExplicitRole(index);
+            builder().removeAssigned(index);
         }
     }
 
-    private void removeImplicitRole(RoleId role) {
-        int index = state().getImplicitRoleList()
+    private void removePropagatedRole(RoleId role) {
+        int index = state().getPropagatedList()
                            .indexOf(role);
         if (index != -1) {
-            builder().removeImplicitRole(index);
+            builder().removePropagated(index);
         }
     }
 }

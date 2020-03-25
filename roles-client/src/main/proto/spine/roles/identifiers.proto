@@ -32,12 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/users/identifiers.proto";
 
-// The ID of a role, which is unique in the scope of an organization or a unit.
+// The ID of a role.
 message RoleId {
-
-    // An organization or organizational unit the role belongs to.
-    users.OrganizationOrUnit org_entity = 1 [(required) = true];
-
-    // A name of the role.
-    string name = 2 [(required) = true];
+    string uuid = 1 [(required) = true];
 }

@@ -38,48 +38,58 @@ import "spine/roles/identifiers.proto";
 message CreateRole {
 
     // The ID of the new role.
-    RoleId id = 1;
+    RoleId role = 1;
+
+    // The text to show the role name in the UI.
+    string display_name = 2;
+
+    // Longer text which describes the role.
+    string description = 3;
 }
 
-// Deletes a role.
+// Deletes a role from the system.
 message DeleteRole {
 
-    // The ID of the role to delete.
-    RoleId id = 1;
+    // The role to delete.
+    RoleId role = 1;
 }
 
 // Assigns a role to a user.
 message AssignRoleToUser {
 
-    core.UserId id = 1;
+    // The user to whom the role is assigned.
+    core.UserId user = 1;
 
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
+    // The role to assign.
+    RoleId role = 2 [(required) = true];
 }
 
 // Removes a role assignment from a user.
-message UnassignRoleFromUser {
+message RemoveRoleAssignmentFromUser {
 
-    core.UserId id = 1;
+    // The user from whom the role assignment is removed.
+    core.UserId user = 1;
 
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
+    // The role assigment of which to remove.
+    RoleId role = 2 [(required) = true];
 }
 
 // Assigns a role to the group.
 message AssignRoleToGroup {
 
-    users.GroupId id = 1;
+    // The group to which assign the role.
+    users.GroupId group = 1;
 
-    // An ID of the role to assign.
-    RoleId role_id = 2 [(required) = true];
+    // The role to assign.
+    RoleId role = 2 [(required) = true];
 }
 
 // Removes a role assignment from the group.
-message UnassignRoleFromGroup {
+message RemoveRoleAssignmentFromGroup {
 
-    users.GroupId id = 1;
+    // The group from which the role assignment is removed.
+    users.GroupId group = 1;
 
-    // An ID of the role to unassign.
-    RoleId role_id = 2 [(required) = true];
+    // The role assignment of which to remove.
+    RoleId role = 2 [(required) = true];
 }

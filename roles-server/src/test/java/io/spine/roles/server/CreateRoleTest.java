@@ -54,7 +54,7 @@ class CreateRoleTest extends RoleCommandTest<CreateRole, RoleCreated> {
     protected RoleCreated expectedEventAfter(CreateRole command) {
         return RoleCreated
                 .newBuilder()
-                .setId(command.getId())
+                .setRole(command.getRole())
                 .build();
     }
 
@@ -62,7 +62,7 @@ class CreateRoleTest extends RoleCommandTest<CreateRole, RoleCreated> {
     protected Role expectedStateAfter(CreateRole command) {
         return Role
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getRole())
                 .build();
     }
 }

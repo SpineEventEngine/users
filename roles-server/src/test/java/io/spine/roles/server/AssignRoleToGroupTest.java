@@ -20,7 +20,8 @@
 
 package io.spine.roles.server;
 
-import io.spine.roles.GroupRolesV2;
+import io.spine.roles.GroupRoles;
+import io.spine.roles.RoleId;
 import io.spine.roles.command.AssignRoleToGroup;
 import io.spine.roles.event.RoleAssignedToGroup;
 import io.spine.server.BoundedContextBuilder;
@@ -28,10 +29,7 @@ import io.spine.users.GroupId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.roles.server.RoleIds.roleId;
 import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
 
 @DisplayName("`AssignRoleToGroup` command should")
 class AssignRoleToGroupTest extends GroupRolesCommandTest<AssignRoleToGroup, RoleAssignedToGroup> {
@@ -43,24 +41,24 @@ class AssignRoleToGroupTest extends GroupRolesCommandTest<AssignRoleToGroup, Rol
 
     @Override
     protected AssignRoleToGroup command(GroupId id) {
-        return assignRoleToGroup(id, roleId(orgId(), newUuid()));
+        return assignRoleToGroup(id, RoleId.generate());
     }
 
     @Override
     protected RoleAssignedToGroup expectedEventAfter(AssignRoleToGroup command) {
         return RoleAssignedToGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setGroup(command.getGroup())
+                .setRole(command.getRole())
                 .build();
     }
 
     @Override
-    protected GroupRolesV2 expectedStateAfter(AssignRoleToGroup command) {
-        return GroupRolesV2
+    protected GroupRoles expectedStateAfter(AssignRoleToGroup command) {
+        return GroupRoles
                 .newBuilder()
-                .setGroup(command.getId())
-                .addExplicitRole(command.getRoleId())
+                .setGroup(command.getGroup())
+                .addAssigned(command.getRole())
                 .build();
     }
 

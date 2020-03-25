@@ -24,20 +24,19 @@ import com.google.common.collect.ImmutableList;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.roles.UserRolesV2;
+import io.spine.roles.RoleId;
+import io.spine.roles.UserRoles;
 import io.spine.roles.command.AssignRoleToUser;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.roles.RoleId;
 import io.spine.users.server.CommandTest;
 
-import static io.spine.roles.server.RoleIds.roleId;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
-import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 
 public abstract class UserRolesCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<UserId, C, E, UserRolesV2, UserRolesAggregate> {
+        extends CommandTest<UserId, C, E, UserRoles, UserRolesAggregate> {
 
     private static final UserId USER_ID = userId();
+    private static final RoleId ADMIN_ROLE = RoleId.generate();
 
     @Override
     protected UserId entityId() {
@@ -57,8 +56,8 @@ public abstract class UserRolesCommandTest<C extends CommandMessage, E extends E
     protected Iterable<CommandMessage> setupCommands() {
         AssignRoleToUser assignRole = AssignRoleToUser
                 .newBuilder()
-                .setId(entityId())
-                .setRoleId(originalRole())
+                .setUser(entityId())
+                .setRole(originalRole())
                 .vBuild();
         ImmutableList.Builder<CommandMessage> commands = ImmutableList.builder();
         commands.add(assignRole);
@@ -70,7 +69,7 @@ public abstract class UserRolesCommandTest<C extends CommandMessage, E extends E
     }
 
     static RoleId adminRoleId() {
-        return roleId(userOrgEntity(), "admin_role");
+        return ADMIN_ROLE;
     }
 
     RoleId originalRole() {

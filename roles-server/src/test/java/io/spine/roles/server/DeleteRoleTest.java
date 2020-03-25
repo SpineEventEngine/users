@@ -58,7 +58,7 @@ class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
     protected RoleDeleted expectedEventAfter(DeleteRole command) {
         return RoleDeleted
                 .newBuilder()
-                .setId(command.getId())
+                .setRole(command.getRole())
                 .build();
     }
 
@@ -66,7 +66,7 @@ class DeleteRoleTest extends RoleCommandTest<DeleteRole, RoleDeleted> {
     protected Role expectedStateAfter(DeleteRole command) {
         return Role
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getRole())
                 .build();
     }
 

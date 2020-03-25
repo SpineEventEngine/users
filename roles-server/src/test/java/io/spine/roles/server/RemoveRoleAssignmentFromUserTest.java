@@ -21,15 +21,15 @@
 package io.spine.roles.server;
 
 import io.spine.core.UserId;
-import io.spine.roles.UserRolesV2;
-import io.spine.roles.command.UnassignRoleFromUser;
-import io.spine.roles.event.RoleUnassignedFromUser;
+import io.spine.roles.UserRoles;
+import io.spine.roles.command.RemoveRoleAssignmentFromUser;
+import io.spine.roles.event.RoleAssignmentRemovedFromUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("`UnassignRoleFromUser` command should")
-class UnassignRoleFromUserTest
-        extends UserRolesCommandTest<UnassignRoleFromUser, RoleUnassignedFromUser> {
+class RemoveRoleAssignmentFromUserTest
+        extends UserRolesCommandTest<RemoveRoleAssignmentFromUser, RoleAssignmentRemovedFromUser> {
 
     @Override
     @Test
@@ -40,32 +40,32 @@ class UnassignRoleFromUserTest
     }
 
     @Override
-    protected UnassignRoleFromUser command(UserId id) {
-        return unassignRoleFromUser(id);
+    protected RemoveRoleAssignmentFromUser command(UserId id) {
+        return removeRoleFromUser(id);
     }
 
     @Override
-    protected RoleUnassignedFromUser expectedEventAfter(UnassignRoleFromUser command) {
-        return RoleUnassignedFromUser
+    protected RoleAssignmentRemovedFromUser expectedEventAfter(RemoveRoleAssignmentFromUser command) {
+        return RoleAssignmentRemovedFromUser
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setUser(command.getUser())
+                .setRole(command.getRole())
                 .buildPartial();
     }
 
     @Override
-    protected UserRolesV2 expectedStateAfter(UnassignRoleFromUser command) {
-        return UserRolesV2
+    protected UserRoles expectedStateAfter(RemoveRoleAssignmentFromUser command) {
+        return UserRoles
                 .newBuilder()
-                .setUser(command.getId())
+                .setUser(command.getUser())
                 .buildPartial();
     }
 
-    static UnassignRoleFromUser unassignRoleFromUser(UserId id) {
-        return UnassignRoleFromUser
+    static RemoveRoleAssignmentFromUser removeRoleFromUser(UserId user) {
+        return RemoveRoleAssignmentFromUser
                 .newBuilder()
-                .setId(id)
-                .setRoleId(UserRolesCommandTest.adminRoleId())
+                .setUser(user)
+                .setRole(adminRoleId())
                 .build();
     }
 }

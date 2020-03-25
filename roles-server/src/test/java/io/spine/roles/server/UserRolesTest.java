@@ -23,7 +23,7 @@ package io.spine.roles.server;
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
 import io.spine.roles.RoleId;
-import io.spine.roles.UserRolesV2;
+import io.spine.roles.UserRoles;
 import io.spine.roles.server.given.Given;
 import io.spine.users.GroupId;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,14 +33,13 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
 import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
-import static io.spine.roles.server.given.TestCommands.unassignRoleFromGroup;
-import static io.spine.roles.server.given.TestCommands.unassignRoleFromUser;
+import static io.spine.roles.server.given.TestCommands.removeRoleFromGroup;
+import static io.spine.roles.server.given.TestCommands.removeRoleFromUser;
 import static io.spine.roles.server.given.GivenCommand.createGroup;
 import static io.spine.roles.server.given.GivenCommand.createRole;
 import static io.spine.roles.server.given.GivenCommand.createUser;
 import static io.spine.roles.server.given.GivenCommand.joinGroup;
 import static io.spine.roles.server.given.GivenCommand.leaveGroup;
-import static io.spine.roles.server.given.Given.roleUuid;
 import static io.spine.roles.server.given.Given.userUuid;
 import static io.spine.roles.server.given.Given.userWithRole;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
@@ -51,7 +50,7 @@ class UserRolesTest extends RolesContextTest {
     private UserId user;
     private GroupId group;
     private RoleId role;
-    private UserRolesV2 expectedRoles;
+    private UserRoles expectedRoles;
 
     @BeforeEach
     void createUserRoleAndGroup() {
@@ -61,14 +60,14 @@ class UserRolesTest extends RolesContextTest {
                 createUser(user),
                 createGroup(group)
         );
-        role = roleUuid();
+        role = RoleId.generate();
         rolesContext().receivesCommand(createRole(role));
         expectedRoles = userWithRole(user, role);
     }
 
     private ProtoFluentAssertion assertRoles() {
         return rolesContext()
-                .assertEntityWithState(UserRolesV2.class, user)
+                .assertEntityWithState(UserRoles.class, user)
                 .hasStateThat()
                 .comparingExpectedFieldsOnly();
     }
@@ -113,7 +112,7 @@ class UserRolesTest extends RolesContextTest {
         @Test
         @DisplayName("remove if it is unassigned")
         void removeUnassignedRole() {
-            rolesContext().receivesCommand(unassignRoleFromUser(user, role));
+            rolesContext().receivesCommand(removeRoleFromUser(user, role));
 
             assertRoles().isEqualTo(userWithoutRoles());
         }
@@ -132,7 +131,7 @@ class UserRolesTest extends RolesContextTest {
         @Test
         @DisplayName("remove role if it is unassigned from group")
         void removeUnassignedGroupRole() {
-            rolesContext().receivesCommand(unassignRoleFromGroup(group, role));
+            rolesContext().receivesCommand(removeRoleFromGroup(group, role));
 
             assertRoles().isEqualTo(userWithoutRoles());
         }
@@ -146,7 +145,7 @@ class UserRolesTest extends RolesContextTest {
         }
     }
 
-    private UserRolesV2 userWithoutRoles() {
+    private UserRoles userWithoutRoles() {
         return Given.userWithoutRoles(user);
     }
 }

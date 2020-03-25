@@ -26,8 +26,6 @@ import io.spine.roles.RoleId;
 import io.spine.roles.Role;
 import io.spine.users.server.CommandTest;
 
-import static io.spine.roles.server.given.TestEnv.createRoleId;
-
 /**
  * An abstract base for the tests of {@code Role} commands and their implications.
  *
@@ -39,7 +37,7 @@ import static io.spine.roles.server.given.TestEnv.createRoleId;
 public abstract class RoleCommandTest<C extends CommandMessage, E extends EventMessage>
         extends CommandTest<RoleId, C, E, Role, RoleAggregate> {
 
-    private static final RoleId ROLE_ID = createRoleId();
+    private static final RoleId ROLE_ID = RoleId.generate();
 
     @Override
     protected RoleId entityId() {

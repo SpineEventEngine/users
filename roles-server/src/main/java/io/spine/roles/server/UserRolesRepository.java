@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,35 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.roles.server.given;
+package io.spine.roles.server;
 
-import io.spine.users.OrganizationOrUnit;
-import io.spine.roles.RoleId;
-import io.spine.users.server.given.TestIdentifiers;
-import io.spine.roles.server.RoleAggregate;
+import io.spine.core.UserId;
+import io.spine.server.aggregate.AggregateRepository;
+import io.spine.server.route.EventRouting;
 
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.roles.server.RoleIds.roleId;
+import static io.spine.server.route.EventRoute.byFirstMessageField;
 
 /**
- * The environment for the {@link RoleAggregate} tests.
+ * Manages {@link UserRolesAggregate}s.
  */
-public final class TestEnv {
+final class UserRolesRepository extends AggregateRepository<UserId, UserRolesAggregate> {
 
     /**
-     * Prevents instantiation.
+     * Tunes event routing to use the first message field.
      */
-    private TestEnv() {
-    }
-
-    public static RoleId createRoleId() {
-        return roleId(roleParent(), newUuid());
-    }
-
-    private static OrganizationOrUnit roleParent() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(TestIdentifiers.orgId())
-                .vBuild();
+    @Override
+    protected void setupEventRouting(EventRouting<UserId> routing) {
+        super.setupEventRouting(routing);
+        routing.replaceDefault(byFirstMessageField(UserId.class));
     }
 }

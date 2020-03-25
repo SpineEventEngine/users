@@ -34,36 +34,68 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/roles/identifiers.proto";
 
-// The role of the group was inherited by a user.
-message RoleInheritedByUser {
+// The role of the group is propagated to the user.
+//
+// Example scenarios:
+//  1) The user is added to the group and the group has this role.
+//  2) The user belongs to the group and the role is assigned to the group.
+//
+message RolePropagatedToUser {
 
-    users.GroupId id = 1;
+    // The user to whom the role is propagated.
+    core.UserId user = 1 [(required) = true];
 
-    // An ID of the inherited role.
-    RoleId role_id = 2 [(required) = true];
+    // The group to which the user belongs.
+    users.GroupId group = 2 [(required) = true];
 
-    // An ID of the user inherited the role.
-    core.UserId user_id = 3 [(required) = true];
+    // The propagated role.
+    RoleId role = 3 [(required) = true];
 }
 
-// The role assignment was removed from the group.
-message RoleUnassignedFromGroup {
+// The role is no longer propagated to the user.
+//
+// Example scenarios:
+//  1) The user is removed from the group, which has this role assigned.
+//  2) The user belongs to the group, and the role assignment is removed from the group.
+//
+message RolePropagationCanceledForUser {
 
-    users.GroupId id = 1;
+    // The user for whom the role is no longer propagated.
+    core.UserId user = 1 [(required) = true];
 
-    // An ID of the unassigned role.
-    RoleId role_id = 2 [(required) = true];
+    // The group the user belongs to, or belonged before the event.
+    users.GroupId group = 2 [(required) = true];
+
+    // The role propagation of which is canceled for the user.
+    RoleId role = 3 [(required) = true];
 }
 
-//TODO:2019-09-30:alexander.yevsyukov: Rename this event.
-// The user disinherited the role of a group.
-message RoleDisinheritedByUser {
+// The role is propagated to the group because it is nested into another group.
+//
+// Example scenarios:
+//  1) The parent group has the role explicitly assigned.
+//  2) The parent group got the role because of propagation.
+//  3) This group was added to the group which already has the role (either assigned or propagated).
+//
+message RolePropagatedToGroup {
 
-    users.GroupId id = 1;
+    // The group to which the role is propagated.
+    users.GroupId child = 1 [(required) = true];
 
-    // The ID of the disinherited role.
-    RoleId role_id = 2 [(required) = true];
+    // The group through which the role is propagated.
+    users.GroupId parent = 2 [(required) = true];
 
-    // The ID of the user disinherited the role.
-    core.UserId user_id = 3 [(required) = true];
+    // The propagated role.
+    RoleId role = 3 [(required) = true];
+}
+
+// The role is no longer propagated to the group.
+//
+// Example scenarios:
+//  1) The group is removed from the group, which has this role assigned or propagated.
+//  2) The group belongs to the group, to which the role assignment is removed, or
+//     no longer propagated.
+//
+message RolePropagationCanceledForGroup {
+
 }

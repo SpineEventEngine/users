@@ -41,7 +41,7 @@ public class RolesContext {
     public static BoundedContextBuilder newBuilder() {
         return BoundedContext.multitenant(NAME)
                              .add(RoleAggregate.class)
-                             .add(new UserRolesAggregateRepository())
+                             .add(new UserRolesRepository())
                              .add(GroupRolesAggregate.class)
                              .add(new RolePropagations());
     }

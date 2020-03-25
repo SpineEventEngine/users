@@ -20,9 +20,9 @@
 
 package io.spine.roles.server;
 
-import io.spine.roles.GroupRolesV2;
-import io.spine.roles.command.UnassignRoleFromGroup;
-import io.spine.roles.server.event.RoleUnassignedFromGroup;
+import io.spine.roles.GroupRoles;
+import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
+import io.spine.roles.event.RoleAssignmentRemovedFromGroup;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.GroupId;
 import io.spine.roles.RoleId;
@@ -31,21 +31,18 @@ import io.spine.users.server.given.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.roles.server.RoleIds.roleId;
 import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
-import static io.spine.roles.server.given.TestCommands.unassignRoleFromGroup;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
-import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
+import static io.spine.roles.server.given.TestCommands.removeRoleFromGroup;
 
 @DisplayName("`UnassignRoleFromGroup` command should")
-class UnassignRoleFromGroupTest
-        extends GroupRolesCommandTest<UnassignRoleFromGroup, RoleUnassignedFromGroup> {
+class RemoveRoleAssignmentFromGroupTest
+        extends GroupRolesCommandTest<RemoveRoleAssignmentFromGroup, RoleAssignmentRemovedFromGroup> {
 
-    private static final RoleId ROLE_ID = roleId(orgId(), newUuid());
+    private static final RoleId REGULAR_ROLE = RoleId.generate();
+    private static final RoleId ADMIN_ROLE = RoleId.generate();
 
     static RoleId groupRole() {
-        return roleId(groupOrgEntityOrganization(), "administrator");
+        return ADMIN_ROLE;
     }
 
     @Override
@@ -57,7 +54,7 @@ class UnassignRoleFromGroupTest
     @DisplayName("throw `RoleIsNotAssignedToGroup` if the role isn't assigned to the group")
     void throwsRejection() {
         GroupId someGroupId = TestIdentifiers.groupId();
-        UnassignRoleFromGroup unassignRole = unassignRoleFromGroup(someGroupId, groupRole());
+        RemoveRoleAssignmentFromGroup unassignRole = removeRoleFromGroup(someGroupId, groupRole());
 
         context().receivesCommand(unassignRole)
                  .assertEvents()
@@ -69,29 +66,30 @@ class UnassignRoleFromGroupTest
     @DisplayName("produce `RoleAssignedToGroup` event and add a role to the `Group` state")
     @Override
     protected void produceEventAndChangeState() {
-        context().receivesCommand(assignRoleToGroup(entityId(), ROLE_ID));
+        context().receivesCommand(assignRoleToGroup(entityId(), REGULAR_ROLE));
         super.produceEventAndChangeState();
     }
 
     @Override
-    protected UnassignRoleFromGroup command(GroupId id) {
-        return unassignRoleFromGroup(id, ROLE_ID);
+    protected RemoveRoleAssignmentFromGroup command(GroupId id) {
+        return removeRoleFromGroup(id, REGULAR_ROLE);
     }
 
     @Override
-    protected RoleUnassignedFromGroup expectedEventAfter(UnassignRoleFromGroup command) {
-        return RoleUnassignedFromGroup
+    protected RoleAssignmentRemovedFromGroup expectedEventAfter(
+            RemoveRoleAssignmentFromGroup command) {
+        return RoleAssignmentRemovedFromGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setGroup(command.getGroup())
+                .setRole(command.getRole())
                 .build();
     }
 
     @Override
-    protected GroupRolesV2 expectedStateAfter(UnassignRoleFromGroup command) {
-        return GroupRolesV2
+    protected GroupRoles expectedStateAfter(RemoveRoleAssignmentFromGroup command) {
+        return GroupRoles
                 .newBuilder()
-                .setGroup(command.getId())
+                .setGroup(command.getGroup())
                 .build();
     }
 }

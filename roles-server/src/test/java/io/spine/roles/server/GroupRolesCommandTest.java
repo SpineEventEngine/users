@@ -22,13 +22,13 @@ package io.spine.roles.server;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
-import io.spine.roles.GroupRolesV2;
+import io.spine.roles.GroupRoles;
 import io.spine.users.GroupId;
 import io.spine.users.server.CommandTest;
 import io.spine.users.server.given.TestIdentifiers;
 
 public abstract class GroupRolesCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<GroupId, C, E, GroupRolesV2, GroupRolesAggregate> {
+        extends CommandTest<GroupId, C, E, GroupRoles, GroupRolesAggregate> {
 
     private static final GroupId GROUP_ID = TestIdentifiers.groupId();
 

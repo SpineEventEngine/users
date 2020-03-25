@@ -21,21 +21,21 @@
 package io.spine.roles.server;
 
 import io.spine.core.UserId;
+import io.spine.roles.RoleId;
+import io.spine.roles.event.RoleAssignedToGroup;
+import io.spine.roles.event.RoleAssignmentRemovedFromGroup;
+import io.spine.roles.server.event.RolePropagatedToUser;
+import io.spine.roles.server.event.RolePropagationCanceledForUser;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
-import io.spine.roles.RoleId;
-import io.spine.roles.event.RoleAssignedToGroup;
-import io.spine.roles.server.event.RoleDisinheritedByUser;
-import io.spine.roles.server.event.RoleInheritedByUser;
-import io.spine.roles.server.event.RoleUnassignedFromGroup;
 import io.spine.users.user.event.UserJoinedGroup;
 import io.spine.users.user.event.UserLeftGroup;
 
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 
 /**
  * Propagates roles assigned to the group to enclosed users and groups.
@@ -46,60 +46,60 @@ final class RolePropagation
         extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagation.Builder> {
 
     @React(external = true)
-    Collection<RoleInheritedByUser> on(UserJoinedGroup event) {
+    Collection<RolePropagatedToUser> on(UserJoinedGroup event) {
         UserId newMember = event.getId();
-        GroupId groupId = event.getGroupId();
-        builder().setId(groupId)
-                 .addUserMember(newMember);
-        List<RoleInheritedByUser> commands = roles()
+        GroupId group = event.getGroupId();
+        builder().setGroup(group)
+                 .addUser(newMember);
+        List<RolePropagatedToUser> commands = roles()
                 .stream()
-                .map(role -> roleInherited(groupId, newMember, role))
-                .collect(toList());
+                .map(role -> rolePropagated(group, newMember, role))
+                .collect(toImmutableList());
         return commands;
     }
 
     @React(external = true)
-    Collection<RoleDisinheritedByUser> on(UserLeftGroup event) {
+    Collection<RolePropagationCanceledForUser> on(UserLeftGroup event) {
         UserId leftMember = event.getId();
-        GroupId groupId = event.getGroupId();
+        GroupId group = event.getGroupId();
         removeUser(leftMember);
-        List<RoleDisinheritedByUser> commands = roles()
+        List<RolePropagationCanceledForUser> commands = roles()
                 .stream()
-                .map(role -> roleDisinherited(groupId, leftMember, role))
-                .collect(toList());
+                .map(role -> rolePropagationCanceled(group, leftMember, role))
+                .collect(toImmutableList());
         return commands;
     }
 
     @React
-    Collection<RoleInheritedByUser> on(RoleAssignedToGroup event) {
-        RoleId assignedRole = event.getRoleId();
-        GroupId groupId = event.getId();
-        builder().setId(groupId)
+    Collection<RolePropagatedToUser> on(RoleAssignedToGroup event) {
+        RoleId assignedRole = event.getRole();
+        GroupId group = event.getGroup();
+        builder().setGroup(group)
                  .addRole(assignedRole);
-        List<RoleInheritedByUser> commands = users()
+        List<RolePropagatedToUser> commands = users()
                 .stream()
-                .map(member -> roleInherited(groupId, member, assignedRole))
-                .collect(toList());
+                .map(member -> rolePropagated(group, member, assignedRole))
+                .collect(toImmutableList());
         return commands;
     }
 
     @React
-    Collection<RoleDisinheritedByUser> on(RoleUnassignedFromGroup event) {
-        RoleId unassignedRole = event.getRoleId();
-        GroupId groupId = event.getId();
-        removeRole(unassignedRole);
-        List<RoleDisinheritedByUser> commands = users()
+    Collection<RolePropagationCanceledForUser> on(RoleAssignmentRemovedFromGroup event) {
+        RoleId roleToRemove = event.getRole();
+        GroupId group = event.getGroup();
+        removeRole(roleToRemove);
+        List<RolePropagationCanceledForUser> commands = users()
                 .stream()
-                .map(member -> roleDisinherited(groupId, member, unassignedRole))
-                .collect(toList());
+                .map(member -> rolePropagationCanceled(group, member, roleToRemove))
+                .collect(toImmutableList());
         return commands;
     }
 
     private void removeUser(UserId member) {
         GroupRolesPropagation.Builder builder = builder();
-        List<UserId> members = builder.getUserMemberList();
-        int memberIndex = members.indexOf(member);
-        builder().removeUserMember(memberIndex);
+        List<UserId> users = builder.getUserList();
+        int memberIndex = users.indexOf(member);
+        builder().removeUser(memberIndex);
     }
 
     private void removeRole(RoleId role) {
@@ -110,33 +110,33 @@ final class RolePropagation
     }
 
     private List<UserId> users() {
-        return builder().getUserMemberList();
+        return state().getUserList();
     }
 
     /**
      * Obtains the roles currently assigned to the group.
      */
     private List<RoleId> roles() {
-        return builder().getRoleList();
+        return state().getRoleList();
     }
 
-    private static RoleInheritedByUser
-    roleInherited(GroupId group, UserId member, RoleId role) {
-        return RoleInheritedByUser
+    private static RolePropagatedToUser
+    rolePropagated(GroupId group, UserId member, RoleId role) {
+        return RolePropagatedToUser
                 .newBuilder()
-                .setId(group)
-                .setRoleId(role)
-                .setUserId(member)
+                .setGroup(group)
+                .setRole(role)
+                .setUser(member)
                 .vBuild();
     }
 
-    private static RoleDisinheritedByUser
-    roleDisinherited(GroupId group, UserId member, RoleId role) {
-        return RoleDisinheritedByUser
+    private static RolePropagationCanceledForUser
+    rolePropagationCanceled(GroupId group, UserId member, RoleId role) {
+        return RolePropagationCanceledForUser
                 .newBuilder()
-                .setId(group)
-                .setRoleId(role)
-                .setUserId(member)
+                .setGroup(group)
+                .setRole(role)
+                .setUser(member)
                 .vBuild();
     }
 }

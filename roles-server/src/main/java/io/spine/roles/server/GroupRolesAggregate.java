@@ -20,62 +20,66 @@
 
 package io.spine.roles.server;
 
-import io.spine.roles.GroupRolesV2;
+import io.spine.roles.GroupRoles;
 import io.spine.roles.command.AssignRoleToGroup;
-import io.spine.roles.command.UnassignRoleFromGroup;
+import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.roles.RoleId;
 import io.spine.roles.event.RoleAssignedToGroup;
-import io.spine.roles.server.event.RoleUnassignedFromGroup;
+import io.spine.roles.event.RoleAssignmentRemovedFromGroup;
 import io.spine.roles.rejection.RoleIsNotAssignedToGroup;
 
 import java.util.List;
 
-final class GroupRolesAggregate extends Aggregate<GroupId, GroupRolesV2, GroupRolesV2.Builder> {
+/**
+ * Manages assignment of roles to a group.
+ */
+final class GroupRolesAggregate extends Aggregate<GroupId, GroupRoles, GroupRoles.Builder> {
 
     @Assign
     RoleAssignedToGroup handle(AssignRoleToGroup command) {
         return RoleAssignedToGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setGroup(command.getGroup())
+                .setRole(command.getRole())
                 .build();
     }
 
     @Assign
-    RoleUnassignedFromGroup handle(UnassignRoleFromGroup command)
+    RoleAssignmentRemovedFromGroup handle(RemoveRoleAssignmentFromGroup command)
             throws RoleIsNotAssignedToGroup {
-        List<RoleId> roles = state().getExplicitRoleList();
-        RoleId roleId = command.getRoleId();
-        if (!roles.contains(roleId)) {
+        List<RoleId> roles = state().getAssignedList();
+        GroupId group = id();
+        RoleId role = command.getRole();
+        if (!roles.contains(role)) {
             throw RoleIsNotAssignedToGroup
                     .newBuilder()
-                    .setId(id())
-                    .setRoleId(roleId)
+                    .setGroup(group)
+                    .setRole(role)
                     .build();
         }
-        return RoleUnassignedFromGroup
+        return RoleAssignmentRemovedFromGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setRoleId(command.getRoleId())
+                .setGroup(group)
+                .setRole(role)
                 .build();
     }
 
     @Apply
     private void on(RoleAssignedToGroup event) {
-        builder().addExplicitRole(event.getRoleId());
+        builder().addAssigned(event.getRole());
     }
 
     @Apply
-    private void on(RoleUnassignedFromGroup event) {
-        RoleId roleId = event.getRoleId();
-        List<RoleId> roles = builder().getExplicitRoleList();
+    private void on(RoleAssignmentRemovedFromGroup event) {
+        RoleId roleId = event.getRole();
+        List<RoleId> roles = builder().getAssignedList();
         if (roles.contains(roleId)) {
             int index = roles.indexOf(roleId);
-            builder().removeExplicitRole(index);
+            builder().removeAssigned(index);
         }
     }
 }

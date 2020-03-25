@@ -59,18 +59,18 @@ public class GivenCommand {
                 .build();
     }
 
-    public static CreateRole createRole(RoleId id) {
+    public static CreateRole createRole(RoleId role) {
         return CreateRole
                 .newBuilder()
-                .setId(id)
+                .setRole(role)
                 .build();
     }
 
-    public static CreateGroup createGroup(GroupId groupId) {
+    public static CreateGroup createGroup(GroupId group) {
         return CreateGroup
                 .newBuilder()
-                .setId(groupId)
-                .setDisplayName("group " + groupId.getValue())
+                .setId(group)
+                .setDisplayName("group " + group.getValue())
                 .setEmail(GroupTestEnv.groupEmail())
                 .setOrgEntity(GroupTestEnv.groupOrgEntityOrganization())
                 .setDescription(GroupTestEnv.groupDescription())

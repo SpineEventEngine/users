@@ -34,20 +34,19 @@ import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 import "spine/roles/identifiers.proto";
 
-// A process manager stating facts of the group roles propagation.
-//
-// The roles, assigned to a `Group` are implicitly inherited by all group members.
-// This process manager, it its turn, explicitly states the fact of the propagation.
-// So, entities interested in implicitly inherited roles can listen to these statements (events).
-//
+// Contains information for propagation of roles in a group.
 message GroupRolesPropagation {
     option (entity).kind = PROCESS_MANAGER;
 
-    users.GroupId id = 1 [(set_once) = false];
+    // The group for which to manage propagation of roles.
+    users.GroupId group = 1 [(set_once) = false];
 
-    // A list of `User` members. Only direct members of the group are included.
-    repeated core.UserId user_member = 2;
+    // Users that belong to this group directly.
+    repeated core.UserId user = 2;
 
-    // Roles explicitly assigned to a group.
-    repeated RoleId role = 3;
+    // Groups that belong to this group directly.
+    repeated users.GroupId nested = 3;
+
+    // Roles that this group has either assigned directly or propagated.
+    repeated RoleId role = 4;
 }
