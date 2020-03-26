@@ -38,17 +38,17 @@ import "spine/roles/identifiers.proto";
 message RoleCreated {
 
     // The ID of the new role.
-    RoleId role = 1;
+    RoleId role = 1 [(required) = true];
 
     // The text to show the role in the UI.
-    string display_name = 2 [(required) = true];
+    string display_name = 2;
 }
 
 // A role was deleted.
 message RoleDeleted {
 
-    // The ID of the deleted role.
-    RoleId role = 1;
+    // The deleted role.
+    RoleId role = 1 [(required) = true];
 }
 
 // A role was assigned to a user.
@@ -65,27 +65,55 @@ message RoleAssignedToUser {
 message RoleAssignmentRemovedFromUser {
 
     // The user from whom the role assignment was removed.
-    core.UserId user = 1;
+    core.UserId user = 1 [(required) = true];
 
-    // An ID of the unassigned role.
+    // The role assignment of which was removed.
     RoleId role = 2 [(required) = true];
+}
+
+// A user got a new role which was propagated from a group to which the user belongs.
+message UserInheritedRole {
+
+    // The user who gets the new role.
+    core.UserId user = 1 [(required) = true];
+
+    // The group through which the role is inherited.
+    users.GroupId group = 2 [(required) = true];
+
+    // The role the user gets.
+    RoleId role = 3 [(required) = true];
+}
+
+// A user no longer has the role because it is no longer available from the group to which
+// the user belongs.
+message RoleInheritanceCanceledForUser {
+
+    // The user who lost the role.
+    core.UserId user = 1 [(required) = true];
+
+    // The group through which the role is no longer inherited.
+    users.GroupId group = 2 [(required) = true];
+
+    // The role which the user lose.
+    RoleId role = 3 [(required) = true];
 }
 
 // A role was assigned to the group.
 message RoleAssignedToGroup {
 
-    users.GroupId group = 1;
+    // The group to which the role is assigned.
+    users.GroupId group = 1 [(required) = true];
 
-    // An ID of the assigned role.
+    // The assigned role.
     RoleId role = 2 [(required) = true];
 }
 
-// The role assignment was removed from the group.
+// A role assignment was removed from a group.
 message RoleAssignmentRemovedFromGroup {
 
     // The group from which the role was removed.
-    users.GroupId group = 1;
+    users.GroupId group = 1 [(required) = true];
 
-    // An ID of the unassigned role.
+    // The role assignment of which was removed.
     RoleId role = 2 [(required) = true];
 }

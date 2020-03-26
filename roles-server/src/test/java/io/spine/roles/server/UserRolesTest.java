@@ -22,6 +22,8 @@ package io.spine.roles.server;
 
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
+import io.spine.roles.InheritedRoles;
+import io.spine.roles.InheritedRoles.Item;
 import io.spine.roles.RoleId;
 import io.spine.roles.UserRoles;
 import io.spine.roles.server.given.Given;
@@ -87,7 +89,8 @@ class UserRolesTest extends RolesContextTest {
         // Join a group after the role assigned.
         usersContext().receivesCommand(joinGroup(user, group));
 
-        assertRoles().isEqualTo(expectedRoles);
+        UserRoles expected = roleInherited();
+        assertRoles().isEqualTo(expected);
     }
 
     @Test
@@ -97,7 +100,21 @@ class UserRolesTest extends RolesContextTest {
         // Assign a role when a user already joined a group
         rolesContext().receivesCommand(assignRoleToGroup(group, role));
 
-        assertRoles().isEqualTo(expectedRoles);
+        UserRoles expected = roleInherited();
+        assertRoles().isEqualTo(expected);
+    }
+
+    private UserRoles roleInherited() {
+        return UserRoles
+                .newBuilder()
+                .setUser(user)
+                .setInherited(
+                        InheritedRoles
+                                .newBuilder()
+                                .addItem(Item.newBuilder()
+                                             .setGroup(group)
+                                             .setRole(role)))
+                .build();
     }
 
     @Nested

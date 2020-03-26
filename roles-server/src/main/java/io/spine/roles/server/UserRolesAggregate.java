@@ -27,6 +27,8 @@ import io.spine.roles.command.AssignRoleToUser;
 import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.roles.event.RoleAssignedToUser;
 import io.spine.roles.event.RoleAssignmentRemovedFromUser;
+import io.spine.roles.event.RoleInheritanceCanceledForUser;
+import io.spine.roles.event.UserInheritedRole;
 import io.spine.roles.rejection.RoleIsNotAssignedToUser;
 import io.spine.roles.server.event.RolePropagatedToUser;
 import io.spine.roles.server.event.RolePropagationCanceledForUser;
@@ -34,9 +36,9 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Manages role assignment and propagation for a user.
@@ -56,10 +58,9 @@ final class UserRolesAggregate extends Aggregate<UserId, UserRoles, UserRoles.Bu
     @Assign
     RoleAssignmentRemovedFromUser handle(RemoveRoleAssignmentFromUser c)
             throws RoleIsNotAssignedToUser {
-        List<RoleId> roles = state().getAssignedList();
         RoleId role = c.getRole();
-        final UserId user = id();
-        if (!roles.contains(role)) {
+        UserId user = id();
+        if (!assignedRoles().contains(role)) {
             throw RoleIsNotAssignedToUser
                     .newBuilder()
                     .setUser(user)
@@ -84,32 +85,74 @@ final class UserRolesAggregate extends Aggregate<UserId, UserRoles, UserRoles.Bu
         removeAssignedRole(e.getRole());
     }
 
+    /**
+     * Makes the user inherit the propagated role, if it's not assigned directly
+     * or inherited already.
+     */
     @React
-    Nothing on(RolePropagatedToUser e) {
-        builder().addPropagated(e.getRole());
-        return nothing();
+    Optional<UserInheritedRole> on(RolePropagatedToUser e) {
+        RoleId role = e.getRole();
+        if (assignedRoles().contains(role) || inheritedRoles().contains(role)) {
+            return Optional.empty();
+        }
+        return Optional.of(
+                UserInheritedRole
+                        .newBuilder()
+                        .setUser(e.getUser())
+                        .setGroup(e.getGroup())
+                        .setRole(role)
+                        .vBuild()
+        );
     }
 
+    /**
+     * Makes the user lose the inherited role, if it is inherited.
+     */
     @React
-    Nothing on(RolePropagationCanceledForUser e) {
-        final RoleId role = e.getRole();
-        removePropagatedRole(role);
-        return nothing();
+    Optional<RoleInheritanceCanceledForUser> on(RolePropagationCanceledForUser e) {
+        RoleId role = e.getRole();
+        if (!inheritedRoles().contains(role)) {
+            return Optional.empty();
+        }
+        return Optional.of(
+                RoleInheritanceCanceledForUser
+                        .newBuilder()
+                        .setUser(e.getUser())
+                        .setGroup(e.getGroup())
+                        .setRole(e.getRole())
+                        .vBuild()
+        );
+    }
+
+    @Apply
+    private void event(UserInheritedRole e) {
+        inheritedRolesWithBuilder().addRole(e.getGroup(), e.getRole());
+    }
+
+    @Apply
+    private void event(RoleInheritanceCanceledForUser e) {
+        inheritedRolesWithBuilder().removeRole(e.getGroup(), e.getRole());
+    }
+
+    private List<RoleId> assignedRoles() {
+        return state().getAssignedList();
     }
 
     private void removeAssignedRole(RoleId role) {
-        int index = state().getAssignedList()
-                           .indexOf(role);
+        int index = assignedRoles().indexOf(role);
         if (index != -1) {
             builder().removeAssigned(index);
         }
     }
 
-    private void removePropagatedRole(RoleId role) {
-        int index = state().getPropagatedList()
-                           .indexOf(role);
-        if (index != -1) {
-            builder().removePropagated(index);
-        }
+    private InheritedRolesHelper inheritedRoles() {
+        return new InheritedRolesHelper(state().getInherited(), null);
+    }
+
+    private InheritedRolesHelper inheritedRolesWithBuilder() {
+        return new InheritedRolesHelper(
+                state().getInherited(),
+                builder().getInheritedBuilder()
+        );
     }
 }
