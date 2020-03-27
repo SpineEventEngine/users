@@ -59,9 +59,10 @@ public class Given {
                 .setInherited(
                         InheritedRoles
                                 .newBuilder()
-                                .addItem(InheritedRoles.Item.newBuilder()
-                                                            .setGroup(group)
-                                                            .setRole(role)))
+                                .addItem(InheritedRoles.Item
+                                                 .newBuilder()
+                                                 .setGroup(group)
+                                                 .setRole(role)))
                 .build();
     }
 }

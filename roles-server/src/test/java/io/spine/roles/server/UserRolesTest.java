@@ -56,7 +56,7 @@ class UserRolesTest extends RolesContextTest {
     private RoleId role;
 
     @BeforeEach
-    void createUserRoleAndGroup() {
+    void createUserGroupAndRole() {
         user =  userUuid();
         group = groupId();
         usersContext().receivesCommands(
@@ -67,17 +67,13 @@ class UserRolesTest extends RolesContextTest {
         rolesContext().receivesCommand(createRole(role));
     }
 
-    private ProtoFluentAssertion assertRoles() {
-        return assertRolesOf(this.user);
-    }
-
     @Nested
     @DisplayName("have a role")
-    class ExplicitAssignment {
+    class Assignment {
 
         @BeforeEach
         void assigningRoleToUser() {
-            rolesContext().receivesCommand(assignRoleToUser(user, role));
+            rolesContext().receivesCommand(assignRoleToUser(role, user));
         }
 
         @Test
@@ -98,7 +94,7 @@ class UserRolesTest extends RolesContextTest {
         @Test
         @DisplayName("removed")
         void removeUnassignedRole() {
-            rolesContext().receivesCommand(removeRoleFromUser(user, role));
+            rolesContext().receivesCommand(removeRoleFromUser(role, user));
 
             assertEvent(
                     RoleAssignmentRemovedFromUser
@@ -119,7 +115,7 @@ class UserRolesTest extends RolesContextTest {
         @Test
         @DisplayName("when joining a group")
         void inheritAlreadyPresentGroupRoles() {
-            rolesContext().receivesCommand(assignRoleToGroup(group, role));
+            rolesContext().receivesCommand(assignRoleToGroup(role, group));
             // Join a group after the role assigned.
             usersContext().receivesCommand(joinGroup(user, group));
 
@@ -132,7 +128,7 @@ class UserRolesTest extends RolesContextTest {
         void inheritFromGroup() {
             usersContext().receivesCommand(joinGroup(user, group));
             // Assign a role when a user already joined a group
-            rolesContext().receivesCommand(assignRoleToGroup(group, role));
+            rolesContext().receivesCommand(assignRoleToGroup(role, group));
 
             assertInheritedEvent();
             assertRolesState();
@@ -163,13 +159,13 @@ class UserRolesTest extends RolesContextTest {
         @BeforeEach
         void joinGroupAndAssignRoleToGroup() {
             usersContext().receivesCommand(joinGroup(user, group));
-            rolesContext().receivesCommand(assignRoleToGroup(group, role));
+            rolesContext().receivesCommand(assignRoleToGroup(role, group));
         }
 
         @Test
         @DisplayName("when its assignment removed from the group")
         void removeUnassignedGroupRole() {
-            rolesContext().receivesCommand(removeRoleFromGroup(group, role));
+            rolesContext().receivesCommand(removeRoleFromGroup(role, group));
 
             assertRoles().isEqualTo(userWithoutRoles(user));
         }
@@ -181,5 +177,16 @@ class UserRolesTest extends RolesContextTest {
 
             assertRoles().isEqualTo(userWithoutRoles(user));
         }
+    }
+
+    private ProtoFluentAssertion assertRoles() {
+        return assertRolesOf(this.user);
+    }
+
+    private ProtoFluentAssertion assertRolesOf(UserId user) {
+        return rolesContext()
+                .assertEntityWithState(UserRoles.class, user)
+                .hasStateThat()
+                .comparingExpectedFieldsOnly();
     }
 }

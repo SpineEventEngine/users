@@ -20,12 +20,9 @@
 
 package io.spine.roles.server;
 
-import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.base.EventMessage;
 import io.spine.core.TenantId;
-import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
-import io.spine.roles.UserRoles;
 import io.spine.testing.server.EventSubject;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.server.UsersContext;
@@ -84,7 +81,7 @@ public abstract class RolesContextTest {
     /**
      * Asserts that the Roles context emitted only one event with the passed message.
      */
-    protected void assertEvent(EventMessage expected) {
+    void assertEvent(EventMessage expected) {
         EventSubject assertEvents =
                 rolesContext().assertEvents()
                               .withType(expected.getClass());
@@ -92,12 +89,5 @@ public abstract class RolesContextTest {
         assertEvents.message(0)
                     .comparingExpectedFieldsOnly()
                     .isEqualTo(expected);
-    }
-
-    protected ProtoFluentAssertion assertRolesOf(UserId user) {
-        return rolesContext()
-                .assertEntityWithState(UserRoles.class, user)
-                .hasStateThat()
-                .comparingExpectedFieldsOnly();
     }
 }

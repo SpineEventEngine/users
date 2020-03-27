@@ -50,19 +50,19 @@ public final class TestCommands {
         return DeleteRole.newBuilder().setRole(r).vBuild();
     }
 
-    public static AssignRoleToUser assignRoleToUser(UserId u, RoleId r) {
+    public static AssignRoleToUser assignRoleToUser(RoleId r, UserId u) {
         return AssignRoleToUser.newBuilder().setUser(u).setRole(r).vBuild();
     }
 
-    public static RemoveRoleAssignmentFromUser removeRoleFromUser(UserId u, RoleId r) {
+    public static RemoveRoleAssignmentFromUser removeRoleFromUser(RoleId r, UserId u) {
         return RemoveRoleAssignmentFromUser.newBuilder().setUser(u).setRole(r).vBuild();
     }
 
-    public static AssignRoleToGroup assignRoleToGroup(GroupId g, RoleId r) {
+    public static AssignRoleToGroup assignRoleToGroup(RoleId r, GroupId g) {
         return AssignRoleToGroup.newBuilder().setGroup(g).setRole(r).vBuild();
     }
 
-    public static RemoveRoleAssignmentFromGroup removeRoleFromGroup(GroupId g, RoleId r) {
+    public static RemoveRoleAssignmentFromGroup removeRoleFromGroup(RoleId r, GroupId g) {
         return RemoveRoleAssignmentFromGroup.newBuilder().setGroup(g).setRole(r).vBuild();
     }
 }
