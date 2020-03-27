@@ -71,23 +71,46 @@ class UserRolesTest extends RolesContextTest {
         return assertRolesOf(this.user);
     }
 
-    @Test
-    @DisplayName("have explicitly assigned roles")
-    void assignExplicitRole() {
-        rolesContext().receivesCommand(assignRoleToUser(user, role));
+    @Nested
+    @DisplayName("have a role")
+    class ExplicitAssignment {
 
-        assertEvent(
-                RoleAssignedToUser
-                        .newBuilder()
-                        .setUser(user)
-                        .setRole(role)
-                        .vBuild()
-        );
+        @BeforeEach
+        void assigningRoleToUser() {
+            rolesContext().receivesCommand(assignRoleToUser(user, role));
+        }
 
-        UserRoles expected = userWithAssignedRole(user, role);
-        assertRoles().isEqualTo(expected);
+        @Test
+        @DisplayName("assigned")
+        void assigned() {
+            assertEvent(
+                    RoleAssignedToUser
+                            .newBuilder()
+                            .setUser(user)
+                            .setRole(role)
+                            .vBuild()
+            );
+
+            UserRoles expected = userWithAssignedRole(user, role);
+            assertRoles().isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("removed")
+        void removeUnassignedRole() {
+            rolesContext().receivesCommand(removeRoleFromUser(user, role));
+
+            assertEvent(
+                    RoleAssignmentRemovedFromUser
+                            .newBuilder()
+                            .setRole(role)
+                            .setUser(user)
+                            .vBuild()
+            );
+
+            assertRoles().isEqualTo(userWithoutRoles(user));
+        }
     }
-
 
     @Nested
     @DisplayName("inherit a group role")
@@ -102,11 +125,6 @@ class UserRolesTest extends RolesContextTest {
 
             assertInheritedEvent();
             assertRolesState();
-        }
-
-        private void assertRolesState() {
-            UserRoles expected = userWithInheritedRole(user, group, role);
-            assertRoles().isEqualTo(expected);
         }
 
         @Test
@@ -130,32 +148,13 @@ class UserRolesTest extends RolesContextTest {
                             .vBuild()
             );
         }
-    }
 
-    @Nested
-    @DisplayName("when having an assigned role")
-    class UserWithRole {
-
-        @BeforeEach
-        void assigningRoleToUser() {
-            rolesContext().receivesCommand(assignRoleToUser(user, role));
-        }
-        @Test
-        @DisplayName("lose it when the assignment is removed")
-        void removeUnassignedRole() {
-            rolesContext().receivesCommand(removeRoleFromUser(user, role));
-
-            assertEvent(
-                    RoleAssignmentRemovedFromUser
-                            .newBuilder()
-                            .setRole(role)
-                            .setUser(user)
-                            .vBuild()
-            );
-
-            assertRoles().isEqualTo(userWithoutRoles(user));
+        private void assertRolesState() {
+            UserRoles expected = userWithInheritedRole(user, group, role);
+            assertRoles().isEqualTo(expected);
         }
     }
+
 
     @Nested
     @DisplayName("when being in a group with a role, lose the role")
