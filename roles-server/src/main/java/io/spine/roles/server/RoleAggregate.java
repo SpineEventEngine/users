@@ -48,13 +48,14 @@ import io.spine.roles.event.RoleDeleted;
  * user and a group have not only the roles listed in their aggregate states, but effectively all
  * the roles derived from parent groups.
  */
-public final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
+final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
 
     @Assign
     RoleCreated handle(CreateRole command) {
         RoleCreated event = RoleCreated
                 .newBuilder()
                 .setRole(command.getRole())
+                .setDisplayName(command.getDisplayName())
                 .vBuild();
         return event;
     }
@@ -70,8 +71,7 @@ public final class RoleAggregate extends Aggregate<RoleId, Role, Role.Builder> {
 
     @Apply
     private void on(RoleCreated event) {
-        RoleId id = event.getRole();
-        builder().setId(id)
+        builder().setId(event.getRole())
                  .setDisplayName(event.getDisplayName())
                  .build();
     }
