@@ -42,10 +42,11 @@ import static io.spine.roles.server.given.GivenCommand.createRole;
 import static io.spine.roles.server.given.GivenCommand.createUser;
 import static io.spine.roles.server.given.GivenCommand.joinGroup;
 import static io.spine.roles.server.given.GivenCommand.leaveGroup;
-import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
-import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
-import static io.spine.roles.server.given.TestCommands.removeRoleFromGroup;
-import static io.spine.roles.server.given.TestCommands.removeRoleFromUser;
+import static io.spine.roles.server.given.GivenCommand.assignRoleToGroup;
+import static io.spine.roles.server.given.GivenCommand.assignRoleToUser;
+import static io.spine.roles.server.given.GivenCommand.removeRoleFromGroup;
+import static io.spine.roles.server.given.GivenCommand.removeRoleFromUser;
+import static io.spine.testing.TestValues.randomString;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
 
 @DisplayName("A user should")
@@ -64,7 +65,7 @@ class UserRolesTest extends RolesContextTest {
                 createGroup(group)
         );
         role = RoleId.generate();
-        rolesContext().receivesCommand(createRole(role));
+        rolesContext().receivesCommand(createRole(role, randomString()));
     }
 
     @Nested

@@ -21,6 +21,11 @@
 package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
+import io.spine.roles.command.AssignRoleToGroup;
+import io.spine.roles.command.AssignRoleToUser;
+import io.spine.roles.command.DeleteRole;
+import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
+import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.users.GroupId;
 import io.spine.users.OrganizationId;
 import io.spine.users.OrganizationOrUnit;
@@ -59,13 +64,6 @@ public class GivenCommand {
                 .build();
     }
 
-    public static CreateRole createRole(RoleId role) {
-        return CreateRole
-                .newBuilder()
-                .setRole(role)
-                .build();
-    }
-
     public static CreateGroup createGroup(GroupId group) {
         return CreateGroup
                 .newBuilder()
@@ -92,5 +90,52 @@ public class GivenCommand {
                 .setId(userId)
                 .setGroupId(group)
                 .build();
+    }
+
+    public static CreateRole createRole(RoleId r, String displayName) {
+        return CreateRole
+                .newBuilder()
+                .setRole(r)
+                .setDisplayName(displayName)
+                .build();
+    }
+
+    public static DeleteRole deleteRole(RoleId r) {
+        return DeleteRole
+                .newBuilder()
+                .setRole(r)
+                .vBuild();
+    }
+
+    public static AssignRoleToUser assignRoleToUser(RoleId r, UserId u) {
+        return AssignRoleToUser
+                .newBuilder()
+                .setUser(u)
+                .setRole(r)
+                .vBuild();
+    }
+
+    public static RemoveRoleAssignmentFromUser removeRoleFromUser(RoleId r, UserId u) {
+        return RemoveRoleAssignmentFromUser
+                .newBuilder()
+                .setUser(u)
+                .setRole(r)
+                .vBuild();
+    }
+
+    public static AssignRoleToGroup assignRoleToGroup(RoleId r, GroupId g) {
+        return AssignRoleToGroup
+                .newBuilder()
+                .setGroup(g)
+                .setRole(r)
+                .vBuild();
+    }
+
+    public static RemoveRoleAssignmentFromGroup removeRoleFromGroup(RoleId r, GroupId g) {
+        return RemoveRoleAssignmentFromGroup
+                .newBuilder()
+                .setGroup(g)
+                .setRole(r)
+                .vBuild();
     }
 }
