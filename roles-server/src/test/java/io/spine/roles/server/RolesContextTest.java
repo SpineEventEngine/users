@@ -20,10 +20,13 @@
 
 package io.spine.roles.server;
 
+import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
+import io.spine.base.EventMessage;
 import io.spine.core.TenantId;
+import io.spine.core.UserId;
 import io.spine.net.InternetDomain;
-import io.spine.server.BoundedContext;
-import io.spine.server.integration.IntegrationBroker;
+import io.spine.roles.UserRoles;
+import io.spine.testing.server.EventSubject;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.server.UsersContext;
 import org.junit.jupiter.api.AfterEach;
@@ -70,11 +73,31 @@ public abstract class RolesContextTest {
         usersContext.close();
     }
 
-    protected final BlackBoxContext rolesContext() {
+    final BlackBoxContext rolesContext() {
         return checkNotNull(rolesContext);
     }
 
-    protected final BlackBoxContext usersContext() {
+    final BlackBoxContext usersContext() {
         return checkNotNull(usersContext);
+    }
+
+    /**
+     * Asserts that the Roles context emitted only one event with the passed message.
+     */
+    protected void assertEvent(EventMessage expected) {
+        EventSubject assertEvents =
+                rolesContext().assertEvents()
+                              .withType(expected.getClass());
+        assertEvents.hasSize(1);
+        assertEvents.message(0)
+                    .comparingExpectedFieldsOnly()
+                    .isEqualTo(expected);
+    }
+
+    protected ProtoFluentAssertion assertRolesOf(UserId user) {
+        return rolesContext()
+                .assertEntityWithState(UserRoles.class, user)
+                .hasStateThat()
+                .comparingExpectedFieldsOnly();
     }
 }

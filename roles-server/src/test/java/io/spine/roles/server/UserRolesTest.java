@@ -22,37 +22,38 @@ package io.spine.roles.server;
 
 import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
 import io.spine.core.UserId;
-import io.spine.roles.InheritedRoles;
-import io.spine.roles.InheritedRoles.Item;
 import io.spine.roles.RoleId;
 import io.spine.roles.UserRoles;
-import io.spine.roles.server.given.Given;
+import io.spine.roles.event.RoleAssignedToUser;
+import io.spine.roles.event.RoleAssignmentRemovedFromUser;
+import io.spine.roles.event.UserInheritedRole;
 import io.spine.users.GroupId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
-import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
-import static io.spine.roles.server.given.TestCommands.removeRoleFromGroup;
-import static io.spine.roles.server.given.TestCommands.removeRoleFromUser;
+import static io.spine.roles.server.given.Given.userUuid;
+import static io.spine.roles.server.given.Given.userWithAssignedRole;
+import static io.spine.roles.server.given.Given.userWithInheritedRole;
+import static io.spine.roles.server.given.Given.userWithoutRoles;
 import static io.spine.roles.server.given.GivenCommand.createGroup;
 import static io.spine.roles.server.given.GivenCommand.createRole;
 import static io.spine.roles.server.given.GivenCommand.createUser;
 import static io.spine.roles.server.given.GivenCommand.joinGroup;
 import static io.spine.roles.server.given.GivenCommand.leaveGroup;
-import static io.spine.roles.server.given.Given.userUuid;
-import static io.spine.roles.server.given.Given.userWithRole;
+import static io.spine.roles.server.given.TestCommands.assignRoleToGroup;
+import static io.spine.roles.server.given.TestCommands.assignRoleToUser;
+import static io.spine.roles.server.given.TestCommands.removeRoleFromGroup;
+import static io.spine.roles.server.given.TestCommands.removeRoleFromUser;
 import static io.spine.users.server.given.TestIdentifiers.groupId;
 
-@DisplayName("`UserRolesAggregate` should")
+@DisplayName("A user should")
 class UserRolesTest extends RolesContextTest {
 
     private UserId user;
     private GroupId group;
     private RoleId role;
-    private UserRoles expectedRoles;
 
     @BeforeEach
     void createUserRoleAndGroup() {
@@ -64,79 +65,100 @@ class UserRolesTest extends RolesContextTest {
         );
         role = RoleId.generate();
         rolesContext().receivesCommand(createRole(role));
-        expectedRoles = userWithRole(user, role);
     }
 
     private ProtoFluentAssertion assertRoles() {
-        return rolesContext()
-                .assertEntityWithState(UserRoles.class, user)
-                .hasStateThat()
-                .comparingExpectedFieldsOnly();
+        return assertRolesOf(this.user);
     }
 
     @Test
     @DisplayName("have explicitly assigned roles")
-    void assignExplicitRoles() {
+    void assignExplicitRole() {
         rolesContext().receivesCommand(assignRoleToUser(user, role));
 
-        assertRoles().isEqualTo(expectedRoles);
-    }
+        assertEvent(
+                RoleAssignedToUser
+                        .newBuilder()
+                        .setUser(user)
+                        .setRole(role)
+                        .vBuild()
+        );
 
-    @Test
-    @DisplayName("inherit group roles when joining a group")
-    void inheritAlreadyPresentGroupRoles() {
-        rolesContext().receivesCommand(assignRoleToGroup(group, role));
-        // Join a group after the role assigned.
-        usersContext().receivesCommand(joinGroup(user, group));
-
-        UserRoles expected = roleInherited();
+        UserRoles expected = userWithAssignedRole(user, role);
         assertRoles().isEqualTo(expected);
     }
 
-    @Test
-    @DisplayName("inherit a group role after its assignment")
-    void trackRoleChangesOfGroup() {
-        usersContext().receivesCommand(joinGroup(user, group));
-        // Assign a role when a user already joined a group
-        rolesContext().receivesCommand(assignRoleToGroup(group, role));
 
-        UserRoles expected = roleInherited();
-        assertRoles().isEqualTo(expected);
-    }
+    @Nested
+    @DisplayName("inherit a group role")
+    class InheritGroupRole {
 
-    private UserRoles roleInherited() {
-        return UserRoles
-                .newBuilder()
-                .setUser(user)
-                .setInherited(
-                        InheritedRoles
-                                .newBuilder()
-                                .addItem(Item.newBuilder()
-                                             .setGroup(group)
-                                             .setRole(role)))
-                .build();
+        @Test
+        @DisplayName("when joining a group")
+        void inheritAlreadyPresentGroupRoles() {
+            rolesContext().receivesCommand(assignRoleToGroup(group, role));
+            // Join a group after the role assigned.
+            usersContext().receivesCommand(joinGroup(user, group));
+
+            assertInheritedEvent();
+            assertRolesState();
+        }
+
+        private void assertRolesState() {
+            UserRoles expected = userWithInheritedRole(user, group, role);
+            assertRoles().isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("after the role is assigned to the group")
+        void inheritFromGroup() {
+            usersContext().receivesCommand(joinGroup(user, group));
+            // Assign a role when a user already joined a group
+            rolesContext().receivesCommand(assignRoleToGroup(group, role));
+
+            assertInheritedEvent();
+            assertRolesState();
+        }
+
+        private void assertInheritedEvent() {
+            assertEvent(
+                    UserInheritedRole
+                            .newBuilder()
+                            .setUser(user)
+                            .setGroup(group)
+                            .setRole(role)
+                            .vBuild()
+            );
+        }
     }
 
     @Nested
-    @DisplayName("when a user has a role")
+    @DisplayName("when having an assigned role")
     class UserWithRole {
 
         @BeforeEach
         void assigningRoleToUser() {
             rolesContext().receivesCommand(assignRoleToUser(user, role));
         }
-
         @Test
-        @DisplayName("remove if it is unassigned")
+        @DisplayName("lose it when the assignment is removed")
         void removeUnassignedRole() {
             rolesContext().receivesCommand(removeRoleFromUser(user, role));
 
-            assertRoles().isEqualTo(userWithoutRoles());
+            assertEvent(
+                    RoleAssignmentRemovedFromUser
+                            .newBuilder()
+                            .setRole(role)
+                            .setUser(user)
+                            .vBuild()
+            );
+
+            assertRoles().isEqualTo(userWithoutRoles(user));
         }
     }
 
     @Nested
-    @DisplayName("when user is in group with a role")
+    @DisplayName("when being in a group with a role, lose the role")
     class UserInGroupWithRole {
 
         @BeforeEach
@@ -146,23 +168,19 @@ class UserRolesTest extends RolesContextTest {
         }
 
         @Test
-        @DisplayName("remove role if it is unassigned from group")
+        @DisplayName("when its assignment removed from the group")
         void removeUnassignedGroupRole() {
             rolesContext().receivesCommand(removeRoleFromGroup(group, role));
 
-            assertRoles().isEqualTo(userWithoutRoles());
+            assertRoles().isEqualTo(userWithoutRoles(user));
         }
 
         @Test
-        @DisplayName("remove role if user leaves group")
+        @DisplayName("when being removed from the group")
         void removeRoleOfLeftGroup() {
             usersContext().receivesCommand(leaveGroup(user, group));
 
-            assertRoles().isEqualTo(userWithoutRoles());
+            assertRoles().isEqualTo(userWithoutRoles(user));
         }
-    }
-
-    private UserRoles userWithoutRoles() {
-        return Given.userWithoutRoles(user);
     }
 }

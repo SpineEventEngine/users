@@ -21,9 +21,11 @@
 package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
+import io.spine.roles.InheritedRoles;
 import io.spine.roles.RoleId;
 import io.spine.roles.UserRoles;
 import io.spine.testing.core.given.GivenUserId;
+import io.spine.users.GroupId;
 
 public class Given {
 
@@ -42,11 +44,24 @@ public class Given {
                 .vBuild();
     }
 
-    public static UserRoles userWithRole(UserId user, RoleId role) {
+    public static UserRoles userWithAssignedRole(UserId user, RoleId role) {
         return UserRoles
                 .newBuilder()
                 .setUser(user)
                 .addAssigned(role)
                 .vBuild();
+    }
+
+    public static UserRoles userWithInheritedRole(UserId user, GroupId group, RoleId role) {
+        return UserRoles
+                .newBuilder()
+                .setUser(user)
+                .setInherited(
+                        InheritedRoles
+                                .newBuilder()
+                                .addItem(InheritedRoles.Item.newBuilder()
+                                                            .setGroup(group)
+                                                            .setRole(role)))
+                .build();
     }
 }
