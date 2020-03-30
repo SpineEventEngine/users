@@ -33,7 +33,6 @@ import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
-import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
@@ -66,7 +65,6 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
         CreateUser createUser = CreateUser
                 .newBuilder()
                 .setId(USER_ID)
-                .setOrgEntity(userOrgEntity())
                 .setDisplayName(userDisplayName())
                 .setPrimaryIdentity(googleIdentity())
                 .setProfile(profile())

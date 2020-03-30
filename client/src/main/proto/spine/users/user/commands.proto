@@ -52,16 +52,6 @@ message CreateUser {
     // An email address of a user.
     net.EmailAddress email = 4;
 
-    // An entity a user belongs to.
-    oneof origin {
-
-        // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 5;
-
-        // An external domain.
-        net.InternetDomain external_domain = 6;
-    }
-
     // The primary identity of the user.
     Identity primary_identity = 7;
 
@@ -70,15 +60,6 @@ message CreateUser {
 
     // The current status of the user.
     User.Status status = 9 [(required) = true];
-}
-
-// Moves a user from one organization or organizational unit to another.
-message MoveUser {
-
-    core.UserId id = 1;
-
-    // A new parent entity in the organizational structure.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
 // Joins a group.

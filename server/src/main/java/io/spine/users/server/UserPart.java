@@ -32,7 +32,6 @@ import io.spine.users.user.command.ChangePrimaryIdentity;
 import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.DeleteUser;
-import io.spine.users.user.command.MoveUser;
 import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.command.UpdatePersonProfile;
@@ -42,18 +41,13 @@ import io.spine.users.user.event.SecondaryIdentityAdded;
 import io.spine.users.user.event.SecondaryIdentityRemoved;
 import io.spine.users.user.event.UserCreated;
 import io.spine.users.user.event.UserDeleted;
-import io.spine.users.user.event.UserMoved;
 import io.spine.users.user.event.UserRenamed;
 import io.spine.users.user.event.UserStatusChanged;
-import io.spine.users.user.rejection.CannotMoveExternalUser;
 import io.spine.users.user.rejection.IdentityDoesNotExist;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import static io.spine.users.user.User.OriginCase.EXTERNAL_DOMAIN;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * An aggregate for user of the application, either a person or machine.
@@ -77,36 +71,7 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
                 .setStatus(command.getStatus())
                 .setProfile(command.getProfile())
                 .setNature(command.getNature());
-        switch (command.getOriginCase()) {
-            case ORG_ENTITY:
-                eventBuilder.setOrgEntity(command.getOrgEntity());
-                break;
-            case EXTERNAL_DOMAIN:
-                eventBuilder.setExternalDomain(command.getExternalDomain());
-                break;
-            case ORIGIN_NOT_SET: // Fallthrough intended.
-            default:
-                throw newIllegalArgumentException("No `origin` found in `CreateUser` command.");
-        }
         return eventBuilder.vBuild();
-    }
-
-    @Assign
-    UserMoved handle(MoveUser command, CommandContext context) throws CannotMoveExternalUser {
-        if (state().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw CannotMoveExternalUser
-                    .newBuilder()
-                    .setId(command.getId())
-                    .setExternalDomain(state().getExternalDomain())
-                    .build();
-        }
-        UserMoved event = UserMoved
-                .newBuilder()
-                .setId(command.getId())
-                .setNewOrgEntity(command.getNewOrgEntity())
-                .setOldOrgEntity(state().getOrgEntity())
-                .vBuild();
-        return event;
     }
 
     @Assign
@@ -194,24 +159,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
                .setProfile(event.getProfile())
                .setNature(event.getNature())
                .setStatus(event.getStatus());
-
-        switch (event.getOriginCase()) {
-            case ORG_ENTITY:
-                builder.setOrgEntity(event.getOrgEntity());
-                break;
-            case EXTERNAL_DOMAIN:
-                builder.setExternalDomain(event.getExternalDomain());
-                break;
-            case ORIGIN_NOT_SET: // Fallthrough intended.
-            default:
-                throw newIllegalArgumentException(
-                        "No `origin` found in UserCreated event");
-        }
-    }
-
-    @Apply
-    private void on(UserMoved event) {
-        builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply

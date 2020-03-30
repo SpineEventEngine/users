@@ -30,7 +30,6 @@ import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.DeleteUser;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
-import io.spine.users.user.command.MoveUser;
 import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.command.UpdatePersonProfile;
@@ -40,10 +39,8 @@ import static io.spine.users.server.user.given.UserTestEnv.githubIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.newProfile;
 import static io.spine.users.server.user.given.UserTestEnv.newUserDisplayName;
-import static io.spine.users.server.user.given.UserTestEnv.newUserOrgEntity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
-import static io.spine.users.server.user.given.UserTestEnv.userOrgEntity;
 import static io.spine.users.user.RoleInGroup.MEMBER;
 import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
@@ -62,20 +59,11 @@ public class UserTestCommands {
                 .newBuilder()
                 .setId(id)
                 .setDisplayName(userDisplayName())
-                .setOrgEntity(userOrgEntity())
                 .setPrimaryIdentity(googleIdentity())
                 .setProfile(profile())
                 .setStatus(NOT_READY)
                 .setNature(PERSON)
                 .vBuild();
-    }
-
-    public static MoveUser moveUser(UserId id) {
-        return MoveUser
-                .newBuilder()
-                .setId(id)
-                .setNewOrgEntity(newUserOrgEntity())
-                .build();
     }
 
     public static JoinGroup joinGroup(UserId id) {

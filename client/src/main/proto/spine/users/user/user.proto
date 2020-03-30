@@ -57,16 +57,6 @@ message User {
     // An email address of a user.
     net.EmailAddress email = 4;
 
-    // An entity a user belongs to.
-    oneof origin {
-
-        // An organization or org. unit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 5;
-
-        // An external domain.
-        net.InternetDomain external_domain = 6;
-    }
-
     // General profile information for a user, if applicable.
     PersonProfile profile = 7;
 

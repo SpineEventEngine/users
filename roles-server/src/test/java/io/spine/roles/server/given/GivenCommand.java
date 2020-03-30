@@ -21,17 +21,15 @@
 package io.spine.roles.server.given;
 
 import io.spine.core.UserId;
+import io.spine.roles.RoleId;
 import io.spine.roles.command.AssignRoleToGroup;
 import io.spine.roles.command.AssignRoleToUser;
+import io.spine.roles.command.CreateRole;
 import io.spine.roles.command.DeleteRole;
 import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
 import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.users.GroupId;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationOrUnit;
-import io.spine.roles.RoleId;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.roles.command.CreateRole;
 import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.RoleInGroup;
 import io.spine.users.user.User;
@@ -40,8 +38,6 @@ import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
 
-import static io.spine.users.server.given.TestIdentifiers.orgId;
-
 public class GivenCommand {
 
     /** Prevents instantiation of this utility class. */
@@ -49,17 +45,11 @@ public class GivenCommand {
     }
 
     public static CreateUser createUser(UserId userId) {
-        OrganizationId organizationId = orgId("organization of " + userId.getValue());
-        OrganizationOrUnit orgEntity = OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(organizationId)
-                .build();
         return CreateUser
                 .newBuilder()
                 .setId(userId)
                 .setNature(UserNature.UNAVAILABLE)
                 .setDisplayName("display name of " + userId.getValue())
-                .setOrgEntity(orgEntity)
                 .setStatus(User.Status.ACTIVE)
                 .build();
     }
