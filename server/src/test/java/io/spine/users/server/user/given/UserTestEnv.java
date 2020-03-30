@@ -24,22 +24,13 @@ import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
 import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.DirectoryId;
 import io.spine.users.GroupId;
-import io.spine.users.OrgUnitId;
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationOrUnit;
 import io.spine.users.PersonProfile;
-import io.spine.users.user.Identity;
-
-import static io.spine.base.Identifier.newUuid;
 
 /**
  * The environment for the {@code UserPart} tests.
  */
 public class UserTestEnv {
-
-    private static final String USER_UUID = newUuid();
 
     /**
      * Prevents direct instantiation.
@@ -79,66 +70,6 @@ public class UserTestEnv {
                 .newBuilder()
                 .setName(newPersonName())
                 .setEmail(newEmail())
-                .vBuild();
-    }
-
-    public static OrganizationOrUnit userOrgEntity() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(organizationId())
-                .vBuild();
-    }
-
-    static OrganizationOrUnit newUserOrgEntity() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrgUnit(orgUnitId())
-                .vBuild();
-    }
-
-    public static Identity googleIdentity() {
-        return Identity
-                .newBuilder()
-                .setDisplayName("j.s@google.com")
-                .setDirectoryId(googleDirectoryId())
-                .setUserId(USER_UUID)
-                .vBuild();
-    }
-
-    static Identity githubIdentity() {
-        return Identity
-                .newBuilder()
-                .setDisplayName("j.s@github.com")
-                .setDirectoryId(githubDirectoryId())
-                .setUserId(USER_UUID)
-                .vBuild();
-    }
-
-    private static DirectoryId googleDirectoryId() {
-        return DirectoryId
-                .newBuilder()
-                .setValue("gmail.com")
-                .vBuild();
-    }
-
-    private static DirectoryId githubDirectoryId() {
-        return DirectoryId
-                .newBuilder()
-                .setValue("github.com")
-                .vBuild();
-    }
-
-    private static OrganizationId organizationId() {
-        return OrganizationId
-                .newBuilder()
-                .setValue("org_id")
-                .vBuild();
-    }
-
-    private static OrgUnitId orgUnitId() {
-        return OrgUnitId
-                .newBuilder()
-                .setValue("orgunit_id")
                 .vBuild();
     }
 

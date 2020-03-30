@@ -36,7 +36,6 @@ import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/user/user.proto";
 import "spine/users/person_profile.proto";
-import "spine/users/user/identity.proto";
 
 // A new user was created.
 message UserCreated {

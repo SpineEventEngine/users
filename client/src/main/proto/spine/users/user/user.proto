@@ -36,8 +36,8 @@ import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/person_profile.proto";
-import "spine/users/user/identity.proto";
 
+//TODO:2020-03-30:alexander.yevsyukov: Rename to UserAccount
 // A user of the application, either a person or machine.
 //
 // A user is a leaf in the hierarchical structure of the organization. It can have either
@@ -48,6 +48,7 @@ message User {
 
     core.UserId id = 1;
 
+    //TODO:2020-03-30:alexander.yevsyukov: Have oneof instead which switches between PersonProfile and ServiceProfile.
     // Nature of a user: a person or machine.
     UserNature nature = 2 [(required) = true];
 
@@ -59,32 +60,37 @@ message User {
 
     // General profile information for a user, if applicable.
     PersonProfile profile = 7;
+}
 
-    // The current status of a user.
-    Status status = 8 [(required) = true];
+// Enumerates possible statuses of a user account
+enum AccountStatus {
 
-    // A status of a user.
+    // The default value.
+    US_UNKNOWN = 0;
+
+    // The user account is created but not yet ready to work.
     //
-    enum Status {
+    // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
+    //
+    NOT_READY = 1;
 
-        // The default value.
-        US_UNKNOWN = 0;
+    // The user account is ready to work.
+    ACTIVE = 2;
 
-        // A user is created but not yet ready to work.
-        //
-        // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
-        //
-        NOT_READY = 1;
+    // The user account was suspended.
+    SUSPENDED = 3;
+}
 
-        // A user is active and ready to work.
-        ACTIVE = 2;
+// Contains a status of a user account.
+message UserAccountStatus {
 
-        // A user is suspended by a user directory.
-        SUSPENDED = 3;
+    option (entity).kind = AGGREGATE;
 
-        // A user is external and its status is unknown.
-        UNAVAILABLE = 4;
-    }
+    // The ID of the user account.
+    core.UserId id = 1;
+
+    // The value of the status.
+    AccountStatus value = 2 [(required) = true];
 }
 
 // A user membership in multiple groups, a part of `User` aggregate.
@@ -101,6 +107,7 @@ message UserMembership {
     repeated UserMembershipRecord membership = 2;
 }
 
+//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
 // A single record about a membership in the aggregate part.
 //
 message UserMembershipRecord {
@@ -112,6 +119,7 @@ message UserMembershipRecord {
     RoleInGroup role = 2 [(required) = true];
 }
 
+//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
 // A role of the `User` as a member of the group.
 //
 // This role defines whether a user is a regular member or can manage the group.
@@ -125,13 +133,16 @@ enum RoleInGroup {
     MEMBER = 1;
 
     // A privileged member with permissions to manage the group.
-    PRIVILEGED = 2;
+    PRIVILEGED = 2; //TODO:2020-03-30:alexander.yevsyukov: Rename to MODERATOR (see how it's in Google Groups)
+
+    //TODO:2020-03-30:alexander.yevsyukov: Add OWNER.
 }
 
 // The fundamental kind of `User`.
 //
 enum UserNature {
 
+    //TODO:2020-03-30:alexander.yevsyukov: Remove in favor of oneof under UserAccount
     // The default value.
     UN_UNKNOWN = 0;
 
