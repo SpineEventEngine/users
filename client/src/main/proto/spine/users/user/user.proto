@@ -35,7 +35,7 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/person_profile.proto";
+import "spine/users/profiles.proto";
 
 //TODO:2020-03-30:alexander.yevsyukov: Rename to UserAccount
 // A user of the application, either a person or machine.
@@ -133,9 +133,10 @@ enum RoleInGroup {
     MEMBER = 1;
 
     // A privileged member with permissions to manage the group.
-    PRIVILEGED = 2; //TODO:2020-03-30:alexander.yevsyukov: Rename to MODERATOR (see how it's in Google Groups)
+    PRIVILEGED = 2; //TODO:2020-03-30:alexander.yevsyukov: Rename to MANAGER
 
-    //TODO:2020-03-30:alexander.yevsyukov: Add OWNER.
+    // A person who can delete the group and add manage other owners.
+    OWNER = 3;
 }
 
 // The fundamental kind of `User`.
