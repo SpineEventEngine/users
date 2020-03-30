@@ -55,26 +55,6 @@ message CreateUser {
     PersonProfile profile = 8;
 }
 
-// Joins a group.
-message JoinGroup {
-
-    core.UserId id = 1;
-
-    // An ID of a group.
-    GroupId group_id = 2 [(required) = true];
-
-    // A role of a user in the group.
-    RoleInGroup role = 3 [(required) = true];
-}
-
-// Leaves a group.
-message LeaveGroup {
-
-    core.UserId id = 1;
-
-    // An ID of a group.
-    GroupId group_id = 2 [(required) = true];
-}
 
 // Deletes a user.
 message DeleteUser {

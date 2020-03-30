@@ -29,9 +29,11 @@ option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
+import "spine/users/group/group.proto";
 
 // Creates a group.
 message CreateGroup {
@@ -56,15 +58,6 @@ message CreateGroup {
 
     // An email address of the group, if applicable.
     net.EmailAddress email = 6;
-}
-
-// Moves a group from one organization or org. unit to another.
-message MoveGroup {
-
-    GroupId id = 1;
-
-    // A new parent entity in the organizational structure.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
 }
 
 // Deletes a group.
@@ -117,3 +110,25 @@ message ChangeGroupDescription {
     // A new human-friendly description of a group.
     string description = 2 [(required) = true];
 }
+
+// Joins a group.
+message JoinGroup {
+
+    core.UserId id = 1;
+
+    // An ID of a group.
+    GroupId group_id = 2 [(required) = true];
+
+    // A role of a user in the group.
+    RoleInGroup role = 3 [(required) = true];
+}
+
+// Leaves a group.
+message LeaveGroup {
+
+    core.UserId id = 1;
+
+    // An ID of a group.
+    GroupId group_id = 2 [(required) = true];
+}
+

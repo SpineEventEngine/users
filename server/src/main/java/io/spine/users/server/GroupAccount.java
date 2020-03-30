@@ -29,20 +29,14 @@ import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.group.event.GroupCreated;
 import io.spine.users.group.event.GroupDeleted;
 import io.spine.users.group.event.GroupDescriptionChanged;
 import io.spine.users.group.event.GroupEmailChanged;
-import io.spine.users.group.event.GroupMoved;
 import io.spine.users.group.event.GroupRenamed;
-import io.spine.users.group.rejection.CannotMoveExternalGroup;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
-
-import static io.spine.users.group.Group.OriginCase.EXTERNAL_DOMAIN;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
@@ -69,26 +63,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
-                .setExternalDomain(command.getExternalDomain())
-                .setOrgEntity(command.getOrgEntity())
                 .setDescription(command.getDescription())
-                .build();
-    }
-
-    @Assign
-    GroupMoved handle(MoveGroup command) throws CannotMoveExternalGroup {
-        if (state().getOriginCase() == EXTERNAL_DOMAIN) {
-            throw CannotMoveExternalGroup
-                    .newBuilder()
-                    .setId(command.getId())
-                    .setExternalDomain(state().getExternalDomain())
-                    .build();
-        }
-        return GroupMoved
-                .newBuilder()
-                .setId(command.getId())
-                .setNewOrgEntity(command.getNewOrgEntity())
-                .setOldOrgEntity(state().getOrgEntity())
                 .build();
     }
 
@@ -138,23 +113,6 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
                .setDescription(event.getDescription());
-
-        switch (event.getOriginCase()) {
-            case ORG_ENTITY:
-                builder.setOrgEntity(event.getOrgEntity());
-                break;
-            case EXTERNAL_DOMAIN:
-                builder.setExternalDomain(event.getExternalDomain());
-                break;
-            case ORIGIN_NOT_SET: // Fallthrough intended.
-            default:
-                throw newIllegalArgumentException("No `origin` found in GroupCreated event");
-        }
-    }
-
-    @Apply
-    private void on(GroupMoved event) {
-        builder().setOrgEntity(event.getNewOrgEntity());
     }
 
     @Apply

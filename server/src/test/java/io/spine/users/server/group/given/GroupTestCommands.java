@@ -21,23 +21,21 @@
 package io.spine.users.server.group.given;
 
 import io.spine.users.GroupId;
-import io.spine.users.OrganizationOrUnit;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
-import io.spine.users.group.command.MoveGroup;
 import io.spine.users.group.command.RenameGroup;
 
+import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupDescription;
+import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.groupName;
 import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
-import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
-import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 
 /**
  * Test commands for {@code GroupAccount}.
@@ -58,14 +56,6 @@ public class GroupTestCommands {
                 .setEmail(groupEmail())
                 .setOrgEntity(groupOrgEntityOrganization())
                 .setDescription(groupDescription())
-                .vBuild();
-    }
-
-    public static MoveGroup moveGroup(GroupId groupId, OrganizationOrUnit newParent) {
-        return MoveGroup
-                .newBuilder()
-                .setId(groupId)
-                .setNewOrgEntity(newParent)
                 .vBuild();
     }
 

@@ -29,8 +29,8 @@ import io.spine.roles.server.event.RolePropagationCanceledForUser;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
-import io.spine.users.user.event.UserJoinedGroup;
-import io.spine.users.user.event.UserLeftGroup;
+import io.spine.users.group.event.UserJoinedGroup;
+import io.spine.users.group.event.UserLeftGroup;
 
 import java.util.Collection;
 import java.util.List;

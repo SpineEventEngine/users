@@ -23,7 +23,7 @@ package io.spine.users.server;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.users.user.UserMembership;
+import io.spine.users.group.UserMembership;
 
 import static io.spine.users.server.user.given.UserTestEnv.userId;
 

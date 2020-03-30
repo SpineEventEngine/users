@@ -45,7 +45,6 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
-                .setOrgEntity(command.getOrgEntity())
                 .setDescription(command.getDescription())
                 .build();
     }
@@ -57,7 +56,6 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
-                .setOrgEntity(command.getOrgEntity())
                 .setDescription(command.getDescription())
                 .build();
     }

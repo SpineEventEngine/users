@@ -25,16 +25,16 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
-import io.spine.users.user.UserMembership;
-import io.spine.users.user.UserMembershipRecord;
-import io.spine.users.user.command.JoinGroup;
-import io.spine.users.user.command.LeaveGroup;
-import io.spine.users.user.event.UserJoinedGroup;
-import io.spine.users.user.event.UserLeftGroup;
+import io.spine.users.group.UserMembership;
+import io.spine.users.group.UserMembershipRecord;
+import io.spine.users.group.command.JoinGroup;
+import io.spine.users.group.command.LeaveGroup;
+import io.spine.users.group.event.UserJoinedGroup;
+import io.spine.users.group.event.UserLeftGroup;
 
 import java.util.Optional;
 
-import static io.spine.users.user.RoleInGroup.MEMBER;
+import static io.spine.users.group.RoleInGroup.MEMBER;
 
 /**
  * A user membership in multiple {@linkplain GroupRoot groups},

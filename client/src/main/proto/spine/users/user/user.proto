@@ -66,13 +66,13 @@ message User {
 enum AccountStatus {
 
     // The default value.
-    US_UNKNOWN = 0;
+    ACCOUNT_STATUS_UNKNOWN = 0;
 
     // The user account is created but not yet ready to work.
     //
     // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
     //
-    NOT_READY = 1;
+    PENDING = 1;
 
     // The user account is ready to work.
     ACTIVE = 2;
@@ -91,52 +91,6 @@ message UserAccountStatus {
 
     // The value of the status.
     AccountStatus value = 2 [(required) = true];
-}
-
-// A user membership in multiple groups, a part of `User` aggregate.
-//
-// If a `User` shares its functions and roles with a number of other users they can join
-// one or more `Group`s (please see `JoinGroup`, `LeaveGroup` commands).
-//
-message UserMembership {
-    option (entity).kind = AGGREGATE;
-
-    core.UserId id = 1;
-
-    // The group memberships of a `User`.
-    repeated UserMembershipRecord membership = 2;
-}
-
-//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
-// A single record about a membership in the aggregate part.
-//
-message UserMembershipRecord {
-
-    // An ID of a group.
-    GroupId group_id = 1 [(required) = true];
-
-    // A role of a user in the group.
-    RoleInGroup role = 2 [(required) = true];
-}
-
-//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
-// A role of the `User` as a member of the group.
-//
-// This role defines whether a user is a regular member or can manage the group.
-//
-enum RoleInGroup {
-
-    // The default value.
-    RIG_UNKNOWN = 0;
-
-    // A regular member of a group: can't add or remove members, rename the group, etc.
-    MEMBER = 1;
-
-    // A privileged member with permissions to manage the group.
-    PRIVILEGED = 2; //TODO:2020-03-30:alexander.yevsyukov: Rename to MANAGER
-
-    // A person who can delete the group and add manage other owners.
-    OWNER = 3;
 }
 
 // The fundamental kind of `User`.

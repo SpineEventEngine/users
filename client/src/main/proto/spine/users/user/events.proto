@@ -55,27 +55,6 @@ message UserCreated {
     PersonProfile profile = 8;
 }
 
-// A user joined a group.
-message UserJoinedGroup {
-
-    core.UserId id = 1;
-
-    // An ID of the group.
-    users.GroupId group_id = 2 [(required) = true];
-
-    // A role of a user in the group.
-    RoleInGroup role = 3 [(required) = true];
-}
-
-// A user left a group.
-message UserLeftGroup {
-
-    core.UserId id = 1;
-
-    // An ID of the group.
-    users.GroupId group_id = 2 [(required) = true];
-}
-
 // A user was deleted.
 message UserDeleted {
 

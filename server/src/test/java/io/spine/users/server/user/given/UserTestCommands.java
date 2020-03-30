@@ -23,8 +23,8 @@ package io.spine.users.server.user.given;
 import io.spine.core.UserId;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.DeleteUser;
-import io.spine.users.user.command.JoinGroup;
-import io.spine.users.user.command.LeaveGroup;
+import io.spine.users.group.command.JoinGroup;
+import io.spine.users.group.command.LeaveGroup;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.command.UpdatePersonProfile;
 
@@ -33,7 +33,7 @@ import static io.spine.users.server.user.given.UserTestEnv.newProfile;
 import static io.spine.users.server.user.given.UserTestEnv.newUserDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
-import static io.spine.users.user.RoleInGroup.MEMBER;
+import static io.spine.users.group.RoleInGroup.MEMBER;
 import static io.spine.users.user.UserNature.PERSON;
 
 /**

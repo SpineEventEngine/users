@@ -29,13 +29,13 @@ import io.spine.roles.command.DeleteRole;
 import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
 import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.users.GroupId;
+import io.spine.users.group.RoleInGroup;
 import io.spine.users.group.command.CreateGroup;
+import io.spine.users.group.command.JoinGroup;
+import io.spine.users.group.command.LeaveGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
-import io.spine.users.user.RoleInGroup;
 import io.spine.users.user.UserNature;
 import io.spine.users.user.command.CreateUser;
-import io.spine.users.user.command.JoinGroup;
-import io.spine.users.user.command.LeaveGroup;
 
 public class GivenCommand {
 

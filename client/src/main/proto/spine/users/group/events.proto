@@ -34,6 +34,7 @@ import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
+import "spine/users/group/group.proto";
 
 // The new group was created.
 message GroupCreated {
@@ -46,31 +47,8 @@ message GroupCreated {
     // Human-friendly description of the group.
     string description = 3;
 
-    // The entity the group belongs to.
-    oneof origin {
-
-        // The organization or org. unit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 4;
-
-        //TODO:2019-09-30:alexander.yevsyukov: What is this?
-        // The external domain.
-        net.InternetDomain external_domain = 5;
-    }
-
     // The email address of the group, if available.
     net.EmailAddress email = 6;
-}
-
-// The group was moved to another organization or org. unit.
-message GroupMoved {
-
-    GroupId id = 1;
-
-    // New parent entity in the organizational structure.
-    OrganizationOrUnit new_org_entity = 2 [(required) = true];
-
-    // Former parent entity in the organizational structure.
-    OrganizationOrUnit old_org_entity = 3 [(required) = true];
 }
 
 // The group joined a parent group, that is, became a member of another group.
@@ -131,4 +109,25 @@ message GroupDescriptionChanged {
 
     // An old human-friendly description of the group.
     string old_description = 3 [(required) = true];
+}
+
+// A user joined a group.
+message UserJoinedGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
+
+    // A role of a user in the group.
+    RoleInGroup role = 3 [(required) = true];
+}
+
+// A user left a group.
+message UserLeftGroup {
+
+    core.UserId id = 1;
+
+    // An ID of the group.
+    users.GroupId group_id = 2 [(required) = true];
 }

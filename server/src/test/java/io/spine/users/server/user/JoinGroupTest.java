@@ -22,10 +22,10 @@ package io.spine.users.server.user;
 
 import io.spine.core.UserId;
 import io.spine.users.server.UserMembershipCommandTest;
-import io.spine.users.user.UserMembership;
-import io.spine.users.user.UserMembershipRecord;
-import io.spine.users.user.command.JoinGroup;
-import io.spine.users.user.event.UserJoinedGroup;
+import io.spine.users.group.UserMembership;
+import io.spine.users.group.UserMembershipRecord;
+import io.spine.users.group.command.JoinGroup;
+import io.spine.users.group.event.UserJoinedGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

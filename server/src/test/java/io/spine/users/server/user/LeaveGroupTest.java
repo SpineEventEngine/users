@@ -22,9 +22,9 @@ package io.spine.users.server.user;
 
 import io.spine.core.UserId;
 import io.spine.users.server.UserMembershipCommandTest;
-import io.spine.users.user.UserMembership;
-import io.spine.users.user.command.LeaveGroup;
-import io.spine.users.user.event.UserLeftGroup;
+import io.spine.users.group.UserMembership;
+import io.spine.users.group.command.LeaveGroup;
+import io.spine.users.group.event.UserLeftGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
