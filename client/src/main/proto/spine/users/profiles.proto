@@ -45,8 +45,8 @@ message PersonProfile {
     // A name of the person, if available.
     people.PersonName name = 2;
 
-    // The URL to the user's profile picture, if available.
-    net.Url avatar = 3;
+    // The URL of the photo of the user, if available.
+    net.Url photo = 3;
 }
 
 // Information about a non-human user such as a service or a device.
