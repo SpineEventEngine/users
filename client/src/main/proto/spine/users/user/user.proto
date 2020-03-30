@@ -63,25 +63,6 @@ message User {
     // The current status of a user.
     Status status = 8 [(required) = true];
 
-    // The primary user identity.
-    //
-    // The primary identity and its provider (i.e. the user directory to which the identity
-    // belongs) are used as a single source of truth about a user:
-    //  - to get a user profile;
-    //  - to check whether a user account is active;
-    //  - etc.
-    //
-    // A user without the primary identity can't authenticate and therefore perform any actions.
-    // This is only applicable for users from external domains.
-    //
-    Identity primary_identity = 9;
-
-    // Secondary identities of a user; used solely for authentication.
-    repeated Identity secondary_identity = 10;
-
-    // A moment in time when a user was created.
-    google.protobuf.Timestamp when_created = 11;
-
     // A status of a user.
     //
     enum Status {

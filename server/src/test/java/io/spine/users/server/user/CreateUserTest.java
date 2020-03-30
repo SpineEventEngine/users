@@ -51,8 +51,6 @@ class CreateUserTest extends UserPartCommandTest<CreateUser, UserCreated> {
                 .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
-                .setPrimaryIdentity(command.getPrimaryIdentity())
-                .setStatus(command.getStatus())
                 .setNature(command.getNature())
                 .build();
     }
@@ -63,8 +61,6 @@ class CreateUserTest extends UserPartCommandTest<CreateUser, UserCreated> {
                 .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
-                .setPrimaryIdentity(command.getPrimaryIdentity())
-                .setStatus(command.getStatus())
                 .setNature(command.getNature())
                 .build();
     }

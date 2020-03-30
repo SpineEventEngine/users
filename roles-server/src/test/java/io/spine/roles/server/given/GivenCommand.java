@@ -32,7 +32,6 @@ import io.spine.users.GroupId;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.RoleInGroup;
-import io.spine.users.user.User;
 import io.spine.users.user.UserNature;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.JoinGroup;
@@ -50,7 +49,6 @@ public class GivenCommand {
                 .setId(userId)
                 .setNature(UserNature.UNAVAILABLE)
                 .setDisplayName("display name of " + userId.getValue())
-                .setStatus(User.Status.ACTIVE)
                 .build();
     }
 

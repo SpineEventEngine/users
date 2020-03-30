@@ -24,16 +24,12 @@ import com.google.common.collect.ImmutableList;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
-import io.spine.users.user.Identity;
 import io.spine.users.user.User;
-import io.spine.users.user.command.AddSecondaryIdentity;
 import io.spine.users.user.command.CreateUser;
 
-import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
-import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
 /**
@@ -66,24 +62,13 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
                 .newBuilder()
                 .setId(USER_ID)
                 .setDisplayName(userDisplayName())
-                .setPrimaryIdentity(googleIdentity())
                 .setProfile(profile())
-                .setStatus(NOT_READY)
                 .setNature(PERSON)
                 .vBuild();
-        AddSecondaryIdentity addSecondaryIdentity = AddSecondaryIdentity
-                .newBuilder()
-                .setId(USER_ID)
-                .setIdentity(originalSecondaryIdentity())
-                .vBuild();
-        return ImmutableList.of(createUser, addSecondaryIdentity);
+        return ImmutableList.of(createUser);
     }
 
     protected void preCreateUser() {
         setupCommands().forEach(context()::receivesCommand);
-    }
-
-    protected Identity originalSecondaryIdentity() {
-        return googleIdentity();
     }
 }

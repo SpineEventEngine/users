@@ -21,28 +21,19 @@
 package io.spine.users.server.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.user.Identity;
-import io.spine.users.user.User.Status;
-import io.spine.users.user.command.AddSecondaryIdentity;
-import io.spine.users.user.command.ChangePrimaryIdentity;
-import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.DeleteUser;
 import io.spine.users.user.command.JoinGroup;
 import io.spine.users.user.command.LeaveGroup;
-import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.command.UpdatePersonProfile;
 
 import static io.spine.users.server.user.given.UserTestEnv.firstGroupId;
-import static io.spine.users.server.user.given.UserTestEnv.githubIdentity;
-import static io.spine.users.server.user.given.UserTestEnv.googleIdentity;
 import static io.spine.users.server.user.given.UserTestEnv.newProfile;
 import static io.spine.users.server.user.given.UserTestEnv.newUserDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.profile;
 import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.user.RoleInGroup.MEMBER;
-import static io.spine.users.user.User.Status.NOT_READY;
 import static io.spine.users.user.UserNature.PERSON;
 
 /**
@@ -59,9 +50,7 @@ public class UserTestCommands {
                 .newBuilder()
                 .setId(id)
                 .setDisplayName(userDisplayName())
-                .setPrimaryIdentity(googleIdentity())
                 .setProfile(profile())
-                .setStatus(NOT_READY)
                 .setNature(PERSON)
                 .vBuild();
     }
@@ -87,40 +76,6 @@ public class UserTestCommands {
         return DeleteUser
                 .newBuilder()
                 .setId(id)
-                .build();
-    }
-
-    public static AddSecondaryIdentity addAuthIdentity(UserId id) {
-        return AddSecondaryIdentity
-                .newBuilder()
-                .setId(id)
-                .setIdentity(githubIdentity())
-                .build();
-    }
-
-    public static RemoveSecondaryIdentity removeAuthIdentity(UserId id) {
-        Identity identity = googleIdentity();
-        return RemoveSecondaryIdentity
-                .newBuilder()
-                .setId(id)
-                .setDirectoryId(identity.getDirectoryId())
-                .setUserId(identity.getUserId())
-                .build();
-    }
-
-    public static ChangeUserStatus changeUserStatus(UserId id) {
-        return ChangeUserStatus
-                .newBuilder()
-                .setId(id)
-                .setStatus(Status.SUSPENDED)
-                .build();
-    }
-
-    public static ChangePrimaryIdentity changePrimaryIdentity(UserId id) {
-        return ChangePrimaryIdentity
-                .newBuilder()
-                .setId(id)
-                .setIdentity(githubIdentity())
                 .build();
     }
 

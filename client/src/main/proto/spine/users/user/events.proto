@@ -52,14 +52,8 @@ message UserCreated {
     // An email address of a user.
     net.EmailAddress email = 4;
 
-    // The primary identity of the user.
-    Identity primary_identity = 7;
-
     // A user profile, if applicable.
     PersonProfile profile = 8;
-
-    // The current status of the user.
-    User.Status status = 9 [(required) = true];
 }
 
 // A user joined a group.
@@ -87,45 +81,6 @@ message UserLeftGroup {
 message UserDeleted {
 
     core.UserId id = 1;
-}
-
-// The status of a user was changed.
-message UserStatusChanged {
-
-    core.UserId id = 1;
-
-    // An old status.
-    User.Status old_status = 2 [(required) = true];
-
-    // A new status.
-    User.Status new_status = 3 [(required) = true];
-}
-
-// A new secondary identity was added.
-message SecondaryIdentityAdded {
-
-    core.UserId id = 1;
-
-    // A new secondary identity.
-    Identity identity = 2 [(required) = true];
-}
-
-// A secondary identity was removed.
-message SecondaryIdentityRemoved {
-
-    core.UserId id = 1;
-
-    // The removed identity.
-    Identity identity = 2 [(required) = true];
-}
-
-// The primary identity was changed.
-message PrimaryIdentityChanged {
-
-    core.UserId id = 1;
-
-    // A new primary identity.
-    Identity identity = 2 [(required) = true];
 }
 
 // A user was renamed.

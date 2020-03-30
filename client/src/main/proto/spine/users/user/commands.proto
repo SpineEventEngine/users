@@ -52,14 +52,8 @@ message CreateUser {
     // An email address of a user.
     net.EmailAddress email = 4;
 
-    // The primary identity of the user.
-    Identity primary_identity = 7;
-
     // A user profile, if applicable.
     PersonProfile profile = 8;
-
-    // The current status of the user.
-    User.Status status = 9 [(required) = true];
 }
 
 // Joins a group.
@@ -87,47 +81,6 @@ message LeaveGroup {
 message DeleteUser {
 
     core.UserId id = 1;
-}
-
-
-// Changes the user status.
-message ChangeUserStatus {
-
-    core.UserId id = 1;
-
-    // A new status.
-    User.Status status = 2 [(required) = true];
-}
-
-// Adds a new secondary identity to the user.
-message AddSecondaryIdentity {
-
-    core.UserId id = 1;
-
-    // An identity to add.
-    Identity identity = 2 [(required) = true];
-}
-
-// Removes a secondary identity of the user.
-message RemoveSecondaryIdentity {
-
-    core.UserId id = 1;
-
-    // A user identifier as specified by the user directory.
-    string user_id = 2 [(required) = true];
-
-    // A unique identifier of the user directory.
-    DirectoryId directory_id = 3 [(required) = true];
-}
-
-// Changes the primary identity.
-//
-message ChangePrimaryIdentity {
-
-    core.UserId id = 1;
-
-    // A new primary identity.
-    Identity identity = 2 [(required) = true];
 }
 
 // Renames a user.

@@ -25,29 +25,15 @@ import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.user.Identity;
 import io.spine.users.user.User;
-import io.spine.users.user.command.AddSecondaryIdentity;
-import io.spine.users.user.command.ChangePrimaryIdentity;
-import io.spine.users.user.command.ChangeUserStatus;
 import io.spine.users.user.command.CreateUser;
 import io.spine.users.user.command.DeleteUser;
-import io.spine.users.user.command.RemoveSecondaryIdentity;
 import io.spine.users.user.command.RenameUser;
 import io.spine.users.user.command.UpdatePersonProfile;
 import io.spine.users.user.event.PersonProfileUpdated;
-import io.spine.users.user.event.PrimaryIdentityChanged;
-import io.spine.users.user.event.SecondaryIdentityAdded;
-import io.spine.users.user.event.SecondaryIdentityRemoved;
 import io.spine.users.user.event.UserCreated;
 import io.spine.users.user.event.UserDeleted;
 import io.spine.users.user.event.UserRenamed;
-import io.spine.users.user.event.UserStatusChanged;
-import io.spine.users.user.rejection.IdentityDoesNotExist;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * An aggregate for user of the application, either a person or machine.
@@ -67,8 +53,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
                 .newBuilder()
                 .setId(command.getId())
                 .setDisplayName(command.getDisplayName())
-                .setPrimaryIdentity(command.getPrimaryIdentity())
-                .setStatus(command.getStatus())
                 .setProfile(command.getProfile())
                 .setNature(command.getNature());
         return eventBuilder.vBuild();
@@ -79,52 +63,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
         UserDeleted event = UserDeleted
                 .newBuilder()
                 .setId(command.getId())
-                .vBuild();
-        return event;
-    }
-
-    @Assign
-    UserStatusChanged handle(ChangeUserStatus command, CommandContext context) {
-        UserStatusChanged event = UserStatusChanged
-                .newBuilder()
-                .setId(command.getId())
-                .setNewStatus(command.getStatus())
-                .setOldStatus(state().getStatus())
-                .vBuild();
-        return event;
-    }
-
-    @Assign
-    SecondaryIdentityAdded handle(AddSecondaryIdentity command, CommandContext context) {
-        SecondaryIdentityAdded event = SecondaryIdentityAdded
-                .newBuilder()
-                .setId(command.getId())
-                .setIdentity(command.getIdentity())
-                .vBuild();
-        return event;
-    }
-
-    @Assign
-    SecondaryIdentityRemoved handle(RemoveSecondaryIdentity command,
-                                    CommandContext context) throws IdentityDoesNotExist {
-        Optional<Identity> identityToRemove = findAuthIdentity(command);
-        if (identityToRemove.isPresent()) {
-            SecondaryIdentityRemoved event = SecondaryIdentityRemoved
-                    .newBuilder()
-                    .setId(command.getId())
-                    .setIdentity(identityToRemove.get())
-                    .vBuild();
-            return event;
-        }
-        throw identityDoesNotExist(command);
-    }
-
-    @Assign
-    PrimaryIdentityChanged handle(ChangePrimaryIdentity command, CommandContext context) {
-        PrimaryIdentityChanged event = PrimaryIdentityChanged
-                .newBuilder()
-                .setId(command.getId())
-                .setIdentity(command.getIdentity())
                 .vBuild();
         return event;
     }
@@ -155,10 +93,8 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
         User.Builder builder = builder();
         builder.setId(event.getId())
                .setDisplayName(event.getDisplayName())
-               .setPrimaryIdentity(event.getPrimaryIdentity())
                .setProfile(event.getProfile())
-               .setNature(event.getNature())
-               .setStatus(event.getStatus());
+               .setNature(event.getNature());
     }
 
     @Apply
@@ -166,27 +102,6 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
                     UserDeleted event) {
         setDeleted(true);
     }
-
-    @Apply
-    private void on(UserStatusChanged event) {
-        builder().setStatus(event.getNewStatus());
-    }
-
-    @Apply
-    private void on(SecondaryIdentityAdded event) {
-        builder().addSecondaryIdentity(event.getIdentity());
-    }
-
-    @Apply
-    private void on(SecondaryIdentityRemoved event) {
-        removeIdentity(event.getIdentity());
-    }
-
-    @Apply
-    private void on(PrimaryIdentityChanged event) {
-        builder().setPrimaryIdentity(event.getIdentity());
-    }
-
     @Apply
     private void on(UserRenamed event) {
         builder().setDisplayName(event.getNewName());
@@ -195,39 +110,5 @@ final class UserPart extends AggregatePart<UserId, User, User.Builder, UserRoot>
     @Apply
     private void on(PersonProfileUpdated event) {
         builder().setProfile(event.getUpdatedProfile());
-    }
-
-    private Optional<Identity> findAuthIdentity(RemoveSecondaryIdentity command) {
-        return state().getSecondaryIdentityList()
-                      .stream()
-                      .filter(identityMatcher(command))
-                      .findFirst();
-    }
-
-    private void removeIdentity(Identity identity) {
-        List<Identity> identities = builder().getSecondaryIdentityList();
-        if (identities.contains(identity)) {
-            int index = identities.indexOf(identity);
-            builder().removeSecondaryIdentity(index);
-        }
-    }
-
-    private static Predicate<Identity> identityMatcher(RemoveSecondaryIdentity command) {
-        return identity -> {
-            boolean idMatches = identity.getUserId()
-                                        .equals(command.getUserId());
-            boolean directoryMatches = identity.getDirectoryId()
-                                               .equals(command.getDirectoryId());
-            return idMatches && directoryMatches;
-        };
-    }
-
-    private static IdentityDoesNotExist identityDoesNotExist(RemoveSecondaryIdentity command) {
-        return IdentityDoesNotExist
-                .newBuilder()
-                .setId(command.getId())
-                .setDirectoryId(command.getDirectoryId())
-                .setUserId(command.getUserId())
-                .build();
     }
 }
