@@ -25,21 +25,20 @@ import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 import io.spine.users.user.User;
-import io.spine.users.user.command.CreateUser;
+import io.spine.users.user.UserAccount;
+import io.spine.users.user.command.CreateUserAccount;
 
 import static io.spine.users.server.user.given.UserTestEnv.profile;
-import static io.spine.users.server.user.given.UserTestEnv.userDisplayName;
 import static io.spine.users.server.user.given.UserTestEnv.userId;
-import static io.spine.users.user.UserNature.PERSON;
 
 /**
- * An implementation base for the {@link User} aggregate command handler tests.
+ * An implementation base for the {@link UserAccount} aggregate command handler tests.
  *
  * @param <C>
  *         the type of the command being tested
  */
 public abstract class UserPartCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<UserId, C, E, User, UserPart> {
+        extends CommandTest<UserId, C, E, UserAccount, UserAccountPart> {
 
     private static final UserId USER_ID = userId();
 
@@ -49,8 +48,8 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
     }
 
     @Override
-    protected Class<UserPart> entityClass() {
-        return UserPart.class;
+    protected Class<UserAccountPart> entityClass() {
+        return UserAccountPart.class;
     }
 
     /**
@@ -58,12 +57,12 @@ public abstract class UserPartCommandTest<C extends CommandMessage, E extends Ev
      * the test environment for the user.
      */
     protected Iterable<CommandMessage> setupCommands() {
-        CreateUser createUser = CreateUser
+        CreateUserAccount createUser = CreateUserAccount
                 .newBuilder()
                 .setId(USER_ID)
-                .setDisplayName(userDisplayName())
-                .setProfile(profile())
-                .setNature(PERSON)
+                .setUser(User.newBuilder()
+                             .setPerson(profile())
+                             .vBuild())
                 .vBuild();
         return ImmutableList.of(createUser);
     }

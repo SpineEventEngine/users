@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,48 +18,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server;
 
+import io.spine.core.CommandContext;
 import io.spine.core.UserId;
-import io.spine.users.server.UserPartCommandTest;
+import io.spine.server.aggregate.AggregatePart;
+import io.spine.server.aggregate.Apply;
+import io.spine.server.command.Assign;
 import io.spine.users.user.UserAccount;
 import io.spine.users.user.command.CreateUserAccount;
+import io.spine.users.user.command.DeleteUserAccount;
 import io.spine.users.user.event.UserAccountCreated;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.users.user.event.UserAccountDeleted;
 
-import static io.spine.users.server.user.given.UserTestCommands.createUser;
+/**
+ * An aggregate for user of the application, either a person or machine.
+ *
+ * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
+ * a single {@code Organization} or single {@code OrgUnit} as a parent organizational entity.
+ */
+final class UserAccountPart extends AggregatePart<UserId, UserAccount, UserAccount.Builder, UserRoot> {
 
-@DisplayName("`CreateUser` command should")
-class CreateUserTest extends UserPartCommandTest<CreateUserAccount, UserAccountCreated> {
-
-    @Override
-    @Test
-    @DisplayName("generate `UserCreated` event and create the `User`")
-    protected void produceEventAndChangeState() {
-        super.produceEventAndChangeState();
+    UserAccountPart(UserRoot root) {
+        super(root);
     }
 
-    @Override
-    protected CreateUserAccount command(UserId id) {
-        return createUser(id);
-    }
-
-    @Override
-    protected UserAccountCreated expectedEventAfter(CreateUserAccount command) {
+    @Assign
+    UserAccountCreated handle(CreateUserAccount command, CommandContext context) {
         return UserAccountCreated
                 .newBuilder()
                 .setId(command.getId())
                 .setUser(command.getUser())
-                .build();
+                .vBuild();
     }
 
-    @Override
-    protected UserAccount expectedStateAfter(CreateUserAccount command) {
-        return UserAccount
+    @Assign
+    UserAccountDeleted handle(DeleteUserAccount command, CommandContext context) {
+        return UserAccountDeleted
                 .newBuilder()
                 .setId(command.getId())
-                .setUser(command.getUser())
-                .build();
+                .vBuild();
+    }
+
+    @Apply
+    private void on(UserAccountCreated event) {
+        builder().setUser(event.getUser());
+    }
+
+    @Apply
+    private void on(@SuppressWarnings("unused") UserAccountDeleted event) {
+        setDeleted(true);
     }
 }

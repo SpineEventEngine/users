@@ -31,53 +31,41 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
-import "spine/net/internet_domain.proto";
-import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/user/user.proto";
 import "spine/users/profiles.proto";
+import "spine/users/user/user.proto";
 
-// Creates a new user.
-message CreateUser {
+// Creates a new user account.
+message CreateUserAccount {
 
+    // The ID of the account
     core.UserId id = 1;
 
-    // A kind of user: a person or machine.
-    UserNature nature = 2 [(required) = true];
-
-    // A user name to be displayed on UI.
-    string display_name = 3 [(required) = true];
-
-    // An email address of a user.
-    net.EmailAddress email = 4;
-
-    // A user profile, if applicable.
-    PersonProfile profile = 8;
+    // The user for whom to create the account.
+    User user = 2 [(required) = true];
 }
 
+// Deletes a user account.
+message DeleteUserAccount {
 
-// Deletes a user.
-message DeleteUser {
-
+    // The ID of the account to delete.
     core.UserId id = 1;
 }
 
-// Renames a user.
+// Suspend an account of a user.
 //
-message RenameUser {
+// After this command completes the user should not be able to access the application data
+// until the account is resumed.
+//
+message SuspendUserAccount {
 
+    // The ID of the account to suspend.
     core.UserId id = 1;
-
-    // A new name of a user.
-    string new_name = 2 [(required) = true];
 }
 
-// Updates a user profile.
-//
-message UpdatePersonProfile {
+// Activate previously suspended user account.
+message ResumeUserAccount {
 
+    // The ID of the account to resume.
     core.UserId id = 1;
-
-    // An updated version of a profile.
-    PersonProfile updated_profile = 2 [(required) = true];
 }

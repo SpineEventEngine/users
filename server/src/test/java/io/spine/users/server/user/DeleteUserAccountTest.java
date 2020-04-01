@@ -22,16 +22,16 @@ package io.spine.users.server.user;
 
 import io.spine.core.UserId;
 import io.spine.users.server.UserPartCommandTest;
-import io.spine.users.user.User;
-import io.spine.users.user.command.DeleteUser;
-import io.spine.users.user.event.UserDeleted;
+import io.spine.users.user.UserAccount;
+import io.spine.users.user.command.DeleteUserAccount;
+import io.spine.users.user.event.UserAccountDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.user.given.UserTestCommands.deleteUser;
 
 @DisplayName("`DeleteUser` command should")
-class DeleteUserTest extends UserPartCommandTest<DeleteUser, UserDeleted> {
+class DeleteUserAccountTest extends UserPartCommandTest<DeleteUserAccount, UserAccountDeleted> {
 
     @Test
     @DisplayName("produce `UserDeleted` event and delete the user")
@@ -42,21 +42,21 @@ class DeleteUserTest extends UserPartCommandTest<DeleteUser, UserDeleted> {
     }
 
     @Override
-    protected DeleteUser command(UserId id) {
+    protected DeleteUserAccount command(UserId id) {
         return deleteUser(id);
     }
 
     @Override
-    protected UserDeleted expectedEventAfter(DeleteUser command) {
-        return UserDeleted
+    protected UserAccountDeleted expectedEventAfter(DeleteUserAccount command) {
+        return UserAccountDeleted
                 .newBuilder()
                 .setId(command.getId())
                 .build();
     }
 
     @Override
-    protected User expectedStateAfter(DeleteUser command) {
-        return User
+    protected UserAccount expectedStateAfter(DeleteUserAccount command) {
+        return UserAccount
                 .newBuilder()
                 .setId(command.getId())
                 .build();

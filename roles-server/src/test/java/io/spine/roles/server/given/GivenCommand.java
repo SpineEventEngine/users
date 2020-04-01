@@ -34,8 +34,10 @@ import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.JoinGroup;
 import io.spine.users.group.command.LeaveGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
-import io.spine.users.user.UserNature;
-import io.spine.users.user.command.CreateUser;
+import io.spine.users.user.command.CreateUserAccount;
+
+import static io.spine.users.server.given.GivenValue.personName;
+import static io.spine.users.server.given.GivenValue.user;
 
 public class GivenCommand {
 
@@ -43,13 +45,12 @@ public class GivenCommand {
     private GivenCommand() {
     }
 
-    public static CreateUser createUser(UserId userId) {
-        return CreateUser
+    public static CreateUserAccount createUser(UserId userId) {
+        return CreateUserAccount
                 .newBuilder()
                 .setId(userId)
-                .setNature(UserNature.UNAVAILABLE)
-                .setDisplayName("display name of " + userId.getValue())
-                .build();
+                .setUser(user(personName("John", "Doe")))
+                .vBuild();
     }
 
     public static CreateGroup createGroup(GroupId group) {
@@ -58,7 +59,6 @@ public class GivenCommand {
                 .setId(group)
                 .setDisplayName("group " + group.getValue())
                 .setEmail(GroupTestEnv.groupEmail())
-                .setOrgEntity(GroupTestEnv.groupOrgEntityOrganization())
                 .setDescription(GroupTestEnv.groupDescription())
                 .build();
     }

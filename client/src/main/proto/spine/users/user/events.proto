@@ -34,50 +34,36 @@ import "spine/core/user_id.proto";
 import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/user/user.proto";
 import "spine/users/profiles.proto";
+import "spine/users/user/user.proto";
 
-// A new user was created.
-message UserCreated {
+// A new user account was created.
+message UserAccountCreated {
 
+    // The ID of the account.
     core.UserId id = 1;
 
-    // A kind of user: a person or a machine.
-    UserNature nature = 2 [(required) = true];
-
-    // A user name to be displayed on UI.
-    string display_name = 3 [(required) = true];
-
-    // An email address of a user.
-    net.EmailAddress email = 4;
-
-    // A user profile, if applicable.
-    PersonProfile profile = 8;
+    // The user for whom the account was created.
+    User user = 2 [(required) = true];
 }
 
-// A user was deleted.
-message UserDeleted {
+// An account of a user was deleted.
+message UserAccountDeleted {
 
+    // The ID of the deleted account.
     core.UserId id = 1;
 }
 
-// A user was renamed.
-message UserRenamed {
+// An account of a user was suspended.
+message UserAccountSuspended {
 
+    // The ID of the suspended account.
     core.UserId id = 1;
-
-    // A new name of a user.
-    string new_name = 2 [(required) = true];
-
-    // An old name of a user.
-    string old_name = 3 [(required) = true];
 }
 
-// A user profile was updated.
-message PersonProfileUpdated {
+// A previously suspended account of a user was resumed.
+message UserAccountResumed {
 
+    // The ID of the resumed account.
     core.UserId id = 1;
-
-    // An updated version of the profile.
-    PersonProfile updated_profile = 2 [(required) = true];
 }

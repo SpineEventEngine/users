@@ -58,6 +58,6 @@ message ServiceProfile {
     // Optional descriptive text for the service.
     string description = 2;
 
-    // A picture to show in places where person accounts would show a human photo, if available.
+    // A picture to show in places where person accounts would have a human photo, if available.
     net.Url icon = 3;
 }

@@ -30,36 +30,31 @@ option java_outer_classname = "UserProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-import "google/protobuf/timestamp.proto";
 import "spine/core/user_id.proto";
-import "spine/net/internet_domain.proto";
-import "spine/net/email_address.proto";
-import "spine/users/identifiers.proto";
 import "spine/users/profiles.proto";
 
-//TODO:2020-03-30:alexander.yevsyukov: Rename to UserAccount
-// A user of the application, either a person or machine.
-//
-// A user is a leaf in the hierarchical structure of the organization. It can have either
-// a single `Organization` or single `OrgUnit` as a parent organizational entity.
-//
+// A user of a computer system.
 message User {
+    option (required_field) = "person|service";
+
+    oneof type {
+        // The user is a human.
+        PersonProfile person = 2;
+
+        // The user is a computer program.
+        ServiceProfile service = 3;
+    }
+}
+
+// A user of the application, either a person or a computer program.
+message UserAccount {
     option (entity).kind = AGGREGATE;
 
+    // The ID of the account
     core.UserId id = 1;
 
-    //TODO:2020-03-30:alexander.yevsyukov: Have oneof instead which switches between PersonProfile and ServiceProfile.
-    // Nature of a user: a person or machine.
-    UserNature nature = 2 [(required) = true];
-
-    // A user name to be displayed on UI.
-    string display_name = 3 [(required) = true];
-
-    // An email address of a user.
-    net.EmailAddress email = 4;
-
-    // General profile information for a user, if applicable.
-    PersonProfile profile = 7;
+    // The user of the system.
+    User user = 2 [(required) = true];
 }
 
 // Enumerates possible statuses of a user account
@@ -91,24 +86,4 @@ message UserAccountStatus {
 
     // The value of the status.
     AccountStatus value = 2 [(required) = true];
-}
-
-// The fundamental kind of `User`.
-//
-enum UserNature {
-
-    //TODO:2020-03-30:alexander.yevsyukov: Remove in favor of oneof under UserAccount
-    // The default value.
-    UN_UNKNOWN = 0;
-
-    // A `User` represents a person and acts on behalf of this person.
-    PERSON = 1;
-
-    // A `User` is a machine, a service account, which acts on behalf of an inanimate entity
-    // such as a printer, a CRON job, a bot.
-    //
-    MACHINE = 2;
-
-    // A user is external and its nature is unknown.
-    UNAVAILABLE = 3;
 }

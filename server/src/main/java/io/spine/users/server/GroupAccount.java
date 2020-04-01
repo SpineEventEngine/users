@@ -41,7 +41,7 @@ import io.spine.users.orgunit.OrgUnit;
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
  *
- * <p>A {@code Group} is the way to group {@linkplain UserPart users} by their common functions
+ * <p>A {@code Group} is the way to group {@linkplain UserAccountPart users} by their common functions
  * and functional roles inside of an {@linkplain Organization organization} or
  * {@linkplain OrgUnit organizational unit}.
  *

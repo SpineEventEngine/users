@@ -23,9 +23,10 @@ package io.spine.users.server;
 import io.spine.core.UserId;
 import io.spine.server.BoundedContext;
 import io.spine.server.aggregate.AggregateRoot;
+import io.spine.users.user.UserAccount;
 
 /**
- * The {@link io.spine.users.user.User} aggregate root.
+ * The {@link UserAccount} aggregate root.
  */
 public final class UserRoot extends AggregateRoot<UserId> {
 
