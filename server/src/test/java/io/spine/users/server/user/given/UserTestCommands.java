@@ -43,7 +43,7 @@ public class UserTestCommands {
     public static CreateUserAccount createUserAccount(UserId id) {
         return CreateUserAccount
                 .newBuilder()
-                .setId(id)
+                .setAccount(id)
                 .setUser(User.newBuilder()
                              .setPerson(profile())
                              .vBuild())
@@ -67,10 +67,10 @@ public class UserTestCommands {
                 .build();
     }
 
-    public static DeleteUserAccount deleteUser(UserId id) {
+    public static DeleteUserAccount deleteUserAccount(UserId id) {
         return DeleteUserAccount
                 .newBuilder()
-                .setId(id)
+                .setAccount(id)
                 .build();
     }
 }

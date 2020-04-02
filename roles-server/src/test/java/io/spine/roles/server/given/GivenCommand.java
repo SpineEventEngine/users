@@ -48,7 +48,7 @@ public class GivenCommand {
     public static CreateUserAccount createUser(UserId userId) {
         return CreateUserAccount
                 .newBuilder()
-                .setId(userId)
+                .setAccount(userId)
                 .setUser(user(personName("John", "Doe")))
                 .vBuild();
     }

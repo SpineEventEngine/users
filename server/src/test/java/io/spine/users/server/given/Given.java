@@ -20,7 +20,6 @@
 
 package io.spine.users.server.given;
 
-import com.google.errorprone.annotations.FormatString;
 import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
@@ -72,7 +71,7 @@ public final class Given {
                 .vBuild();
     }
 
-    private static String generateId(@FormatString String fmt) {
+    private static String generateId(String fmt) {
         String value = format(fmt, random(1, 1000));
         return value;
     }

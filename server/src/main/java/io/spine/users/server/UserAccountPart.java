@@ -20,16 +20,19 @@
 
 package io.spine.users.server;
 
-import io.spine.core.CommandContext;
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
+import io.spine.users.user.User;
 import io.spine.users.user.UserAccount;
 import io.spine.users.user.command.CreateUserAccount;
 import io.spine.users.user.command.DeleteUserAccount;
 import io.spine.users.user.event.UserAccountCreated;
 import io.spine.users.user.event.UserAccountDeleted;
+import io.spine.users.user.rejection.UnavalableForPreviouslyDeletedAccount;
+import io.spine.users.user.rejection.UserAccountAlreadyDeleted;
+import io.spine.users.user.rejection.UserAccountAlreadyExists;
 
 /**
  * An aggregate for user of the application, either a person or machine.
@@ -45,19 +48,43 @@ final class UserAccountPart
     }
 
     @Assign
-    UserAccountCreated handle(CreateUserAccount command, CommandContext context) {
+    UserAccountCreated handle(CreateUserAccount command)
+            throws UserAccountAlreadyExists,
+                   UnavalableForPreviouslyDeletedAccount {
+        if (isDeleted()) {
+            throw UnavalableForPreviouslyDeletedAccount
+                    .newBuilder()
+                    .setAccount(id())
+                    .build();
+        }
+        boolean userAlreadyExists =
+                !User.getDefaultInstance()
+                     .equals(state().getUser());
+        if (userAlreadyExists) {
+            throw UserAccountAlreadyExists
+                    .newBuilder()
+                    .setAccount(id())
+                    .build();
+        }
         return UserAccountCreated
                 .newBuilder()
-                .setId(command.getId())
+                .setAccount(command.getAccount())
                 .setUser(command.getUser())
                 .vBuild();
     }
 
     @Assign
-    UserAccountDeleted handle(DeleteUserAccount command, CommandContext context) {
+    UserAccountDeleted handle(DeleteUserAccount command)
+            throws UserAccountAlreadyDeleted {
+        if (isDeleted()) {
+            throw UserAccountAlreadyDeleted
+                    .newBuilder()
+                    .setAccount(id())
+                    .build();
+        }
         return UserAccountDeleted
                 .newBuilder()
-                .setId(command.getId())
+                .setAccount(command.getAccount())
                 .vBuild();
     }
 
