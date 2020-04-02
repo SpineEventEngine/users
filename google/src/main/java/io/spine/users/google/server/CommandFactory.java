@@ -42,7 +42,6 @@ import io.spine.users.group.command.RenameGroup;
  *
  * @see GoogleGroupLifecyclePm
  */
-@SuppressWarnings("OverlyCoupledClass") // It is OK for a command factory.
 final class CommandFactory {
 
     private static final CommandFactory INSTANCE = new CommandFactory();
