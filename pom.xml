@@ -126,7 +126,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-protoc-plugin</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.3</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
