@@ -28,7 +28,7 @@ import io.spine.users.user.UserAccount;
 /**
  * The {@link UserAccount} aggregate root.
  */
-public final class UserRoot extends AggregateRoot<UserId> {
+final class UserRoot extends AggregateRoot<UserId> {
 
     UserRoot(BoundedContext context, UserId id) {
         super(context, id);
