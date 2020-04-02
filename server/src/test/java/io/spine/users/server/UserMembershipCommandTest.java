@@ -25,7 +25,7 @@ import io.spine.base.EventMessage;
 import io.spine.core.UserId;
 import io.spine.users.group.UserMembership;
 
-import static io.spine.users.server.user.given.UserTestEnv.userId;
+import static io.spine.users.server.given.Given.userId;
 
 /**
  * An implementation base for the {@link User} aggregate command handler tests.

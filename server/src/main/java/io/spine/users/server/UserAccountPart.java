@@ -37,7 +37,8 @@ import io.spine.users.user.event.UserAccountDeleted;
  * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
  * a single {@code Organization} or single {@code OrgUnit} as a parent organizational entity.
  */
-final class UserAccountPart extends AggregatePart<UserId, UserAccount, UserAccount.Builder, UserRoot> {
+final class UserAccountPart
+        extends AggregatePart<UserId, UserAccount, UserAccount.Builder, UserRoot> {
 
     UserAccountPart(UserRoot root) {
         super(root);

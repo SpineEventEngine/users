@@ -20,20 +20,26 @@
 
 package io.spine.users.server.given;
 
+import com.google.errorprone.annotations.FormatString;
+import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
+import io.spine.testing.core.given.GivenUserId;
+import io.spine.users.GroupId;
 import io.spine.users.PersonProfile;
 import io.spine.users.user.User;
 
+import static io.spine.testing.TestValues.random;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import static java.lang.String.format;
 
 /**
  * Test value objects for the Users context.
  */
-public final class GivenValue {
+public final class Given {
 
     /** Prevents instantiation of this utility class. */
-    private GivenValue() {
+    private Given() {
     }
 
     public static EmailAddress email(String value) {
@@ -63,6 +69,30 @@ public final class GivenValue {
         return User
                 .newBuilder()
                 .setPerson(profile(name))
+                .vBuild();
+    }
+
+    private static String generateId(@FormatString String fmt) {
+        String value = format(fmt, random(1, 1000));
+        return value;
+    }
+
+    public static UserId userId() {
+        String value = generateId("user-%d@example.com");
+        return GivenUserId.of(value);
+    }
+
+    public static GroupId groupId() {
+        return GroupId
+                .newBuilder()
+                .setValue(generateId("group-%d@example.com"))
+                .vBuild();
+    }
+
+    public static EmailAddress email() {
+        return EmailAddress
+                .newBuilder()
+                .setValue(generateId("john-%d@smith.com"))
                 .vBuild();
     }
 }

@@ -20,9 +20,14 @@
 
 package io.spine.users.server;
 
+import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.base.EntityState;
+import io.spine.base.EventMessage;
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
 import io.spine.server.BoundedContextBuilder;
+import io.spine.testing.server.EventSubject;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +68,36 @@ public abstract class UsersContextTest {
         context.close();
     }
 
-    protected BlackBoxContext context() {
+    protected final BlackBoxContext context() {
         return checkNotNull(context);
+    }
+
+    /**
+     * Asserts that the context generated only one event of the passed type.
+     *
+     * @param eventClass
+     *         the type of the event to assert
+     * @return the subject for further assertions
+     */
+    @CanIgnoreReturnValue
+    protected final ProtoFluentAssertion assertEvent(Class<? extends EventMessage> eventClass) {
+        EventSubject assertEvents =
+                context().assertEvents()
+                         .withType(eventClass);
+        assertEvents.hasSize(1);
+        return assertEvents.message(0)
+                           .comparingExpectedFieldsOnly();
+    }
+
+    /**
+     * Asserts that there is an entity with the state of the passed type and ID.
+     */
+    protected final <I, S extends EntityState> ProtoFluentAssertion
+    assertEntityState(Class<S> stateClass, I id) {
+        ProtoFluentAssertion stateAssertion =
+                context().assertEntityWithState(stateClass, id)
+                         .hasStateThat()
+                         .comparingExpectedFieldsOnly();
+        return stateAssertion;
     }
 }

@@ -36,8 +36,8 @@ import io.spine.users.group.command.LeaveGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.command.CreateUserAccount;
 
-import static io.spine.users.server.given.GivenValue.personName;
-import static io.spine.users.server.given.GivenValue.user;
+import static io.spine.users.server.given.Given.personName;
+import static io.spine.users.server.given.Given.user;
 
 public class GivenCommand {
 

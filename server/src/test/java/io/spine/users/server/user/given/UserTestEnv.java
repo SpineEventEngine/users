@@ -20,12 +20,9 @@
 
 package io.spine.users.server.user.given;
 
-import io.spine.core.UserId;
-import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
-import io.spine.testing.core.given.GivenUserId;
-import io.spine.users.GroupId;
 import io.spine.users.PersonProfile;
+import io.spine.users.server.given.Given;
 
 /**
  * The environment for the {@code UserPart} tests.
@@ -38,45 +35,11 @@ public class UserTestEnv {
     private UserTestEnv() {
     }
 
-    public static UserId userId() {
-        return GivenUserId.of("john.smith@example.com");
-    }
-
-    public static GroupId firstGroupId() {
-        return GroupId
-                .newBuilder()
-                .setValue("fisrt_group@example.com")
-                .vBuild();
-    }
-
-    public static String userDisplayName() {
-        return "John Smith";
-    }
-
-    public static String newUserDisplayName() {
-        return "John Doe";
-    }
-
     public static PersonProfile profile() {
         return PersonProfile
                 .newBuilder()
                 .setName(personName())
-                .setEmail(email())
-                .vBuild();
-    }
-
-    public static PersonProfile newProfile() {
-        return PersonProfile
-                .newBuilder()
-                .setName(newPersonName())
-                .setEmail(newEmail())
-                .vBuild();
-    }
-
-    private static EmailAddress email() {
-        return EmailAddress
-                .newBuilder()
-                .setValue("john@smith.com")
+                .setEmail(Given.email())
                 .vBuild();
     }
 
@@ -85,22 +48,6 @@ public class UserTestEnv {
                 .newBuilder()
                 .setGivenName("Jane")
                 .setFamilyName("Jones")
-                .vBuild();
-    }
-
-    private static EmailAddress newEmail() {
-        return EmailAddress
-                .newBuilder()
-                .setValue("john+alias@smith.com")
-                .vBuild();
-    }
-
-    private static PersonName newPersonName() {
-        return PersonName
-                .newBuilder()
-                .setGivenName("John")
-                .setMiddleName("The Person")
-                .setFamilyName("Smith")
                 .vBuild();
     }
 }
