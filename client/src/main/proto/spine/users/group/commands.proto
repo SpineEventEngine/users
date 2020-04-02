@@ -31,14 +31,13 @@ option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
-import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/group/group.proto";
 
 // Creates a group.
 message CreateGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
@@ -46,48 +45,38 @@ message CreateGroup {
     // A human-friendly description of a group.
     string description = 3;
 
-    // An entity a group belongs to.
-    oneof origin {
-
-        // An organization or orgunit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 4;
-
-        // An external domain.
-        net.InternetDomain external_domain = 5;
-    }
-
     // An email address of the group, if applicable.
-    net.EmailAddress email = 6;
+    net.EmailAddress email = 4;
 }
 
 // Deletes a group.
 message DeleteGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 }
 
 // Joins a parent group.
 message JoinParentGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // An ID of the parent group.
-    GroupId parent_group_id = 2 [(required) = true];
+    GroupId parent_group = 2 [(required) = true];
 }
 
 // Leaves a parent group.
 message LeaveParentGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // An ID of the parent group.
-    GroupId parent_group_id = 2 [(required) = true];
+    GroupId parent_group = 2 [(required) = true];
 }
 
 // Renames a group.
 message RenameGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // A new name.
     string new_name = 2 [(required) = true];
@@ -96,7 +85,7 @@ message RenameGroup {
 // Changes a group email address.
 message ChangeGroupEmail {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // A new email address of the group.
     net.EmailAddress new_email = 2 [(required) = true];
@@ -105,30 +94,35 @@ message ChangeGroupEmail {
 // Changes a description of a group.
 message ChangeGroupDescription {
 
-    GroupId id = 1;
+    // The group for which we update the description.
+    GroupId group = 1;
 
     // A new human-friendly description of a group.
     string description = 2 [(required) = true];
+
+    //TODO:2020-04-02:alexander.yevsyukov: Add previous value of the description.
 }
 
-// Joins a group.
-message JoinGroup {
+// Add a user to a group.
+message AddUserToGroup {
 
-    core.UserId id = 1;
+    // The group to which add the user.
+    GroupId group = 1 [(required) = true];
 
-    // An ID of a group.
-    GroupId group_id = 2 [(required) = true];
+    // The user to be added.
+    core.UserId user = 2 [(required) = true];
 
-    // A role of a user in the group.
-    RoleInGroup role = 3 [(required) = true];
+    // A role of the user in the group.
+    Role role = 3 [(required) = true];
 }
 
-// Leaves a group.
-message LeaveGroup {
+// Remove a user from a group.
+message RemoveUserFromGroup {
 
-    core.UserId id = 1;
+    // The group from which to remove the user.
+    GroupId group = 1 [(required) = true];
 
-    // An ID of a group.
-    GroupId group_id = 2 [(required) = true];
+    // The user to be removed from the group.
+    core.UserId user = 2 [(required) = true];
 }
 

@@ -30,9 +30,9 @@ import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
 import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.users.GroupId;
 import io.spine.users.group.RoleInGroup;
+import io.spine.users.group.command.AddUserToGroup;
 import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.command.JoinGroup;
-import io.spine.users.group.command.LeaveGroup;
+import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.command.CreateUserAccount;
 
@@ -63,8 +63,8 @@ public class GivenCommand {
                 .build();
     }
 
-    public static JoinGroup joinGroup(UserId user, GroupId groupId) {
-        return JoinGroup
+    public static AddUserToGroup joinGroup(UserId user, GroupId groupId) {
+        return AddUserToGroup
                 .newBuilder()
                 .setId(user)
                 .setGroupId(groupId)
@@ -72,8 +72,8 @@ public class GivenCommand {
                 .build();
     }
 
-    public static LeaveGroup leaveGroup(UserId userId, GroupId group) {
-        return LeaveGroup
+    public static RemoveUserFromGroup leaveGroup(UserId userId, GroupId group) {
+        return RemoveUserFromGroup
                 .newBuilder()
                 .setId(userId)
                 .setGroupId(group)

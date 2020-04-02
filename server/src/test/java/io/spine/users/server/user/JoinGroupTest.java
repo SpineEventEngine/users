@@ -21,10 +21,10 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.users.group.command.AddUserToGroup;
 import io.spine.users.server.UserMembershipCommandTest;
 import io.spine.users.group.UserMembership;
 import io.spine.users.group.UserMembershipRecord;
-import io.spine.users.group.command.JoinGroup;
 import io.spine.users.group.event.UserJoinedGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
 
 @DisplayName("`JoinGroup` command should")
-class JoinGroupTest extends UserMembershipCommandTest<JoinGroup, UserJoinedGroup> {
+class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserJoinedGroup> {
 
     @Test
     @DisplayName("produce `UserJoinedGroup` event and update the user group membership")
@@ -42,12 +42,12 @@ class JoinGroupTest extends UserMembershipCommandTest<JoinGroup, UserJoinedGroup
     }
 
     @Override
-    protected JoinGroup command(UserId id) {
+    protected AddUserToGroup command(UserId id) {
         return joinGroup(id);
     }
 
     @Override
-    protected UserJoinedGroup expectedEventAfter(JoinGroup command) {
+    protected UserJoinedGroup expectedEventAfter(AddUserToGroup command) {
         return UserJoinedGroup
                 .newBuilder()
                 .setId(command.getId())
@@ -57,7 +57,7 @@ class JoinGroupTest extends UserMembershipCommandTest<JoinGroup, UserJoinedGroup
     }
 
     @Override
-    protected UserMembership expectedStateAfter(JoinGroup command) {
+    protected UserMembership expectedStateAfter(AddUserToGroup command) {
         return UserMembership
                 .newBuilder()
                 .setId(command.getId())
@@ -65,7 +65,7 @@ class JoinGroupTest extends UserMembershipCommandTest<JoinGroup, UserJoinedGroup
                 .buildPartial();
     }
 
-    private static UserMembershipRecord membershipAfter(JoinGroup command) {
+    private static UserMembershipRecord membershipAfter(AddUserToGroup command) {
         return UserMembershipRecord
                 .newBuilder()
                 .setGroupId(command.getGroupId())

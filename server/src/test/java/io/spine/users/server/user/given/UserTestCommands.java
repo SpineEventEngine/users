@@ -21,8 +21,8 @@
 package io.spine.users.server.user.given;
 
 import io.spine.core.UserId;
-import io.spine.users.group.command.JoinGroup;
-import io.spine.users.group.command.LeaveGroup;
+import io.spine.users.group.command.AddUserToGroup;
+import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.user.User;
 import io.spine.users.user.command.CreateUserAccount;
 import io.spine.users.user.command.DeleteUserAccount;
@@ -50,8 +50,8 @@ public class UserTestCommands {
                 .vBuild();
     }
 
-    public static JoinGroup joinGroup(UserId id) {
-        return JoinGroup
+    public static AddUserToGroup joinGroup(UserId id) {
+        return AddUserToGroup
                 .newBuilder()
                 .setId(id)
                 .setGroupId(groupId())
@@ -59,8 +59,8 @@ public class UserTestCommands {
                 .build();
     }
 
-    public static LeaveGroup leaveGroup(UserId id) {
-        return LeaveGroup
+    public static RemoveUserFromGroup leaveGroup(UserId id) {
+        return RemoveUserFromGroup
                 .newBuilder()
                 .setId(id)
                 .setGroupId(groupId())

@@ -39,7 +39,7 @@ import "spine/users/group/group.proto";
 // The new group was created.
 message GroupCreated {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // The name of the group to display on UI.
     string display_name = 2 [(required) = true];
@@ -54,31 +54,31 @@ message GroupCreated {
 // The group joined a parent group, that is, became a member of another group.
 message JoinedParentGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // The ID of the parent group.
-    GroupId parent_group_id = 2 [(required) = true];
+    GroupId parent_group = 2 [(required) = true];
 }
 
 // The group left its parent group.
 message LeftParentGroup {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // The ID of the parent group.
-    GroupId parent_group_id = 2 [(required) = true];
+    GroupId parent_group = 2 [(required) = true];
 }
 
 // The group was deleted.
 message GroupDeleted {
 
-    GroupId id = 1;
+    GroupId group = 1;
 }
 
 // The group was renamed.
 message GroupRenamed {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // The new name.
     string new_name = 2 [(required) = true];
@@ -90,7 +90,7 @@ message GroupRenamed {
 // The group email address was changed.
 message GroupEmailChanged {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // A new email address of the group.
     net.EmailAddress new_email = 2 [(required) = true];
@@ -102,7 +102,7 @@ message GroupEmailChanged {
 // The group description changed.
 message GroupDescriptionChanged {
 
-    GroupId id = 1;
+    GroupId group = 1;
 
     // A new human-friendly description of the group.
     string new_description = 2 [(required) = true];
@@ -114,20 +114,20 @@ message GroupDescriptionChanged {
 // A user joined a group.
 message UserJoinedGroup {
 
-    core.UserId id = 1;
+    core.UserId user = 1;
 
     // An ID of the group.
-    users.GroupId group_id = 2 [(required) = true];
+    users.GroupId group = 2 [(required) = true];
 
     // A role of a user in the group.
-    RoleInGroup role = 3 [(required) = true];
+    Role role = 3 [(required) = true];
 }
 
 // A user left a group.
 message UserLeftGroup {
 
-    core.UserId id = 1;
+    core.UserId user = 1;
 
     // An ID of the group.
-    users.GroupId group_id = 2 [(required) = true];
+    users.GroupId group = 2 [(required) = true];
 }

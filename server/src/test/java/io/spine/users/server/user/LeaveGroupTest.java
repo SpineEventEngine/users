@@ -21,9 +21,9 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
+import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.server.UserMembershipCommandTest;
 import io.spine.users.group.UserMembership;
-import io.spine.users.group.command.LeaveGroup;
 import io.spine.users.group.event.UserLeftGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
 import static io.spine.users.server.user.given.UserTestCommands.leaveGroup;
 
 @DisplayName("`LeaveGroup` command should")
-class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup, UserLeftGroup> {
+class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, UserLeftGroup> {
 
     @Test
     @DisplayName("produce `UserLeftGroup` event and update the user group membership")
@@ -43,12 +43,12 @@ class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup, UserLeftGroup
     }
 
     @Override
-    protected LeaveGroup command(UserId id) {
+    protected RemoveUserFromGroup command(UserId id) {
         return leaveGroup(id);
     }
 
     @Override
-    protected UserLeftGroup expectedEventAfter(LeaveGroup command) {
+    protected UserLeftGroup expectedEventAfter(RemoveUserFromGroup command) {
         return UserLeftGroup
                 .newBuilder()
                 .setId(command.getId())
@@ -57,7 +57,7 @@ class LeaveGroupTest extends UserMembershipCommandTest<LeaveGroup, UserLeftGroup
     }
 
     @Override
-    protected UserMembership expectedStateAfter(LeaveGroup command) {
+    protected UserMembership expectedStateAfter(RemoveUserFromGroup command) {
         return UserMembership
                 .newBuilder()
                 .setId(command.getId())

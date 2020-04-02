@@ -26,6 +26,7 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
+import io.spine.users.group.Membership;
 import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.event.JoinedParentGroup;
@@ -63,8 +64,8 @@ final class GroupMembershipPart
         ensureNoCycles(command);
         return JoinedParentGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setParentGroupId(command.getParentGroupId())
+                .setGroup(command.getGroup())
+                .setParentGroup(command.getParentGroup())
                 .build();
     }
 
@@ -72,19 +73,23 @@ final class GroupMembershipPart
     LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
         return LeftParentGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setParentGroupId(command.getParentGroupId())
+                .setGroup(command.getGroup())
+                .setParentGroup(command.getParentGroup())
                 .build();
     }
 
     @Apply
     private void on(JoinedParentGroup event) {
-        builder().addMembership(event.getParentGroupId());
+        builder().addMembership(
+                Membership.newBuilder()
+                          .setGroup(event.getParentGroup())
+                          .vBuild()
+        );
     }
 
     @Apply
     private void on(LeftParentGroup event) {
-        removeMembership(event.getParentGroupId());
+        removeMembership(event.getParentGroup());
     }
 
     private static void ensureNoCycles(JoinParentGroup event) throws GroupsCannotFormCycles {
@@ -94,7 +99,8 @@ final class GroupMembershipPart
 
     private void removeMembership(GroupId parentGroup) {
         GroupMembership.Builder builder = builder();
-        List<GroupId> memberships = builder.getMembershipList();
+        List<Membership> memberships = builder.getMembershipList();
+        //TODO:2020-04-02:alexander.yevsyukov: Implement.
         if (memberships.contains(parentGroup)) {
             int index = memberships.indexOf(parentGroup);
             builder.removeMembership(index);

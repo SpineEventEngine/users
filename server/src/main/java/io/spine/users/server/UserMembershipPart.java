@@ -25,23 +25,22 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
+import io.spine.users.group.Membership;
 import io.spine.users.group.UserMembership;
-import io.spine.users.group.UserMembershipRecord;
-import io.spine.users.group.command.JoinGroup;
-import io.spine.users.group.command.LeaveGroup;
+import io.spine.users.group.command.AddUserToGroup;
+import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.group.event.UserJoinedGroup;
 import io.spine.users.group.event.UserLeftGroup;
 
 import java.util.Optional;
 
-import static io.spine.users.group.RoleInGroup.MEMBER;
 
 /**
  * A user membership in multiple {@linkplain GroupRoot groups},
  * a part of {@linkplain UserRoot User} aggregate.
  *
  * <p>If a user shares its functions and roles with a number of other users they can join
- * one or more groups (please see {@link JoinGroup}, {@link LeaveGroup} commands).
+ * one or more groups (please see {@link AddUserToGroup}, {@link RemoveUserFromGroup} commands).
  */
 final class UserMembershipPart
         extends AggregatePart<UserId, UserMembership, UserMembership.Builder, UserRoot> {
@@ -51,57 +50,55 @@ final class UserMembershipPart
     }
 
     @Assign
-    UserJoinedGroup handle(JoinGroup command) {
+    UserJoinedGroup handle(AddUserToGroup command) {
         UserJoinedGroup event = UserJoinedGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setGroupId(command.getGroupId())
-                .setRole(MEMBER)
+                .setUser(command.getUser())
+                .setGroup(command.getGroup())
+                .setRole(command.getRole())
                 .vBuild();
         return event;
     }
 
     @Assign
-    UserLeftGroup handle(LeaveGroup command) {
+    UserLeftGroup handle(RemoveUserFromGroup command) {
         UserLeftGroup event = UserLeftGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setGroupId(command.getGroupId())
+                .setUser(command.getUser())
+                .setGroup(command.getGroup())
                 .vBuild();
         return event;
     }
 
     @Apply
     private void on(UserJoinedGroup event) {
-        UserMembershipRecord membershipRecord = UserMembershipRecord
-                .newBuilder()
-                .setGroupId(event.getGroupId())
-                .setRole(event.getRole())
-                .vBuild();
-        builder()
-                .setId(id())
-                .addMembership(membershipRecord);
+        builder().addMembership(
+                Membership
+                        .newBuilder()
+                        .setGroup(event.getGroup())
+                        .setRole(event.getRole())
+                        .vBuild()
+        );
     }
 
     @Apply
     private void on(UserLeftGroup event) {
-        Optional<UserMembershipRecord> membership = findMembership(event.getGroupId());
+        Optional<Membership> membership = findMembership(event.getGroup());
         membership.ifPresent(this::removeMembership);
     }
 
-    private void removeMembership(UserMembershipRecord record) {
+    private void removeMembership(Membership record) {
         int index = builder().getMembershipList()
                              .indexOf(record);
         builder().removeMembership(index);
     }
 
-    private Optional<UserMembershipRecord> findMembership(GroupId groupId) {
-        Optional<UserMembershipRecord> record =
+    private Optional<Membership> findMembership(GroupId groupId) {
+        Optional<Membership> found =
                 builder().getMembershipList()
                          .stream()
-                         .filter(membership -> membership.getGroupId()
-                                                         .equals(groupId))
+                         .filter(membership -> groupId.equals(membership.getGroup()))
                          .findFirst();
-        return record;
+        return found;
     }
 }

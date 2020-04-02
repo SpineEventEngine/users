@@ -31,98 +31,111 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
-import "spine/net/internet_domain.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 
-// A `Group` is a way to group users by their common functions and functional roles inside of
-// an organization or organizational unit.
+// A group gathers users on a common purpose of collaboration.
+//
+// Users can be added to the group directly, or via other groups added to this group.
 //
 message Group {
     option (entity).kind = AGGREGATE;
 
+    // The ID of the group.
     GroupId id = 1;
 
     // A name of a group to display on UI.
     string display_name = 2 [(required) = true];
 
-    // An email address of the group if applicable.
+    // A text describing the purpose of the group.
+    string description = 3;
+
+    // An email address of the group, if applicable.
     //
     // The email address may be used to send messages to all the group members.
     //
-    net.EmailAddress email = 3;
-
-    // A human-friendly description of a group.
-    string description = 4;
-
-    // An entity a group belongs to.
-    oneof origin {
-
-        // An organization or org. unit in one of the tenant's domains.
-        OrganizationOrUnit org_entity = 5;
-
-        // An external domain.
-        net.InternetDomain external_domain = 6;
-    }
+    net.EmailAddress email = 4;
 }
 
-// A group's membership in other groups, a part of the `Group` aggregate.
-//
-// It is forbidden for groups to directly or indirectly join themselves; in other words,
-// all nested group memberships must always form an acyclic graph.
-//
-message GroupMembership {
+// Provides information about users and groups added to a given group.
+message GroupMembers {
     option (entity).kind = AGGREGATE;
 
+    // The ID of the group.
     GroupId id = 1;
 
-    // Other groups this group is a member of.
-    repeated GroupId membership = 2;
+    // Members added directly to this group.
+    repeated Member member = 2;
 }
 
-// A user membership in multiple groups, a part of `User` aggregate.
-//
-// If a `User` shares its functions and roles with a number of other users they can join
-// one or more `Group`s (please see `JoinGroup`, `LeaveGroup` commands).
-//
-message UserMembership {
-    option (entity).kind = AGGREGATE;
+// A member of a group.
+message Member {
+    option (required_field) = "user|group";
 
-    core.UserId id = 1;
+    oneof kind {
+        // The user who is added directly to the group.
+        core.UserId user = 1;
 
-    // The group memberships of a `User`.
-    repeated UserMembershipRecord membership = 2;
+        // The group which is added directly to the group.
+        GroupId group = 2;
+    }
+
+    // The role of the member in the group.
+    Role role = 3 [(required) = true];
 }
 
-//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
-// A single record about a membership in the aggregate part.
-//
-message UserMembershipRecord {
+// Defines roles which a member may have in a group.
+enum Role {
 
-    // An ID of a group.
-    GroupId group_id = 1 [(required) = true];
+    // The role was not specified. A member cannot be added to a group with this value.
+    ROLE_UNSPECIFIED = 0;
 
-    // A role of a user in the group.
-    RoleInGroup role = 2 [(required) = true];
-}
-
-//TODO:2020-03-30:alexander.yevsyukov: Move under the Membership type
-// A role of the `User` as a member of the group.
-//
-// This role defines whether a user is a regular member or can manage the group.
-//
-enum RoleInGroup {
-
-    // The default value.
-    RIG_UNKNOWN = 0;
-
-    // A regular member of a group: can't add or remove members, rename the group, etc.
+    // A regular member of a group.
     MEMBER = 1;
 
     // A privileged member with permissions to manage the group.
-    PRIVILEGED = 2; //TODO:2020-03-30:alexander.yevsyukov: Rename to MANAGER
+    MANAGER = 2;
 
     // A person who can delete the group and add manage other owners.
     OWNER = 3;
 }
+
+// Defines membership in a group.
+message Membership {
+
+    // The group to which the member belongs.
+    GroupId group = 1 [(required) = true];
+
+    // The role in the group.
+    Role role = 2 [(required) = true];
+}
+
+// To which groups this user belongs directly?
+message UserMembership {
+    option (entity).kind = AGGREGATE;
+
+    // The ID of the user who is the member of some groups.
+    core.UserId user = 1 [(required) = true];
+
+    // Groups to which the user belongs.
+    //
+    // Empty if the user is not a member of any group.
+    //
+    repeated Membership membership = 2;
+}
+
+// To which groups this group belongs directly?
+message GroupMembership {
+    option (entity).kind = AGGREGATE;
+
+    // The ID of the group which is a member of other groups.
+    GroupId group = 1 [(required) = true];
+
+    // Groups to which this group belong directly.
+    //
+    // Empty if this group is not a member of any other group.
+    //
+    repeated Membership membership = 2;
+}
+
 

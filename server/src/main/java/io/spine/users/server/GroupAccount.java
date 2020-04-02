@@ -60,7 +60,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     GroupCreated handle(CreateGroup command) {
         return GroupCreated
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
                 .setDescription(command.getDescription())
@@ -71,7 +71,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     GroupDeleted handle(DeleteGroup command) {
         return GroupDeleted
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .build();
     }
 
@@ -79,7 +79,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     GroupRenamed handle(RenameGroup command) {
         return GroupRenamed
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
                 .build();
@@ -90,7 +90,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     GroupEmailChanged handle(ChangeGroupEmail command) {
         return GroupEmailChanged
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setNewEmail(command.getNewEmail())
                 .setOldEmail(state().getEmail())
                 .build();
@@ -100,7 +100,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     GroupDescriptionChanged handle(ChangeGroupDescription command) {
         return GroupDescriptionChanged
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setNewDescription(command.getDescription())
                 .setOldDescription(state().getDescription())
                 .build();
@@ -109,7 +109,7 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     @Apply
     private void on(GroupCreated event) {
         Group.Builder builder = builder();
-        builder.setId(event.getId())
+        builder.setId(event.getGroup())
                .setDisplayName(event.getDisplayName())
                .setEmail(event.getEmail())
                .setDescription(event.getDescription());
