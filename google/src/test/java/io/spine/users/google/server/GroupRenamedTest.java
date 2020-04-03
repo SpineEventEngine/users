@@ -45,7 +45,7 @@ class GroupRenamedTest extends UsersContextTest {
         GoogleGroupRenamed event = googleGroupRenamed(groupId);
         RenameGroup expectedCmd = RenameGroup
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(groupId)
                 .setNewName(event.getDisplayName())
                 .build();
         context().receivesCommand(createGroup)

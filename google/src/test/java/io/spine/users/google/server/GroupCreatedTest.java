@@ -59,7 +59,7 @@ class GroupCreatedTest extends UsersContextTest {
 
             CreateGroup expectedCmd = CreateGroup
                     .newBuilder()
-                    .setId(GROUP_ID)
+                    .setGroup(GROUP_ID)
                     .setDisplayName(event.getDisplayName())
                     .setEmail(event.getEmail())
                     .build();
@@ -89,10 +89,9 @@ class GroupCreatedTest extends UsersContextTest {
             GoogleGroupCreated event = externalGoogleGroupCreated(GROUP_ID);
             CreateGroup expectedCmd = CreateGroup
                     .newBuilder()
-                    .setId(GROUP_ID)
+                    .setGroup(GROUP_ID)
                     .setDisplayName(event.getDisplayName())
                     .setEmail(event.getEmail())
-                    .setExternalDomain(event.getDomain())
                     .build();
             context().receivesEvent(event)
                      .assertCommands()

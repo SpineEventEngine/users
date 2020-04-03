@@ -20,8 +20,6 @@
 
 package io.spine.users.google.server;
 
-import io.spine.users.OrganizationId;
-import io.spine.users.OrganizationOrUnit;
 import io.spine.users.google.event.GoogleGroupCreated;
 import io.spine.users.google.event.GoogleGroupDeleted;
 import io.spine.users.google.event.GoogleGroupDescriptionChanged;
@@ -60,10 +58,9 @@ final class CommandFactory {
     CreateGroup createExternalGroup(GoogleGroupCreated event) {
         CreateGroup result = CreateGroup
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
-                .setExternalDomain(event.getDomain())
                 .build();
         return result;
     }
@@ -71,13 +68,12 @@ final class CommandFactory {
     /**
      * Creates {@link CreateGroup} command for a group from a tenant's domain.
      */
-    CreateGroup createInternalGroup(GoogleGroupCreated event, OrganizationId organization) {
+    CreateGroup createInternalGroup(GoogleGroupCreated event) {
         CreateGroup result = CreateGroup
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
-                .setOrgEntity(orgEntity(organization))
                 .build();
         return result;
     }
@@ -89,8 +85,8 @@ final class CommandFactory {
     JoinParentGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
         return JoinParentGroup
                 .newBuilder()
-                .setId(event.getId())
-                .setParentGroupId(event.getNewParentId())
+                .setGroup(event.getId())
+                .setParentGroup(event.getNewParentId())
                 .build();
     }
 
@@ -101,7 +97,7 @@ final class CommandFactory {
     RenameGroup renameGroup(GoogleGroupRenamed event) {
         return RenameGroup
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .setNewName(event.getDisplayName())
                 .build();
     }
@@ -113,8 +109,8 @@ final class CommandFactory {
     LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
         return LeaveParentGroup
                 .newBuilder()
-                .setId(event.getId())
-                .setParentGroupId(event.getParentGroupId())
+                .setGroup(event.getId())
+                .setParentGroup(event.getParentGroupId())
                 .build();
     }
 
@@ -125,7 +121,7 @@ final class CommandFactory {
     DeleteGroup deleteGroup(GoogleGroupDeleted event) {
         return DeleteGroup
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .build();
     }
 
@@ -136,7 +132,7 @@ final class CommandFactory {
     ChangeGroupEmail changeEmail(GoogleGroupEmailChanged event) {
         return ChangeGroupEmail
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .setNewEmail(event.getNewEmail())
                 .build();
     }
@@ -144,15 +140,8 @@ final class CommandFactory {
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
         return ChangeGroupDescription
                 .newBuilder()
-                .setId(event.getId())
+                .setGroup(event.getId())
                 .setDescription(event.getNewDescription())
-                .build();
-    }
-
-    private static OrganizationOrUnit orgEntity(OrganizationId org) {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(org)
                 .build();
     }
 }

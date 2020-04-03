@@ -34,7 +34,6 @@ import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.groupName;
-import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
 import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
 
 /**
@@ -51,10 +50,9 @@ public class GroupTestCommands {
     public static CreateGroup createGroup(GroupId id) {
         return CreateGroup
                 .newBuilder()
-                .setId(id)
+                .setGroup(id)
                 .setDisplayName(groupName())
                 .setEmail(groupEmail())
-                .setOrgEntity(groupOrgEntityOrganization())
                 .setDescription(groupDescription())
                 .vBuild();
     }
@@ -62,30 +60,30 @@ public class GroupTestCommands {
     public static DeleteGroup deleteGroup(GroupId groupId) {
         return DeleteGroup
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(groupId)
                 .vBuild();
     }
 
     public static JoinParentGroup joinParentGroup(GroupId groupId, GroupId upperGroupId) {
         return JoinParentGroup
                 .newBuilder()
-                .setId(groupId)
-                .setParentGroupId(upperGroupId)
+                .setGroup(groupId)
+                .setParentGroup(upperGroupId)
                 .vBuild();
     }
 
     public static LeaveParentGroup leaveParentGroup(GroupId groupId, GroupId upperGroupId) {
         return LeaveParentGroup
                 .newBuilder()
-                .setId(groupId)
-                .setParentGroupId(upperGroupId)
+                .setGroup(groupId)
+                .setParentGroup(upperGroupId)
                 .vBuild();
     }
 
     public static RenameGroup renameGroup(GroupId id) {
         return RenameGroup
                 .newBuilder()
-                .setId(id)
+                .setGroup(id)
                 .setNewName(anotherGroupName())
                 .vBuild();
     }
@@ -93,7 +91,7 @@ public class GroupTestCommands {
     public static ChangeGroupEmail changeGroupEmail(GroupId id) {
         return ChangeGroupEmail
                 .newBuilder()
-                .setId(id)
+                .setGroup(id)
                 .setNewEmail(newGroupEmail())
                 .vBuild();
     }
@@ -101,7 +99,7 @@ public class GroupTestCommands {
     public static ChangeGroupDescription changeGroupDescription(GroupId id) {
         return ChangeGroupDescription
                 .newBuilder()
-                .setId(id)
+                .setGroup(id)
                 .setDescription(anotherGroupDescription())
                 .vBuild();
     }

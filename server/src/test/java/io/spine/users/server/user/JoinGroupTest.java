@@ -21,11 +21,11 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
-import io.spine.users.group.command.AddUserToGroup;
-import io.spine.users.server.UserMembershipCommandTest;
+import io.spine.users.group.Membership;
 import io.spine.users.group.UserMembership;
-import io.spine.users.group.UserMembershipRecord;
+import io.spine.users.group.command.AddUserToGroup;
 import io.spine.users.group.event.UserJoinedGroup;
+import io.spine.users.server.UserMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -50,8 +50,8 @@ class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserJoined
     protected UserJoinedGroup expectedEventAfter(AddUserToGroup command) {
         return UserJoinedGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setGroupId(command.getGroupId())
+                .setUser(command.getUser())
+                .setGroup(command.getGroup())
                 .setRole(command.getRole())
                 .buildPartial();
     }
@@ -60,15 +60,15 @@ class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserJoined
     protected UserMembership expectedStateAfter(AddUserToGroup command) {
         return UserMembership
                 .newBuilder()
-                .setId(command.getId())
+                .setUser(command.getUser())
                 .addMembership(membershipAfter(command))
                 .buildPartial();
     }
 
-    private static UserMembershipRecord membershipAfter(AddUserToGroup command) {
-        return UserMembershipRecord
+    private static Membership membershipAfter(AddUserToGroup command) {
+        return Membership
                 .newBuilder()
-                .setGroupId(command.getGroupId())
+                .setGroup(command.getGroup())
                 .setRole(command.getRole())
                 .buildPartial();
     }

@@ -42,7 +42,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
     protected GroupCreated expectedEventAfter(CreateGroup command) {
         return GroupCreated
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
                 .setDescription(command.getDescription())
@@ -53,7 +53,7 @@ class CreateGroupTest extends GroupCommandTest<CreateGroup, GroupCreated> {
     protected Group expectedStateAfter(CreateGroup command) {
         return Group
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getGroup())
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
                 .setDescription(command.getDescription())

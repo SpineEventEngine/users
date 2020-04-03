@@ -42,7 +42,7 @@ class GroupDeletedTest extends UsersContextTest {
         GoogleGroupDeleted event = googleGroupDeleted(groupId);
         DeleteGroup expectedCmd = DeleteGroup
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(groupId)
                 .build();
         context().receivesEvent(event)
                  .assertCommands()

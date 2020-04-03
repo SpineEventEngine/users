@@ -41,7 +41,7 @@ final class RolePropagations
     protected void setupEventRouting(EventRouting<GroupId> routing) {
         super.setupEventRouting(routing);
         routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
-        routing.route(UserJoinedGroup.class, (message, context) -> withId(message.getGroupId()));
-        routing.route(UserLeftGroup.class,(message, context) -> withId(message.getGroupId()));
+        routing.route(UserJoinedGroup.class, (message, context) -> withId(message.getGroup()));
+        routing.route(UserLeftGroup.class,(message, context) -> withId(message.getGroup()));
     }
 }

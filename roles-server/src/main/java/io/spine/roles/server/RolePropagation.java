@@ -47,8 +47,8 @@ final class RolePropagation
 
     @React(external = true)
     Collection<RolePropagatedToUser> on(UserJoinedGroup event) {
-        UserId newMember = event.getId();
-        GroupId group = event.getGroupId();
+        UserId newMember = event.getUser();
+        GroupId group = event.getGroup();
         builder().setGroup(group)
                  .addUser(newMember);
         List<RolePropagatedToUser> commands = roles()
@@ -60,8 +60,8 @@ final class RolePropagation
 
     @React(external = true)
     Collection<RolePropagationCanceledForUser> on(UserLeftGroup event) {
-        UserId leftMember = event.getId();
-        GroupId group = event.getGroupId();
+        UserId leftMember = event.getUser();
+        GroupId group = event.getGroup();
         removeUser(leftMember);
         List<RolePropagationCanceledForUser> commands = roles()
                 .stream()

@@ -50,7 +50,7 @@ class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {
     protected GroupDeleted expectedEventAfter(DeleteGroup command) {
         return GroupDeleted
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .build();
     }
 
@@ -58,7 +58,7 @@ class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {
     protected Group expectedStateAfter(DeleteGroup command) {
         return Group
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getGroup())
                 .build();
     }
 

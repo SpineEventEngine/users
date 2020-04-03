@@ -42,7 +42,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
     protected GroupRenamed expectedEventAfter(RenameGroup command) {
         return GroupRenamed
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setNewName(command.getNewName())
                 .build();
     }
@@ -51,7 +51,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
     protected Group expectedStateAfter(RenameGroup command) {
         return Group
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getGroup())
                 .setDisplayName(command.getNewName())
                 .build();
     }

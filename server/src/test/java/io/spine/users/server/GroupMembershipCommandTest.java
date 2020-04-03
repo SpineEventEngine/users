@@ -64,8 +64,8 @@ public abstract class GroupMembershipCommandTest<C extends CommandMessage, E ext
     protected void preCreateGroupMembership(GroupId group, GroupId parentGroup) {
         JoinParentGroup joinParentGroup = JoinParentGroup
                 .newBuilder()
-                .setId(group)
-                .setParentGroupId(parentGroup)
+                .setGroup(group)
+                .setParentGroup(parentGroup)
                 .vBuild();
         context().receivesCommand(joinParentGroup);
     }

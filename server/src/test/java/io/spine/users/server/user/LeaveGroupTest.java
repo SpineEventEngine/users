@@ -21,10 +21,10 @@
 package io.spine.users.server.user;
 
 import io.spine.core.UserId;
-import io.spine.users.group.command.RemoveUserFromGroup;
-import io.spine.users.server.UserMembershipCommandTest;
 import io.spine.users.group.UserMembership;
+import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.group.event.UserLeftGroup;
+import io.spine.users.server.UserMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -51,8 +51,8 @@ class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, User
     protected UserLeftGroup expectedEventAfter(RemoveUserFromGroup command) {
         return UserLeftGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setGroupId(command.getGroupId())
+                .setUser(command.getUser())
+                .setGroup(command.getGroup())
                 .buildPartial();
     }
 
@@ -60,7 +60,7 @@ class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, User
     protected UserMembership expectedStateAfter(RemoveUserFromGroup command) {
         return UserMembership
                 .newBuilder()
-                .setId(command.getId())
+                .setUser(command.getUser())
                 .buildPartial();
     }
 }

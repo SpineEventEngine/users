@@ -42,8 +42,8 @@ class GroupJoinedGroupTest extends UsersContextTest {
         GoogleGroupJoinedParentGroup event = googleGroupJoinedParentGroup(groupId);
         JoinParentGroup expectedCmd = JoinParentGroup
                 .newBuilder()
-                .setId(groupId)
-                .setParentGroupId(event.getNewParentId())
+                .setGroup(groupId)
+                .setParentGroup(event.getNewParentId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()

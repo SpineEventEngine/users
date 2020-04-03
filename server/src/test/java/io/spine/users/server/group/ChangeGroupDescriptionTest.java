@@ -51,7 +51,7 @@ class ChangeGroupDescriptionTest
     protected GroupDescriptionChanged expectedEventAfter(ChangeGroupDescription command) {
         return GroupDescriptionChanged
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .setNewDescription(command.getDescription())
                 .build();
     }
@@ -60,7 +60,7 @@ class ChangeGroupDescriptionTest
     protected Group expectedStateAfter(ChangeGroupDescription command) {
         return Group
                 .newBuilder()
-                .setId(command.getId())
+                .setId(command.getGroup())
                 .setDescription(command.getDescription())
                 .build();
     }

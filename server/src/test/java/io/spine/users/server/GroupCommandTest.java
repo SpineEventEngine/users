@@ -30,7 +30,6 @@ import io.spine.users.server.given.TestIdentifiers;
 import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
 import static io.spine.users.server.group.given.GroupTestEnv.groupName;
-import static io.spine.users.server.group.given.GroupTestEnv.groupOrgEntityOrganization;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
@@ -67,11 +66,10 @@ public abstract class GroupCommandTest<C extends CommandMessage, E extends Event
     protected void preCreateGroup(GroupId id) {
         CreateGroup createGroup = CreateGroup
                 .newBuilder()
-                .setId(id)
-                .setOrgEntity(groupOrgEntityOrganization())
+                .setGroup(id)
                 .setDisplayName(groupName())
-                .setEmail(groupEmail())
                 .setDescription(groupDescription())
+                .setEmail(groupEmail())
                 .vBuild();
         context().receivesCommand(createGroup);
     }

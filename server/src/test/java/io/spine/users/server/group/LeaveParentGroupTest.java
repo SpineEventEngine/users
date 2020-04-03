@@ -50,8 +50,8 @@ class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, 
     protected LeftParentGroup expectedEventAfter(LeaveParentGroup command) {
         return LeftParentGroup
                 .newBuilder()
-                .setId(command.getId())
-                .setParentGroupId(command.getParentGroupId())
+                .setGroup(command.getGroup())
+                .setParentGroup(command.getParentGroup())
                 .build();
     }
 
@@ -59,7 +59,7 @@ class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, 
     protected GroupMembership expectedStateAfter(LeaveParentGroup command) {
         return GroupMembership
                 .newBuilder()
-                .setId(command.getId())
+                .setGroup(command.getGroup())
                 .build();
     }
 }

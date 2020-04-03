@@ -29,13 +29,13 @@ import io.spine.roles.command.DeleteRole;
 import io.spine.roles.command.RemoveRoleAssignmentFromGroup;
 import io.spine.roles.command.RemoveRoleAssignmentFromUser;
 import io.spine.users.GroupId;
-import io.spine.users.group.RoleInGroup;
 import io.spine.users.group.command.AddUserToGroup;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.server.group.given.GroupTestEnv;
 import io.spine.users.user.command.CreateUserAccount;
 
+import static io.spine.users.group.Role.MEMBER;
 import static io.spine.users.server.given.Given.personName;
 import static io.spine.users.server.given.Given.user;
 
@@ -56,7 +56,7 @@ public class GivenCommand {
     public static CreateGroup createGroup(GroupId group) {
         return CreateGroup
                 .newBuilder()
-                .setId(group)
+                .setGroup(group)
                 .setDisplayName("group " + group.getValue())
                 .setEmail(GroupTestEnv.groupEmail())
                 .setDescription(GroupTestEnv.groupDescription())
@@ -66,17 +66,17 @@ public class GivenCommand {
     public static AddUserToGroup joinGroup(UserId user, GroupId groupId) {
         return AddUserToGroup
                 .newBuilder()
-                .setId(user)
-                .setGroupId(groupId)
-                .setRole(RoleInGroup.MEMBER)
+                .setUser(user)
+                .setGroup(groupId)
+                .setRole(MEMBER)
                 .build();
     }
 
     public static RemoveUserFromGroup leaveGroup(UserId userId, GroupId group) {
         return RemoveUserFromGroup
                 .newBuilder()
-                .setId(userId)
-                .setGroupId(group)
+                .setUser(userId)
+                .setGroup(group)
                 .build();
     }
 

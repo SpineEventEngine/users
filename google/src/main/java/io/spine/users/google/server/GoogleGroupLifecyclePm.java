@@ -62,7 +62,7 @@ public class GoogleGroupLifecyclePm
         InternetDomain domain = event.getDomain();
         Optional<OrganizationId> organization = organizationByDomain(domain);
         CreateGroup result =
-                organization.map(id -> commands().createInternalGroup(event, id))
+                organization.map(id -> commands().createInternalGroup(event))
                             .orElseGet(() -> commands().createExternalGroup(event));
         return result;
     }

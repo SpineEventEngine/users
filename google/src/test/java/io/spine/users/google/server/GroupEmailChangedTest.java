@@ -44,7 +44,7 @@ class GroupEmailChangedTest extends UsersContextTest {
         GoogleGroupEmailChanged event = googleGroupEmailChanged(groupId);
         ChangeGroupEmail expectedCmd = ChangeGroupEmail
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(groupId)
                 .setNewEmail(event.getNewEmail())
                 .build();
         context().receivesEvent(event)

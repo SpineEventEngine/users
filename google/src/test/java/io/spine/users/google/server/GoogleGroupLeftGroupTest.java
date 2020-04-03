@@ -42,8 +42,8 @@ class GoogleGroupLeftGroupTest extends UsersContextTest {
         GoogleGroupLeftParentGroup event = googleGroupLeftParentGroup(groupId);
         LeaveParentGroup expectedCmd = LeaveParentGroup
                 .newBuilder()
-                .setId(groupId)
-                .setParentGroupId(event.getParentGroupId())
+                .setGroup(groupId)
+                .setParentGroup(event.getParentGroupId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
