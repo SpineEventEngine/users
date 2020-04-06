@@ -23,7 +23,7 @@ package io.spine.users.server.user;
 import io.spine.core.UserId;
 import io.spine.users.group.UserMembership;
 import io.spine.users.group.command.RemoveUserFromGroup;
-import io.spine.users.group.event.UserLeftGroup;
+import io.spine.users.group.event.UserRemovedFromGroup;
 import io.spine.users.server.UserMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
 import static io.spine.users.server.user.given.UserTestCommands.leaveGroup;
 
 @DisplayName("`LeaveGroup` command should")
-class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, UserLeftGroup> {
+class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, UserRemovedFromGroup> {
 
     @Test
     @DisplayName("produce `UserLeftGroup` event and update the user group membership")
@@ -48,8 +48,8 @@ class LeaveGroupTest extends UserMembershipCommandTest<RemoveUserFromGroup, User
     }
 
     @Override
-    protected UserLeftGroup expectedEventAfter(RemoveUserFromGroup command) {
-        return UserLeftGroup
+    protected UserRemovedFromGroup expectedEventAfter(RemoveUserFromGroup command) {
+        return UserRemovedFromGroup
                 .newBuilder()
                 .setUser(command.getUser())
                 .setGroup(command.getGroup())

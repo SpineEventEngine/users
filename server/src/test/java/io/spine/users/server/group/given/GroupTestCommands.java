@@ -21,11 +21,11 @@
 package io.spine.users.server.group.given;
 
 import io.spine.users.GroupId;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 
@@ -64,8 +64,8 @@ public class GroupTestCommands {
                 .vBuild();
     }
 
-    public static JoinParentGroup joinParentGroup(GroupId groupId, GroupId upperGroupId) {
-        return JoinParentGroup
+    public static AddGroupToGroup joinParentGroup(GroupId groupId, GroupId upperGroupId) {
+        return AddGroupToGroup
                 .newBuilder()
                 .setGroup(groupId)
                 .setParentGroup(upperGroupId)

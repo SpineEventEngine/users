@@ -29,8 +29,8 @@ import io.spine.roles.server.event.RolePropagationCanceledForUser;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
-import io.spine.users.group.event.UserJoinedGroup;
-import io.spine.users.group.event.UserLeftGroup;
+import io.spine.users.group.event.UserAddedToGroup;
+import io.spine.users.group.event.UserRemovedFromGroup;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +46,7 @@ final class RolePropagation
         extends ProcessManager<GroupId, GroupRolesPropagation, GroupRolesPropagation.Builder> {
 
     @React(external = true)
-    Collection<RolePropagatedToUser> on(UserJoinedGroup event) {
+    Collection<RolePropagatedToUser> on(UserAddedToGroup event) {
         UserId newMember = event.getUser();
         GroupId group = event.getGroup();
         builder().setGroup(group)
@@ -59,7 +59,7 @@ final class RolePropagation
     }
 
     @React(external = true)
-    Collection<RolePropagationCanceledForUser> on(UserLeftGroup event) {
+    Collection<RolePropagationCanceledForUser> on(UserRemovedFromGroup event) {
         UserId leftMember = event.getUser();
         GroupId group = event.getGroup();
         removeUser(leftMember);

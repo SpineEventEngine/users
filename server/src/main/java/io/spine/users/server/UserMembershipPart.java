@@ -22,17 +22,9 @@ package io.spine.users.server;
 
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
-import io.spine.server.aggregate.Apply;
-import io.spine.server.command.Assign;
-import io.spine.users.GroupId;
-import io.spine.users.group.Membership;
 import io.spine.users.group.UserMembership;
 import io.spine.users.group.command.AddUserToGroup;
 import io.spine.users.group.command.RemoveUserFromGroup;
-import io.spine.users.group.event.UserJoinedGroup;
-import io.spine.users.group.event.UserLeftGroup;
-
-import java.util.Optional;
 
 
 /**
@@ -49,56 +41,6 @@ final class UserMembershipPart
         super(root);
     }
 
-    @Assign
-    UserJoinedGroup handle(AddUserToGroup command) {
-        UserJoinedGroup event = UserJoinedGroup
-                .newBuilder()
-                .setUser(command.getUser())
-                .setGroup(command.getGroup())
-                .setRole(command.getRole())
-                .vBuild();
-        return event;
-    }
 
-    @Assign
-    UserLeftGroup handle(RemoveUserFromGroup command) {
-        UserLeftGroup event = UserLeftGroup
-                .newBuilder()
-                .setUser(command.getUser())
-                .setGroup(command.getGroup())
-                .vBuild();
-        return event;
-    }
 
-    @Apply
-    private void on(UserJoinedGroup event) {
-        builder().addMembership(
-                Membership
-                        .newBuilder()
-                        .setGroup(event.getGroup())
-                        .setRole(event.getRole())
-                        .vBuild()
-        );
-    }
-
-    @Apply
-    private void on(UserLeftGroup event) {
-        Optional<Membership> membership = findMembership(event.getGroup());
-        membership.ifPresent(this::removeMembership);
-    }
-
-    private void removeMembership(Membership record) {
-        int index = builder().getMembershipList()
-                             .indexOf(record);
-        builder().removeMembership(index);
-    }
-
-    private Optional<Membership> findMembership(GroupId groupId) {
-        Optional<Membership> found =
-                builder().getMembershipList()
-                         .stream()
-                         .filter(membership -> groupId.equals(membership.getGroup()))
-                         .findFirst();
-        return found;
-    }
 }

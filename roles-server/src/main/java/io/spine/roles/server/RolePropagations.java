@@ -25,8 +25,8 @@ import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
 import io.spine.users.GroupId;
-import io.spine.users.group.event.UserJoinedGroup;
-import io.spine.users.group.event.UserLeftGroup;
+import io.spine.users.group.event.UserAddedToGroup;
+import io.spine.users.group.event.UserRemovedFromGroup;
 
 import static io.spine.server.route.EventRoute.withId;
 
@@ -41,7 +41,7 @@ final class RolePropagations
     protected void setupEventRouting(EventRouting<GroupId> routing) {
         super.setupEventRouting(routing);
         routing.replaceDefault(EventRoute.byFirstMessageField(idClass()));
-        routing.route(UserJoinedGroup.class, (message, context) -> withId(message.getGroup()));
-        routing.route(UserLeftGroup.class,(message, context) -> withId(message.getGroup()));
+        routing.route(UserAddedToGroup.class, (message, context) -> withId(message.getGroup()));
+        routing.route(UserRemovedFromGroup.class, (message, context) -> withId(message.getGroup()));
     }
 }

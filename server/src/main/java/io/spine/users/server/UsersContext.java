@@ -50,7 +50,9 @@ public final class UsersContext {
                 .add(OrgUnitAggregate.class)
                 .add(OrganizationAggregate.class)
                 .add(GroupAccount.class)
-                .add(GroupMembershipPart.class);
+                .add(GroupMembersPart.class)
+                /*.add(GroupMembershipPart.class)*/
+                ;
         return builder;
     }
 }

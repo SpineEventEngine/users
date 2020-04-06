@@ -27,11 +27,11 @@ import io.spine.users.google.event.GoogleGroupEmailChanged;
 import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
 import io.spine.users.google.event.GoogleGroupLeftParentGroup;
 import io.spine.users.google.event.GoogleGroupRenamed;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.JoinParentGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 
@@ -79,11 +79,11 @@ final class CommandFactory {
     }
 
     /**
-     * Creates {@link JoinParentGroup} command based on information from
+     * Creates {@link AddGroupToGroup} command based on information from
      * {@link GoogleGroupJoinedParentGroup} event.
      */
-    JoinParentGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
-        return JoinParentGroup
+    AddGroupToGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
+        return AddGroupToGroup
                 .newBuilder()
                 .setGroup(event.getId())
                 .setParentGroup(event.getNewParentId())

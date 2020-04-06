@@ -22,7 +22,7 @@ package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -40,14 +40,14 @@ class GroupJoinedGroupTest extends UsersContextTest {
     void testBeTranslated() {
         GroupId groupId = newGroupId();
         GoogleGroupJoinedParentGroup event = googleGroupJoinedParentGroup(groupId);
-        JoinParentGroup expectedCmd = JoinParentGroup
+        AddGroupToGroup expectedCmd = AddGroupToGroup
                 .newBuilder()
                 .setGroup(groupId)
                 .setParentGroup(event.getNewParentId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
-                 .withType(JoinParentGroup.class)
+                 .withType(AddGroupToGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);

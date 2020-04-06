@@ -55,12 +55,13 @@ message DeleteGroup {
     GroupId group = 1;
 }
 
-// Joins a parent group.
-message JoinParentGroup {
+// Add a group to a parent group.
+message AddGroupToGroup {
 
+    // The group to add to another group.
     GroupId group = 1;
 
-    // An ID of the parent group.
+    // The parent group which gets the specified group as a new member.
     GroupId parent_group = 2 [(required) = true];
 }
 

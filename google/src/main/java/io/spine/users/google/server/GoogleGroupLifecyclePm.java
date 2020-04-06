@@ -36,7 +36,7 @@ import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.LeaveParentGroup;
 import io.spine.users.group.command.RenameGroup;
 import io.spine.users.google.GoogleGroupLifecycle;
@@ -68,7 +68,7 @@ public class GoogleGroupLifecyclePm
     }
 
     @Command
-    JoinParentGroup on(GoogleGroupJoinedParentGroup event) {
+    AddGroupToGroup on(GoogleGroupJoinedParentGroup event) {
         return commands().joinParentGroup(event);
     }
 

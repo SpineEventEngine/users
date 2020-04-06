@@ -24,7 +24,7 @@ import io.spine.core.UserId;
 import io.spine.users.group.Membership;
 import io.spine.users.group.UserMembership;
 import io.spine.users.group.command.AddUserToGroup;
-import io.spine.users.group.event.UserJoinedGroup;
+import io.spine.users.group.event.UserAddedToGroup;
 import io.spine.users.server.UserMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.user.given.UserTestCommands.joinGroup;
 
 @DisplayName("`JoinGroup` command should")
-class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserJoinedGroup> {
+class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserAddedToGroup> {
 
     @Test
     @DisplayName("produce `UserJoinedGroup` event and update the user group membership")
@@ -47,8 +47,8 @@ class JoinGroupTest extends UserMembershipCommandTest<AddUserToGroup, UserJoined
     }
 
     @Override
-    protected UserJoinedGroup expectedEventAfter(AddUserToGroup command) {
-        return UserJoinedGroup
+    protected UserAddedToGroup expectedEventAfter(AddUserToGroup command) {
+        return UserAddedToGroup
                 .newBuilder()
                 .setUser(command.getUser())
                 .setGroup(command.getGroup())

@@ -23,7 +23,7 @@ package io.spine.users.server.group;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.command.LeaveParentGroup;
-import io.spine.users.group.event.LeftParentGroup;
+import io.spine.users.group.event.GroupRemovedFromGroup;
 import io.spine.users.server.GroupMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.leaveParentGroup;
 
 @DisplayName("`LeaveParentGroup` command should")
-class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, LeftParentGroup> {
+class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, GroupRemovedFromGroup> {
 
     @Test
     @DisplayName("produce `LeftParentGroup` event and clear the respective membership")
@@ -47,8 +47,8 @@ class LeaveParentGroupTest extends GroupMembershipCommandTest<LeaveParentGroup, 
     }
 
     @Override
-    protected LeftParentGroup expectedEventAfter(LeaveParentGroup command) {
-        return LeftParentGroup
+    protected GroupRemovedFromGroup expectedEventAfter(LeaveParentGroup command) {
+        return GroupRemovedFromGroup
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())

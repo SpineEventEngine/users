@@ -27,11 +27,9 @@ import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.Membership;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.LeaveParentGroup;
-import io.spine.users.group.event.JoinedParentGroup;
-import io.spine.users.group.event.LeftParentGroup;
-import io.spine.users.group.rejection.GroupsCannotFormCycles;
+import io.spine.users.group.event.GroupRemovedFromGroup;
 
 import java.util.List;
 
@@ -43,7 +41,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>It is forbidden for groups to directly or indirectly join themselves; in other words,
  * all nested group memberships must always form an acyclic graph.
  *
- * <p>Please see {@link JoinParentGroup} and {@link LeaveParentGroup} commands.
+ * <p>Please see {@link AddGroupToGroup} and {@link LeaveParentGroup} commands.
  */
 final class GroupMembershipPart
         extends AggregatePart<GroupId, GroupMembership, GroupMembership.Builder, GroupRoot> {
@@ -58,44 +56,22 @@ final class GroupMembershipPart
         super(root);
     }
 
+
     @Assign
-    JoinedParentGroup handle(JoinParentGroup command, CommandContext context)
-            throws GroupsCannotFormCycles {
-        ensureNoCycles(command);
-        return JoinedParentGroup
+    GroupRemovedFromGroup handle(LeaveParentGroup command, CommandContext context) {
+        return GroupRemovedFromGroup
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())
                 .build();
     }
 
-    @Assign
-    LeftParentGroup handle(LeaveParentGroup command, CommandContext context) {
-        return LeftParentGroup
-                .newBuilder()
-                .setGroup(command.getGroup())
-                .setParentGroup(command.getParentGroup())
-                .build();
-    }
 
     @Apply
-    private void on(JoinedParentGroup event) {
-        builder().addMembership(
-                Membership.newBuilder()
-                          .setGroup(event.getParentGroup())
-                          .vBuild()
-        );
-    }
-
-    @Apply
-    private void on(LeftParentGroup event) {
+    private void on(GroupRemovedFromGroup event) {
         removeMembership(event.getParentGroup());
     }
 
-    private static void ensureNoCycles(JoinParentGroup event) throws GroupsCannotFormCycles {
-        checkNotNull(event);
-        // TODO:2018-09-21:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/23
-    }
 
     private void removeMembership(GroupId parentGroup) {
         GroupMembership.Builder builder = builder();

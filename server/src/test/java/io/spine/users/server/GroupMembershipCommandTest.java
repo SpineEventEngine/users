@@ -25,7 +25,7 @@ import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.GroupMembership;
-import io.spine.users.group.command.JoinParentGroup;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.server.given.TestIdentifiers;
 
 /**
@@ -62,7 +62,7 @@ public abstract class GroupMembershipCommandTest<C extends CommandMessage, E ext
      * Creates the {@link GroupAccount} with the some predefined state and the specified identifier.
      */
     protected void preCreateGroupMembership(GroupId group, GroupId parentGroup) {
-        JoinParentGroup joinParentGroup = JoinParentGroup
+        AddGroupToGroup joinParentGroup = AddGroupToGroup
                 .newBuilder()
                 .setGroup(group)
                 .setParentGroup(parentGroup)

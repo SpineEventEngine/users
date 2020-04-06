@@ -23,8 +23,8 @@ package io.spine.users.server.group;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembership;
 import io.spine.users.group.Membership;
-import io.spine.users.group.command.JoinParentGroup;
-import io.spine.users.group.event.JoinedParentGroup;
+import io.spine.users.group.command.AddGroupToGroup;
+import io.spine.users.group.event.GroupAddedToGroup;
 import io.spine.users.server.GroupMembershipCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,16 +32,16 @@ import org.junit.jupiter.api.Test;
 import static io.spine.users.server.group.given.GroupTestCommands.joinParentGroup;
 
 @DisplayName("`JoinParentGroup` command should")
-class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup, JoinedParentGroup> {
+class JoinParentGroupTest extends GroupMembershipCommandTest<AddGroupToGroup, GroupAddedToGroup> {
 
     @Override
-    protected JoinParentGroup command(GroupId id) {
+    protected AddGroupToGroup command(GroupId id) {
         return joinParentGroup(id, PARENT_GROUP_ID);
     }
 
     @Override
-    protected JoinedParentGroup expectedEventAfter(JoinParentGroup command) {
-        return JoinedParentGroup
+    protected GroupAddedToGroup expectedEventAfter(AddGroupToGroup command) {
+        return GroupAddedToGroup
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())
@@ -49,7 +49,7 @@ class JoinParentGroupTest extends GroupMembershipCommandTest<JoinParentGroup, Jo
     }
 
     @Override
-    protected GroupMembership expectedStateAfter(JoinParentGroup command) {
+    protected GroupMembership expectedStateAfter(AddGroupToGroup command) {
         return GroupMembership
                 .newBuilder()
                 .setGroup(command.getGroup())
