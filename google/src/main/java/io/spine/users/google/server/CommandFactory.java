@@ -32,7 +32,7 @@ import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.command.RemoveGroupFromGroup;
 import io.spine.users.group.command.RenameGroup;
 
 /**
@@ -103,11 +103,11 @@ final class CommandFactory {
     }
 
     /**
-     * Creates {@link LeaveParentGroup} command based on information from
+     * Creates {@link RemoveGroupFromGroup} command based on information from
      * {@link GoogleGroupLeftParentGroup} event.
      */
-    LeaveParentGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
-        return LeaveParentGroup
+    RemoveGroupFromGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
+        return RemoveGroupFromGroup
                 .newBuilder()
                 .setGroup(event.getId())
                 .setParentGroup(event.getParentGroupId())

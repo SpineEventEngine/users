@@ -25,6 +25,7 @@ import io.spine.base.EntityState;
 import io.spine.base.EventMessage;
 import io.spine.server.entity.Entity;
 import io.spine.testing.server.blackbox.BlackBoxContext;
+import io.spine.testing.server.entity.EntitySubject;
 
 /**
  * An abstract base for tests of {@code Users} Bounded Context, which test that a certain command
@@ -99,16 +100,12 @@ public abstract class CommandTest<I, C extends CommandMessage, E extends EventMe
         assertEvent(afterCommand, expectedEvent);
 
         S expectedState = expectedStateAfter(command);
-        afterCommand.assertEntity(entityClass(), id)
-                    .hasStateThat()
-                    .comparingExpectedFieldsOnly()
-                    .isEqualTo(expectedState);
+        afterCommand.assertState(id, expectedState);
 
-        afterCommand.assertEntity(entityClass(), id)
-                    .archivedFlag()
+        EntitySubject assertEntity = afterCommand.assertEntity(id, entityClass());
+        assertEntity.archivedFlag()
                     .isEqualTo(isArchivedAfterCommand());
-        afterCommand.assertEntity(entityClass(), id)
-                    .deletedFlag()
+        assertEntity.deletedFlag()
                     .isEqualTo(isDeletedAfterCommand());
     }
 

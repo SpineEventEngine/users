@@ -20,14 +20,11 @@
 
 package io.spine.users.server;
 
-import com.google.common.truth.extensions.proto.ProtoFluentAssertion;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.EntityState;
 import io.spine.base.EventMessage;
 import io.spine.core.TenantId;
 import io.spine.net.InternetDomain;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.EventSubject;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,31 +70,16 @@ public abstract class UsersContextTest {
     }
 
     /**
-     * Asserts that the context generated only one event of the passed type.
-     *
-     * @param eventClass
-     *         the type of the event to assert
-     * @return the subject for further assertions
+     * Asserts that the context generated only one passed event.
      */
-    @CanIgnoreReturnValue
-    protected final ProtoFluentAssertion assertEvent(Class<? extends EventMessage> eventClass) {
-        EventSubject assertEvents =
-                context().assertEvents()
-                         .withType(eventClass);
-        assertEvents.hasSize(1);
-        return assertEvents.message(0)
-                           .comparingExpectedFieldsOnly();
+    protected final void assertEvent(EventMessage event) {
+        context().assertEvent(event);
     }
 
     /**
-     * Asserts that there is an entity with the state of the passed type and ID.
+     * Asserts that there is an entity with passed ID which has the passed state.
      */
-    protected final <I, S extends EntityState> ProtoFluentAssertion
-    assertEntityState(Class<S> stateClass, I id) {
-        ProtoFluentAssertion stateAssertion =
-                context().assertEntityWithState(stateClass, id)
-                         .hasStateThat()
-                         .comparingExpectedFieldsOnly();
-        return stateAssertion;
+    protected final <I> void assertEntity(I id, EntityState state) {
+        context().assertState(id, state);
     }
 }

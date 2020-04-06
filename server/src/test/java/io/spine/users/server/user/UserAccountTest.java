@@ -34,7 +34,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.given.Given.userId;
+import static io.spine.users.server.given.TestIdentifiers.userId;
 import static io.spine.users.server.user.given.UserTestCommands.createUserAccount;
 import static io.spine.users.server.user.given.UserTestCommands.deleteUserAccount;
 
@@ -45,34 +45,75 @@ class UserAccountTest extends UsersContextTest {
     private BlackBoxContext context;
 
     @BeforeEach
-    void createAccount() {
+    void initFields() {
         user = userId();
         context = context();
     }
 
-    @Test
+    @Nested
     @DisplayName("be created on a command")
-    void creation() {
-        CreateUserAccount cmd = createUserAccount(user);
-        context.receivesCommand(cmd);
+    class Creation {
 
-        assertEvent(UserAccountCreated.class)
-                .isEqualTo(
-                        UserAccountCreated
+        private CreateUserAccount cmd;
+
+        @BeforeEach
+        void createAccount() {
+            cmd = createUserAccount(user);
+            context.receivesCommand(cmd);
+        }
+
+        @Test
+        @DisplayName("emitting event")
+        void event() {
+            assertEvent(UserAccountCreated
                                 .newBuilder()
                                 .setAccount(user)
                                 .setUser(cmd.getUser())
-                                .build()
-                );
+                                .build());
+        }
 
-        assertEntityState(UserAccount.class, user)
-                .isEqualTo(
-                        UserAccount
-                                .newBuilder()
-                                .setId(user)
-                                .setUser(cmd.getUser())
-                                .build()
-                );
+        @Test
+        @DisplayName("creating entity with state")
+        void entityState() {
+            assertEntity(user,
+                         UserAccount
+                                      .newBuilder()
+                                      .setId(user)
+                                      .setUser(cmd.getUser())
+                                      .build());
+        }
+
+        @Nested
+        @DisplayName("rejecting if")
+        class Rejecting {
+
+            @Test
+            @DisplayName("an account with ID already exists")
+            void ifDuplicate() {
+                // Attempt to create the account with the same ID.
+                context.receivesCommand(createUserAccount(user));
+
+                assertEvent(UserAccountAlreadyExists
+                                    .newBuilder()
+                                    .setAccount(user)
+                                    .vBuild());
+            }
+
+            @Test
+            @DisplayName("an account with such ID was previously deleted")
+            void ifDeletedBefore() {
+                // Delete the account which was previously created.
+                context.receivesCommand(deleteUserAccount(user));
+
+                context.receivesCommand(createUserAccount(user));
+
+                assertEvent(UnavalableForPreviouslyDeletedAccount
+                                    .newBuilder()
+                                    .setAccount(user)
+                                    .build());
+            }
+        }
+
     }
 
     @Test
@@ -83,50 +124,8 @@ class UserAccountTest extends UsersContextTest {
         DeleteUserAccount cmd = deleteUserAccount(user);
         context.receivesCommand(cmd);
 
-        context.assertEntityWithState(UserAccount.class, user)
+        context.assertEntityWithState(user, UserAccount.class)
                .deletedFlag()
                .isTrue();
-    }
-
-    @Nested
-    @DisplayName("reject creation if an account")
-    class RejectCreation {
-
-        @BeforeEach
-        void createAccount() {
-            context.receivesCommand(createUserAccount(user));
-        }
-
-        @Test
-        @DisplayName("already exists")
-        void ifDuplicate() {
-            // Attempt to create the account with the same ID.
-            context.receivesCommand(createUserAccount(user));
-
-            assertEvent(UserAccountAlreadyExists.class)
-                    .isEqualTo(
-                            UserAccountAlreadyExists
-                                    .newBuilder()
-                                    .setAccount(user)
-                                    .vBuild()
-                    );
-        }
-
-        @Test
-        @DisplayName("was previously deleted")
-        void ifDeleted() {
-            // Delete the account which was previously created.
-            context.receivesCommand(deleteUserAccount(user));
-
-            context.receivesCommand(createUserAccount(user));
-
-            assertEvent(UnavalableForPreviouslyDeletedAccount.class)
-                    .isEqualTo(
-                            UnavalableForPreviouslyDeletedAccount
-                                    .newBuilder()
-                                    .setAccount(user)
-                                    .build()
-                    );
-        }
     }
 }

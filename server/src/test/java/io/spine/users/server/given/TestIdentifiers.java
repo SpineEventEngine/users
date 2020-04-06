@@ -20,11 +20,15 @@
 
 package io.spine.users.server.given;
 
+import io.spine.core.UserId;
+import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.OrgUnitId;
 import io.spine.users.OrganizationId;
 
 import static io.spine.base.Identifier.newUuid;
+import static io.spine.testing.TestValues.random;
+import static java.lang.String.format;
 
 /**
  * Factory methods for creating test values of identifiers in Users bounded context.
@@ -54,7 +58,7 @@ public class TestIdentifiers {
     }
 
     public static GroupId groupId() {
-        return groupId("group-" + newUuid());
+        return groupId(generateId("group-%d@example.com"));
     }
 
     private static GroupId groupId(String value) {
@@ -62,5 +66,15 @@ public class TestIdentifiers {
                 .newBuilder()
                 .setValue(value)
                 .vBuild();
+    }
+
+    static String generateId(String fmt) {
+        String value = format(fmt, random(1, 1000));
+        return value;
+    }
+
+    public static UserId userId() {
+        String value = generateId("user-%d@example.com");
+        return GivenUserId.of(value);
     }
 }

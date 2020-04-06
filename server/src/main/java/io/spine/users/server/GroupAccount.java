@@ -35,6 +35,7 @@ import io.spine.users.group.event.GroupDeleted;
 import io.spine.users.group.event.GroupDescriptionChanged;
 import io.spine.users.group.event.GroupEmailChanged;
 import io.spine.users.group.event.GroupRenamed;
+import io.spine.users.group.rejection.GroupAlreadyExists;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
 
@@ -47,8 +48,6 @@ import io.spine.users.orgunit.OrgUnit;
  *
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
- *
- * @see GroupMembershipPart for the part that handle group memberships
  */
 final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
@@ -57,7 +56,15 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
     }
 
     @Assign
-    GroupCreated handle(CreateGroup command) {
+    GroupCreated handle(CreateGroup command) throws GroupAlreadyExists {
+        boolean alreadyExists = !state().getDisplayName()
+                               .isEmpty();
+        if (alreadyExists) {
+            throw GroupAlreadyExists
+                    .newBuilder()
+                    .setGroup(id())
+                    .build();
+        }
         return GroupCreated
                 .newBuilder()
                 .setGroup(command.getGroup())

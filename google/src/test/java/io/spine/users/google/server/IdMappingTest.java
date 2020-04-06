@@ -44,9 +44,6 @@ class IdMappingTest extends UsersContextTest {
                                 .getValue(), event.getId())
                 .build();
         context().receivesEvent(event)
-                 .assertEntityWithState(IdMap.class, expectedState.getId())
-                 .hasStateThat()
-                 .comparingExpectedFieldsOnly()
-                 .isEqualTo(expectedState);
+                 .assertState(expectedState.getId(), expectedState);
     }
 }

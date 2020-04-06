@@ -58,20 +58,21 @@ message DeleteGroup {
 // Add a group to a parent group.
 message AddGroupToGroup {
 
-    // The group to add to another group.
-    GroupId group = 1;
-
     // The parent group which gets the specified group as a new member.
-    GroupId parent_group = 2 [(required) = true];
+    GroupId parent_group = 1;
+
+    // The group to add to another group.
+    GroupId group = 2  [(required) = true];
 }
 
-// Leaves a parent group.
-message LeaveParentGroup {
+// Remove a group from its parent group.
+message RemoveGroupFromGroup {
 
-    GroupId group = 1;
+    // The parent group.
+    GroupId parent_group = 1;
 
-    // An ID of the parent group.
-    GroupId parent_group = 2 [(required) = true];
+    // The group to remove from the parent group.
+    GroupId group = 2 [(required) = true];
 }
 
 // Renames a group.

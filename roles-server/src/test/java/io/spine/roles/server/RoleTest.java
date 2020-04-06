@@ -55,16 +55,13 @@ class RoleTest extends RolesContextTest {
                         .build()
         );
 
-        Role expected = Role
-                .newBuilder()
-                .setId(role)
-                .setDisplayName(displayName)
-                .build();
-        rolesContext()
-                .assertEntityWithState(Role.class, role)
-                .hasStateThat()
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(expected);
+        rolesContext().assertState(
+                role,
+                Role.newBuilder()
+                    .setId(role)
+                    .setDisplayName(displayName)
+                    .build()
+        );
     }
 
     @Test
@@ -73,7 +70,7 @@ class RoleTest extends RolesContextTest {
         rolesContext().receivesCommand(deleteRole(role));
 
         rolesContext()
-                .assertEntityWithState(Role.class, role)
+                .assertEntityWithState(role, Role.class)
                 .deletedFlag()
                 .isTrue();
     }

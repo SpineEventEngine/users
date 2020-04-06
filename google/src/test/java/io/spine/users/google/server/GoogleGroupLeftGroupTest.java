@@ -22,7 +22,7 @@ package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupLeftParentGroup;
-import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.command.RemoveGroupFromGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -40,14 +40,14 @@ class GoogleGroupLeftGroupTest extends UsersContextTest {
     void testBeTranslated() {
         GroupId groupId = newGroupId();
         GoogleGroupLeftParentGroup event = googleGroupLeftParentGroup(groupId);
-        LeaveParentGroup expectedCmd = LeaveParentGroup
+        RemoveGroupFromGroup expectedCmd = RemoveGroupFromGroup
                 .newBuilder()
                 .setGroup(groupId)
                 .setParentGroup(event.getParentGroupId())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()
-                 .withType(LeaveParentGroup.class)
+                 .withType(RemoveGroupFromGroup.class)
                  .message(0)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expectedCmd);

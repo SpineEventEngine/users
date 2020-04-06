@@ -28,19 +28,18 @@ import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
 import io.spine.users.group.GroupMembers;
 import io.spine.users.group.Member;
-import io.spine.users.group.Membership;
 import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.AddUserToGroup;
+import io.spine.users.group.command.RemoveGroupFromGroup;
 import io.spine.users.group.command.RemoveUserFromGroup;
 import io.spine.users.group.event.GroupAddedToGroup;
+import io.spine.users.group.event.GroupRemovedFromGroup;
 import io.spine.users.group.event.UserAddedToGroup;
 import io.spine.users.group.event.UserRemovedFromGroup;
-import io.spine.users.group.rejection.GroupsCannotFormCycles;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.users.group.Member.KindCase.GROUP;
 import static io.spine.users.group.Member.KindCase.USER;
 
@@ -50,7 +49,7 @@ import static io.spine.users.group.Member.KindCase.USER;
 final class GroupMembersPart
         extends AggregatePart<GroupId, GroupMembers, GroupMembers.Builder, GroupRoot> {
 
-    private GroupMembersPart(GroupRoot root) {
+    GroupMembersPart(GroupRoot root) {
         super(root);
     }
 
@@ -77,10 +76,17 @@ final class GroupMembersPart
     }
 
     @Assign
-    GroupAddedToGroup handle(AddGroupToGroup command, CommandContext context)
-            throws GroupsCannotFormCycles {
-        ensureNoCycles(command);
+    GroupAddedToGroup handle(AddGroupToGroup command, CommandContext context) {
         return GroupAddedToGroup
+                .newBuilder()
+                .setGroup(command.getGroup())
+                .setParentGroup(command.getParentGroup())
+                .build();
+    }
+
+    @Assign
+    GroupRemovedFromGroup handle(RemoveGroupFromGroup command) {
+        return GroupRemovedFromGroup
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())
@@ -108,10 +114,17 @@ final class GroupMembersPart
     private void on(GroupAddedToGroup event) {
         builder().addMember(
                 Member.newBuilder()
-                          .setGroup(event.getGroup())
+                      .setGroup(event.getGroup())
                       .setRole(event.getRole())
-                          .vBuild()
+                      .vBuild()
         );
+    }
+
+    @Apply
+    private void on(GroupRemovedFromGroup event) {
+        GroupId group = event.getGroup();
+        Optional<Member> member = findMember(group);
+        member.ifPresent(this::removeMember);
     }
 
     private Optional<Member> findMember(UserId user) {
@@ -140,11 +153,5 @@ final class GroupMembersPart
                              .indexOf(member);
         builder().removeMember(index);
     }
-
-    private static void ensureNoCycles(AddGroupToGroup event) throws GroupsCannotFormCycles {
-        checkNotNull(event);
-        // TODO:2018-09-21:vladyslav.lubenskyi: https://github.com/SpineEventEngine/users/issues/23
-    }
-
 }
 

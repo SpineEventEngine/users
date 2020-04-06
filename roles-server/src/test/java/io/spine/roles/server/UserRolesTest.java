@@ -58,7 +58,7 @@ class UserRolesTest extends RolesContextTest {
 
     @BeforeEach
     void createUserGroupAndRole() {
-        user =  userUuid();
+        user = userUuid();
         group = groupId();
         usersContext().receivesCommands(
                 createUser(user),
@@ -152,7 +152,6 @@ class UserRolesTest extends RolesContextTest {
         }
     }
 
-
     @Nested
     @DisplayName("when being in a group with a role, lose the role")
     class UserInGroupWithRole {
@@ -186,7 +185,7 @@ class UserRolesTest extends RolesContextTest {
 
     private ProtoFluentAssertion assertRolesOf(UserId user) {
         return rolesContext()
-                .assertEntityWithState(UserRoles.class, user)
+                .assertEntityWithState(user, UserRoles.class)
                 .hasStateThat()
                 .comparingExpectedFieldsOnly();
     }

@@ -135,7 +135,7 @@ class GroupRolesTest extends RolesContextTest {
 
     private ProtoFluentAssertion assertRolesOf(GroupId group) {
         return rolesContext()
-                .assertEntityWithState(GroupRoles.class, group)
+                .assertEntityWithState(group, GroupRoles.class)
                 .hasStateThat()
                 .comparingExpectedFieldsOnly();
     }

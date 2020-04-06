@@ -26,7 +26,7 @@ import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.LeaveParentGroup;
+import io.spine.users.group.command.RemoveGroupFromGroup;
 import io.spine.users.group.command.RenameGroup;
 
 import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupDescription;
@@ -72,8 +72,8 @@ public class GroupTestCommands {
                 .vBuild();
     }
 
-    public static LeaveParentGroup leaveParentGroup(GroupId groupId, GroupId upperGroupId) {
-        return LeaveParentGroup
+    public static RemoveGroupFromGroup leaveParentGroup(GroupId groupId, GroupId upperGroupId) {
+        return RemoveGroupFromGroup
                 .newBuilder()
                 .setGroup(groupId)
                 .setParentGroup(upperGroupId)

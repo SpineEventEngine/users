@@ -29,25 +29,44 @@ option java_package = "io.spine.users.group.rejection";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
-import "spine/net/internet_domain.proto";
+import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
 
-// The rejection is generated when joining a parent group forms a cycle.
-//
-message GroupsCannotFormCycles {
+// A command requests creation of a group with an ID which already assigned to another group.
+message GroupAlreadyExists {
 
-    GroupId id = 1;
-
-    // A group that closes a cycle.
-    GroupId closing_group = 2 [(required) = true];
+    // The ID of the group which the creation command used.
+    GroupId group = 1 [(required) = true];
 }
 
-// The rejection to moving an external user.
-//
-message CannotMoveExternalGroup {
+// A command requested removal of a user from a group, but the user is not a member of the group.
+message UserIsNotMember {
 
-    GroupId id = 1;
+    // The group from which removal of the user was requested.
+    GroupId group = 1 [(required) = true];
 
-    // An external domain the group belongs to.
-    net.InternetDomain external_domain = 2 [(required) = true];
+    // The user removal of whom from the group was requested.
+    core.UserId missing_user = 2 [(required) = true];
+}
+
+// A command requested removal of a group, but it is not a member of a group removal from which
+// was requested.
+message GroupsIsNotMember {
+
+    // The group from which removal of the group was requested.
+    GroupId parent_group = 1 [(required) = true];
+
+    // The group removal of whom from the group was requested.
+    GroupId missing_group = 2 [(required) = true];
+}
+
+// A command requested adding a group to another group, but the group to be added
+// already presents in the nesting hierarchy.
+message GroupsCannotFormCycles {
+
+    // The parent group to which addition of the group requested.
+    GroupId parent_group = 1 [(required) = true];
+
+    // The group that closes a cycle.
+    GroupId closing_group = 2 [(required) = true];
 }
