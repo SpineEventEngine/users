@@ -26,6 +26,7 @@ import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.event.GroupCreated;
 import io.spine.users.group.rejection.Rejections.GroupAlreadyExists;
+import io.spine.users.group.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.given.TestIdentifiers.groupId;
 import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.group.given.GroupTestCommands.deleteGroup;
 
 @DisplayName("A group should")
 class GroupAccountTest extends UsersContextTest {
@@ -88,12 +90,12 @@ class GroupAccountTest extends UsersContextTest {
         }
 
         @Nested
-        @DisplayName("reject creation if")
+        @DisplayName("rejecting if")
         class Rejecting {
 
             @Test
             @DisplayName("a group with the requested ID already exists")
-            void ifDuplicated() {
+            void ifDuplicate() {
                 // Request creation of a group having the same ID (and other fields random).
                 context.receivesCommand(createGroup(group));
 
@@ -104,7 +106,21 @@ class GroupAccountTest extends UsersContextTest {
                                 .vBuild()
                 );
             }
+
+            @Test
+            @DisplayName("a group with such ID was previously deleted")
+            void ifDeletedBefore() {
+                context.receivesCommand(deleteGroup(group));
+
+                context.receivesCommand(createGroup(group));
+
+                context.assertEvent(
+                        UnavalableForPreviouslyDeletedGroup
+                                .newBuilder()
+                                .setGroup(group)
+                                .build()
+                );
+            }
         }
     }
-
 }

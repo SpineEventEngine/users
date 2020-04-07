@@ -38,7 +38,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupName;
  *         the type of the command being tested
  */
 public abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<GroupId, C, E, Group, GroupAccount> {
+        extends CommandTest<GroupId, C, E, Group, GroupAccountPart> {
 
     private static final GroupId GROUP_ID = TestIdentifiers.groupId();
 
@@ -48,12 +48,12 @@ public abstract class GroupCommandTest<C extends CommandMessage, E extends Event
     }
 
     @Override
-    protected Class<GroupAccount> entityClass() {
-        return GroupAccount.class;
+    protected Class<GroupAccountPart> entityClass() {
+        return GroupAccountPart.class;
     }
 
     /**
-     * Creates the {@link GroupAccount} with the some predefined state and the {@link #GROUP_ID}
+     * Creates the {@link GroupAccountPart} with the some predefined state and the {@link #GROUP_ID}
      * identifier.
      */
     protected void preCreateGroup() {
@@ -61,7 +61,7 @@ public abstract class GroupCommandTest<C extends CommandMessage, E extends Event
     }
 
     /**
-     * Creates the {@link GroupAccount} with the some predefined state and the specified identifier.
+     * Creates the {@link GroupAccountPart} with the some predefined state and the specified identifier.
      */
     protected void preCreateGroup(GroupId id) {
         CreateGroup createGroup = CreateGroup

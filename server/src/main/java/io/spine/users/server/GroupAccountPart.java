@@ -36,6 +36,7 @@ import io.spine.users.group.event.GroupDescriptionChanged;
 import io.spine.users.group.event.GroupEmailChanged;
 import io.spine.users.group.event.GroupRenamed;
 import io.spine.users.group.rejection.GroupAlreadyExists;
+import io.spine.users.group.rejection.UnavalableForPreviouslyDeletedGroup;
 import io.spine.users.organization.Organization;
 import io.spine.users.orgunit.OrgUnit;
 
@@ -49,18 +50,26 @@ import io.spine.users.orgunit.OrgUnit;
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
  */
-final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
+final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
 
-    GroupAccount(GroupRoot root) {
+    GroupAccountPart(GroupRoot root) {
         super(root);
     }
 
     @Assign
-    GroupCreated handle(CreateGroup command) throws GroupAlreadyExists {
+    GroupCreated handle(CreateGroup c)
+            throws GroupAlreadyExists,
+                   UnavalableForPreviouslyDeletedGroup {
+        GroupId group = c.getGroup();
+        if (isDeleted()) {
+            throw UnavalableForPreviouslyDeletedGroup
+                    .newBuilder()
+                    .setGroup(group)
+                    .build();
+        }
         boolean alreadyExists =
                 !state().getDisplayName()
                         .isEmpty();
-        GroupId group = command.getGroup();
         if (alreadyExists) {
             throw GroupAlreadyExists
                     .newBuilder()
@@ -70,76 +79,76 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
         return GroupCreated
                 .newBuilder()
                 .setGroup(group)
-                .setDisplayName(command.getDisplayName())
-                .setEmail(command.getEmail())
-                .setDescription(command.getDescription())
+                .setDisplayName(c.getDisplayName())
+                .setEmail(c.getEmail())
+                .setDescription(c.getDescription())
                 .build();
     }
 
     @Assign
-    GroupDeleted handle(DeleteGroup command) {
+    GroupDeleted handle(DeleteGroup c) {
         return GroupDeleted
                 .newBuilder()
-                .setGroup(command.getGroup())
+                .setGroup(c.getGroup())
                 .build();
     }
 
    @Assign
-    GroupRenamed handle(RenameGroup command) {
+    GroupRenamed handle(RenameGroup c) {
         return GroupRenamed
                 .newBuilder()
-                .setGroup(command.getGroup())
-                .setNewName(command.getNewName())
+                .setGroup(c.getGroup())
+                .setNewName(c.getNewName())
                 .setOldName(state().getDisplayName())
                 .build();
     }
 
     @Assign
-    GroupEmailChanged handle(ChangeGroupEmail command) {
+    GroupEmailChanged handle(ChangeGroupEmail c) {
         return GroupEmailChanged
                 .newBuilder()
-                .setGroup(command.getGroup())
-                .setNewEmail(command.getNewEmail())
+                .setGroup(c.getGroup())
+                .setNewEmail(c.getNewEmail())
                 .setOldEmail(state().getEmail())
                 .build();
     }
 
     @Assign
-    GroupDescriptionChanged handle(ChangeGroupDescription command) {
+    GroupDescriptionChanged handle(ChangeGroupDescription c) {
         return GroupDescriptionChanged
                 .newBuilder()
-                .setGroup(command.getGroup())
-                .setNewDescription(command.getDescription())
+                .setGroup(c.getGroup())
+                .setNewDescription(c.getDescription())
                 .setOldDescription(state().getDescription())
                 .build();
     }
 
     @Apply
-    private void on(GroupCreated event) {
+    private void on(GroupCreated e) {
         Group.Builder builder = builder();
-        builder.setId(event.getGroup())
-               .setDisplayName(event.getDisplayName())
-               .setDescription(event.getDescription())
-               .setEmail(event.getEmail());
+        builder.setId(e.getGroup())
+               .setDisplayName(e.getDisplayName())
+               .setDescription(e.getDescription())
+               .setEmail(e.getEmail());
     }
 
     @Apply
-    private void on(@SuppressWarnings("unused") GroupDeleted event) {
+    private void on(@SuppressWarnings("unused") GroupDeleted e) {
         setDeleted(true);
     }
 
     @Apply
-    private void on(GroupRenamed event) {
-        builder().setDisplayName(event.getNewName());
+    private void on(GroupRenamed e) {
+        builder().setDisplayName(e.getNewName());
     }
 
     @Apply
-    private void on(GroupEmailChanged event) {
-        builder().setEmail(event.getNewEmail());
+    private void on(GroupEmailChanged e) {
+        builder().setEmail(e.getNewEmail());
     }
 
     @Apply
-    private void on(GroupDescriptionChanged event) {
-        builder().setDescription(event.getNewDescription());
+    private void on(GroupDescriptionChanged e) {
+        builder().setDescription(e.getNewDescription());
     }
 }

@@ -70,3 +70,10 @@ message GroupsCannotFormCycles {
     // The group that closes a cycle.
     GroupId closing_group = 2 [(required) = true];
 }
+
+// An operation is not available because a group the passed ID was previously deleted.
+message UnavalableForPreviouslyDeletedGroup {
+
+    // The ID of the group which was previously deleted.
+    GroupId group = 1 [(required) = true];
+}
