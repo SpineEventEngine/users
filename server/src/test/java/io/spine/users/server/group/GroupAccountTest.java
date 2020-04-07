@@ -25,6 +25,7 @@ import io.spine.users.GroupId;
 import io.spine.users.group.Group;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.event.GroupCreated;
+import io.spine.users.group.rejection.Rejections.GroupAlreadyExists;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -85,5 +86,25 @@ class GroupAccountTest extends UsersContextTest {
                          .vBuild()
             );
         }
+
+        @Nested
+        @DisplayName("reject creation if")
+        class Rejecting {
+
+            @Test
+            @DisplayName("a group with the requested ID already exists")
+            void ifDuplicated() {
+                // Request creation of a group having the same ID (and other fields random).
+                context.receivesCommand(createGroup(group));
+
+                context.assertEvent(
+                        GroupAlreadyExists
+                                .newBuilder()
+                                .setGroup(cmd.getGroup())
+                                .vBuild()
+                );
+            }
+        }
     }
+
 }

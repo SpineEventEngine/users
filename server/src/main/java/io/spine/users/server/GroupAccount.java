@@ -57,17 +57,19 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
 
     @Assign
     GroupCreated handle(CreateGroup command) throws GroupAlreadyExists {
-        boolean alreadyExists = !state().getDisplayName()
-                               .isEmpty();
+        boolean alreadyExists =
+                !state().getDisplayName()
+                        .isEmpty();
+        GroupId group = command.getGroup();
         if (alreadyExists) {
             throw GroupAlreadyExists
                     .newBuilder()
-                    .setGroup(id())
+                    .setGroup(group)
                     .build();
         }
         return GroupCreated
                 .newBuilder()
-                .setGroup(command.getGroup())
+                .setGroup(group)
                 .setDisplayName(command.getDisplayName())
                 .setEmail(command.getEmail())
                 .setDescription(command.getDescription())
@@ -90,7 +92,6 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
                 .setNewName(command.getNewName())
                 .setOldName(state().getDisplayName())
                 .build();
-
     }
 
     @Assign
@@ -118,8 +119,8 @@ final class GroupAccount extends AggregatePart<GroupId, Group, Group.Builder, Gr
         Group.Builder builder = builder();
         builder.setId(event.getGroup())
                .setDisplayName(event.getDisplayName())
-               .setEmail(event.getEmail())
-               .setDescription(event.getDescription());
+               .setDescription(event.getDescription())
+               .setEmail(event.getEmail());
     }
 
     @Apply

@@ -23,6 +23,7 @@ package io.spine.users.server.group.given;
 import io.spine.net.EmailAddress;
 import io.spine.users.OrganizationOrUnit;
 
+import static io.spine.testing.TestValues.random;
 import static io.spine.users.server.given.TestIdentifiers.orgId;
 import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
 
@@ -36,13 +37,13 @@ public final class GroupTestEnv {
     }
 
     public static String groupName() {
-        return "Developers";
+        return "Group-" + random(100);
     }
 
     public static EmailAddress groupEmail() {
         return EmailAddress
                 .newBuilder()
-                .setValue("developers-list@gmail.com")
+                .setValue("developers-list-" + random(50) + "@gmail.com")
                 .vBuild();
     }
 
@@ -75,7 +76,7 @@ public final class GroupTestEnv {
     static EmailAddress newGroupEmail() {
         return EmailAddress
                 .newBuilder()
-                .setValue("developers-renamed-list@gmail.com")
+                .setValue("developers-renamed-list" + random(42) + "@gmail.com")
                 .vBuild();
     }
 }
