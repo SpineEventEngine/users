@@ -28,10 +28,10 @@
  * This file is copied to the root of the project ONLY if there's no file with such a name
  * already in the root directory.
  */
-final def VERSION_TO_PUBLISH = '0.0.2-SNAPSHOT'
+final def VERSION_TO_PUBLISH = '0.0.3'
 
 ext {
-    spineBaseVersion = '1.5.3'
+    spineBaseVersion = '1.5.4'
     spineVersion = '1.5.7'
     versionToPublish = VERSION_TO_PUBLISH
     versionToPublishJs = VERSION_TO_PUBLISH
