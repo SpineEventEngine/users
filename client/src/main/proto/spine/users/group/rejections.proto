@@ -51,7 +51,7 @@ message UserIsNotMember {
 
 // A command requested removal of a group, but it is not a member of a group removal from which
 // was requested.
-message GroupsIsNotMember {
+message GroupIsNotMember {
 
     // The group from which removal of the group was requested.
     GroupId parent_group = 1 [(required) = true];

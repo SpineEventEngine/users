@@ -93,7 +93,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
                 .build();
     }
 
-   @Assign
+    @Assign
     GroupRenamed handle(RenameGroup c) {
         return GroupRenamed
                 .newBuilder()

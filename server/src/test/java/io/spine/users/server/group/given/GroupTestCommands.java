@@ -64,26 +64,26 @@ public class GroupTestCommands {
                 .vBuild();
     }
 
-    public static AddGroupToGroup joinParentGroup(GroupId groupId, GroupId upperGroupId) {
+    public static AddGroupToGroup addGroup(GroupId member, GroupId parent) {
         return AddGroupToGroup
                 .newBuilder()
-                .setGroup(groupId)
-                .setParentGroup(upperGroupId)
+                .setGroup(member)
+                .setParentGroup(parent)
                 .vBuild();
     }
 
-    public static RemoveGroupFromGroup leaveParentGroup(GroupId groupId, GroupId upperGroupId) {
+    public static RemoveGroupFromGroup removeGroup(GroupId member, GroupId parent) {
         return RemoveGroupFromGroup
                 .newBuilder()
-                .setGroup(groupId)
-                .setParentGroup(upperGroupId)
+                .setGroup(member)
+                .setParentGroup(parent)
                 .vBuild();
     }
 
-    public static RenameGroup renameGroup(GroupId id) {
+    public static RenameGroup renameGroup(GroupId group) {
         return RenameGroup
                 .newBuilder()
-                .setGroup(id)
+                .setGroup(group)
                 .setNewName(anotherGroupName())
                 .vBuild();
     }
