@@ -68,13 +68,13 @@ public class TestIdentifiers {
                 .vBuild();
     }
 
-    static String generateId(String fmt) {
-        String value = format(fmt, random(1, 1000));
-        return value;
-    }
-
     public static UserId userId() {
         String value = generateId("user-%d@example.com");
         return GivenUserId.of(value);
+    }
+
+    static String generateId(String fmt) {
+        String value = format(fmt, random(1, 1000));
+        return value;
     }
 }
