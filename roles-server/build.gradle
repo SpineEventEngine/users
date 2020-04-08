@@ -20,6 +20,6 @@
 
 dependencies {
     api project(path: ':roles-client')
-    implementation project(path: ':server')
-    testImplementation project(path: ':server', configuration: 'testArtifacts')
+    implementation project(path: ':users-server')
+    testImplementation project(path: ':users-server', configuration: 'testArtifacts')
 }

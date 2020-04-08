@@ -21,5 +21,5 @@
 apply from: deps.scripts.testArtifacts
 
 dependencies {
-    api project(path: ':client')
+    api project(path: ':users-client')
 }

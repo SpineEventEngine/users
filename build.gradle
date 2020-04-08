@@ -43,7 +43,6 @@ buildscript { final scriptHandler ->
 }
 
 allprojects {
-    apply plugin: 'maven'
     apply plugin: 'jacoco'
     apply plugin: 'idea'
 
@@ -60,7 +59,7 @@ allprojects {
 }
 
 ext {
-    projectsToPublish = ["client", "server"]
+    projectsToPublish = ["users-client", "users-server"]
 }
 
 subprojects {
@@ -98,7 +97,6 @@ subprojects {
 
     apply plugin: 'com.google.protobuf'
     apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
     apply plugin: spineProtobufPluginId
     apply plugin: 'net.ltgt.errorprone'
     apply plugin: 'pmd'
