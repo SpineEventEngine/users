@@ -36,6 +36,7 @@ import io.spine.users.group.event.GroupAddedToGroup;
 import io.spine.users.group.event.GroupRemovedFromGroup;
 import io.spine.users.group.event.UserAddedToGroup;
 import io.spine.users.group.event.UserRemovedFromGroup;
+import io.spine.users.group.rejection.UserIsNotMember;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -65,12 +66,20 @@ final class GroupMembersPart
     }
 
     @Assign
-    UserRemovedFromGroup handle(RemoveUserFromGroup command) {
-        //TODO:2020-04-04:alexander.yevsyukov: Throw rejection if a user is not a member.
+    UserRemovedFromGroup handle(RemoveUserFromGroup command) throws UserIsNotMember {
+        UserId user = command.getUser();
+        GroupId group = command.getGroup();
+        Member member = findMember(user)
+                .orElseThrow(() -> UserIsNotMember
+                        .newBuilder()
+                        .setGroup(group)
+                        .setMissingUser(user)
+                        .build());
         UserRemovedFromGroup event = UserRemovedFromGroup
                 .newBuilder()
-                .setUser(command.getUser())
-                .setGroup(command.getGroup())
+                .setUser(user)
+                .setGroup(group)
+                .setRole(member.getRole())
                 .vBuild();
         return event;
     }
