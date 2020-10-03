@@ -37,15 +37,9 @@ import io.spine.users.group.event.GroupEmailChanged;
 import io.spine.users.group.event.GroupRenamed;
 import io.spine.users.group.rejection.GroupAlreadyExists;
 import io.spine.users.group.rejection.UnavalableForPreviouslyDeletedGroup;
-import io.spine.users.organization.Organization;
-import io.spine.users.orgunit.OrgUnit;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
- *
- * <p>A {@code Group} is the way to group {@linkplain UserAccountPart users} by their common functions
- * and functional roles inside of an {@linkplain Organization organization} or
- * {@linkplain OrgUnit organizational unit}.
  *
  * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
@@ -133,7 +127,10 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
     }
 
     @Apply
-    private void on(@SuppressWarnings("unused") GroupDeleted e) {
+    private void on(
+            @SuppressWarnings({
+                    "unused", "RedundantSuppression" /* to keep both IDEA and PMD happy */
+            }) GroupDeleted e) {
         setDeleted(true);
     }
 

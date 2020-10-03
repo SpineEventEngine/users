@@ -20,11 +20,10 @@
 
 package io.spine.users.google.server;
 
-import io.spine.net.InternetDomain;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import io.spine.users.GroupId;
-import io.spine.users.OrganizationId;
+import io.spine.users.google.GoogleGroupLifecycle;
 import io.spine.users.google.event.GoogleGroupCreated;
 import io.spine.users.google.event.GoogleGroupDeleted;
 import io.spine.users.google.event.GoogleGroupDescriptionChanged;
@@ -32,18 +31,13 @@ import io.spine.users.google.event.GoogleGroupEmailChanged;
 import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
 import io.spine.users.google.event.GoogleGroupLeftParentGroup;
 import io.spine.users.google.event.GoogleGroupRenamed;
+import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.ChangeGroupDescription;
 import io.spine.users.group.command.ChangeGroupEmail;
 import io.spine.users.group.command.CreateGroup;
 import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.AddGroupToGroup;
 import io.spine.users.group.command.RemoveGroupFromGroup;
 import io.spine.users.group.command.RenameGroup;
-import io.spine.users.google.GoogleGroupLifecycle;
-
-import java.util.Optional;
-
-import static java.util.Optional.empty;
 
 /**
  * Translates the terminology of Google Groups events into commands in
@@ -59,11 +53,7 @@ public class GoogleGroupLifecyclePm
 
     @Command
     CreateGroup on(GoogleGroupCreated event) {
-        InternetDomain domain = event.getDomain();
-        Optional<OrganizationId> organization = organizationByDomain(domain);
-        CreateGroup result =
-                organization.map(id -> commands().createInternalGroup(event))
-                            .orElseGet(() -> commands().createExternalGroup(event));
+        CreateGroup result = commands().createInternalGroup(event);
         return result;
     }
 
@@ -95,13 +85,6 @@ public class GoogleGroupLifecyclePm
     @Command
     ChangeGroupDescription on(GoogleGroupDescriptionChanged event) {
         return commands().changeDescription(event);
-    }
-
-    private Optional<OrganizationId>
-    organizationByDomain(@SuppressWarnings("PMD.UnusedFormalParameter") InternetDomain domain) {
-        // TODO:2018-09-27:vladyslav.lubenskyi: implement this look up when Organization
-        //  projection is ready
-        return empty();
     }
 
     private static CommandFactory commands() {

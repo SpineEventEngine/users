@@ -23,10 +23,7 @@ package io.spine.users.server.given;
 import io.spine.core.UserId;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
-import io.spine.users.OrgUnitId;
-import io.spine.users.OrganizationId;
 
-import static io.spine.base.Identifier.newUuid;
 import static io.spine.testing.TestValues.random;
 import static java.lang.String.format;
 
@@ -37,24 +34,6 @@ public class TestIdentifiers {
 
     /** Prevents instantiation of this utility class. */
     private TestIdentifiers() {
-    }
-
-    public static OrganizationId orgId() {
-        return orgId("org-" + newUuid());
-    }
-
-    public static OrgUnitId orgUnitId() {
-        return OrgUnitId
-                .newBuilder()
-                .setValue(newUuid())
-                .vBuild();
-    }
-
-    public static OrganizationId orgId(String value) {
-        return OrganizationId
-                .newBuilder()
-                .setValue(value)
-                .vBuild();
     }
 
     public static GroupId groupId() {

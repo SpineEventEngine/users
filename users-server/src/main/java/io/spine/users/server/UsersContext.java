@@ -46,8 +46,6 @@ public final class UsersContext {
         BoundedContextBuilder builder = BoundedContext
                 .multitenant(NAME)
                 .add(UserAccountPart.class)
-                .add(OrgUnitAggregate.class)
-                .add(OrganizationAggregate.class)
                 .add(GroupAccountPart.class)
                 .add(GroupMembersPart.class);
         return builder;

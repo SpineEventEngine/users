@@ -21,11 +21,8 @@
 package io.spine.users.server.group.given;
 
 import io.spine.net.EmailAddress;
-import io.spine.users.OrganizationOrUnit;
 
 import static io.spine.testing.TestValues.random;
-import static io.spine.users.server.given.TestIdentifiers.orgId;
-import static io.spine.users.server.given.TestIdentifiers.orgUnitId;
 
 /**
  * The environment for the {@code GroupPart} tests.
@@ -44,20 +41,6 @@ public final class GroupTestEnv {
         return EmailAddress
                 .newBuilder()
                 .setValue("developers-list-" + random(50) + "@gmail.com")
-                .vBuild();
-    }
-
-    public static OrganizationOrUnit groupOrgEntityOrganization() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrganization(orgId("Space travel"))
-                .vBuild();
-    }
-
-    public static OrganizationOrUnit groupParentOrgUnit() {
-        return OrganizationOrUnit
-                .newBuilder()
-                .setOrgUnit(orgUnitId())
                 .vBuild();
     }
 

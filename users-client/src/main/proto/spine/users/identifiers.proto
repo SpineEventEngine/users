@@ -36,18 +36,6 @@ message GroupId {
     string value = 1;
 }
 
-// The ID of an organization.
-message OrganizationId {
-
-    string value = 1;
-}
-
-// The ID of an organizational unit.
-message OrgUnitId {
-
-    string value = 1;
-}
-
 // The ID of a user directory system.
 //
 // For example, "google.com", "active-directory.mycompany.co.uk".
@@ -55,23 +43,4 @@ message OrgUnitId {
 message DirectoryId {
 
     string value = 1;
-}
-
-// The ID of an organization node. A node is an `Organization` itself or an `OrgUnit`.
-//
-// An `OrgUnit` is quite similar to an `Organization`, the major difference is that
-// an `Organization` has no parent. So, most of the interaction can be performed in
-// the same manner for both of them.
-//
-message OrganizationOrUnit {
-
-    // A kind of a node ID.
-    oneof kind {
-
-        // An `OrgUnit`.
-        users.OrgUnitId org_unit = 1;
-
-        // An `Organization`.
-        users.OrganizationId organization = 2;
-    }
 }
