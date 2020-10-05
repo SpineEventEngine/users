@@ -1,5 +1,4 @@
 # Default ignored files
-.name
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
@@ -7,3 +6,17 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+/*.iml
+/*.xml
+/.name
+/artifacts
+/libraries
+/modules
+/shelf
+
+# Do not ignore the following IDEA settings
+!/misc.xml
+!/codeStyleSettings.xml
+!/codeStyles/
+!/copyright/

@@ -25,16 +25,6 @@
 #
 # Therefore, instructions below are superset of instructions required for all the projects.
 
-# IntelliJ IDEA modules and interim config files.
-*.iml
-.idea/*.xml
-.idea/.name
-.idea/libraries/**
-.idea/modules/**
-
-# Do not ignore the following IDEA settings
-!.idea/misc.xml
-
 # Gradle interim configs
 .gradle/**
 
