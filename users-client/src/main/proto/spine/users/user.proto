@@ -31,7 +31,9 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
-import "spine/users/profiles.proto";
+import "spine/net/email_address.proto";
+import "spine/net/url.proto";
+import "spine/people/person_name.proto";
 
 // A user of a computer system.
 message User {
@@ -44,6 +46,34 @@ message User {
         // The user is a computer program.
         ServiceProfile service = 3;
     }
+}
+
+// Information about a human user.
+message PersonProfile {
+    option (required_field) = "email|name";
+
+    // The primary email address of the user which may be used by the application
+    // for communicating with the user.
+    net.EmailAddress email = 1;
+
+    // A name of the person, if available.
+    people.PersonName name = 2;
+
+    // The URL of the photo of the user, if available.
+    net.Url photo = 3;
+}
+
+// Information about a non-human user such as a service or a device.
+message ServiceProfile {
+
+    // The text to show the account in the UI.
+    string display_name = 1 [(required) = true];
+
+    // Optional descriptive text for the service.
+    string description = 2;
+
+    // A picture to show in places where person accounts would have a human photo, if available.
+    net.Url icon = 3;
 }
 
 // A user of the application, either a person or a computer program.
