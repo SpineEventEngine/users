@@ -44,7 +44,7 @@ import "spine/users/google/identifiers.proto";
 //
 // Please refer to Directory API documentation:
 // * [on Groups;](https://developers.google.com/admin-sdk/directory/v1/reference/groups)
-// * [om Roles;](https://developers.google.com/admin-sdk/directory/v1/guides/manage-roles)
+// * [on Roles;](https://developers.google.com/admin-sdk/directory/v1/guides/manage-roles)
 // * [on Members.](https://developers.google.com/admin-sdk/directory/v1/reference/members)
 //
 
