@@ -24,15 +24,15 @@ import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.users.user.User;
-import io.spine.users.user.UserAccount;
-import io.spine.users.user.command.CreateUserAccount;
-import io.spine.users.user.command.DeleteUserAccount;
-import io.spine.users.user.event.UserAccountCreated;
-import io.spine.users.user.event.UserAccountDeleted;
-import io.spine.users.user.rejection.UnavalableForPreviouslyDeletedAccount;
-import io.spine.users.user.rejection.UserAccountAlreadyDeleted;
-import io.spine.users.user.rejection.UserAccountAlreadyExists;
+import io.spine.users.User;
+import io.spine.users.UserAccount;
+import io.spine.users.command.CreateUserAccount;
+import io.spine.users.command.DeleteUserAccount;
+import io.spine.users.event.UserAccountCreated;
+import io.spine.users.event.UserAccountDeleted;
+import io.spine.users.rejection.UnavalableForPreviouslyDeletedAccount;
+import io.spine.users.rejection.UserAccountAlreadyDeleted;
+import io.spine.users.rejection.UserAccountAlreadyExists;
 
 /**
  * An aggregate for user of the application, either a person or machine.

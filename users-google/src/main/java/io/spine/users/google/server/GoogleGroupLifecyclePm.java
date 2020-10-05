@@ -31,13 +31,13 @@ import io.spine.users.google.event.GoogleGroupEmailChanged;
 import io.spine.users.google.event.GoogleGroupJoinedParentGroup;
 import io.spine.users.google.event.GoogleGroupLeftParentGroup;
 import io.spine.users.google.event.GoogleGroupRenamed;
-import io.spine.users.group.command.AddGroupToGroup;
-import io.spine.users.group.command.ChangeGroupDescription;
-import io.spine.users.group.command.ChangeGroupEmail;
-import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.RemoveGroupFromGroup;
-import io.spine.users.group.command.RenameGroup;
+import io.spine.users.command.AddGroupToGroup;
+import io.spine.users.command.ChangeGroupDescription;
+import io.spine.users.command.ChangeGroupEmail;
+import io.spine.users.command.CreateGroup;
+import io.spine.users.command.DeleteGroup;
+import io.spine.users.command.RemoveGroupFromGroup;
+import io.spine.users.command.RenameGroup;
 
 /**
  * Translates the terminology of Google Groups events into commands in

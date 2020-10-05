@@ -22,11 +22,11 @@ package io.spine.users.server.group;
 
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.GroupId;
-import io.spine.users.group.Group;
-import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.event.GroupCreated;
-import io.spine.users.group.rejection.Rejections.GroupAlreadyExists;
-import io.spine.users.group.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;
+import io.spine.users.Group;
+import io.spine.users.command.CreateGroup;
+import io.spine.users.event.GroupCreated;
+import io.spine.users.rejection.Rejections.GroupAlreadyExists;
+import io.spine.users.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -25,7 +25,7 @@ import io.spine.server.aggregate.AggregateRoot;
 import io.spine.users.GroupId;
 
 /**
- * The {@link io.spine.users.group.Group Group} aggregate root.
+ * The {@link io.spine.users.Group Group} aggregate root.
  */
 public final class GroupRoot extends AggregateRoot<GroupId> {
 

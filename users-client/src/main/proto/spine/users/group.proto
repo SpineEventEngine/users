@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-package spine.users.group;
+package spine.users;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.group";
+option java_package = "io.spine.users";
 option java_outer_classname = "GroupProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;

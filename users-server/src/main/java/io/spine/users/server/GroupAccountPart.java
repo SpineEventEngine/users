@@ -24,19 +24,19 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
-import io.spine.users.group.Group;
-import io.spine.users.group.command.ChangeGroupDescription;
-import io.spine.users.group.command.ChangeGroupEmail;
-import io.spine.users.group.command.CreateGroup;
-import io.spine.users.group.command.DeleteGroup;
-import io.spine.users.group.command.RenameGroup;
-import io.spine.users.group.event.GroupCreated;
-import io.spine.users.group.event.GroupDeleted;
-import io.spine.users.group.event.GroupDescriptionChanged;
-import io.spine.users.group.event.GroupEmailChanged;
-import io.spine.users.group.event.GroupRenamed;
-import io.spine.users.group.rejection.GroupAlreadyExists;
-import io.spine.users.group.rejection.UnavalableForPreviouslyDeletedGroup;
+import io.spine.users.Group;
+import io.spine.users.command.ChangeGroupDescription;
+import io.spine.users.command.ChangeGroupEmail;
+import io.spine.users.command.CreateGroup;
+import io.spine.users.command.DeleteGroup;
+import io.spine.users.command.RenameGroup;
+import io.spine.users.event.GroupCreated;
+import io.spine.users.event.GroupDeleted;
+import io.spine.users.event.GroupDescriptionChanged;
+import io.spine.users.event.GroupEmailChanged;
+import io.spine.users.event.GroupRenamed;
+import io.spine.users.rejection.GroupAlreadyExists;
+import io.spine.users.rejection.UnavalableForPreviouslyDeletedGroup;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.

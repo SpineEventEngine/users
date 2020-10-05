@@ -20,17 +20,56 @@
 
 syntax = "proto3";
 
-package spine.users.group;
+package spine.users;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.group.rejection";
+option java_package = "io.spine.users.rejection";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
 import "spine/users/identifiers.proto";
+
+// A command requested creation of a new user account,
+// but the account with such ID already exists.
+message UserAccountAlreadyExists {
+
+    // The ID of the account.
+    core.UserId account = 1;
+}
+
+// A command requested deletion of a user account,
+// but the account is already marked as deleted.
+message UserAccountAlreadyDeleted {
+
+    // The ID of the account.
+    core.UserId account = 1;
+}
+
+// A command requested suspension of a user account,
+// but the account is already suspended.
+message UserAccountAlreadySuspended {
+
+    // The ID of the account.
+    core.UserId account = 1;
+}
+
+// An operation requested by a command is not available for an account which is marked
+// as deleted. Or, the account with such ID was never created.
+message UserAccountDoesNotExist {
+
+    // The ID that the command used to reference the account.
+    core.UserId account = 1;
+}
+
+// An operation is not available because an account with the passed ID was previously deleted.
+message UnavalableForPreviouslyDeletedAccount {
+
+    // The ID of the account which existed before.
+    core.UserId account = 1;
+}
 
 // A command requests creation of a group with an ID which already assigned to another group.
 message GroupAlreadyExists {

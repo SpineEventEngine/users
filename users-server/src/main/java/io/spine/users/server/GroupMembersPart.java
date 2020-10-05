@@ -26,23 +26,23 @@ import io.spine.server.aggregate.AggregatePart;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 import io.spine.users.GroupId;
-import io.spine.users.group.GroupMembers;
-import io.spine.users.group.Member;
-import io.spine.users.group.command.AddGroupToGroup;
-import io.spine.users.group.command.AddUserToGroup;
-import io.spine.users.group.command.RemoveGroupFromGroup;
-import io.spine.users.group.command.RemoveUserFromGroup;
-import io.spine.users.group.event.GroupAddedToGroup;
-import io.spine.users.group.event.GroupRemovedFromGroup;
-import io.spine.users.group.event.UserAddedToGroup;
-import io.spine.users.group.event.UserRemovedFromGroup;
-import io.spine.users.group.rejection.UserIsNotMember;
+import io.spine.users.GroupMembers;
+import io.spine.users.Member;
+import io.spine.users.command.AddGroupToGroup;
+import io.spine.users.command.AddUserToGroup;
+import io.spine.users.command.RemoveGroupFromGroup;
+import io.spine.users.command.RemoveUserFromGroup;
+import io.spine.users.event.GroupAddedToGroup;
+import io.spine.users.event.GroupRemovedFromGroup;
+import io.spine.users.event.UserAddedToGroup;
+import io.spine.users.event.UserRemovedFromGroup;
+import io.spine.users.rejection.UserIsNotMember;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static io.spine.users.group.Member.KindCase.GROUP;
-import static io.spine.users.group.Member.KindCase.USER;
+import static io.spine.users.Member.KindCase.GROUP;
+import static io.spine.users.Member.KindCase.USER;
 
 /**
  * Manages adding members to a group.

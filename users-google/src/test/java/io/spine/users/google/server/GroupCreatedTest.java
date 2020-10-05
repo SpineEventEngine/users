@@ -24,7 +24,7 @@ import com.google.common.truth.extensions.proto.ProtoSubject;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupCreated;
-import io.spine.users.group.command.CreateGroup;
+import io.spine.users.command.CreateGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

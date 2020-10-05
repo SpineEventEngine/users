@@ -23,7 +23,7 @@ package io.spine.users.server.given;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
 import io.spine.users.PersonProfile;
-import io.spine.users.user.User;
+import io.spine.users.User;
 
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 

@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-package spine.users.group;
+package spine.users;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.group.event";
+option java_package = "io.spine.users.event";
 option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
@@ -34,7 +34,39 @@ import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
 import "spine/users/identifiers.proto";
-import "spine/users/group/group.proto";
+import "spine/users/user.proto";
+import "spine/users/group.proto";
+
+// A new user account was created.
+message UserAccountCreated {
+
+    // The ID of the account.
+    core.UserId account = 1;
+
+    // The user for whom the account was created.
+    User user = 2 [(required) = true];
+}
+
+// An account of a user was deleted.
+message UserAccountDeleted {
+
+    // The ID of the deleted account.
+    core.UserId account = 1;
+}
+
+// An account of a user was suspended.
+message UserAccountSuspended {
+
+    // The ID of the suspended account.
+    core.UserId account = 1;
+}
+
+// A previously suspended account of a user was resumed.
+message UserAccountResumed {
+
+    // The ID of the resumed account.
+    core.UserId account = 1;
+}
 
 // The new group was created.
 message GroupCreated {

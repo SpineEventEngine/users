@@ -21,9 +21,9 @@
 package io.spine.users.server.group;
 
 import io.spine.users.GroupId;
-import io.spine.users.group.Group;
-import io.spine.users.group.command.ChangeGroupEmail;
-import io.spine.users.group.event.GroupEmailChanged;
+import io.spine.users.Group;
+import io.spine.users.command.ChangeGroupEmail;
+import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.server.GroupCommandTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
