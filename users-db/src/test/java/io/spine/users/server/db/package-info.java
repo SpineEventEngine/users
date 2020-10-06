@@ -18,19 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.server.db;
 
-import io.spine.core.UserId;
-import io.spine.server.BoundedContext;
-import io.spine.server.aggregate.AggregateRoot;
-import io.spine.users.UserAccount;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-/**
- * The {@link UserAccount} aggregate root.
- */
-final class UserRoot extends AggregateRoot<UserId> {
-
-    UserRoot(BoundedContext context, UserId id) {
-        super(context, id);
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

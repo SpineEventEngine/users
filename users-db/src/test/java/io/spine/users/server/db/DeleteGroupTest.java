@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,24 +18,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server.db;
 
 import io.spine.users.GroupId;
 import io.spine.users.Group;
-import io.spine.users.command.ChangeGroupDescription;
-import io.spine.users.event.GroupDescriptionChanged;
-import io.spine.users.server.GroupCommandTest;
+import io.spine.users.command.DeleteGroup;
+import io.spine.users.event.GroupDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.group.given.GroupTestCommands.changeGroupDescription;
+import static io.spine.users.server.db.given.GroupTestCommands.deleteGroup;
 
-@DisplayName("`ChangeGroupDescription` command should")
-class ChangeGroupDescriptionTest
-        extends GroupCommandTest<ChangeGroupDescription, GroupDescriptionChanged> {
+@DisplayName("`DeleteGroup` command should")
+class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {
 
     @Test
-    @DisplayName("produce `GroupDescriptionChanged` event and set the updated description")
+    @DisplayName("produce `GroupDeleted` event and delete the group")
     @Override
     protected void produceEventAndChangeState() {
         preCreateGroup();
@@ -43,25 +41,28 @@ class ChangeGroupDescriptionTest
     }
 
     @Override
-    protected ChangeGroupDescription command(GroupId id) {
-        return changeGroupDescription(id);
+    protected DeleteGroup command(GroupId id) {
+        return deleteGroup(id);
     }
 
     @Override
-    protected GroupDescriptionChanged expectedEventAfter(ChangeGroupDescription command) {
-        return GroupDescriptionChanged
+    protected GroupDeleted expectedEventAfter(DeleteGroup command) {
+        return GroupDeleted
                 .newBuilder()
                 .setGroup(command.getGroup())
-                .setNewDescription(command.getDescription())
                 .build();
     }
 
     @Override
-    protected Group expectedStateAfter(ChangeGroupDescription command) {
+    protected Group expectedStateAfter(DeleteGroup command) {
         return Group
                 .newBuilder()
                 .setId(command.getGroup())
-                .setDescription(command.getDescription())
                 .build();
+    }
+
+    @Override
+    protected boolean isDeletedAfterCommand() {
+        return true;
     }
 }

@@ -57,7 +57,7 @@ public abstract class UsersContextTest {
     }
 
     protected BoundedContextBuilder contextBuilder() {
-        return UsersContext.newBuilder();
+        return UsersContext.newBuilder(true);
     }
 
     @AfterEach

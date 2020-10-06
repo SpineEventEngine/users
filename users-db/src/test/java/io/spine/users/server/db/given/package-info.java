@@ -18,18 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
-
-import io.spine.server.BoundedContext;
-import io.spine.server.aggregate.AggregateRoot;
-import io.spine.users.GroupId;
-
 /**
- * The {@link io.spine.users.Group Group} aggregate root.
+ * Test environment for {@link io.spine.users.server.group.GroupAccount} tests.
  */
-public final class GroupRoot extends AggregateRoot<GroupId> {
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.server.db.given;
 
-    public GroupRoot(BoundedContext context, GroupId id) {
-        super(context, id);
-    }
-}
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;

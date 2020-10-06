@@ -18,18 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.users.server.db;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
-import io.spine.users.GroupId;
 import io.spine.users.Group;
+import io.spine.users.GroupId;
 import io.spine.users.command.CreateGroup;
 import io.spine.users.server.given.TestIdentifiers;
 
-import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
-import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
-import static io.spine.users.server.group.given.GroupTestEnv.groupName;
+import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;
+import static io.spine.users.server.db.given.GroupTestEnv.groupEmail;
+import static io.spine.users.server.db.given.GroupTestEnv.groupName;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.
@@ -38,7 +38,7 @@ import static io.spine.users.server.group.given.GroupTestEnv.groupName;
  *         the type of the command being tested
  */
 public abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
-        extends CommandTest<GroupId, C, E, Group, GroupAccountPart> {
+        extends DbCommandTest<GroupId, C, E, Group, GroupAccountPart> {
 
     private static final GroupId GROUP_ID = TestIdentifiers.groupId();
 

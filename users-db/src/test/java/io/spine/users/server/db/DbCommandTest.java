@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,36 +18,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user.given;
+package io.spine.users.server.db;
 
-import io.spine.people.PersonName;
-import io.spine.users.PersonProfile;
-import io.spine.users.server.given.Given;
+import io.spine.base.CommandMessage;
+import io.spine.base.EntityState;
+import io.spine.base.EventMessage;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.server.entity.Entity;
+import io.spine.users.server.CommandTest;
 
-/**
- * The environment for the {@code UserPart} tests.
- */
-public class UserTestEnv {
+public abstract class DbCommandTest<I, C extends CommandMessage, E extends EventMessage,
+        S extends EntityState, Z extends Entity<I, S>> extends CommandTest<I, C, E, S, Z> {
 
-    /**
-     * Prevents direct instantiation.
-     */
-    private UserTestEnv() {
-    }
-
-    public static PersonProfile profile() {
-        return PersonProfile
-                .newBuilder()
-                .setName(personName())
-                .setEmail(Given.email())
-                .vBuild();
-    }
-
-    private static PersonName personName() {
-        return PersonName
-                .newBuilder()
-                .setGivenName("Jane")
-                .setFamilyName("Jones")
-                .vBuild();
+    @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return ContextExtensions.withDatabase(super.contextBuilder());
     }
 }

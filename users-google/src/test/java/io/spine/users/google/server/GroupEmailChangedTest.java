@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupEmailChanged;
-import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.db.given.GroupTestCommands.createGroup;
 
 @DisplayName("`GoogleGroupPm` should, when `GoogleGroupEmailChanged`")
 @Disabled("Until new API is introduced")

@@ -18,16 +18,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.gradle.internal.Deps
-
-plugins {
-    id("io.spine.tools.gradle.bootstrap")
-}
-
-apply {
-    from(Deps.scripts.testArtifacts(project))
-}
-
 spine.enableJava().server()
 
 dependencies {

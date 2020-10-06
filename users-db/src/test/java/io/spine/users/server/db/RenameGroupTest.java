@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,49 +18,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server.db;
 
 import io.spine.users.GroupId;
 import io.spine.users.Group;
-import io.spine.users.command.ChangeGroupEmail;
-import io.spine.users.event.GroupEmailChanged;
-import io.spine.users.server.GroupCommandTest;
+import io.spine.users.command.RenameGroup;
+import io.spine.users.event.GroupRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.group.given.GroupTestCommands.changeGroupEmail;
+import static io.spine.users.server.db.given.GroupTestCommands.renameGroup;
 
-@DisplayName("`ChangeGroupEmail` command should")
-class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmailChanged> {
+@DisplayName("`RenameGroup` command should")
+class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
+
+    @Override
+    protected RenameGroup command(GroupId id) {
+        return renameGroup(id);
+    }
+
+    @Override
+    protected GroupRenamed expectedEventAfter(RenameGroup command) {
+        return GroupRenamed
+                .newBuilder()
+                .setGroup(command.getGroup())
+                .setNewName(command.getNewName())
+                .build();
+    }
+
+    @Override
+    protected Group expectedStateAfter(RenameGroup command) {
+        return Group
+                .newBuilder()
+                .setId(command.getGroup())
+                .setDisplayName(command.getNewName())
+                .build();
+    }
 
     @Test
-    @DisplayName("produce `GroupEmailChanged` event and set the updated email")
+    @DisplayName("produce `GroupRenamed` event and change the display name")
     @Override
     protected void produceEventAndChangeState() {
         preCreateGroup();
         super.produceEventAndChangeState();
-    }
-
-    @Override
-    protected ChangeGroupEmail command(GroupId id) {
-        return changeGroupEmail(id);
-    }
-
-    @Override
-    protected GroupEmailChanged expectedEventAfter(ChangeGroupEmail command) {
-        return GroupEmailChanged
-                .newBuilder()
-                .setGroup(command.getGroup())
-                .setNewEmail(command.getNewEmail())
-                .buildPartial();
-    }
-
-    @Override
-    protected Group expectedStateAfter(ChangeGroupEmail command) {
-        return Group
-                .newBuilder()
-                .setId(command.getGroup())
-                .setEmail(command.getNewEmail())
-                .build();
     }
 }

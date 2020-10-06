@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group.given;
+package io.spine.users.server.db.given;
 
 import io.spine.net.EmailAddress;
 

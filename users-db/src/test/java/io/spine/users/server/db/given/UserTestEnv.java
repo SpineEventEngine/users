@@ -18,10 +18,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-package io.spine.users.server.group;
+package io.spine.users.server.db.given;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.people.PersonName;
+import io.spine.users.PersonProfile;
+import io.spine.users.server.given.Given;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * The environment for the {@code UserPart} tests.
+ */
+public class UserTestEnv {
+
+    /**
+     * Prevents direct instantiation.
+     */
+    private UserTestEnv() {
+    }
+
+    public static PersonProfile profile() {
+        return PersonProfile
+                .newBuilder()
+                .setName(personName())
+                .setEmail(Given.email())
+                .vBuild();
+    }
+
+    private static PersonName personName() {
+        return PersonName
+                .newBuilder()
+                .setGivenName("Jane")
+                .setFamilyName("Jones")
+                .vBuild();
+    }
+}

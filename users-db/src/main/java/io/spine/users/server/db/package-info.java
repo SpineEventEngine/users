@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,33 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
-
-import io.spine.server.BoundedContextBuilder;
-
-import static io.spine.server.BoundedContext.multitenant;
-import static io.spine.server.BoundedContext.singleTenant;
-
 /**
- * A factory of {@code Users} bounded context.
+ * This package provides implementation of user management via a database
+ * owned by an application.
  */
-public final class UsersContext {
 
-    /**
-     * The name of the context.
-     */
-    public static final String NAME = "Users";
+@ParametersAreNonnullByDefault
+@CheckReturnValue
+package io.spine.users.server.db;
 
-    /** Prevents instantiation of this static factory. */
-    private UsersContext() {
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Creates a builder of the {@code Users} Context along with the registered repositories.
-     *
-     * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
-     */
-    public static BoundedContextBuilder newBuilder(boolean multitenant) {
-        return multitenant ? multitenant(NAME) : singleTenant(NAME);
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

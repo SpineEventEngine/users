@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,33 +18,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.users.server.db;
 
-import io.spine.server.BoundedContextBuilder;
-
-import static io.spine.server.BoundedContext.multitenant;
-import static io.spine.server.BoundedContext.singleTenant;
+import io.spine.core.UserId;
+import io.spine.server.BoundedContext;
+import io.spine.server.aggregate.AggregateRoot;
+import io.spine.users.UserAccount;
 
 /**
- * A factory of {@code Users} bounded context.
+ * The {@link UserAccount} aggregate root.
  */
-public final class UsersContext {
+final class UserRoot extends AggregateRoot<UserId> {
 
-    /**
-     * The name of the context.
-     */
-    public static final String NAME = "Users";
-
-    /** Prevents instantiation of this static factory. */
-    private UsersContext() {
-    }
-
-    /**
-     * Creates a builder of the {@code Users} Context along with the registered repositories.
-     *
-     * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
-     */
-    public static BoundedContextBuilder newBuilder(boolean multitenant) {
-        return multitenant ? multitenant(NAME) : singleTenant(NAME);
+    UserRoot(BoundedContext context, UserId id) {
+        super(context, id);
     }
 }

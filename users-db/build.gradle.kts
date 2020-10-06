@@ -18,13 +18,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Test environment for {@link io.spine.users.server.group.GroupAccount} tests.
- */
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-package io.spine.users.server.group.given;
+import io.spine.gradle.internal.Deps
 
-import com.google.errorprone.annotations.CheckReturnValue;
+spine.enableJava().server()
 
-import javax.annotation.ParametersAreNonnullByDefault;
+dependencies {
+    implementation(project(":users-server"))
+    testImplementation(project(path = ":users-server", configuration = "testArtifacts"))
+}

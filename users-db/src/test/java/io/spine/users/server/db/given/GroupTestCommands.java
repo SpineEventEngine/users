@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group.given;
+package io.spine.users.server.db.given;
 
 import io.spine.users.GroupId;
 import io.spine.users.command.AddGroupToGroup;
@@ -29,12 +29,12 @@ import io.spine.users.command.DeleteGroup;
 import io.spine.users.command.RemoveGroupFromGroup;
 import io.spine.users.command.RenameGroup;
 
-import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupDescription;
-import static io.spine.users.server.group.given.GroupTestEnv.anotherGroupName;
-import static io.spine.users.server.group.given.GroupTestEnv.groupDescription;
-import static io.spine.users.server.group.given.GroupTestEnv.groupEmail;
-import static io.spine.users.server.group.given.GroupTestEnv.groupName;
-import static io.spine.users.server.group.given.GroupTestEnv.newGroupEmail;
+import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupDescription;
+import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupName;
+import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;
+import static io.spine.users.server.db.given.GroupTestEnv.groupEmail;
+import static io.spine.users.server.db.given.GroupTestEnv.groupName;
+import static io.spine.users.server.db.given.GroupTestEnv.newGroupEmail;
 
 /**
  * Test commands for {@code GroupAccount}.

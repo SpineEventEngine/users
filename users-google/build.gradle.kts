@@ -22,5 +22,7 @@ spine.enableJava().server()
 
 dependencies {
     implementation(project(":users-server"))
+    implementation(project(":users-db"))
     testImplementation(project(path = ":users-server", configuration = "testArtifacts"))
+    testImplementation(project(path = ":users-db", configuration = "testArtifacts"))
 }

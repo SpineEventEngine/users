@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.user;
+package io.spine.users.server.db;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.BlackBoxContext;
@@ -35,11 +35,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.given.TestIdentifiers.userId;
-import static io.spine.users.server.user.given.UserTestCommands.createUserAccount;
-import static io.spine.users.server.user.given.UserTestCommands.deleteUserAccount;
+import static io.spine.users.server.db.given.UserTestCommands.createUserAccount;
+import static io.spine.users.server.db.given.UserTestCommands.deleteUserAccount;
 
 @DisplayName("A User Account should")
-class UserAccountTest extends UsersContextTest {
+class UserAccountTest extends DbExtensionsTest {
 
     private UserId user;
     private BlackBoxContext context;

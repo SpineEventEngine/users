@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.group;
+package io.spine.users.server.db;
 
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.GroupId;
@@ -34,11 +34,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.given.TestIdentifiers.groupId;
-import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
-import static io.spine.users.server.group.given.GroupTestCommands.deleteGroup;
+import static io.spine.users.server.db.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.db.given.GroupTestCommands.deleteGroup;
 
 @DisplayName("A group should")
-class GroupAccountTest extends UsersContextTest {
+class GroupAccountTest extends DbExtensionsTest {
 
     private GroupId group;
     private BlackBoxContext context;

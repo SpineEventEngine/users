@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.users.server.db;
 
 import io.spine.core.UserId;
 import io.spine.server.aggregate.AggregatePart;
