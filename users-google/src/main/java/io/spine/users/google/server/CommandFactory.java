@@ -37,8 +37,6 @@ import io.spine.users.command.RenameGroup;
 
 /**
  * Translates Google Group events into system-neutral commands.
- *
- * @see GoogleGroupLifecyclePm
  */
 final class CommandFactory {
 
@@ -61,7 +59,7 @@ final class CommandFactory {
                 .setGroup(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
-                .build();
+                .vBuild();
         return result;
     }
 
@@ -74,7 +72,7 @@ final class CommandFactory {
                 .setGroup(event.getId())
                 .setEmail(event.getEmail())
                 .setDisplayName(event.getDisplayName())
-                .build();
+                .vBuild();
         return result;
     }
 
@@ -87,7 +85,7 @@ final class CommandFactory {
                 .newBuilder()
                 .setGroup(event.getId())
                 .setParentGroup(event.getNewParentId())
-                .build();
+                .vBuild();
     }
 
     /**
@@ -99,7 +97,7 @@ final class CommandFactory {
                 .newBuilder()
                 .setGroup(event.getId())
                 .setNewName(event.getDisplayName())
-                .build();
+                .vBuild();
     }
 
     /**
@@ -111,7 +109,7 @@ final class CommandFactory {
                 .newBuilder()
                 .setGroup(event.getId())
                 .setParentGroup(event.getParentGroupId())
-                .build();
+                .vBuild();
     }
 
     /**
@@ -122,7 +120,7 @@ final class CommandFactory {
         return DeleteGroup
                 .newBuilder()
                 .setGroup(event.getId())
-                .build();
+                .vBuild();
     }
 
     /**
@@ -134,7 +132,7 @@ final class CommandFactory {
                 .newBuilder()
                 .setGroup(event.getId())
                 .setNewEmail(event.getNewEmail())
-                .build();
+                .vBuild();
     }
 
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
@@ -142,6 +140,6 @@ final class CommandFactory {
                 .newBuilder()
                 .setGroup(event.getId())
                 .setDescription(event.getNewDescription())
-                .build();
+                .vBuild();
     }
 }

@@ -90,7 +90,7 @@ final class GroupMembersPart
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())
-                .build();
+                .vBuild();
     }
 
     @Assign
@@ -99,7 +99,7 @@ final class GroupMembersPart
                 .newBuilder()
                 .setGroup(command.getGroup())
                 .setParentGroup(command.getParentGroup())
-                .build();
+                .vBuild();
     }
 
     @Apply

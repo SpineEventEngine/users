@@ -76,7 +76,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
                 .setDisplayName(c.getDisplayName())
                 .setEmail(c.getEmail())
                 .setDescription(c.getDescription())
-                .build();
+                .vBuild();
     }
 
     @Assign
@@ -84,7 +84,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
         return GroupDeleted
                 .newBuilder()
                 .setGroup(c.getGroup())
-                .build();
+                .vBuild();
     }
 
     @Assign
@@ -94,7 +94,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
                 .setGroup(c.getGroup())
                 .setNewName(c.getNewName())
                 .setOldName(state().getDisplayName())
-                .build();
+                .vBuild();
     }
 
     @Assign
@@ -104,7 +104,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
                 .setGroup(c.getGroup())
                 .setNewEmail(c.getNewEmail())
                 .setOldEmail(state().getEmail())
-                .build();
+                .vBuild();
     }
 
     @Assign
@@ -114,7 +114,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
                 .setGroup(c.getGroup())
                 .setNewDescription(c.getDescription())
                 .setOldDescription(state().getDescription())
-                .build();
+                .vBuild();
     }
 
     @Apply
