@@ -26,7 +26,7 @@
 # Therefore, instructions below are superset of instructions required for all the projects.
 
 # Gradle interim configs
-.gradle/**
+.gradle/
 
 # Generated source code
 **/generated/
