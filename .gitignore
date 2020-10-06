@@ -29,18 +29,18 @@
 .gradle/**
 
 # Generated source code
-**/generated/**
+**/generated/
 
-# Gradle build files
-**/build/**
+# Gradle build directories
+**/build/
 
-# Build files produced by the IDE
-**/out/**
+# Build directories produced by IDEA
+**/out/
 
 # Spine temporary artifact storage
 .spine/
 
-# Ignore Gradle GUI config
+# Gradle GUI config
 gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
@@ -51,12 +51,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
-
-# Spine internal directory for storing intermediate artifacts
-**/.spine/**
-
-# Spine model compiler auto-generated resources
-/tools/gradle-plugins/model-compiler/src/main/resources/spine-protoc.gradle
 
 # Login details to Maven repository.
 # Each workstation should have developer's login defined in this file.
@@ -81,5 +75,5 @@ hs_err_pid*
 
 # Web-specific entires.
 client/html-js/proto
-**/node_modules/**
+**/node_modules/
 **/bundle.js
