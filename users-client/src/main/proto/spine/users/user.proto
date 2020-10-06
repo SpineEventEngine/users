@@ -52,15 +52,15 @@ message User {
 message PersonProfile {
     option (required_field) = "email|name";
 
-    // The primary email address of the user which may be used by the application
-    // for communicating with the user.
-    net.EmailAddress email = 1;
-
     // A name of the person, if available.
-    people.PersonName name = 2;
+    people.PersonName name = 1;
 
     // The URL of the photo of the user, if available.
-    net.Url photo = 3;
+    net.Url photo = 2;
+
+    // The primary email address of the user which may be used by the application
+    // for communicating with the user.
+    net.EmailAddress email = 3;
 }
 
 // Information about a non-human user such as a service or a device.
