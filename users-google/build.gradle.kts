@@ -18,7 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+spine.enableJava().server()
+
 dependencies {
-    compile project(path: ':users-server')
-    testImplementation project(path: ':users-server', configuration: 'testArtifacts')
+    implementation(project(":users-server"))
+    testImplementation(project(path = ":users-server", configuration = "testArtifacts"))
 }

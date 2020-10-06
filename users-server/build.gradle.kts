@@ -18,21 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Declares the version of the artifacts to publish and versions of
- * project-specific general dependencies.
- *
- * This file is used in both module `build.gradle` scripts and in the integration tests,
- * as we want to manage the versions in a single source.
- *
- * This file is copied to the root of the project ONLY if there's no file with such a name
- * already in the root directory.
- */
-final def VERSION_TO_PUBLISH = '0.0.3'
+import io.spine.gradle.internal.Deps
 
-ext {
-    spineBaseVersion = '1.6.0'
-    spineVersion = '1.6.0'
-    versionToPublish = VERSION_TO_PUBLISH
-    versionToPublishJs = VERSION_TO_PUBLISH
+plugins {
+    id("io.spine.tools.gradle.bootstrap")
+}
+
+apply {
+    from(Deps.scripts.testArtifacts(project))
+}
+
+spine.enableJava().server()
+
+dependencies {
+    api(project(":users-client"))
 }

@@ -1,7 +1,0 @@
-rootProject.name = 'spine-users'
-
-include(
-        'users-client',
-        'users-server',
-        'users-google'
-)
