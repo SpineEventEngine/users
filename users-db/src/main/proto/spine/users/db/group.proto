@@ -1,5 +1,5 @@
 //
-// Copyright 2019, TeamDev. All rights reserved.
+// Copyright 2020, TeamDev. All rights reserved.
 //
 // Redistribution and use in source and/or binary forms, with or without
 // modification, must retain the above copyright notice and the following
@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.db;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users";
+option java_package = "io.spine.users.db";
 option java_outer_classname = "GroupProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
@@ -33,6 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
+import "spine/users/membership.proto";
 
 // A group gathers users on a common purpose of collaboration.
 //
@@ -67,75 +68,3 @@ message GroupMembers {
     // Members added directly to this group.
     repeated Member member = 2;
 }
-
-// A member of a group.
-message Member {
-    option (required_field) = "user|group";
-
-    oneof kind {
-        // The user who is added directly to the group.
-        core.UserId user = 1;
-
-        // The group which is added directly to the group.
-        GroupId group = 2;
-    }
-
-    // The role of the member in the group.
-    Role role = 3 [(required) = true];
-}
-
-// Defines roles which a member may have in a group.
-enum Role {
-
-    // The role was not specified. A member cannot be added to a group with this value.
-    ROLE_UNSPECIFIED = 0;
-
-    // A regular member of a group.
-    MEMBER = 1;
-
-    // A privileged member with permissions to manage the group.
-    MANAGER = 2;
-
-    // A person who can delete the group and add manage other owners.
-    OWNER = 3;
-}
-
-// Defines membership in a group.
-message Membership {
-
-    // The group to which the member belongs.
-    GroupId group = 1 [(required) = true];
-
-    // The role in the group.
-    Role role = 2 [(required) = true];
-}
-
-// To which groups this user belongs directly?
-message UserMembership {
-    option (entity).kind = AGGREGATE;
-
-    // The ID of the user who is the member of some groups.
-    core.UserId user = 1 [(required) = true];
-
-    // Groups to which the user belongs.
-    //
-    // Empty if the user is not a member of any group.
-    //
-    repeated Membership membership = 2;
-}
-
-// To which groups this group belongs directly?
-message GroupMembership {
-    option (entity).kind = AGGREGATE;
-
-    // The ID of the group which is a member of other groups.
-    GroupId group = 1 [(required) = true];
-
-    // Groups to which this group belong directly.
-    //
-    // Empty if this group is not a member of any other group.
-    //
-    repeated Membership membership = 2;
-}
-
-

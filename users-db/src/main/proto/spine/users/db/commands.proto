@@ -24,7 +24,7 @@ package spine.users;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.command";
+option java_package = "io.spine.users.db.command";
 option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
@@ -33,7 +33,8 @@ import "spine/core/user_id.proto";
 import "spine/net/email_address.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/user.proto";
-import "spine/users/group.proto";
+import "spine/users/membership.proto";
+import "spine/users/db/group.proto";
 
 // Creates a new user account.
 message CreateUserAccount {

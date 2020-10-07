@@ -36,6 +36,13 @@ import "spine/net/email_address.proto";
 import "spine/net/url.proto";
 
 // A user of a computer system.
+//
+// This type provides human-readable information about the user.
+// The primary purpose of this type is to show the user to other users in the UI
+// or other media.
+//
+// This type does not hold identity of the user for security reasons.
+//
 message User {
     option (required_field) = "person|service";
 
@@ -76,15 +83,18 @@ message ServiceProfile {
     net.Url icon = 3;
 }
 
-// A user of the application, either a person or a computer program.
-message UserAccount {
-    option (entity).kind = AGGREGATE;
+// An account of a user in a system.
+message PUserAccount {
+    option (entity).kind = PROJECTION;
 
     // The ID of the account
     core.UserId id = 1;
 
     // The user of the system.
     User user = 2 [(required) = true];
+
+    // The value of the status.
+    AccountStatus status = 3 [(required) = true];
 }
 
 // Enumerates possible statuses of a user account
@@ -104,16 +114,4 @@ enum AccountStatus {
 
     // The user account was suspended.
     SUSPENDED = 3;
-}
-
-// Contains a status of a user account.
-message UserAccountStatus {
-
-    option (entity).kind = AGGREGATE;
-
-    // The ID of the user account.
-    core.UserId id = 1;
-
-    // The value of the status.
-    AccountStatus value = 2 [(required) = true];
 }

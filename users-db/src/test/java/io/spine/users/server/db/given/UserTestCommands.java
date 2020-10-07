@@ -21,12 +21,12 @@
 package io.spine.users.server.db.given;
 
 import io.spine.core.UserId;
-import io.spine.users.command.AddUserToGroup;
-import io.spine.users.command.RemoveUserFromGroup;
-import io.spine.users.server.given.TestIdentifiers;
 import io.spine.users.User;
-import io.spine.users.command.CreateUserAccount;
-import io.spine.users.command.DeleteUserAccount;
+import io.spine.users.db.command.AddUserToGroup;
+import io.spine.users.db.command.CreateUserAccount;
+import io.spine.users.db.command.DeleteUserAccount;
+import io.spine.users.db.command.RemoveUserFromGroup;
+import io.spine.users.server.given.TestIdentifiers;
 
 import static io.spine.users.Role.MEMBER;
 import static io.spine.users.server.db.given.UserTestEnv.profile;

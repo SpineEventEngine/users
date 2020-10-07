@@ -21,13 +21,13 @@
 package io.spine.users.server.db.given;
 
 import io.spine.users.GroupId;
-import io.spine.users.command.AddGroupToGroup;
-import io.spine.users.command.ChangeGroupDescription;
-import io.spine.users.command.ChangeGroupEmail;
-import io.spine.users.command.CreateGroup;
-import io.spine.users.command.DeleteGroup;
-import io.spine.users.command.RemoveGroupFromGroup;
-import io.spine.users.command.RenameGroup;
+import io.spine.users.db.command.AddGroupToGroup;
+import io.spine.users.db.command.ChangeGroupDescription;
+import io.spine.users.db.command.ChangeGroupEmail;
+import io.spine.users.db.command.CreateGroup;
+import io.spine.users.db.command.DeleteGroup;
+import io.spine.users.db.command.RemoveGroupFromGroup;
+import io.spine.users.db.command.RenameGroup;
 
 import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupDescription;
 import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupName;

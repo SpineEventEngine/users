@@ -22,10 +22,9 @@ package io.spine.users.server.db;
 
 import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.BlackBoxContext;
-import io.spine.users.server.UsersContextTest;
-import io.spine.users.UserAccount;
-import io.spine.users.command.CreateUserAccount;
-import io.spine.users.command.DeleteUserAccount;
+import io.spine.users.db.UserAccount;
+import io.spine.users.db.command.CreateUserAccount;
+import io.spine.users.db.command.DeleteUserAccount;
 import io.spine.users.event.UserAccountCreated;
 import io.spine.users.rejection.Rejections.UnavalableForPreviouslyDeletedAccount;
 import io.spine.users.rejection.Rejections.UserAccountAlreadyExists;
@@ -34,9 +33,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.given.TestIdentifiers.userId;
 import static io.spine.users.server.db.given.UserTestCommands.createUserAccount;
 import static io.spine.users.server.db.given.UserTestCommands.deleteUserAccount;
+import static io.spine.users.server.given.TestIdentifiers.userId;
 
 @DisplayName("A User Account should")
 class UserAccountTest extends DbExtensionsTest {

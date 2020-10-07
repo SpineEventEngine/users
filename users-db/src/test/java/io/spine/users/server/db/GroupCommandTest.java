@@ -22,9 +22,9 @@ package io.spine.users.server.db;
 
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
-import io.spine.users.Group;
 import io.spine.users.GroupId;
-import io.spine.users.command.CreateGroup;
+import io.spine.users.db.Group;
+import io.spine.users.db.command.CreateGroup;
 import io.spine.users.server.given.TestIdentifiers;
 
 import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;

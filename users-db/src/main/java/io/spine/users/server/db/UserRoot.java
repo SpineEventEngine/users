@@ -23,7 +23,7 @@ package io.spine.users.server.db;
 import io.spine.core.UserId;
 import io.spine.server.BoundedContext;
 import io.spine.server.aggregate.AggregateRoot;
-import io.spine.users.UserAccount;
+import io.spine.users.db.UserAccount;
 
 /**
  * The {@link UserAccount} aggregate root.

@@ -22,8 +22,8 @@ package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupDescriptionChanged;
-import io.spine.users.command.ChangeGroupDescription;
-import io.spine.users.command.CreateGroup;
+import io.spine.users.db.command.ChangeGroupDescription;
+import io.spine.users.db.command.CreateGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

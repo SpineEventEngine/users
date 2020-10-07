@@ -22,8 +22,8 @@ package io.spine.users.server.db;
 
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.GroupId;
-import io.spine.users.Group;
-import io.spine.users.command.CreateGroup;
+import io.spine.users.db.Group;
+import io.spine.users.db.command.CreateGroup;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.rejection.Rejections.GroupAlreadyExists;
 import io.spine.users.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;

@@ -21,8 +21,8 @@
 package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
+import io.spine.users.db.command.DeleteGroup;
 import io.spine.users.google.event.GoogleGroupDeleted;
-import io.spine.users.command.DeleteGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
