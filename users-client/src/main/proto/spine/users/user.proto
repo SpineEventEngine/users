@@ -84,7 +84,7 @@ message ServiceProfile {
 }
 
 // An account of a user in a system.
-message PUserAccount {
+message UserAccount {
     option (entity).kind = PROJECTION;
 
     // The ID of the account
