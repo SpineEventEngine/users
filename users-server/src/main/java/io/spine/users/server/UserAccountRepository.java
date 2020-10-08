@@ -18,36 +18,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server.db.given;
+package io.spine.users.server;
 
-import io.spine.people.PersonName;
-import io.spine.users.PersonProfile;
-import io.spine.users.server.given.Given;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+import io.spine.core.UserId;
+import io.spine.server.projection.ProjectionRepository;
+import io.spine.server.route.EventRouting;
+import io.spine.users.UserAccount;
+import io.spine.users.event.AccountAware;
 
-/**
- * The environment for the {@code UserPart} tests.
- */
-public class UserTestEnv {
+import static io.spine.server.route.EventRoute.withId;
 
-    /**
-     * Prevents direct instantiation.
-     */
-    private UserTestEnv() {
-    }
+final class UserAccountRepository
+        extends ProjectionRepository<UserId, UserAccountProjection, UserAccount> {
 
-    public static PersonProfile profile() {
-        return PersonProfile
-                .newBuilder()
-                .setName(personName())
-                .setEmail(Given.email())
-                .vBuild();
-    }
-
-    private static PersonName personName() {
-        return PersonName
-                .newBuilder()
-                .setGivenName("Jane")
-                .setFamilyName("Jones")
-                .vBuild();
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void setupEventRouting(EventRouting<UserId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(AccountAware.class, (e, ctx) -> withId(e.getAccount()));
     }
 }

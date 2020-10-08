@@ -18,9 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * This package provides events of the Users context.
+ */
+
 @ParametersAreNonnullByDefault
 @CheckReturnValue
-package io.spine.users.server.user;
+package io.spine.users.event;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

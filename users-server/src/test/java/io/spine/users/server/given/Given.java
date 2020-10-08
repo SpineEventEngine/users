@@ -20,22 +20,66 @@
 
 package io.spine.users.server.given;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
+import io.spine.testing.TestValues;
 import io.spine.users.PersonProfile;
 import io.spine.users.User;
 
+import java.util.List;
+
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import static java.lang.String.format;
 
 /**
  * Test value objects for the Users context.
  */
 public final class Given {
 
+    private static final ImmutableList<PersonName> names = ImmutableList.of(
+            name("Georgina Ortega"),
+            name("Rosa Sparks"),
+            name("Orla Mccoy"),
+            name("Betty Saunders"),
+            name("Isabelle Khan"),
+            name("Jeremiah Wallace"),
+            name("Hugo Olsen"),
+            name("Raymond Livingston"),
+            name("Eugene O'Neill"),
+            name("Keith Floyd")
+    );
+
     /** Prevents instantiation of this utility class. */
     private Given() {
     }
 
+    private static PersonName name(String name) {
+        List<String> names = Splitter.on(' ')
+                                     .limit(2)
+                                     .splitToList(name);
+        return name(names.get(0), names.get(1));
+    }
+
+    /** Creates a person name using the passed values. */
+    public static PersonName name(String givenName, String familyName) {
+        return PersonName
+                .newBuilder()
+                .setGivenName(givenName)
+                .setFamilyName(familyName)
+                .vBuild();
+    }
+
+    /** Creates a profile for the person with the given name. */
+    public static PersonProfile person(PersonName name) {
+        return PersonProfile
+                .newBuilder()
+                .setName(name)
+                .vBuild();
+    }
+
+    /** Creates an email address with the passed value. */
     public static EmailAddress email(String value) {
         checkNotEmptyOrBlank(value);
         return EmailAddress
@@ -44,32 +88,47 @@ public final class Given {
                 .vBuild();
     }
 
-    public static PersonName personName(String givenName, String familyName) {
-        return PersonName
-                .newBuilder()
-                .setGivenName(givenName)
-                .setFamilyName(familyName)
-                .vBuild();
+    /** Creates a user with a randomly selected person name. */
+    public static User humanUser() {
+        return User.newBuilder()
+                   .setPerson(person(name()))
+                   .vBuild();
     }
 
-    public static PersonProfile profile(PersonName name) {
+    /** Generates an email address using a randomly selected person name. */
+    public static EmailAddress email() {
+        PersonName name = name();
+        return email(name);
+    }
+
+    /**
+     * Creates an email address in the form {@code "<givenName>.<familyName>@example.com"}.
+     */
+    public static EmailAddress email(PersonName name) {
+        String value = format(
+                "%s.%s@example.com",
+                name.getGivenName().toLowerCase(),
+                name.getFamilyName().toLowerCase()
+        );
+        return EmailAddress.newBuilder()
+                           .setValue(value)
+                           .vBuild();
+    }
+
+    /** Randomly selected name from a list of pre-defined. */
+    public static PersonName name() {
+        int index = TestValues.random(names.size() - 1);
+        PersonName result = names.get(index);
+        return result;
+    }
+
+    /** Creates a person profile with randomly selected name and corresponding email address. */
+    public static PersonProfile person() {
+        PersonName name = name();
         return PersonProfile
                 .newBuilder()
                 .setName(name)
-                .vBuild();
-    }
-
-    public static User user(PersonName name) {
-        return User
-                .newBuilder()
-                .setPerson(profile(name))
-                .vBuild();
-    }
-
-    public static EmailAddress email() {
-        return EmailAddress
-                .newBuilder()
-                .setValue(TestIdentifiers.generateId("john-%d@smith.com"))
+                .setEmail(email(name))
                 .vBuild();
     }
 }

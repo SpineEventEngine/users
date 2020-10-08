@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,35 +18,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.server;
+package io.spine.users.event;
 
-import io.spine.server.BoundedContextBuilder;
-
-import static io.spine.server.BoundedContext.multitenant;
-import static io.spine.server.BoundedContext.singleTenant;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.base.EventMessage;
+import io.spine.core.UserId;
 
 /**
- * A factory of {@code Users} bounded context.
+ * The interface common for events referring a user account.
  */
-public final class UsersContext {
+@Immutable
+public interface AccountAware extends EventMessage {
 
-    /**
-     * The name of the context.
-     */
-    public static final String NAME = "Users";
+    /** Obtains the ID of the user account associated with the event. */
+    UserId getAccount();
 
-    /** Prevents instantiation of this static factory. */
-    private UsersContext() {
-    }
-
-    /**
-     * Creates a builder of the {@code Users} Context along with the registered repositories.
-     *
-     * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
-     */
-    public static BoundedContextBuilder newBuilder(boolean multitenant) {
-        BoundedContextBuilder builder = multitenant ? multitenant(NAME) : singleTenant(NAME);
-        builder.add(new UserAccountRepository());
-        return builder;
+    /** Obtains the ID of the user account associated with the event. */
+    default UserId account() {
+        return getAccount();
     }
 }

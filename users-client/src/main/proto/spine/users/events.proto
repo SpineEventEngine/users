@@ -39,6 +39,7 @@ import "spine/users/membership.proto";
 
 // A new user account was created.
 message UserAccountCreated {
+    option (is).java_type = "AccountAware";
 
     // The ID of the account.
     core.UserId account = 1;
@@ -49,6 +50,7 @@ message UserAccountCreated {
 
 // An account of a user was deleted.
 message UserAccountDeleted {
+    option (is).java_type = "AccountAware";
 
     // The ID of the deleted account.
     core.UserId account = 1;
@@ -56,6 +58,7 @@ message UserAccountDeleted {
 
 // An account of a user was suspended.
 message UserAccountSuspended {
+    option (is).java_type = "AccountAware";
 
     // The ID of the suspended account.
     core.UserId account = 1;
@@ -63,6 +66,7 @@ message UserAccountSuspended {
 
 // A previously suspended account of a user was resumed.
 message UserAccountResumed {
+    option (is).java_type = "AccountAware";
 
     // The ID of the resumed account.
     core.UserId account = 1;

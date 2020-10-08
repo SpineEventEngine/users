@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, TeamDev. All rights reserved.
+ * Copyright 2020, TeamDev. All rights reserved.
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -18,14 +18,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.users.server;
+
+import io.spine.core.Subscribe;
+import io.spine.core.UserId;
+import io.spine.server.projection.Projection;
+import io.spine.users.AccountStatus;
+import io.spine.users.UserAccount;
+import io.spine.users.event.UserAccountCreated;
+
 /**
- * This package contains test environment for user entities.
+ * Gathers events on a user account for building its latest representation.
  */
+final class UserAccountProjection extends Projection<UserId, UserAccount, UserAccount.Builder> {
 
-@ParametersAreNonnullByDefault
-@CheckReturnValue
-package io.spine.users.server.user.given;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Subscribe
+    void on(UserAccountCreated e) {
+        builder().setUser(e.getUser())
+                 .setStatus(AccountStatus.ACTIVE);
+    }
+}
