@@ -29,9 +29,15 @@ import io.spine.users.event.AccountAware;
 
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * Manages {@link UserAccountProjection}s.
+ */
 final class UserAccountRepository
         extends ProjectionRepository<UserId, UserAccountProjection, UserAccount> {
 
+    /**
+     * Customizes the routing to deliver {@link AccountAware} events to corresponding projections.
+     */
     @OverridingMethodsMustInvokeSuper
     @Override
     protected void setupEventRouting(EventRouting<UserId> routing) {
