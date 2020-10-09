@@ -47,7 +47,7 @@ message CreateUserAccount {
 }
 
 // Deletes a user account.
-message DeleteUserAccount {
+message TerminateUserAccount {
 
     // The ID of the account to delete.
     core.UserId account = 1;

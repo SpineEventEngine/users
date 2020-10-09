@@ -35,8 +35,8 @@ import io.spine.users.event.GroupDeleted;
 import io.spine.users.event.GroupDescriptionChanged;
 import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.event.GroupRenamed;
-import io.spine.users.rejection.GroupAlreadyExists;
-import io.spine.users.rejection.UnavalableForPreviouslyDeletedGroup;
+import io.spine.users.db.rejection.GroupAlreadyExists;
+import io.spine.users.db.rejection.UnavalableForPreviouslyDeletedGroup;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.

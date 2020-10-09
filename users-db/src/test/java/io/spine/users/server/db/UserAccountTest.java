@@ -24,10 +24,10 @@ import io.spine.core.UserId;
 import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.db.UserAccount;
 import io.spine.users.db.command.CreateUserAccount;
-import io.spine.users.db.command.DeleteUserAccount;
+import io.spine.users.db.command.TerminateUserAccount;
 import io.spine.users.event.UserAccountCreated;
-import io.spine.users.rejection.Rejections.UnavalableForPreviouslyDeletedAccount;
-import io.spine.users.rejection.Rejections.UserAccountAlreadyExists;
+import io.spine.users.db.rejection.Rejections.UnavalableForPreviouslyDeletedAccount;
+import io.spine.users.db.rejection.Rejections.UserAccountAlreadyExists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -120,7 +120,7 @@ class UserAccountTest extends DbExtensionsTest {
     void deletion() {
         context.receivesCommand(createUserAccount(user));
 
-        DeleteUserAccount cmd = deleteUserAccount(user);
+        TerminateUserAccount cmd = deleteUserAccount(user);
         context.receivesCommand(cmd);
 
         context.assertEntityWithState(user, UserAccount.class)

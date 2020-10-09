@@ -24,7 +24,7 @@ import io.spine.core.UserId;
 import io.spine.users.User;
 import io.spine.users.db.command.AddUserToGroup;
 import io.spine.users.db.command.CreateUserAccount;
-import io.spine.users.db.command.DeleteUserAccount;
+import io.spine.users.db.command.TerminateUserAccount;
 import io.spine.users.db.command.RemoveUserFromGroup;
 import io.spine.users.server.given.Given;
 
@@ -67,8 +67,8 @@ public class UserTestCommands {
                 .build();
     }
 
-    public static DeleteUserAccount deleteUserAccount(UserId id) {
-        return DeleteUserAccount
+    public static TerminateUserAccount deleteUserAccount(UserId id) {
+        return TerminateUserAccount
                 .newBuilder()
                 .setAccount(id)
                 .build();

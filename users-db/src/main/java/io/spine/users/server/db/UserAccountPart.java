@@ -27,18 +27,15 @@ import io.spine.server.command.Assign;
 import io.spine.users.User;
 import io.spine.users.db.UserAccount;
 import io.spine.users.db.command.CreateUserAccount;
-import io.spine.users.db.command.DeleteUserAccount;
+import io.spine.users.db.command.TerminateUserAccount;
 import io.spine.users.event.UserAccountCreated;
 import io.spine.users.event.UserAccountTerminated;
-import io.spine.users.rejection.UnavalableForPreviouslyDeletedAccount;
-import io.spine.users.rejection.UserAccountAlreadyDeleted;
-import io.spine.users.rejection.UserAccountAlreadyExists;
+import io.spine.users.db.rejection.UnavalableForPreviouslyDeletedAccount;
+import io.spine.users.db.rejection.UserAccountAlreadyDeleted;
+import io.spine.users.db.rejection.UserAccountAlreadyExists;
 
 /**
- * An aggregate for user of the application, either a person or machine.
- *
- * <p>A user is a leaf in the hierarchical structure of the organization. It can have either
- * a single {@code Organization} or single {@code OrgUnit} as a parent organizational entity.
+ * Manages a user account stored locally in the database of an application.
  */
 final class UserAccountPart
         extends AggregatePart<UserId, UserAccount, UserAccount.Builder, UserRoot> {
@@ -74,7 +71,7 @@ final class UserAccountPart
     }
 
     @Assign
-    UserAccountTerminated handle(DeleteUserAccount command)
+    UserAccountTerminated handle(TerminateUserAccount command)
             throws UserAccountAlreadyDeleted {
         if (isDeleted()) {
             throw UserAccountAlreadyDeleted

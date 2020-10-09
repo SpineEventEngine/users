@@ -36,7 +36,7 @@ import io.spine.users.event.GroupAddedToGroup;
 import io.spine.users.event.GroupRemovedFromGroup;
 import io.spine.users.event.UserAddedToGroup;
 import io.spine.users.event.UserRemovedFromGroup;
-import io.spine.users.rejection.UserIsNotMember;
+import io.spine.users.db.rejection.UserIsNotMember;
 
 import java.util.Optional;
 import java.util.stream.Stream;

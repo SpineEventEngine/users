@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-package spine.users;
+package spine.users.db;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.users.rejection";
+option java_package = "io.spine.users.db.rejection";
 option java_multiple_files = false;
 option java_generate_equals_and_hash = true;
 
