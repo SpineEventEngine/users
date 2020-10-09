@@ -22,14 +22,18 @@ package io.spine.users.server.given;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import io.spine.core.UserId;
 import io.spine.net.EmailAddress;
 import io.spine.people.PersonName;
 import io.spine.testing.TestValues;
+import io.spine.testing.core.given.GivenUserId;
+import io.spine.users.GroupId;
 import io.spine.users.PersonProfile;
 import io.spine.users.User;
 
 import java.util.List;
 
+import static io.spine.testing.TestValues.random;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 import static java.lang.String.format;
 
@@ -55,10 +59,34 @@ public final class Given {
     private Given() {
     }
 
+    /** Generates a user ID using a random number in the range [0, 999]. */
+    public static UserId userId() {
+        String value = generateId("u-%03d");
+        return GivenUserId.of(value);
+    }
+
+    private static String generateId(String fmt) {
+        String value = format(fmt, random(1, 999));
+        return value;
+    }
+
+    /** Generates a group ID using a random number in the range [0, 999]. */
+    public static GroupId groupId() {
+        return groupId(generateId("g-%03d"));
+    }
+
+    private static GroupId groupId(String value) {
+        return GroupId
+                .newBuilder()
+                .setValue(value)
+                .vBuild();
+    }
+
     private static PersonName name(String name) {
-        List<String> names = Splitter.on(' ')
-                                     .limit(2)
-                                     .splitToList(name);
+        List<String> names =
+                Splitter.on(' ')
+                        .limit(2)
+                        .splitToList(name);
         return name(names.get(0), names.get(1));
     }
 

@@ -27,13 +27,12 @@ import io.spine.users.db.command.CreateGroup;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.rejection.Rejections.GroupAlreadyExists;
 import io.spine.users.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;
-import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.given.TestIdentifiers.groupId;
+import static io.spine.users.server.given.Given.groupId;
 import static io.spine.users.server.db.given.GroupTestCommands.createGroup;
 import static io.spine.users.server.db.given.GroupTestCommands.deleteGroup;
 

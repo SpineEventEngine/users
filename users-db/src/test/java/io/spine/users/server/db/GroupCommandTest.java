@@ -25,7 +25,7 @@ import io.spine.base.EventMessage;
 import io.spine.users.GroupId;
 import io.spine.users.db.Group;
 import io.spine.users.db.command.CreateGroup;
-import io.spine.users.server.given.TestIdentifiers;
+import io.spine.users.server.given.Given;
 
 import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;
 import static io.spine.users.server.db.given.GroupTestEnv.groupEmail;
@@ -40,7 +40,7 @@ import static io.spine.users.server.db.given.GroupTestEnv.groupName;
 public abstract class GroupCommandTest<C extends CommandMessage, E extends EventMessage>
         extends DbCommandTest<GroupId, C, E, Group, GroupAccountPart> {
 
-    private static final GroupId GROUP_ID = TestIdentifiers.groupId();
+    private static final GroupId GROUP_ID = Given.groupId();
 
     @Override
     protected GroupId entityId() {

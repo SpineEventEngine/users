@@ -29,7 +29,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.given.Given.humanUser;
-import static io.spine.users.server.given.TestIdentifiers.userId;
+import static io.spine.users.server.given.Given.userId;
 
 class UserAccountProjectionTest extends UsersContextTest {
 

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.db.given.UserTestCommands.createUserAccount;
 import static io.spine.users.server.db.given.UserTestCommands.deleteUserAccount;
-import static io.spine.users.server.given.TestIdentifiers.userId;
+import static io.spine.users.server.given.Given.userId;
 
 @DisplayName("A User Account should")
 class UserAccountTest extends DbExtensionsTest {
