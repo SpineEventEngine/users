@@ -46,6 +46,13 @@ message UserAccountCreated {
 
     // The user for whom the account was created.
     User user = 2 [(required) = true];
+
+    // An optional field that says in which status the account was created.
+    //
+    // If not specified, [ACTIVE] is assumed.
+    // This field cannot be set to [TERMINATED].
+    //
+    AccountStatus status = 3;
 }
 
 // An account of a user was terminated. It cannot be re-activated again.

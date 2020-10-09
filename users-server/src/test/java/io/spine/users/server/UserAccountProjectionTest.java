@@ -28,9 +28,11 @@ import io.spine.users.event.UserAccountCreated;
 import io.spine.users.event.UserAccountTerminated;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.AccountStatus.ACTIVE;
+import static io.spine.users.AccountStatus.PENDING;
 import static io.spine.users.AccountStatus.TERMINATED;
 import static io.spine.users.server.given.Given.humanUser;
 import static io.spine.users.server.given.Given.service;
@@ -49,16 +51,29 @@ class UserAccountProjectionTest extends UsersContextTest {
         service = service();
     }
 
-    @Test
-    @DisplayName("mark the account as `ACTIVE` upon creation")
-    void whenCreated() {
-        UserAccountCreated event = created(id, humanUser);
-        context().receivesEvent(event);
+    @Nested
+    @DisplayName("mark the account upon creation")
+    class Creation {
 
-        UserAccount expected = account(id, humanUser, ACTIVE);
-        context().assertState(id, UserAccount.class)
-                 .comparingExpectedFieldsOnly()
-                 .isEqualTo(expected);
+        @Test
+        @DisplayName("as `ACTIVE` when the status is not specified in the event")
+        void withAssumedStatus() {
+            UserAccountCreated event = created(id, humanUser);
+            context().receivesEvent(event);
+
+            UserAccount expected = account(id, humanUser, ACTIVE);
+            assertState(expected);
+        }
+
+        @Test
+        @DisplayName("using the status passed in the event")
+        void withExplicitStatus() {
+            UserAccountCreated event = created(id, humanUser, PENDING);
+            context().receivesEvent(event);
+
+            UserAccount expected = account(id, humanUser, PENDING);
+            assertState(expected);
+        }
     }
 
     @Test
@@ -73,9 +88,11 @@ class UserAccountProjectionTest extends UsersContextTest {
         context().receivesEvent(created)
                  .receivesEvent(terminated);
 
-        AccountStatus status = TERMINATED;
-        UserAccount expected = account(id, service, status);
+        UserAccount expected = account(id, service, TERMINATED);
+        assertState(expected);
+    }
 
+    private void assertState(UserAccount expected) {
         context().assertState(id, UserAccount.class)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expected);
@@ -86,6 +103,15 @@ class UserAccountProjectionTest extends UsersContextTest {
                 .newBuilder()
                 .setAccount(id)
                 .setUser(user)
+                .vBuild();
+    }
+
+    private static UserAccountCreated created(UserId id, User user, AccountStatus status) {
+        return UserAccountCreated
+                .newBuilder()
+                .setAccount(id)
+                .setUser(user)
+                .setStatus(status)
                 .vBuild();
     }
 
