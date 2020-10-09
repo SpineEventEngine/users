@@ -25,8 +25,8 @@ import io.spine.testing.server.blackbox.BlackBoxContext;
 import io.spine.users.db.UserAccount;
 import io.spine.users.db.command.CreateUserAccount;
 import io.spine.users.db.command.TerminateUserAccount;
+import io.spine.users.db.rejection.Rejections.UnavailableForTerminatedAccount;
 import io.spine.users.event.UserAccountCreated;
-import io.spine.users.db.rejection.Rejections.UnavalableForPreviouslyDeletedAccount;
 import io.spine.users.db.rejection.Rejections.UserAccountAlreadyExists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -106,7 +106,7 @@ class UserAccountTest extends DbExtensionsTest {
 
                 context.receivesCommand(createUserAccount(user));
 
-                assertEvent(UnavalableForPreviouslyDeletedAccount
+                assertEvent(UnavailableForTerminatedAccount
                                     .newBuilder()
                                     .setAccount(user)
                                     .build());

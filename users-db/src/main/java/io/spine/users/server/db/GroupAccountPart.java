@@ -30,13 +30,13 @@ import io.spine.users.db.command.ChangeGroupEmail;
 import io.spine.users.db.command.CreateGroup;
 import io.spine.users.db.command.DeleteGroup;
 import io.spine.users.db.command.RenameGroup;
+import io.spine.users.db.rejection.UnavailableForDeletedGroup;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.event.GroupDeleted;
 import io.spine.users.event.GroupDescriptionChanged;
 import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.event.GroupRenamed;
 import io.spine.users.db.rejection.GroupAlreadyExists;
-import io.spine.users.db.rejection.UnavalableForPreviouslyDeletedGroup;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
@@ -53,10 +53,10 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
     @Assign
     GroupCreated handle(CreateGroup c)
             throws GroupAlreadyExists,
-                   UnavalableForPreviouslyDeletedGroup {
+                   UnavailableForDeletedGroup {
         GroupId group = c.getGroup();
         if (isDeleted()) {
-            throw UnavalableForPreviouslyDeletedGroup
+            throw UnavailableForDeletedGroup
                     .newBuilder()
                     .setGroup(group)
                     .build();

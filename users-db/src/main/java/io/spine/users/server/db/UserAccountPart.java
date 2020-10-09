@@ -28,11 +28,11 @@ import io.spine.users.User;
 import io.spine.users.db.UserAccount;
 import io.spine.users.db.command.CreateUserAccount;
 import io.spine.users.db.command.TerminateUserAccount;
+import io.spine.users.db.rejection.UnavailableForTerminatedAccount;
+import io.spine.users.db.rejection.UserAccountAlreadyExists;
+import io.spine.users.db.rejection.UserAccountAlreadyTerminated;
 import io.spine.users.event.UserAccountCreated;
 import io.spine.users.event.UserAccountTerminated;
-import io.spine.users.db.rejection.UnavalableForPreviouslyDeletedAccount;
-import io.spine.users.db.rejection.UserAccountAlreadyDeleted;
-import io.spine.users.db.rejection.UserAccountAlreadyExists;
 
 /**
  * Manages a user account stored locally in the database of an application.
@@ -47,9 +47,9 @@ final class UserAccountPart
     @Assign
     UserAccountCreated handle(CreateUserAccount command)
             throws UserAccountAlreadyExists,
-                   UnavalableForPreviouslyDeletedAccount {
+                   UnavailableForTerminatedAccount {
         if (isDeleted()) {
-            throw UnavalableForPreviouslyDeletedAccount
+            throw UnavailableForTerminatedAccount
                     .newBuilder()
                     .setAccount(id())
                     .build();
@@ -72,9 +72,9 @@ final class UserAccountPart
 
     @Assign
     UserAccountTerminated handle(TerminateUserAccount command)
-            throws UserAccountAlreadyDeleted {
+            throws UserAccountAlreadyTerminated {
         if (isDeleted()) {
-            throw UserAccountAlreadyDeleted
+            throw UserAccountAlreadyTerminated
                     .newBuilder()
                     .setAccount(id())
                     .build();

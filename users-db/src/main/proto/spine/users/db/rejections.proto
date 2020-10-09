@@ -42,7 +42,7 @@ message UserAccountAlreadyExists {
 
 // A command requested deletion of a user account,
 // but the account is already marked as deleted.
-message UserAccountAlreadyDeleted {
+message UserAccountAlreadyTerminated {
 
     // The ID of the account.
     core.UserId account = 1;
@@ -65,7 +65,7 @@ message UserAccountDoesNotExist {
 }
 
 // An operation is not available because an account with the passed ID was previously deleted.
-message UnavalableForPreviouslyDeletedAccount {
+message UnavailableForTerminatedAccount {
 
     // The ID of the account which existed before.
     core.UserId account = 1;
@@ -111,7 +111,7 @@ message GroupsCannotFormCycles {
 }
 
 // An operation is not available because a group the passed ID was previously deleted.
-message UnavalableForPreviouslyDeletedGroup {
+message UnavailableForDeletedGroup {
 
     // The ID of the group which was previously deleted.
     GroupId group = 1 [(required) = true];

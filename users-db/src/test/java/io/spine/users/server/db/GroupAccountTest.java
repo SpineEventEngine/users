@@ -26,7 +26,7 @@ import io.spine.users.db.Group;
 import io.spine.users.db.command.CreateGroup;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.db.rejection.Rejections.GroupAlreadyExists;
-import io.spine.users.db.rejection.Rejections.UnavalableForPreviouslyDeletedGroup;
+import io.spine.users.db.rejection.Rejections.UnavailableForDeletedGroup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -114,7 +114,7 @@ class GroupAccountTest extends DbExtensionsTest {
                 context.receivesCommand(createGroup(group));
 
                 context.assertEvent(
-                        UnavalableForPreviouslyDeletedGroup
+                        UnavailableForDeletedGroup
                                 .newBuilder()
                                 .setGroup(group)
                                 .build()
