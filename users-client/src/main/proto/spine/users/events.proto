@@ -48,15 +48,21 @@ message UserAccountCreated {
     User user = 2 [(required) = true];
 }
 
-// An account of a user was deleted.
-message UserAccountDeleted {
+// An account of a user was terminated. It cannot be re-activated again.
+//
+// See also [UserAccountSuspended].
+//
+message UserAccountTerminated {
     option (is).java_type = "AccountAware";
 
     // The ID of the deleted account.
     core.UserId account = 1;
 }
 
-// An account of a user was suspended.
+// An account of a user was suspended. It can be [resumed][UserAccountResumed].
+//
+// See also [UserAccountTerminated], [UserAccountResumed]
+//
 message UserAccountSuspended {
     option (is).java_type = "AccountAware";
 

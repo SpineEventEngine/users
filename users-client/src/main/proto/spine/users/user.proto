@@ -42,6 +42,8 @@ import "spine/net/url.proto";
 //
 // This type does not hold identity of the user for security reasons.
 //
+// See also [UserAccount].
+//
 message User {
     option (required_field) = "person|service";
 
@@ -55,6 +57,9 @@ message User {
 }
 
 // Information about a human user.
+//
+// See also [Service].
+//
 message Person {
     option (required_field) = "email|name";
 
@@ -70,6 +75,9 @@ message Person {
 }
 
 // Information about a non-human user such as a service or a device.
+//
+// See also [Person].
+//
 message Service {
 
     // The text to show the account in the UI.
@@ -112,6 +120,9 @@ enum AccountStatus {
     ACTIVE = 2;
 
     // The user account was suspended.
+    //
+    // The account may be turned back [ACTIVE] or permanently [TERMINATED].
+    //
     SUSPENDED = 3;
 
     // The user is permanently disallowed to use the system.

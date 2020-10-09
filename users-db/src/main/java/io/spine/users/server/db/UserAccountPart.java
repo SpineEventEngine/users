@@ -29,7 +29,7 @@ import io.spine.users.db.UserAccount;
 import io.spine.users.db.command.CreateUserAccount;
 import io.spine.users.db.command.DeleteUserAccount;
 import io.spine.users.event.UserAccountCreated;
-import io.spine.users.event.UserAccountDeleted;
+import io.spine.users.event.UserAccountTerminated;
 import io.spine.users.rejection.UnavalableForPreviouslyDeletedAccount;
 import io.spine.users.rejection.UserAccountAlreadyDeleted;
 import io.spine.users.rejection.UserAccountAlreadyExists;
@@ -74,7 +74,7 @@ final class UserAccountPart
     }
 
     @Assign
-    UserAccountDeleted handle(DeleteUserAccount command)
+    UserAccountTerminated handle(DeleteUserAccount command)
             throws UserAccountAlreadyDeleted {
         if (isDeleted()) {
             throw UserAccountAlreadyDeleted
@@ -82,7 +82,7 @@ final class UserAccountPart
                     .setAccount(id())
                     .build();
         }
-        return UserAccountDeleted
+        return UserAccountTerminated
                 .newBuilder()
                 .setAccount(command.getAccount())
                 .vBuild();
@@ -94,7 +94,7 @@ final class UserAccountPart
     }
 
     @Apply
-    private void on(@SuppressWarnings("unused") UserAccountDeleted event) {
+    private void on(@SuppressWarnings("unused") UserAccountTerminated event) {
         setDeleted(true);
     }
 }
