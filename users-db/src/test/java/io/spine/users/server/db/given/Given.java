@@ -25,12 +25,12 @@ import io.spine.net.EmailAddress;
 import static io.spine.testing.TestValues.random;
 
 /**
- * The environment for the {@code GroupPart} tests.
+ * Static factories for producing test values.
  */
-public final class GroupTestEnv {
+public final class Given {
 
     /** Prevents instantiation. */
-    private GroupTestEnv() {
+    private Given() {
     }
 
     public static String groupName() {

@@ -27,9 +27,9 @@ import io.spine.users.db.Group;
 import io.spine.users.db.command.CreateGroup;
 import io.spine.users.server.given.Given;
 
-import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;
-import static io.spine.users.server.db.given.GroupTestEnv.groupEmail;
-import static io.spine.users.server.db.given.GroupTestEnv.groupName;
+import static io.spine.users.server.db.given.Given.groupDescription;
+import static io.spine.users.server.db.given.Given.groupEmail;
+import static io.spine.users.server.db.given.Given.groupName;
 
 /**
  * An implementation base for the {@link Group} aggregate command handler tests.

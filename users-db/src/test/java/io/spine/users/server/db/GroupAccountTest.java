@@ -33,8 +33,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.users.server.given.Given.groupId;
-import static io.spine.users.server.db.given.GroupTestCommands.createGroup;
-import static io.spine.users.server.db.given.GroupTestCommands.deleteGroup;
+import static io.spine.users.server.db.given.Command.createGroup;
+import static io.spine.users.server.db.given.Command.deleteGroup;
 
 @DisplayName("A group should")
 class GroupAccountTest extends DbExtensionsTest {

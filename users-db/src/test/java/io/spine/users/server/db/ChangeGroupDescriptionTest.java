@@ -27,7 +27,7 @@ import io.spine.users.event.GroupDescriptionChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.db.given.GroupTestCommands.changeGroupDescription;
+import static io.spine.users.server.db.given.Command.changeGroupDescription;
 
 @DisplayName("`ChangeGroupDescription` command should")
 class ChangeGroupDescriptionTest

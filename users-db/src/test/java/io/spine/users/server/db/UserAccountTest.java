@@ -33,8 +33,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.db.given.UserTestCommands.createUserAccount;
-import static io.spine.users.server.db.given.UserTestCommands.deleteUserAccount;
+import static io.spine.users.server.db.given.Command.createUserAccount;
+import static io.spine.users.server.db.given.Command.terminateUserAccount;
 import static io.spine.users.server.given.Given.userId;
 
 @DisplayName("A User Account should")
@@ -102,7 +102,7 @@ class UserAccountTest extends DbExtensionsTest {
             @DisplayName("an account with such ID was previously deleted")
             void ifDeletedBefore() {
                 // Delete the account which was previously created.
-                context.receivesCommand(deleteUserAccount(user));
+                context.receivesCommand(terminateUserAccount(user));
 
                 context.receivesCommand(createUserAccount(user));
 
@@ -120,7 +120,7 @@ class UserAccountTest extends DbExtensionsTest {
     void deletion() {
         context.receivesCommand(createUserAccount(user));
 
-        TerminateUserAccount cmd = deleteUserAccount(user);
+        TerminateUserAccount cmd = terminateUserAccount(user);
         context.receivesCommand(cmd);
 
         context.assertEntityWithState(user, UserAccount.class)

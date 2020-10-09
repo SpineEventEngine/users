@@ -27,7 +27,7 @@ import io.spine.users.event.GroupDeleted;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.db.given.GroupTestCommands.deleteGroup;
+import static io.spine.users.server.db.given.Command.deleteGroup;
 
 @DisplayName("`DeleteGroup` command should")
 class DeleteGroupTest extends GroupCommandTest<DeleteGroup, GroupDeleted> {

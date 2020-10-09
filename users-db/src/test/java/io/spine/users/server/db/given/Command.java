@@ -20,31 +20,39 @@
 
 package io.spine.users.server.db.given;
 
+import io.spine.core.UserId;
 import io.spine.users.GroupId;
+import io.spine.users.User;
 import io.spine.users.db.command.AddGroupToGroup;
+import io.spine.users.db.command.AddUserToGroup;
 import io.spine.users.db.command.ChangeGroupDescription;
 import io.spine.users.db.command.ChangeGroupEmail;
 import io.spine.users.db.command.CreateGroup;
+import io.spine.users.db.command.CreateUserAccount;
 import io.spine.users.db.command.DeleteGroup;
 import io.spine.users.db.command.RemoveGroupFromGroup;
+import io.spine.users.db.command.RemoveUserFromGroup;
 import io.spine.users.db.command.RenameGroup;
+import io.spine.users.db.command.TerminateUserAccount;
+import io.spine.users.server.given.Given;
 
-import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupDescription;
-import static io.spine.users.server.db.given.GroupTestEnv.anotherGroupName;
-import static io.spine.users.server.db.given.GroupTestEnv.groupDescription;
-import static io.spine.users.server.db.given.GroupTestEnv.groupEmail;
-import static io.spine.users.server.db.given.GroupTestEnv.groupName;
-import static io.spine.users.server.db.given.GroupTestEnv.newGroupEmail;
+import static io.spine.users.Role.MEMBER;
+import static io.spine.users.server.db.given.Given.anotherGroupDescription;
+import static io.spine.users.server.db.given.Given.anotherGroupName;
+import static io.spine.users.server.db.given.Given.groupDescription;
+import static io.spine.users.server.db.given.Given.groupEmail;
+import static io.spine.users.server.db.given.Given.groupName;
+import static io.spine.users.server.db.given.Given.newGroupEmail;
 
 /**
- * Test commands for {@code GroupAccount}.
+ * Test commands for DB-based extensions of the Users context.
  */
-public class GroupTestCommands {
+public class Command {
 
     /**
      * Prevents instantiation.
      */
-    private GroupTestCommands() {
+    private Command() {
     }
 
     public static CreateGroup createGroup(GroupId id) {
@@ -102,5 +110,39 @@ public class GroupTestCommands {
                 .setGroup(id)
                 .setDescription(anotherGroupDescription())
                 .vBuild();
+    }
+
+    public static CreateUserAccount createUserAccount(UserId id) {
+        return CreateUserAccount
+                .newBuilder()
+                .setAccount(id)
+                .setUser(User.newBuilder()
+                             .setPerson(Given.person())
+                             .vBuild())
+                .vBuild();
+    }
+
+    public static AddUserToGroup joinGroup(UserId id) {
+        return AddUserToGroup
+                .newBuilder()
+                .setUser(id)
+                .setGroup(Given.groupId())
+                .setRole(MEMBER)
+                .build();
+    }
+
+    public static RemoveUserFromGroup leaveGroup(UserId id) {
+        return RemoveUserFromGroup
+                .newBuilder()
+                .setUser(id)
+                .setGroup(Given.groupId())
+                .build();
+    }
+
+    public static TerminateUserAccount terminateUserAccount(UserId id) {
+        return TerminateUserAccount
+                .newBuilder()
+                .setAccount(id)
+                .build();
     }
 }

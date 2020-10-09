@@ -27,7 +27,7 @@ import io.spine.users.event.GroupEmailChanged;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.db.given.GroupTestCommands.changeGroupEmail;
+import static io.spine.users.server.db.given.Command.changeGroupEmail;
 
 @DisplayName("`ChangeGroupEmail` command should")
 class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmailChanged> {

@@ -27,7 +27,7 @@ import io.spine.users.event.GroupRenamed;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.users.server.db.given.GroupTestCommands.renameGroup;
+import static io.spine.users.server.db.given.Command.renameGroup;
 
 @DisplayName("`RenameGroup` command should")
 class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
