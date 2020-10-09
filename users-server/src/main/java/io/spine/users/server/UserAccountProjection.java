@@ -26,10 +26,13 @@ import io.spine.server.projection.Projection;
 import io.spine.users.AccountStatus;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
+import io.spine.users.event.UserAccountResumed;
+import io.spine.users.event.UserAccountSuspended;
 import io.spine.users.event.UserAccountTerminated;
 
 import static io.spine.users.AccountStatus.ACCOUNT_STATUS_UNKNOWN;
 import static io.spine.users.AccountStatus.ACTIVE;
+import static io.spine.users.AccountStatus.SUSPENDED;
 import static io.spine.users.AccountStatus.TERMINATED;
 
 /**
@@ -48,5 +51,15 @@ final class UserAccountProjection extends Projection<UserId, UserAccount, UserAc
     @Subscribe
     void on(UserAccountTerminated e) {
         builder().setStatus(TERMINATED);
+    }
+
+    @Subscribe
+    void on(UserAccountSuspended e) {
+        builder().setStatus(SUSPENDED);
+    }
+
+    @Subscribe
+    void on(UserAccountResumed e) {
+        builder().setStatus(ACTIVE);
     }
 }

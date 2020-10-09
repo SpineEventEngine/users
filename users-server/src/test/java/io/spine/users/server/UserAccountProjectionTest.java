@@ -25,6 +25,8 @@ import io.spine.users.AccountStatus;
 import io.spine.users.User;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
+import io.spine.users.event.UserAccountResumed;
+import io.spine.users.event.UserAccountSuspended;
 import io.spine.users.event.UserAccountTerminated;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.AccountStatus.ACTIVE;
 import static io.spine.users.AccountStatus.PENDING;
+import static io.spine.users.AccountStatus.SUSPENDED;
 import static io.spine.users.AccountStatus.TERMINATED;
 import static io.spine.users.server.given.Given.humanUser;
 import static io.spine.users.server.given.Given.service;
@@ -89,6 +92,38 @@ class UserAccountProjectionTest extends UsersContextTest {
                  .receivesEvent(terminated);
 
         UserAccount expected = account(id, service, TERMINATED);
+        assertState(expected);
+    }
+
+    @Test
+    @DisplayName("set the status to `SUSPENDED`")
+    void whenSuspended() {
+        UserAccountCreated created = created(id, humanUser);
+        UserAccountSuspended suspended = UserAccountSuspended
+                .newBuilder()
+                .setAccount(id)
+                .vBuild();
+
+        context().receivesEvent(created)
+                 .receivesEvent(suspended);
+
+        UserAccount expected = account(id, humanUser, SUSPENDED);
+        assertState(expected);
+    }
+
+    @Test
+    @DisplayName("set the status back to `ACTIVE` when the account was resumed")
+    void whenResumed() {
+        UserAccountCreated created = created(id, humanUser, SUSPENDED);
+        UserAccountResumed resumed = UserAccountResumed
+                .newBuilder()
+                .setAccount(id)
+                .vBuild();
+
+        context().receivesEvent(created)
+                 .receivesEvent(resumed);
+
+        UserAccount expected = account(id, humanUser, ACTIVE);
         assertState(expected);
     }
 
