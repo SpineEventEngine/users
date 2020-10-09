@@ -1,0 +1,167 @@
+// Copyright 2019, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users.db.command";
+option java_outer_classname = "CommandsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/net/email_address.proto";
+import "spine/users/identifiers.proto";
+import "spine/users/user.proto";
+import "spine/users/membership.proto";
+import "spine/users/db/group.proto";
+
+// Creates a new user account.
+message CreateUserAccount {
+
+    // The ID of the account.
+    core.UserId account = 1;
+
+    // The user for whom to create the account.
+    User user = 2 [(required) = true];
+}
+
+// Deletes a user account.
+message TerminateUserAccount {
+
+    // The ID of the account to delete.
+    core.UserId account = 1;
+}
+
+// Suspend an account of a user.
+//
+// After this command completes the user should not be able to access the application data
+// until the account is resumed.
+//
+message SuspendUserAccount {
+
+    // The ID of the account to suspend.
+    core.UserId account = 1;
+}
+
+// Activate previously suspended user account.
+message ResumeUserAccount {
+
+    // The ID of the account to resume.
+    core.UserId account = 1;
+}
+
+// Creates a group.
+message CreateGroup {
+
+    GroupId group = 1;
+
+    // A name of a group to display on UI.
+    string display_name = 2 [(required) = true];
+
+    // A human-friendly description of a group.
+    string description = 3;
+
+    // An email address of the group, if applicable.
+    net.EmailAddress email = 4;
+}
+
+// Deletes a group.
+message DeleteGroup {
+
+    GroupId group = 1;
+}
+
+// Add a group to a parent group.
+message AddGroupToGroup {
+
+    // The parent group which gets the specified group as a new member.
+    GroupId parent_group = 1;
+
+    // The group to add to another group.
+    GroupId group = 2  [(required) = true];
+}
+
+// Remove a group from its parent group.
+message RemoveGroupFromGroup {
+
+    // The parent group.
+    GroupId parent_group = 1;
+
+    // The group to remove from the parent group.
+    GroupId group = 2 [(required) = true];
+}
+
+// Renames a group.
+message RenameGroup {
+
+    GroupId group = 1;
+
+    // A new name.
+    string new_name = 2 [(required) = true];
+}
+
+// Changes a group email address.
+message ChangeGroupEmail {
+
+    GroupId group = 1;
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2 [(required) = true];
+}
+
+// Changes a description of a group.
+message ChangeGroupDescription {
+
+    // The group for which we update the description.
+    GroupId group = 1;
+
+    // A new human-friendly description of a group.
+    string description = 2 [(required) = true];
+
+    //TODO:2020-04-02:alexander.yevsyukov: Add previous value of the description.
+}
+
+// Add a user to a group.
+message AddUserToGroup {
+
+    // The group to which add the user.
+    GroupId group = 1 [(required) = true];
+
+    // The user to be added.
+    core.UserId user = 2 [(required) = true];
+
+    // A role of the user in the group.
+    Role role = 3 [(required) = true];
+}
+
+// Remove a user from a group.
+message RemoveUserFromGroup {
+
+    // The group from which to remove the user.
+    GroupId group = 1 [(required) = true];
+
+    // The user to be removed from the group.
+    core.UserId user = 2 [(required) = true];
+}
+

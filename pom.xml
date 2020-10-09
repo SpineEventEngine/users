@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  
  -->
 
-<groupId>io.spine</groupId>
+<groupId>io.spine.users</groupId>
 <artifactId>spine-users</artifactId>
 <version>0.0.3</version>
 
@@ -25,6 +25,12 @@ all modules and does not describe the project structure per-subproject.
 </licenses>
 
 <dependencies>
+  <dependency>
+    <groupId>com.google.code.findbugs</groupId>
+    <artifactId>jsr305</artifactId>
+    <version>3.0.2</version>
+    <scope>compile</scope>
+  </dependency>
   <dependency>
     <groupId>com.google.errorprone</groupId>
     <artifactId>error_prone_annotations</artifactId>
@@ -45,7 +51,25 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
+    <artifactId>spine-base</artifactId>
+    <version>1.6.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-client</artifactId>
+    <version>1.6.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
     <artifactId>spine-server</artifactId>
+    <version>1.6.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-time</artifactId>
     <version>1.6.0</version>
     <scope>compile</scope>
   </dependency>
@@ -56,26 +80,38 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
-    <groupId>com.google.truth</groupId>
-    <artifactId>truth</artifactId>
-    <version>1.0.1</version>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava-testlib</artifactId>
+    <version>29.0-jre</version>
     <scope>test</scope>
   </dependency>
   <dependency>
-    <groupId>com.google.truth.extensions</groupId>
-    <artifactId>truth-java8-extension</artifactId>
-    <version>1.0.1</version>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-testlib</artifactId>
+    <version>1.6.0</version>
     <scope>test</scope>
   </dependency>
   <dependency>
-    <groupId>com.google.truth.extensions</groupId>
-    <artifactId>truth-proto-extension</artifactId>
-    <version>1.0.1</version>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-testutil-client</artifactId>
+    <version>1.6.0</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-testutil-server</artifactId>
+    <version>1.6.0</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-testutil-time</artifactId>
+    <version>1.6.0</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.tools</groupId>
+    <artifactId>spine-mute-logging</artifactId>
     <version>1.6.0</version>
     <scope>test</scope>
   </dependency>
@@ -122,6 +158,11 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.grpc</groupId>
     <artifactId>protoc-gen-grpc-java</artifactId>
     <version>1.28.1</version>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.tools</groupId>
+    <artifactId>spine-errorprone-checks</artifactId>
+    <version>1.6.0</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>

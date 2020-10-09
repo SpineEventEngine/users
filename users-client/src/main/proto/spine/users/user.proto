@@ -31,40 +31,54 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
+import "spine/people/person_name.proto";
 import "spine/net/email_address.proto";
 import "spine/net/url.proto";
-import "spine/people/person_name.proto";
 
-// A user of a computer system.
+// Human-readable information about a user of a computer system.
+//
+// The primary purpose of this type is to show the user to other users in the UI
+// or other media.
+//
+// This type does not hold identity of the user for security reasons.
+//
+// See also [UserAccount].
+//
 message User {
     option (required_field) = "person|service";
 
     oneof type {
         // The user is a human.
-        PersonProfile person = 2;
+        Person person = 2;
 
         // The user is a computer program.
-        ServiceProfile service = 3;
+        Service service = 3;
     }
 }
 
 // Information about a human user.
-message PersonProfile {
+//
+// See also [Service].
+//
+message Person {
     option (required_field) = "email|name";
+
+    // A name of the person, if available.
+    people.PersonName name = 1;
+
+    // The URL of the photo of the user, if available.
+    net.Url photo = 2;
 
     // The primary email address of the user which may be used by the application
     // for communicating with the user.
-    net.EmailAddress email = 1;
-
-    // A name of the person, if available.
-    people.PersonName name = 2;
-
-    // The URL of the photo of the user, if available.
-    net.Url photo = 3;
+    net.EmailAddress email = 3;
 }
 
 // Information about a non-human user such as a service or a device.
-message ServiceProfile {
+//
+// See also [Person].
+//
+message Service {
 
     // The text to show the account in the UI.
     string display_name = 1 [(required) = true];
@@ -76,15 +90,18 @@ message ServiceProfile {
     net.Url icon = 3;
 }
 
-// A user of the application, either a person or a computer program.
+// An account of a user in a system.
 message UserAccount {
-    option (entity).kind = AGGREGATE;
+    option (entity).kind = PROJECTION;
 
     // The ID of the account
     core.UserId id = 1;
 
     // The user of the system.
     User user = 2 [(required) = true];
+
+    // The value of the status.
+    AccountStatus status = 3 [(required) = true];
 }
 
 // Enumerates possible statuses of a user account
@@ -103,17 +120,11 @@ enum AccountStatus {
     ACTIVE = 2;
 
     // The user account was suspended.
+    //
+    // The account may be turned back [ACTIVE] or permanently [TERMINATED].
+    //
     SUSPENDED = 3;
-}
 
-// Contains a status of a user account.
-message UserAccountStatus {
-
-    option (entity).kind = AGGREGATE;
-
-    // The ID of the user account.
-    core.UserId id = 1;
-
-    // The value of the status.
-    AccountStatus value = 2 [(required) = true];
+    // The user is permanently disallowed to use the system.
+    TERMINATED = 4;
 }

@@ -20,8 +20,10 @@
 
 package io.spine.users.server;
 
-import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
+
+import static io.spine.server.BoundedContext.multitenant;
+import static io.spine.server.BoundedContext.singleTenant;
 
 /**
  * A factory of {@code Users} bounded context.
@@ -42,12 +44,9 @@ public final class UsersContext {
      *
      * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
      */
-    public static BoundedContextBuilder newBuilder() {
-        BoundedContextBuilder builder = BoundedContext
-                .multitenant(NAME)
-                .add(UserAccountPart.class)
-                .add(GroupAccountPart.class)
-                .add(GroupMembersPart.class);
+    public static BoundedContextBuilder newBuilder(boolean multitenant) {
+        BoundedContextBuilder builder = multitenant ? multitenant(NAME) : singleTenant(NAME);
+        builder.add(new UserAccountRepository());
         return builder;
     }
 }

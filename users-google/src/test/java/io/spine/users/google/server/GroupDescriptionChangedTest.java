@@ -22,8 +22,8 @@ package io.spine.users.google.server;
 
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupDescriptionChanged;
-import io.spine.users.command.ChangeGroupDescription;
-import io.spine.users.command.CreateGroup;
+import io.spine.users.db.command.ChangeGroupDescription;
+import io.spine.users.db.command.CreateGroup;
 import io.spine.users.server.UsersContextTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newGroupId;
 import static io.spine.users.google.server.given.GoogleGroupTestEvents.googleGroupDescriptionChanged;
-import static io.spine.users.server.group.given.GroupTestCommands.createGroup;
+import static io.spine.users.server.db.given.Command.createGroup;
 
 @DisplayName("`GoogleGroupPm` should, when `GoogleGroupDescriptionChanged`")
 @Disabled("Until new API is introduced")

@@ -1,0 +1,121 @@
+//
+// Copyright 2020, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "GroupProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/users/identifiers.proto";
+
+// A member of a group.
+message Member {
+    option (required_field) = "user|group";
+
+    oneof kind {
+        // The user who is added directly to the group.
+        core.UserId user = 1;
+
+        // The group which is added directly to the group.
+        GroupId group = 2;
+    }
+
+    // The role of the member in the group.
+    Role role = 3 [(required) = true];
+}
+
+// A role a member may have in a group.
+enum Role {
+
+    // The role was not specified. A member cannot be added to a group with this value.
+    ROLE_UNSPECIFIED = 0;
+
+    // A regular member of a group.
+    MEMBER = 1;
+
+    // A privileged member with permissions to manage the group.
+    //
+    // Cannot add or remove owners.
+    //
+    MANAGER = 2;
+
+    // A person who can delete the group and manage other members, including owners.
+    OWNER = 3;
+}
+
+// Defines membership in a group.
+message Membership {
+
+    // The group to which the member belongs.
+    GroupId group = 1 [(required) = true];
+
+    // The role in the group.
+    Role role = 2 [(required) = true];
+}
+
+// To which groups this user belongs?
+message UserMembership {
+    option (entity).kind = PROJECTION;
+
+    // The ID of the user who is the member of some groups.
+    core.UserId user = 1 [(required) = true];
+
+    // Groups to which the user belongs.
+    //
+    // Empty if the user is not a member of any group.
+    //
+    repeated Membership direct = 2;
+
+    // Groups to which the user belongs via other groups.
+    //
+    // Empty if the the groups the user belongs to do not belong to other groups.
+    // This means that if the `direct` field is empty, this field must be empty too.
+    //
+    repeated Membership indirect = 3;
+}
+
+// To which groups this group belongs?
+message GroupMembership {
+    option (entity).kind = PROJECTION;
+
+    // The ID of the group which is a member of other groups.
+    GroupId group = 1 [(required) = true];
+
+    // Groups to which this group belong directly.
+    //
+    // Empty if this group is not a member of any other group.
+    //
+    repeated Membership direct = 2;
+
+    // Groups to which the group belongs via other groups.
+    //
+    // Empty if the the groups the user belongs to do not belong to other groups.
+    // This means that if the `direct` field is empty, this field must be empty too.
+    //
+    repeated Membership indirect = 3;
+}
