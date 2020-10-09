@@ -28,7 +28,7 @@ import io.spine.people.PersonName;
 import io.spine.testing.TestValues;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
-import io.spine.users.PersonProfile;
+import io.spine.users.Person;
 import io.spine.users.User;
 
 import java.util.List;
@@ -100,8 +100,8 @@ public final class Given {
     }
 
     /** Creates a profile for the person with the given name. */
-    public static PersonProfile person(PersonName name) {
-        return PersonProfile
+    public static Person person(PersonName name) {
+        return Person
                 .newBuilder()
                 .setName(name)
                 .vBuild();
@@ -151,12 +151,11 @@ public final class Given {
     }
 
     /** Creates a person profile with randomly selected name and corresponding email address. */
-    public static PersonProfile person() {
+    public static Person person() {
         PersonName name = name();
-        return PersonProfile
-                .newBuilder()
-                .setName(name)
-                .setEmail(email(name))
-                .vBuild();
+        return Person.newBuilder()
+                     .setName(name)
+                     .setEmail(email(name))
+                     .vBuild();
     }
 }
