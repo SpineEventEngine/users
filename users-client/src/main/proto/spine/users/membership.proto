@@ -105,5 +105,3 @@ message GroupMembership {
     //
     repeated Membership membership = 2;
 }
-
-
