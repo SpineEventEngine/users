@@ -25,35 +25,76 @@ import io.spine.users.AccountStatus;
 import io.spine.users.User;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
+import io.spine.users.event.UserAccountTerminated;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.users.AccountStatus.ACTIVE;
+import static io.spine.users.AccountStatus.TERMINATED;
 import static io.spine.users.server.given.Given.humanUser;
+import static io.spine.users.server.given.Given.service;
 import static io.spine.users.server.given.Given.userId;
 
 class UserAccountProjectionTest extends UsersContextTest {
 
+    private UserId id;
+    private User humanUser;
+    private User service;
+
+    @BeforeEach
+    void generateData() {
+        id = userId();
+        humanUser = humanUser();
+        service = service();
+    }
+
     @Test
     @DisplayName("mark the account as `ACTIVE` upon creation")
     void whenCreated() {
-        UserId id = userId();
-        User user = humanUser();
-        UserAccountCreated event = UserAccountCreated
-                .newBuilder()
-                .setAccount(id)
-                .setUser(user)
-                .vBuild();
+        UserAccountCreated event = created(id, humanUser);
         context().receivesEvent(event);
 
-        UserAccount expected = UserAccount
+        UserAccount expected = account(id, humanUser, ACTIVE);
+        context().assertState(id, UserAccount.class)
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("set the status to `TERMINATED`")
+    void whenTerminated() {
+        UserAccountCreated created = created(id, service);
+        UserAccountTerminated terminated = UserAccountTerminated
                 .newBuilder()
-                .setId(id)
-                .setUser(user)
-                .setStatus(AccountStatus.ACTIVE)
-                .build();
+                .setAccount(id)
+                .vBuild();
+
+        context().receivesEvent(created)
+                 .receivesEvent(terminated);
+
+        AccountStatus status = TERMINATED;
+        UserAccount expected = account(id, service, status);
 
         context().assertState(id, UserAccount.class)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expected);
+    }
+
+    private static UserAccountCreated created(UserId id, User user) {
+        return UserAccountCreated
+                .newBuilder()
+                .setAccount(id)
+                .setUser(user)
+                .vBuild();
+    }
+
+    private static UserAccount account(UserId id, User user, AccountStatus status) {
+        return UserAccount
+                .newBuilder()
+                .setId(id)
+                .setUser(user)
+                .setStatus(status)
+                .build();
     }
 }

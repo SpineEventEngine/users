@@ -26,6 +26,7 @@ import io.spine.server.projection.Projection;
 import io.spine.users.AccountStatus;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
+import io.spine.users.event.UserAccountTerminated;
 
 /**
  * Gathers events on a user account for building its latest representation.
@@ -36,5 +37,10 @@ final class UserAccountProjection extends Projection<UserId, UserAccount, UserAc
     void on(UserAccountCreated e) {
         builder().setUser(e.getUser())
                  .setStatus(AccountStatus.ACTIVE);
+    }
+
+    @Subscribe
+    void on(UserAccountTerminated e) {
+        builder().setStatus(AccountStatus.TERMINATED);
     }
 }

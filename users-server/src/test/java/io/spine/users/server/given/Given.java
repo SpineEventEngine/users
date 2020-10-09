@@ -29,6 +29,7 @@ import io.spine.testing.TestValues;
 import io.spine.testing.core.given.GivenUserId;
 import io.spine.users.GroupId;
 import io.spine.users.Person;
+import io.spine.users.Service;
 import io.spine.users.User;
 
 import java.util.List;
@@ -120,6 +121,18 @@ public final class Given {
     public static User humanUser() {
         return User.newBuilder()
                    .setPerson(person(name()))
+                   .vBuild();
+    }
+
+    /** Generates a service user with a generated display name using the range [1, 99]. */
+    public static User service() {
+        String displayName = "Service_" + format("%02d", random(1, 99));
+        Service service = Service
+                .newBuilder()
+                .setDisplayName(displayName)
+                .vBuild();
+        return User.newBuilder()
+                   .setService(service)
                    .vBuild();
     }
 
