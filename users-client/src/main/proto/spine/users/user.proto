@@ -49,10 +49,10 @@ message User {
 
     oneof type {
         // The user is a human.
-        Person person = 2;
+        Person person = 1;
 
         // The user is a computer program.
-        Service service = 3;
+        Service service = 2;
     }
 }
 
