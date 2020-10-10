@@ -45,9 +45,9 @@ import "spine/net/url.proto";
 // See also [UserAccount].
 //
 message User {
-    option (required_field) = "person|service";
-
     oneof type {
+        option (is_required) = true;
+
         // The user is a human.
         Person person = 1;
 
