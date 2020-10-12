@@ -76,10 +76,10 @@ class UserAccountTest extends DbExtensionsTest {
         void entityState() {
             assertEntity(user,
                          UserAccount
-                                      .newBuilder()
-                                      .setId(user)
-                                      .setUser(cmd.getUser())
-                                      .build());
+                                 .newBuilder()
+                                 .setId(user)
+                                 .setUser(cmd.getUser())
+                                 .build());
         }
 
         @Nested
