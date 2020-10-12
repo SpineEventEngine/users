@@ -26,6 +26,8 @@ import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.event.GroupDeleted;
+import io.spine.users.event.GroupDescriptionChanged;
+import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.event.GroupRenamed;
 
 /**
@@ -36,7 +38,8 @@ final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
     @Subscribe
     void on(GroupCreated e) {
         builder().setDisplayName(e.getDisplayName())
-                 .setDescription(e.getDescription());
+                 .setDescription(e.getDescription())
+                 .setEmail(e.getEmail());
     }
 
     @Subscribe
@@ -47,5 +50,15 @@ final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
     @Subscribe
     void on(GroupRenamed e) {
         builder().setDisplayName(e.getNewName());
+    }
+
+    @Subscribe
+    void on(GroupDescriptionChanged e) {
+        builder().setDescription(e.getNewDescription());
+    }
+
+    @Subscribe
+    void on(GroupEmailChanged e) {
+        builder().setEmail(e.getNewEmail());
     }
 }

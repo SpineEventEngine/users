@@ -137,14 +137,18 @@ message GroupDescriptionChanged {
 // A group email address was changed.
 message GroupEmailChanged {
     option (is).java_type = "GroupAware";
+    option (required_field) = "new_email|old_email";
 
     GroupId group = 1 [(required) = true];
 
     // A new email address of the group.
-    net.EmailAddress new_email = 2 [(required) = true];
+    net.EmailAddress new_email = 2;
 
     // An old email address of the group.
-    net.EmailAddress old_email = 3 [(required) = true];
+    //
+    // This field cannot be equal to `new_email`.
+    //
+    net.EmailAddress old_email = 3;
 }
 
 // A user was added to a group.

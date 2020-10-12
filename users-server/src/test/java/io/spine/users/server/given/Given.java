@@ -142,6 +142,12 @@ public final class Given {
         return email(name);
     }
 
+    /** Generates a group email address using a random number in the range [1, 99]. */
+    public static EmailAddress groupEmail() {
+        String value = format("group-%02d@example.com", random(1, 99));
+        return email(value);
+    }
+
     /**
      * Creates an email address in the form {@code "<givenName>.<familyName>@example.com"}.
      */

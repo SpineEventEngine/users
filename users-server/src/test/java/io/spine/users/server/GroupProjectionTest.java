@@ -20,16 +20,25 @@
 
 package io.spine.users.server;
 
+import io.spine.net.EmailAddress;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.event.GroupDeleted;
+import io.spine.users.event.GroupDescriptionChanged;
+import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.event.GroupRenamed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static io.spine.testing.TestValues.randomString;
+import static io.spine.users.server.given.Given.groupEmail;
 import static io.spine.users.server.given.Given.groupId;
 
 @DisplayName("`GroupProjection` should")
@@ -47,24 +56,19 @@ class GroupProjectionTest extends UsersContextTest {
     void whenCreated() {
         String displayName = randomString();
         String description = randomString();
-        GroupCreated groupCreated = created(displayName, description);
+        EmailAddress email = groupEmail();
+        GroupCreated groupCreated = created(displayName, description, email);
 
         context().receivesEvent(groupCreated);
 
-        Group expected = Group.newBuilder()
+        Group expected = Group
+                .newBuilder()
                 .setId(id)
                 .setDisplayName(displayName)
                 .setDescription(description)
+                .setEmail(email)
                 .vBuild();
         assertState(expected);
-    }
-
-    private GroupCreated created(String displayName, String description) {
-        return GroupCreated.newBuilder()
-                           .setGroup(id)
-                           .setDisplayName(displayName)
-                           .setDescription(description)
-                           .vBuild();
     }
 
     @Test
@@ -72,7 +76,8 @@ class GroupProjectionTest extends UsersContextTest {
     void whenRenamed() {
         String newName = randomString();
         String oldName = randomString();
-        GroupRenamed groupRenamed = GroupRenamed.newBuilder()
+        GroupRenamed groupRenamed = GroupRenamed
+                .newBuilder()
                 .setGroup(id)
                 .setNewName(newName)
                 .setOldName(oldName)
@@ -80,7 +85,8 @@ class GroupProjectionTest extends UsersContextTest {
 
         context().receivesEvent(groupRenamed);
 
-        Group expected = Group.newBuilder()
+        Group expected = Group
+                .newBuilder()
                 .setId(id)
                 .setDisplayName(newName)
                 .build();
@@ -90,7 +96,8 @@ class GroupProjectionTest extends UsersContextTest {
     @Test
     @DisplayName("mark the entity `deleted` on `GroupDeleted`")
     void whenDeleted() {
-        GroupDeleted groupDeleted = GroupDeleted.newBuilder()
+        GroupDeleted groupDeleted = GroupDeleted
+                .newBuilder()
                 .setGroup(id)
                 .vBuild();
 
@@ -102,9 +109,77 @@ class GroupProjectionTest extends UsersContextTest {
                  .isTrue();
     }
 
+    @Test
+    @DisplayName("update group description")
+    void whenDescriptionChanged() {
+        String newDescription = randomString();
+        String prevDescription = randomString();
+        GroupDescriptionChanged descriptionChanged = GroupDescriptionChanged
+                .newBuilder()
+                .setGroup(id)
+                .setNewDescription(newDescription)
+                .setOldDescription(prevDescription)
+                .vBuild();
+
+        context().receivesEvent(created(randomString(), prevDescription))
+                 .receivesEvent(descriptionChanged);
+
+        Group expected = Group.newBuilder()
+                .setId(id)
+                .setDescription(newDescription)
+                .build();
+        assertState(expected);
+    }
+
+    @ParameterizedTest
+    @MethodSource("emailPairs")
+    @DisplayName("update email address when it changes")
+    void onEvent(EmailAddress oldEmail, EmailAddress newEmail) {
+        GroupEmailChanged emailChanged = GroupEmailChanged
+                .newBuilder()
+                .setGroup(id)
+                .setNewEmail(newEmail)
+                .setOldEmail(oldEmail)
+                .vBuild();
+
+        context().receivesEvent(created(randomString(), randomString(), oldEmail))
+                 .receivesEvent(emailChanged);
+
+        Group expected = Group
+                .newBuilder()
+                .setId(id)
+                .setEmail(newEmail)
+                .buildPartial();
+
+        assertState(expected);
+    }
+
+    private static Stream<Arguments> emailPairs() {
+        EmailAddress empty = EmailAddress.getDefaultInstance();
+        return Stream.of(
+                Arguments.of(groupEmail(), empty),
+                Arguments.of(empty, groupEmail())
+        );
+    }
+
+    private GroupCreated created(String displayName, String description) {
+        return GroupCreated.newBuilder()
+                           .setGroup(id)
+                           .setDisplayName(displayName)
+                           .setDescription(description)
+                           .vBuild();
+    }
+
     private void assertState(Group expected) {
         context().assertState(id, Group.class)
                  .comparingExpectedFieldsOnly()
                  .isEqualTo(expected);
+    }
+
+    private GroupCreated created(String displayName, String description, EmailAddress email) {
+        return created(displayName, description)
+                .toBuilder()
+                .setEmail(email)
+                .vBuild();
     }
 }
