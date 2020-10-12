@@ -18,25 +18,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.event;
+package io.spine.users.server;
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.annotation.GeneratedMixin;
-import io.spine.base.EventMessage;
-import io.spine.core.UserId;
+import io.spine.core.Subscribe;
+import io.spine.server.projection.Projection;
+import io.spine.users.Group;
+import io.spine.users.GroupId;
+import io.spine.users.event.GroupCreated;
 
 /**
- * The interface common for events referring a user account.
+ * Updates {@link Group} according to events coming from implementations of user management.
  */
-@Immutable
-@GeneratedMixin
-public interface AccountAware extends EventMessage {
+final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
 
-    /** Obtains the ID of the user account associated with the event. */
-    UserId getAccount();
-
-    /** Obtains the ID of the user account associated with the event. */
-    default UserId account() {
-        return getAccount();
+    @Subscribe
+    void on(GroupCreated e) {
+        builder().setDisplayName(e.getDisplayName())
+                 .setDescription(e.getDescription());
     }
 }

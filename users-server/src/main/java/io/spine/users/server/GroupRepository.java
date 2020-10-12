@@ -18,25 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.users.event;
+package io.spine.users.server;
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.annotation.GeneratedMixin;
-import io.spine.base.EventMessage;
-import io.spine.core.UserId;
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+import io.spine.server.projection.ProjectionRepository;
+import io.spine.server.route.EventRouting;
+import io.spine.users.Group;
+import io.spine.users.GroupId;
+import io.spine.users.event.GroupAware;
+
+import static io.spine.server.route.EventRoute.withId;
 
 /**
- * The interface common for events referring a user account.
+ * Tunes event routing to direct {@link GroupAware} events to the managed {@link GroupProjection}s.
  */
-@Immutable
-@GeneratedMixin
-public interface AccountAware extends EventMessage {
+final class GroupRepository extends ProjectionRepository<GroupId, GroupProjection, Group> {
 
-    /** Obtains the ID of the user account associated with the event. */
-    UserId getAccount();
-
-    /** Obtains the ID of the user account associated with the event. */
-    default UserId account() {
-        return getAccount();
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void setupEventRouting(EventRouting<GroupId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(GroupAware.class, (e, ctx) -> withId(e.getGroup()));
     }
 }

@@ -86,6 +86,7 @@ message UserAccountResumed {
 
 // A new group was created.
 message GroupCreated {
+    option (is).java_type = "GroupAware";
 
     GroupId group = 1;
 
@@ -101,12 +102,14 @@ message GroupCreated {
 
 // A group was deleted.
 message GroupDeleted {
+    option (is).java_type = "GroupAware";
 
     GroupId group = 1;
 }
 
 // A group was added to another (parent) group.
 message GroupAddedToGroup {
+    option (is).java_type = "GroupAware";
 
     // The group which became a member of the parent group.
     GroupId group = 1;
@@ -124,6 +127,7 @@ message GroupAddedToGroup {
 
 // A group left its parent group.
 message GroupRemovedFromGroup {
+    option (is).java_type = "GroupAware";
 
     // The group was removed from the parent group.
     GroupId group = 1;
@@ -138,6 +142,7 @@ message GroupRemovedFromGroup {
 
 // A group was renamed.
 message GroupRenamed {
+    option (is).java_type = "GroupAware";
 
     // The group which gained a new name.
     GroupId group = 1;
@@ -151,6 +156,7 @@ message GroupRenamed {
 
 // A group email address was changed.
 message GroupEmailChanged {
+    option (is).java_type = "GroupAware";
 
     GroupId group = 1;
 
@@ -163,6 +169,7 @@ message GroupEmailChanged {
 
 // A group description changed.
 message GroupDescriptionChanged {
+    option (is).java_type = "GroupAware";
 
     GroupId group = 1;
 
