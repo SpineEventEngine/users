@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 
 import static io.spine.testing.TestValues.randomString;
 import static io.spine.users.server.given.Given.groupEmail;
+import static io.spine.users.server.given.Given.groupEmailUuid;
 import static io.spine.users.server.given.Given.groupId;
 
 @DisplayName("`GroupProjection` should")
@@ -154,11 +155,15 @@ class GroupProjectionTest extends UsersContextTest {
         assertState(expected);
     }
 
+    /**
+     * Provides pairs of group email addresses for {@link #onEvent(EmailAddress, EmailAddress)}.
+     */
     private static Stream<Arguments> emailPairs() {
         EmailAddress empty = EmailAddress.getDefaultInstance();
         return Stream.of(
                 Arguments.of(groupEmail(), empty),
-                Arguments.of(empty, groupEmail())
+                Arguments.of(empty, groupEmail()),
+                Arguments.of(groupEmail(), groupEmailUuid())
         );
     }
 
