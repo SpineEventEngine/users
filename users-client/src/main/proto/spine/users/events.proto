@@ -107,39 +107,6 @@ message GroupDeleted {
     GroupId group = 1;
 }
 
-// A group was added to another (parent) group.
-message GroupAddedToGroup {
-    option (is).java_type = "GroupAware";
-
-    // The group which became a member of the parent group.
-    GroupId group = 1;
-
-    // The parent group.
-    GroupId parent_group = 2 [(required) = true];
-
-    // The role which this group has in the parent group.
-    //
-    // If specified, this role would be default for all users of the enclosed group
-    // in the parent group.
-    //
-    Role role = 3;
-}
-
-// A group left its parent group.
-message GroupRemovedFromGroup {
-    option (is).java_type = "GroupAware";
-
-    // The group was removed from the parent group.
-    GroupId group = 1;
-
-    // The parent group.
-    GroupId parent_group = 2 [(required) = true];
-
-    // The role which the group had in the parent group, if available.
-    Role role = 3 [(required) = true];
-}
-
-
 // A group was renamed.
 message GroupRenamed {
     option (is).java_type = "GroupAware";
@@ -201,5 +168,37 @@ message UserRemovedFromGroup {
     users.GroupId group = 2 [(required) = true];
 
     // The role the user had in the group.
+    Role role = 3 [(required) = true];
+}
+
+// A group was added to another (parent) group.
+message GroupAddedToGroup {
+    option (is).java_type = "GroupAware";
+
+    // The group which became a member of the parent group.
+    GroupId group = 1;
+
+    // The parent group.
+    GroupId parent_group = 2 [(required) = true];
+
+    // The role which this group has in the parent group.
+    //
+    // If specified, this role would be default for all users of the enclosed group
+    // in the parent group.
+    //
+    Role role = 3;
+}
+
+// A group left its parent group.
+message GroupRemovedFromGroup {
+    option (is).java_type = "GroupAware";
+
+    // The group was removed from the parent group.
+    GroupId group = 1;
+
+    // The parent group.
+    GroupId parent_group = 2 [(required) = true];
+
+    // The role which the group had in the parent group, if available.
     Role role = 3 [(required) = true];
 }
