@@ -46,9 +46,9 @@ public final class UsersContext {
      */
     public static BoundedContextBuilder newBuilder(boolean multitenant) {
         BoundedContextBuilder builder =
-                multitenant ? multitenant(NAME) : singleTenant(NAME)
-                        .add(new UserAccountRepository())
-                        .add(new GroupRepository());
+                multitenant ? multitenant(NAME) : singleTenant(NAME);
+        builder.add(new UserAccountRepository())
+               .add(new GroupRepository());
         return builder;
     }
 }

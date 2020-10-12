@@ -23,6 +23,7 @@ package io.spine.users.server;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
+import io.spine.users.event.GroupRenamed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,32 @@ class GroupProjectionTest extends UsersContextTest {
                 .setDisplayName(displayName)
                 .setDescription(description)
                 .vBuild();
+        assertState(expected);
+    }
+
+    @Test
+    @DisplayName("update group display name")
+    void whenRenamed() {
+        String newName = randomString();
+        String oldName = randomString();
+        GroupRenamed groupRenamed = GroupRenamed.newBuilder()
+                .setGroup(id)
+                .setNewName(newName)
+                .setOldName(oldName)
+                .vBuild();
+
+        context().receivesEvent(groupRenamed);
+
+        Group expected = Group.newBuilder()
+                .setId(id)
+                .setDisplayName(newName)
+                .build();
+        assertState(expected);
+    }
+
+    private void assertState(Group expected) {
         context().assertState(id, Group.class)
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(expected);
+                 .comparingExpectedFieldsOnly()
+                 .isEqualTo(expected);
     }
 }

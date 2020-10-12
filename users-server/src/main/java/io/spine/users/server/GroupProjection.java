@@ -25,6 +25,7 @@ import io.spine.server.projection.Projection;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
+import io.spine.users.event.GroupRenamed;
 
 /**
  * Updates {@link Group} according to events coming from implementations of user management.
@@ -35,5 +36,10 @@ final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
     void on(GroupCreated e) {
         builder().setDisplayName(e.getDisplayName())
                  .setDescription(e.getDescription());
+    }
+
+    @Subscribe
+    void on(GroupRenamed e) {
+        builder().setDisplayName(e.getNewName());
     }
 }
