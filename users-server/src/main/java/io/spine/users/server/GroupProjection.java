@@ -25,6 +25,7 @@ import io.spine.server.projection.Projection;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
+import io.spine.users.event.GroupDeleted;
 import io.spine.users.event.GroupRenamed;
 
 /**
@@ -36,6 +37,11 @@ final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
     void on(GroupCreated e) {
         builder().setDisplayName(e.getDisplayName())
                  .setDescription(e.getDescription());
+    }
+
+    @Subscribe
+    void on(@SuppressWarnings("unused") GroupDeleted e) {
+        setDeleted(true);
     }
 
     @Subscribe

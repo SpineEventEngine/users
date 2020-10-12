@@ -23,6 +23,7 @@ package io.spine.users.server;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
+import io.spine.users.event.GroupDeleted;
 import io.spine.users.event.GroupRenamed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,11 +47,7 @@ class GroupProjectionTest extends UsersContextTest {
     void whenCreated() {
         String displayName = randomString();
         String description = randomString();
-        GroupCreated groupCreated = GroupCreated.newBuilder()
-                .setGroup(id)
-                .setDisplayName(displayName)
-                .setDescription(description)
-                .vBuild();
+        GroupCreated groupCreated = created(displayName, description);
 
         context().receivesEvent(groupCreated);
 
@@ -60,6 +57,14 @@ class GroupProjectionTest extends UsersContextTest {
                 .setDescription(description)
                 .vBuild();
         assertState(expected);
+    }
+
+    private GroupCreated created(String displayName, String description) {
+        return GroupCreated.newBuilder()
+                           .setGroup(id)
+                           .setDisplayName(displayName)
+                           .setDescription(description)
+                           .vBuild();
     }
 
     @Test
@@ -80,6 +85,21 @@ class GroupProjectionTest extends UsersContextTest {
                 .setDisplayName(newName)
                 .build();
         assertState(expected);
+    }
+
+    @Test
+    @DisplayName("mark the entity `deleted` on `GroupDeleted`")
+    void whenDeleted() {
+        GroupDeleted groupDeleted = GroupDeleted.newBuilder()
+                .setGroup(id)
+                .vBuild();
+
+        context().receivesEvent(created(randomString(), randomString()))
+                 .receivesEvent(groupDeleted);
+
+        context().assertEntity(id, GroupProjection.class)
+                 .deletedFlag()
+                 .isTrue();
     }
 
     private void assertState(Group expected) {
