@@ -18,6 +18,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
+
 import io.spine.gradle.internal.DependencyResolution
 import io.spine.gradle.internal.Deps
 import io.spine.gradle.internal.PublishingRepos
@@ -111,8 +113,6 @@ subprojects {
     dependencies {
         errorprone(Deps.build.errorProneCore)
         errorproneJavac(Deps.build.errorProneJavac)
-        // For dependencies config. based on version of Java, see:
-        //  https://github.com/epeee/junit-jupiter-extension-testing/blob/57b7ba75ab64ed8c229d2a5b14a954d6ae359189/gradle/errorprone.gradle
 
         implementation(Deps.build.guava)
         implementation(Deps.build.jsr305Annotations)
@@ -139,7 +139,6 @@ subprojects {
     }
     DependencyResolution.excludeProtobufLite(configurations)
 
-    /* Uncomment this block if you need to display console output during the Gradle build.*/
     tasks.test {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
