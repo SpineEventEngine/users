@@ -131,6 +131,7 @@ subprojects {
             resolutionStrategy {
                 force(
                         "io.spine:spine-base:$spineBaseVersion",
+                        "io.spine:spine-testlib:$spineBaseVersion",
                         "io.spine:spine-base:$spineCoreVersion",
                         "io.spine:spine-time:$spineTimeVersion"
                 )
