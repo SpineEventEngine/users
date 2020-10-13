@@ -127,10 +127,8 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
     }
 
     @Apply
-    private void on(
-            @SuppressWarnings({
-                    "unused", "RedundantSuppression" /* to keep both IDEA and PMD happy */
-            }) GroupDeleted e) {
+    @SuppressWarnings({ "unused", "RedundantSuppression" /* to keep both IDEA and PMD happy */ })
+    private void on(GroupDeleted e) {
         setDeleted(true);
     }
 
