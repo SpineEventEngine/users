@@ -41,6 +41,7 @@ import static io.spine.users.server.given.Given.humanUser;
 import static io.spine.users.server.given.Given.service;
 import static io.spine.users.server.given.Given.userId;
 
+@DisplayName("`UserAccountProjection` should")
 class UserAccountProjectionTest extends UsersContextTest {
 
     private UserId id;

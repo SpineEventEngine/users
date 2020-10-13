@@ -30,7 +30,8 @@ import io.spine.users.event.AccountAware;
 import static io.spine.server.route.EventRoute.withId;
 
 /**
- * Manages {@link UserAccountProjection}s.
+ * Tunes event routing to direct {@link AccountAware} events to the managed
+ * {@link UserAccountProjection}s.
  */
 final class UserAccountRepository
         extends ProjectionRepository<UserId, UserAccountProjection, UserAccount> {

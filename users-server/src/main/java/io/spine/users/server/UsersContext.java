@@ -45,8 +45,10 @@ public final class UsersContext {
      * @return a new instance of {@code BoundedContextBuilder} for this Bounded Context
      */
     public static BoundedContextBuilder newBuilder(boolean multitenant) {
-        BoundedContextBuilder builder = multitenant ? multitenant(NAME) : singleTenant(NAME);
-        builder.add(new UserAccountRepository());
+        BoundedContextBuilder builder =
+                multitenant ? multitenant(NAME) : singleTenant(NAME);
+        builder.add(new UserAccountRepository())
+               .add(new GroupRepository());
         return builder;
     }
 }

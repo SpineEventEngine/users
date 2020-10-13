@@ -23,20 +23,14 @@ package io.spine.users.event;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.annotation.GeneratedMixin;
 import io.spine.base.EventMessage;
-import io.spine.core.UserId;
+import io.spine.users.GroupId;
 
 /**
- * The interface common for events referring a user account.
+ * Common interface for events referring a group.
  */
 @Immutable
 @GeneratedMixin
-public interface AccountAware extends EventMessage {
+public interface GroupAware extends EventMessage {
 
-    /** Obtains the ID of the user account associated with the event. */
-    UserId getAccount();
-
-    /** Obtains the ID of the user account associated with the event. */
-    default UserId account() {
-        return getAccount();
-    }
+    GroupId getGroup();
 }

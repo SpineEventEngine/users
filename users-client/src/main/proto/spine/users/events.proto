@@ -41,7 +41,7 @@ message UserAccountCreated {
     option (is).java_type = "AccountAware";
 
     // The ID of the account.
-    core.UserId account = 1;
+    core.UserId account = 1 [(required) = true];
 
     // The user for whom the account was created.
     User user = 2 [(required) = true];
@@ -62,7 +62,7 @@ message UserAccountTerminated {
     option (is).java_type = "AccountAware";
 
     // The ID of the deleted account.
-    core.UserId account = 1;
+    core.UserId account = 1 [(required) = true];
 }
 
 // An account of a user was suspended. It can be [resumed][UserAccountResumed].
@@ -73,7 +73,7 @@ message UserAccountSuspended {
     option (is).java_type = "AccountAware";
 
     // The ID of the suspended account.
-    core.UserId account = 1;
+    core.UserId account = 1 [(required) = true];
 }
 
 // A previously suspended account of a user was resumed.
@@ -81,13 +81,14 @@ message UserAccountResumed {
     option (is).java_type = "AccountAware";
 
     // The ID of the resumed account.
-    core.UserId account = 1;
+    core.UserId account = 1 [(required) = true];
 }
 
 // A new group was created.
 message GroupCreated {
+    option (is).java_type = "GroupAware";
 
-    GroupId group = 1;
+    GroupId group = 1 [(required) = true];
 
     // The name of the group to display on UI.
     string display_name = 2 [(required) = true];
@@ -101,15 +102,85 @@ message GroupCreated {
 
 // A group was deleted.
 message GroupDeleted {
+    option (is).java_type = "GroupAware";
 
     GroupId group = 1;
 }
 
+// A group was renamed.
+message GroupRenamed {
+    option (is).java_type = "GroupAware";
+
+    // The group which gained a new name.
+    GroupId group = 1 [(required) = true];
+
+    // The new name.
+    string new_name = 2 [(required) = true];
+
+    // The previous name.
+    string old_name = 3 [(required) = true];
+}
+
+// A group description changed.
+message GroupDescriptionChanged {
+    option (is).java_type = "GroupAware";
+
+    GroupId group = 1 [(required) = true];
+
+    // A new human-friendly description of the group.
+    string new_description = 2 [(required) = true];
+
+    // An old human-friendly description of the group.
+    string old_description = 3 [(required) = true];
+}
+
+// A group email address was changed.
+message GroupEmailChanged {
+    option (is).java_type = "GroupAware";
+    option (required_field) = "new_email|old_email";
+
+    GroupId group = 1 [(required) = true];
+
+    // A new email address of the group.
+    net.EmailAddress new_email = 2;
+
+    // An old email address of the group.
+    //
+    // This field cannot be equal to `new_email`.
+    //
+    net.EmailAddress old_email = 3;
+}
+
+// A user was added to a group.
+message UserAddedToGroup {
+
+    core.UserId user = 1 [(required) = true];
+
+    // An ID of the group.
+    users.GroupId group = 2 [(required) = true];
+
+    // A role of a user in the group.
+    Role role = 3 [(required) = true];
+}
+
+// A user was removed a group.
+message UserRemovedFromGroup {
+
+    core.UserId user = 1 [(required) = true];
+
+    // The group from which the user removed.
+    users.GroupId group = 2 [(required) = true];
+
+    // The role the user had in the group.
+    Role role = 3 [(required) = true];
+}
+
 // A group was added to another (parent) group.
 message GroupAddedToGroup {
+    option (is).java_type = "GroupAware";
 
     // The group which became a member of the parent group.
-    GroupId group = 1;
+    GroupId group = 1 [(required) = true];
 
     // The parent group.
     GroupId parent_group = 2 [(required) = true];
@@ -124,75 +195,14 @@ message GroupAddedToGroup {
 
 // A group left its parent group.
 message GroupRemovedFromGroup {
+    option (is).java_type = "GroupAware";
 
     // The group was removed from the parent group.
-    GroupId group = 1;
+    GroupId group = 1 [(required) = true];
 
     // The parent group.
     GroupId parent_group = 2 [(required) = true];
 
     // The role which the group had in the parent group, if available.
-    Role role = 3 [(required) = true];
-}
-
-
-// A group was renamed.
-message GroupRenamed {
-
-    // The group which gained a new name.
-    GroupId group = 1;
-
-    // The new name.
-    string new_name = 2 [(required) = true];
-
-    // The previous name.
-    string old_name = 3 [(required) = true];
-}
-
-// A group email address was changed.
-message GroupEmailChanged {
-
-    GroupId group = 1;
-
-    // A new email address of the group.
-    net.EmailAddress new_email = 2 [(required) = true];
-
-    // An old email address of the group.
-    net.EmailAddress old_email = 3 [(required) = true];
-}
-
-// A group description changed.
-message GroupDescriptionChanged {
-
-    GroupId group = 1;
-
-    // A new human-friendly description of the group.
-    string new_description = 2 [(required) = true];
-
-    // An old human-friendly description of the group.
-    string old_description = 3 [(required) = true];
-}
-
-// A user was added to a group.
-message UserAddedToGroup {
-
-    core.UserId user = 1;
-
-    // An ID of the group.
-    users.GroupId group = 2 [(required) = true];
-
-    // A role of a user in the group.
-    Role role = 3 [(required) = true];
-}
-
-// A user was removed a group.
-message UserRemovedFromGroup {
-
-    core.UserId user = 1;
-
-    // The group from which the user removed.
-    users.GroupId group = 2 [(required) = true];
-
-    // The role the user had in the group.
     Role role = 3 [(required) = true];
 }

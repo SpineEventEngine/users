@@ -35,6 +35,7 @@ import io.spine.users.User;
 import java.util.List;
 
 import static io.spine.testing.TestValues.random;
+import static io.spine.testing.TestValues.randomString;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 import static java.lang.String.format;
 
@@ -140,6 +141,18 @@ public final class Given {
     public static EmailAddress email() {
         PersonName name = name();
         return email(name);
+    }
+
+    /** Generates a group email address using a random number in the range [1, 99]. */
+    public static EmailAddress groupEmail() {
+        String value = format("group-%02d@example.com", random(1, 99));
+        return email(value);
+    }
+
+    /** Generates a group email address using UUID-based string. */
+    public static EmailAddress groupEmailUuid() {
+        String value = format("group-%s@example.com", randomString());
+        return email(value);
     }
 
     /**
