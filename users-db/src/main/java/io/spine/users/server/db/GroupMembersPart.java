@@ -154,7 +154,7 @@ final class GroupMembersPart
 
     private Stream<Member> members() {
         return state().getMemberList()
-               .stream();
+                      .stream();
     }
 
     private void removeMember(Member member) {
