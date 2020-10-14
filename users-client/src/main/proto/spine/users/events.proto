@@ -97,7 +97,7 @@ message GroupCreated {
     string description = 3;
 
     // The email address of the group, if available.
-    net.EmailAddress email = 6;
+    net.EmailAddress email = 4;
 }
 
 // A group was deleted.
