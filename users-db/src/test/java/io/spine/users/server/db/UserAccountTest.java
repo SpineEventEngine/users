@@ -112,7 +112,6 @@ class UserAccountTest extends DbExtensionsTest {
                                     .build());
             }
         }
-
     }
 
     @Test
