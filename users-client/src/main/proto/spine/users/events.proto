@@ -163,7 +163,7 @@ message UserAddedToGroup {
     Role role = 3 [(required) = true];
 }
 
-// A user was removed a group.
+// A user was removed from a group.
 message UserRemovedFromGroup {
 
     core.UserId user = 1 [(required) = true];
