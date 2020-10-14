@@ -23,6 +23,9 @@ package io.spine.users.server.db;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.users.server.UsersContextTest;
 
+/**
+ * Abstract base for tests of the database implementation of user management.
+ */
 public abstract class DbExtensionsTest extends UsersContextTest {
 
     @Override
