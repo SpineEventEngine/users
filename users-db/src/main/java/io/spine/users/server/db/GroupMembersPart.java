@@ -138,16 +138,14 @@ final class GroupMembersPart
 
     private Optional<Member> findMember(UserId user) {
         Optional<Member> found =
-                members().filter(m -> m.getKindCase() == USER)
-                         .filter(m -> user.equals(m.getUser()))
+                members().filter(m -> user.equals(m.getUser()))
                          .findFirst();
         return found;
     }
 
     private Optional<Member> findMember(GroupId group) {
         Optional<Member> found =
-                members().filter(m -> m.getKindCase() == GROUP)
-                         .filter(m -> group.equals(m.getGroup()))
+                members().filter(m -> group.equals(m.getGroup()))
                          .findFirst();
         return found;
     }
