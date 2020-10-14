@@ -24,9 +24,9 @@ import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 
 /**
- * Context of integration with Goolge Directory API.
+ * Context of integration with Google Directory API.
  */
-public class GoogleDirectoryContext {
+public final class GoogleDirectoryContext {
 
     static final String NAME = "Google Directory";
 
