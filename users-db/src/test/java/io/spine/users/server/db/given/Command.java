@@ -47,7 +47,7 @@ import static io.spine.users.server.db.given.Given.newGroupEmail;
 /**
  * Test commands for DB-based extensions of the Users context.
  */
-public class Command {
+public final class Command {
 
     /**
      * Prevents instantiation.
