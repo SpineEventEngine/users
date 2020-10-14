@@ -139,7 +139,7 @@ message ChangeGroupDescription {
     // A new human-friendly description of a group.
     string description = 2 [(required) = true];
 
-    //
+    // A previous value of the description, if available.
     string previous_description = 3;
 }
 
