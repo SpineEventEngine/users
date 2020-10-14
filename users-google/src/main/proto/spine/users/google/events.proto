@@ -71,7 +71,7 @@ message GoogleGroupCreated {
     repeated net.EmailAddress alias = 6;
 
     // A domain the groups belongs to.
-    net.InternetDomain domain = 8;
+    net.InternetDomain domain = 7;
 }
 
 // A Google Group joined a new parent Google Group.

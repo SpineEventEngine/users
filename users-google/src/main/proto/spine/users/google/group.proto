@@ -82,8 +82,8 @@ message GoogleGroupLifecycle {
     GroupId id = 1;
 }
 
-// Maps a Google Group ID as obtained from Google Directory ID to corresponding
-// `GroupId` of the Users context.
+// Maps a Google Group ID as obtained from Google Directory ID to `GroupId`
+// used by the application.
 message IdMap {
     option (entity).kind = PROJECTION;
 
@@ -93,5 +93,6 @@ message IdMap {
     // A mapping of a single Google Group ID to a single `GroupId`.
     //
     // The key is a value of `GoogleGroupId`.
+    //
     map<string, GroupId> groups = 2;
 }
