@@ -95,7 +95,7 @@ message GroupIsNotMember {
     // The group from which removal of the group was requested.
     GroupId parent_group = 1 [(required) = true];
 
-    // The group removal of whom from the group was requested.
+    // The group removal of which from the group was requested.
     GroupId missing_group = 2 [(required) = true];
 }
 
@@ -110,7 +110,7 @@ message GroupsCannotFormCycles {
     GroupId closing_group = 2 [(required) = true];
 }
 
-// An operation is not available because a group the passed ID was previously deleted.
+// An operation is not available because a group with the passed ID was previously deleted.
 message UnavailableForDeletedGroup {
 
     // The ID of the group which was previously deleted.

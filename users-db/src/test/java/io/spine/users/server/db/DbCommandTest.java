@@ -27,6 +27,9 @@ import io.spine.server.BoundedContextBuilder;
 import io.spine.server.entity.Entity;
 import io.spine.users.server.CommandTest;
 
+/**
+ * Abstract base for tests of commands of database-implementation of the user management.
+ */
 public abstract class DbCommandTest<I, C extends CommandMessage, E extends EventMessage,
         S extends EntityState, Z extends Entity<I, S>> extends CommandTest<I, C, E, S, Z> {
 
