@@ -31,7 +31,7 @@ import static io.spine.base.Identifier.newUuid;
 /**
  * Test environment for testing {@link GoogleGroupLifecyclePm}.
  */
-public class GoogleGroupTestEnv {
+public final class GoogleGroupTestEnv {
 
     /**
      * Prevents instantiation.
