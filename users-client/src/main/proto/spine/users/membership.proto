@@ -78,7 +78,7 @@ message Membership {
     Role role = 2 [(required) = true];
 }
 
-// To which groups this user belongs?
+// The groups to which this user belongs.
 message UserMembership {
     option (entity).kind = PROJECTION;
 
@@ -99,7 +99,7 @@ message UserMembership {
     repeated Membership indirect = 3;
 }
 
-// To which groups this group belongs?
+// The groups to which this group belongs.
 message GroupMembership {
     option (entity).kind = PROJECTION;
 
