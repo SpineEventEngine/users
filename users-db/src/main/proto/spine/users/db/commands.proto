@@ -36,7 +36,7 @@ import "spine/users/user.proto";
 import "spine/users/membership.proto";
 import "spine/users/db/group.proto";
 
-// Creates a new user account.
+// Create a new user account.
 message CreateUserAccount {
 
     // The ID of the account.
@@ -46,7 +46,7 @@ message CreateUserAccount {
     User user = 2 [(required) = true];
 }
 
-// Deletes a user account.
+// Terminate a user account.
 message TerminateUserAccount {
 
     // The ID of the account to delete.
@@ -71,7 +71,7 @@ message RestoreUserAccount {
     core.UserId account = 1;
 }
 
-// Creates a group.
+// Create a group.
 message CreateGroup {
 
     GroupId group = 1;
@@ -86,7 +86,7 @@ message CreateGroup {
     net.EmailAddress email = 4;
 }
 
-// Deletes a group.
+// Delete a group.
 message DeleteGroup {
 
     GroupId group = 1;
@@ -112,7 +112,7 @@ message RemoveGroupFromGroup {
     GroupId group = 2 [(required) = true];
 }
 
-// Renames a group.
+// Rename a group.
 message RenameGroup {
 
     GroupId group = 1;
@@ -121,7 +121,7 @@ message RenameGroup {
     string new_name = 2 [(required) = true];
 }
 
-// Changes a group email address.
+// Change a group email address.
 message ChangeGroupEmail {
 
     GroupId group = 1;
@@ -130,7 +130,7 @@ message ChangeGroupEmail {
     net.EmailAddress new_email = 2 [(required) = true];
 }
 
-// Changes a description of a group.
+// Change a description of a group.
 message ChangeGroupDescription {
 
     // The group for which we update the description.
@@ -139,7 +139,8 @@ message ChangeGroupDescription {
     // A new human-friendly description of a group.
     string description = 2 [(required) = true];
 
-    //TODO:2020-04-02:alexander.yevsyukov: Add previous value of the description.
+    //
+    string previous_description = 3;
 }
 
 // Add a user to a group.
