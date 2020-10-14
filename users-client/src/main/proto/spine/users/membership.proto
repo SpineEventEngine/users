@@ -114,8 +114,8 @@ message GroupMembership {
 
     // Groups to which the group belongs via other groups.
     //
-    // Empty if the the groups the user belongs to do not belong to other groups.
-    // This means that if the `direct` field is empty, this field must be empty too.
+    // A `Member` does not belong to any group directly, it cannot belong to any other
+    // group indirectly. Therefore, if the `direct` field is empty, this field must be empty too.
     //
     repeated Membership indirect = 3;
 }
