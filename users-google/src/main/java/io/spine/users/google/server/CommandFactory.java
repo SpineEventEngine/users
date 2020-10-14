@@ -51,19 +51,6 @@ final class CommandFactory {
     }
 
     /**
-     * Creates {@link CreateGroup} command for a group from an external domain.
-     */
-    CreateGroup createExternalGroup(GoogleGroupCreated event) {
-        CreateGroup result = CreateGroup
-                .newBuilder()
-                .setGroup(event.getId())
-                .setEmail(event.getEmail())
-                .setDisplayName(event.getDisplayName())
-                .vBuild();
-        return result;
-    }
-
-    /**
      * Creates {@link CreateGroup} command for a group from a tenant's domain.
      */
     CreateGroup createInternalGroup(GoogleGroupCreated event) {
