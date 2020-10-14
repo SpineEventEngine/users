@@ -26,7 +26,7 @@ import io.spine.server.projection.Projection;
 import io.spine.users.AccountStatus;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
-import io.spine.users.event.UserAccountResumed;
+import io.spine.users.event.UserAccountRestored;
 import io.spine.users.event.UserAccountSuspended;
 import io.spine.users.event.UserAccountTerminated;
 
@@ -59,7 +59,7 @@ final class UserAccountProjection extends Projection<UserId, UserAccount, UserAc
     }
 
     @Subscribe
-    void on(UserAccountResumed e) {
+    void on(UserAccountRestored e) {
         builder().setStatus(ACTIVE);
     }
 }

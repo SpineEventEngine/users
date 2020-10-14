@@ -65,9 +65,9 @@ message UserAccountTerminated {
     core.UserId account = 1 [(required) = true];
 }
 
-// An account of a user was suspended. It can be [resumed][UserAccountResumed].
+// An account of a user was suspended. It can be [restored][UserAccountRestored].
 //
-// See also [UserAccountTerminated], [UserAccountResumed]
+// See also [UserAccountTerminated], [UserAccountRestored]
 //
 message UserAccountSuspended {
     option (is).java_type = "AccountAware";
@@ -77,7 +77,7 @@ message UserAccountSuspended {
 }
 
 // A previously suspended account of a user was resumed.
-message UserAccountResumed {
+message UserAccountRestored {
     option (is).java_type = "AccountAware";
 
     // The ID of the resumed account.

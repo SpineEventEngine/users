@@ -65,7 +65,7 @@ message SuspendUserAccount {
 }
 
 // Activate previously suspended user account.
-message ResumeUserAccount {
+message RestoreUserAccount {
 
     // The ID of the account to resume.
     core.UserId account = 1;

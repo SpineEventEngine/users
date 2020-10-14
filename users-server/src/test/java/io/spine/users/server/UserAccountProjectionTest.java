@@ -25,7 +25,7 @@ import io.spine.users.AccountStatus;
 import io.spine.users.User;
 import io.spine.users.UserAccount;
 import io.spine.users.event.UserAccountCreated;
-import io.spine.users.event.UserAccountResumed;
+import io.spine.users.event.UserAccountRestored;
 import io.spine.users.event.UserAccountSuspended;
 import io.spine.users.event.UserAccountTerminated;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,10 +113,10 @@ class UserAccountProjectionTest extends UsersContextTest {
     }
 
     @Test
-    @DisplayName("set the status back to `ACTIVE` when the account was resumed")
-    void whenResumed() {
+    @DisplayName("set the status back to `ACTIVE` when the account was restored")
+    void whenRestored() {
         UserAccountCreated created = created(id, humanUser, SUSPENDED);
-        UserAccountResumed resumed = UserAccountResumed
+        UserAccountRestored resumed = UserAccountRestored
                 .newBuilder()
                 .setAccount(id)
                 .vBuild();
