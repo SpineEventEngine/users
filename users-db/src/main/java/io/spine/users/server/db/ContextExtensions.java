@@ -36,6 +36,12 @@ public class ContextExtensions {
     private ContextExtensions() {
     }
 
+    /**
+     * Adds database-related types to the passed instance of the builder of the Users context.
+     *
+     * @throws IllegalArgumentException
+     *         if a builder with another name is passed
+     */
     public static BoundedContextBuilder withDatabase(BoundedContextBuilder builder) {
         checkNotNull(builder);
         String passedContextName = builder.name().value();
