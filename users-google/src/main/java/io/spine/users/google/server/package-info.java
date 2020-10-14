@@ -19,7 +19,8 @@
  */
 
 /**
- * This package contains classes and interfaces related to Google Groups.
+ * This package contains classes and interfaces related to integration with Google APIs related
+ * to user management.
  */
 
 @ParametersAreNonnullByDefault
