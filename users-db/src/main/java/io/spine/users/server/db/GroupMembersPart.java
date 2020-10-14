@@ -32,17 +32,14 @@ import io.spine.users.db.command.AddGroupToGroup;
 import io.spine.users.db.command.AddUserToGroup;
 import io.spine.users.db.command.RemoveGroupFromGroup;
 import io.spine.users.db.command.RemoveUserFromGroup;
+import io.spine.users.db.rejection.UserIsNotMember;
 import io.spine.users.event.GroupAddedToGroup;
 import io.spine.users.event.GroupRemovedFromGroup;
 import io.spine.users.event.UserAddedToGroup;
 import io.spine.users.event.UserRemovedFromGroup;
-import io.spine.users.db.rejection.UserIsNotMember;
 
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static io.spine.users.Member.KindCase.GROUP;
-import static io.spine.users.Member.KindCase.USER;
 
 /**
  * Manages adding members to a group.
