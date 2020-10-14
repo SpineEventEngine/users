@@ -41,7 +41,7 @@ import io.spine.users.db.rejection.GroupAlreadyExists;
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
  *
- * <p>The roles, assigned to a group are implicitly inherited by all members of the group,
+ * <p>The roles assigned to a group are implicitly inherited by all members of the group,
  * including sub-groups.
  */
 final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder, GroupRoot> {
