@@ -1,0 +1,130 @@
+//
+// Copyright 2019, TeamDev. All rights reserved.
+//
+// Redistribution and use in source and/or binary forms, with or without
+// modification, must retain the above copyright notice and the following
+// disclaimer.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+syntax = "proto3";
+
+package spine.users;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.users";
+option java_outer_classname = "UserProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/core/user_id.proto";
+import "spine/people/person_name.proto";
+import "spine/net/email_address.proto";
+import "spine/net/url.proto";
+
+// Human-readable information about a user of a computer system.
+//
+// The primary purpose of this type is to show the user to other users in the UI
+// or other media.
+//
+// This type does not hold identity of the user for security reasons.
+//
+// See also [UserAccount].
+//
+message User {
+    oneof type {
+        option (is_required) = true;
+
+        // The user is a human.
+        Person person = 1;
+
+        // The user is a computer program.
+        Service service = 2;
+    }
+}
+
+// Information about a human user.
+//
+// See also [Service].
+//
+message Person {
+    option (required_field) = "email|name";
+
+    // A name of the person, if available.
+    people.PersonName name = 1;
+
+    // The URL of the photo of the user, if available.
+    net.Url photo = 2;
+
+    // The primary email address of the user which may be used by the application
+    // for communicating with the user.
+    net.EmailAddress email = 3;
+}
+
+// Information about a non-human user such as a service or a device.
+//
+// See also [Person].
+//
+message Service {
+
+    // The text to show the account in the UI.
+    string display_name = 1 [(required) = true];
+
+    // Optional descriptive text for the service.
+    string description = 2;
+
+    // A picture to show in places where person accounts would have a human photo, if available.
+    net.Url icon = 3;
+}
+
+// An account of a user in a system.
+message UserAccount {
+    option (entity).kind = PROJECTION;
+
+    // The ID of the account
+    core.UserId id = 1;
+
+    // The user of the system.
+    User user = 2 [(required) = true];
+
+    // The value of the status.
+    AccountStatus status = 3 [(required) = true];
+}
+
+// Enumerates possible statuses of a user account
+enum AccountStatus {
+
+    // The default value.
+    ACCOUNT_STATUS_UNKNOWN = 0;
+
+    // The user account is created but not yet ready to work.
+    //
+    // For example, the user hasn't accepted an invitation yet or hasn't finished registration.
+    //
+    PENDING = 1;
+
+    // The user account is ready to work.
+    ACTIVE = 2;
+
+    // The user account was suspended.
+    //
+    // The account may be turned back [ACTIVE] or permanently [TERMINATED].
+    //
+    SUSPENDED = 3;
+
+    // The user is permanently disallowed to use the system.
+    TERMINATED = 4;
+}
