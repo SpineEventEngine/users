@@ -132,7 +132,7 @@ subprojects {
                 force(
                         "io.spine:spine-base:$spineBaseVersion",
                         "io.spine:spine-testlib:$spineBaseVersion",
-                        "io.spine:spine-base:$spineCoreVersion",
+                        "io.spine:spine-core:$spineCoreVersion",
                         "io.spine:spine-time:$spineTimeVersion"
                 )
             }
