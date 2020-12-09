@@ -19,8 +19,8 @@
  */
 
 project.extra.apply {
-    this["versionToPublish"] = "0.0.3"
-    this["spineCoreVersion"] = "1.6.2"
-    this["spineBaseVersion"] = "1.6.2"
-    this["spineTimeVersion"] = "1.6.0"
+    this["versionToPublish"] = "0.0.4"
+    this["spineCoreVersion"] = "1.6.18"
+    this["spineBaseVersion"] = "1.6.16"
+    this["spineTimeVersion"] = "1.6.16"
 }

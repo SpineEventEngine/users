@@ -161,11 +161,6 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
-    <artifactId>spine-errorprone-checks</artifactId>
-    <version>1.6.0</version>
-  </dependency>
-  <dependency>
-    <groupId>io.spine.tools</groupId>
     <artifactId>spine-protoc-plugin</artifactId>
     <version>1.6.0</version>
   </dependency>
