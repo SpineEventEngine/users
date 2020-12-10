@@ -20,7 +20,10 @@
 
 package io.spine.users.server.db.given;
 
+import io.spine.change.Changes;
 import io.spine.core.UserId;
+import io.spine.net.EmailAddress;
+import io.spine.net.NetChange;
 import io.spine.users.GroupId;
 import io.spine.users.User;
 import io.spine.users.db.command.AddGroupToGroup;
@@ -92,7 +95,7 @@ public final class Command {
         return RenameGroup
                 .newBuilder()
                 .setGroup(group)
-                .setNewName(anotherGroupName())
+                .setName(Changes.of("", anotherGroupName()))
                 .vBuild();
     }
 
@@ -100,7 +103,7 @@ public final class Command {
         return ChangeGroupEmail
                 .newBuilder()
                 .setGroup(id)
-                .setNewEmail(newGroupEmail())
+                .setEmail(NetChange.of(EmailAddress.getDefaultInstance(), newGroupEmail()))
                 .vBuild();
     }
 
@@ -108,7 +111,7 @@ public final class Command {
         return ChangeGroupDescription
                 .newBuilder()
                 .setGroup(id)
-                .setDescription(anotherGroupDescription())
+                .setDescription(Changes.of("", anotherGroupDescription()))
                 .vBuild();
     }
 

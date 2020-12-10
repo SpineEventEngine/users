@@ -20,6 +20,9 @@
 
 package io.spine.users.google.server.given;
 
+import io.spine.change.Changes;
+import io.spine.net.EmailAddress;
+import io.spine.net.NetChange;
 import io.spine.users.GroupId;
 import io.spine.users.google.event.GoogleGroupAliasesChanged;
 import io.spine.users.google.event.GoogleGroupCreated;
@@ -37,8 +40,10 @@ import static io.spine.users.google.server.given.GoogleGroupTestEnv.displayName;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.email;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.externalDomain;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.googleId;
+import static io.spine.users.google.server.given.GoogleGroupTestEnv.groupName;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.internalDomain;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.newDescription;
+import static io.spine.users.google.server.given.GoogleGroupTestEnv.newEmail;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.parentGroup;
 import static io.spine.users.google.server.given.GoogleGroupTestEnv.role;
 
@@ -79,51 +84,51 @@ public class GoogleGroupTestEvents {
                 .vBuild();
     }
 
-    public static GoogleGroupJoinedParentGroup googleGroupJoinedParentGroup(GroupId groupId) {
+    public static GoogleGroupJoinedParentGroup googleGroupJoinedParentGroup(GroupId group) {
         return GoogleGroupJoinedParentGroup
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(group)
                 .setRole(role())
                 .setNewParentId(parentGroup())
                 .vBuild();
     }
 
-    public static GoogleGroupLeftParentGroup googleGroupLeftParentGroup(GroupId groupId) {
+    public static GoogleGroupLeftParentGroup googleGroupLeftParentGroup(GroupId group) {
         return GoogleGroupLeftParentGroup
                 .newBuilder()
-                .setId(groupId)
-                .setParentGroupId(parentGroup())
+                .setGroup(group)
+                .setParentGroup(parentGroup())
                 .vBuild();
     }
 
-    public static GoogleGroupRenamed googleGroupRenamed(GroupId groupId) {
+    public static GoogleGroupRenamed googleGroupRenamed(GroupId group) {
         return GoogleGroupRenamed
                 .newBuilder()
-                .setId(groupId)
-                .setDisplayName(GoogleGroupTestEnv.groupName())
+                .setGroup(group)
+                .setDisplayName(Changes.of("", groupName()))
                 .build();
     }
 
-    public static GoogleGroupDeleted googleGroupDeleted(GroupId groupId) {
+    public static GoogleGroupDeleted googleGroupDeleted(GroupId group) {
         return GoogleGroupDeleted
                 .newBuilder()
-                .setId(groupId)
+                .setGroup(group)
                 .build();
     }
 
-    public static GoogleGroupEmailChanged googleGroupEmailChanged(GroupId groupId) {
+    public static GoogleGroupEmailChanged googleGroupEmailChanged(GroupId group) {
         return GoogleGroupEmailChanged
                 .newBuilder()
-                .setId(groupId)
-                .setNewEmail(GoogleGroupTestEnv.newEmail())
+                .setId(group)
+                .setEmail(NetChange.of(EmailAddress.getDefaultInstance(), newEmail()))
                 .build();
     }
 
-    public static GoogleGroupDescriptionChanged googleGroupDescriptionChanged(GroupId groupId) {
+    public static GoogleGroupDescriptionChanged googleGroupDescriptionChanged(GroupId group) {
         return GoogleGroupDescriptionChanged
                 .newBuilder()
-                .setId(groupId)
-                .setNewDescription(newDescription())
+                .setGroup(group)
+                .setDescription(Changes.of("", newDescription()))
                 .build();
     }
 
@@ -131,7 +136,7 @@ public class GoogleGroupTestEvents {
         return GoogleGroupAliasesChanged
                 .newBuilder()
                 .setId(groupId)
-                .addNewAlias(GoogleGroupTestEnv.newEmail())
+                .addNewAlias(newEmail())
                 .build();
     }
 }

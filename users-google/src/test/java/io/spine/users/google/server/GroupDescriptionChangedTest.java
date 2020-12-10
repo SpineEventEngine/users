@@ -46,7 +46,7 @@ class GroupDescriptionChangedTest extends UsersContextTest {
         ChangeGroupDescription expectedCmd = ChangeGroupDescription
                 .newBuilder()
                 .setGroup(groupId)
-                .setDescription(event.getNewDescription())
+                .setDescription(event.getDescription())
                 .build();
         context().receivesCommand(createGroup)
                  .receivesEvent(event)

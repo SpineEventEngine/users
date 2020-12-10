@@ -20,7 +20,9 @@
 
 package io.spine.users.server;
 
+import io.spine.change.Changes;
 import io.spine.net.EmailAddress;
+import io.spine.net.NetChange;
 import io.spine.users.Group;
 import io.spine.users.GroupId;
 import io.spine.users.event.GroupCreated;
@@ -80,8 +82,7 @@ class GroupProjectionTest extends UsersContextTest {
         GroupRenamed groupRenamed = GroupRenamed
                 .newBuilder()
                 .setGroup(id)
-                .setNewName(newName)
-                .setOldName(oldName)
+                .setName(Changes.of(oldName, newName))
                 .vBuild();
 
         context().receivesEvent(groupRenamed);
@@ -118,8 +119,7 @@ class GroupProjectionTest extends UsersContextTest {
         GroupDescriptionChanged descriptionChanged = GroupDescriptionChanged
                 .newBuilder()
                 .setGroup(id)
-                .setNewDescription(newDescription)
-                .setOldDescription(prevDescription)
+                .setDescription(Changes.of(prevDescription, newDescription))
                 .vBuild();
 
         context().receivesEvent(created(randomString(), prevDescription))
@@ -139,8 +139,7 @@ class GroupProjectionTest extends UsersContextTest {
         GroupEmailChanged emailChanged = GroupEmailChanged
                 .newBuilder()
                 .setGroup(id)
-                .setNewEmail(newEmail)
-                .setOldEmail(oldEmail)
+                .setEmail(NetChange.of(oldEmail, newEmail))
                 .vBuild();
 
         context().receivesEvent(created(randomString(), randomString(), oldEmail))

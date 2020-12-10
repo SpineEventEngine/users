@@ -49,16 +49,16 @@ final class GroupProjection extends Projection<GroupId, Group, Group.Builder> {
 
     @Subscribe
     void on(GroupRenamed e) {
-        builder().setDisplayName(e.getNewName());
+        builder().setDisplayName(e.getName().getNewValue());
     }
 
     @Subscribe
     void on(GroupDescriptionChanged e) {
-        builder().setDescription(e.getNewDescription());
+        builder().setDescription(e.getDescription().getNewValue());
     }
 
     @Subscribe
     void on(GroupEmailChanged e) {
-        builder().setEmail(e.getNewEmail());
+        builder().setEmail(e.getEmail().newValue());
     }
 }

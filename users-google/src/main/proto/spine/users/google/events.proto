@@ -30,8 +30,10 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+import "spine/change/change.proto";
 import "spine/net/email_address.proto";
 import "spine/net/internet_domain.proto";
+import "spine/net/net_change.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/google/identifiers.proto";
 
@@ -49,7 +51,6 @@ import "spine/users/google/identifiers.proto";
 //
 
 // A Google Group was created.
-//
 message GoogleGroupCreated {
 
     // A newly generated identifier of the group.
@@ -75,11 +76,10 @@ message GoogleGroupCreated {
 }
 
 // A Google Group joined a new parent Google Group.
-//
 message GoogleGroupJoinedParentGroup {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
-    GroupId id = 1;
+    // The group which got new email address.
+    GroupId group = 1;
 
     // A new parent.
     GroupId new_parent_id = 2 [(required) = true];
@@ -89,59 +89,54 @@ message GoogleGroupJoinedParentGroup {
 }
 
 // A Google Group left a parent Google Group.
-//
 message GoogleGroupLeftParentGroup {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
-    GroupId id = 1;
+    // The group which left the parent group.
+    GroupId group = 1;
 
     // An ID of the parent group.
-    GroupId parent_group_id = 2 [(required) = true];
+    GroupId parent_group = 2 [(required) = true];
 }
 
 // A name of the Google Group was changed.
-//
 message GoogleGroupRenamed {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
-    GroupId id = 1;
+    // The group which was renamed.
+    GroupId group = 1;
 
-    // A new display name.
-    string display_name = 2 [(required) = true];
+    // A change in the display name.
+    change.StringChange display_name = 2 [(required) = true];
 }
 
 // A Google Group was deleted.
-//
 message GoogleGroupDeleted {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
-    GroupId id = 1;
+    // The deleted group.
+    GroupId group = 1;
 }
 
 // An email address of a Group changed.
-//
 message GoogleGroupEmailChanged {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
+    // The group which got new email address.
     GroupId id = 1;
 
-    // The new email address of the group.
-    net.EmailAddress new_email = 2 [(required) = true];
+    // The change in the email address.
+    net.EmailAddressChange email = 2 [(required) = true];
 }
 
 // A description of a group changed.
 //
 message GoogleGroupDescriptionChanged {
 
-    // An internal identifier of the group (please see `GoogleIdMappingView` projection).
-    GroupId id = 1;
+    // The group which description was changed.
+    GroupId group = 1;
 
-    // The new description of the group.
-    string new_description = 2 [(required) = true];
+    // The change in the group description.
+    change.StringChange description = 2 [(required) = true];
 }
 
 // A list of group aliases changed.
-//
 message GoogleGroupAliasesChanged {
 
     GroupId id = 1;

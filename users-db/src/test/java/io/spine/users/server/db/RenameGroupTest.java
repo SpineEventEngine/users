@@ -42,7 +42,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
         return GroupRenamed
                 .newBuilder()
                 .setGroup(command.getGroup())
-                .setNewName(command.getNewName())
+                .setName(command.getName())
                 .build();
     }
 
@@ -51,7 +51,7 @@ class RenameGroupTest extends GroupCommandTest<RenameGroup, GroupRenamed> {
         return Group
                 .newBuilder()
                 .setId(command.getGroup())
-                .setDisplayName(command.getNewName())
+                .setDisplayName(command.getName().getNewValue())
                 .build();
     }
 
