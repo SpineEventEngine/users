@@ -20,7 +20,12 @@
 
 package io.spine.net;
 
+import io.spine.annotation.GeneratedMixin;
 import io.spine.change.Change;
 
+/**
+ * Makes {@code EmailAddressChange} implement {@code Change<EmailAddress>}.
+ */
+@GeneratedMixin
 public interface EmailAddressChangeMixin extends Change<EmailAddress> {
 }
