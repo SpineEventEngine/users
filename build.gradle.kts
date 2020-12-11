@@ -20,6 +20,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import io.spine.gradle.internal.DependencyResolution
 import io.spine.gradle.internal.Deps
 import io.spine.gradle.internal.PublishingRepos
@@ -30,6 +31,7 @@ buildscript {
 
     val dependencyResolution = io.spine.gradle.internal.DependencyResolution
 
+    val kotlinVersion: String by extra
     val spineBaseVersion: String by extra
     val spineTimeVersion: String by extra
 
@@ -39,8 +41,10 @@ buildscript {
     configurations.all {
         resolutionStrategy {
             force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine:spine-time:$spineTimeVersion"
+                "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+                "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion",
+                "io.spine:spine-base:$spineBaseVersion",
+                "io.spine:spine-time:$spineTimeVersion"
             )
         }
     }
@@ -49,12 +53,14 @@ buildscript {
 plugins {
     java
     idea
+    kotlin("jvm") version "1.4.21"
     id("com.google.protobuf").version(io.spine.gradle.internal.Deps.versions.protobufPlugin)
     id("net.ltgt.errorprone").version(io.spine.gradle.internal.Deps.versions.errorPronePlugin)
     id("io.spine.tools.gradle.bootstrap") version "1.6.15" apply false
 }
 
 apply(from = "version.gradle.kts")
+val kotlinVersion: String by extra
 val spineCoreVersion: String by extra
 val spineBaseVersion: String by extra
 val spineTimeVersion: String by extra
@@ -80,6 +86,7 @@ allprojects {
 subprojects {
     apply {
         plugin("java-library")
+        plugin("kotlin")
         plugin("net.ltgt.errorprone")
         plugin("pmd")
         plugin("io.spine.tools.gradle.bootstrap")
@@ -108,12 +115,22 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    val compileKotlin: KotlinCompile by tasks
+    compileKotlin.kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    val compileTestKotlin: KotlinCompile by tasks
+    compileTestKotlin.kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     DependencyResolution.defaultRepositories(repositories)
 
     dependencies {
         errorprone(Deps.build.errorProneCore)
         errorproneJavac(Deps.build.errorProneJavac)
 
+        implementation(kotlin("stdlib-jdk8"))
         implementation(Deps.build.guava)
         implementation(Deps.build.jsr305Annotations)
         implementation(Deps.build.checkerAnnotations)
@@ -130,10 +147,13 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
-                        "io.spine:spine-base:$spineBaseVersion",
-                        "io.spine:spine-testlib:$spineBaseVersion",
-                        "io.spine:spine-core:$spineCoreVersion",
-                        "io.spine:spine-time:$spineTimeVersion"
+                    "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+                    "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion",
+
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-core:$spineCoreVersion",
+                    "io.spine:spine-time:$spineTimeVersion"
                 )
             }
         }
@@ -181,4 +201,18 @@ apply {
 
     // Generate a `pom.xml` file containing first-level dependency of all projects in the repository.
     from(Deps.scripts.generatePom(project))
+}
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+}
+repositories {
+    mavenCentral()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }

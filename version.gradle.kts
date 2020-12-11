@@ -19,7 +19,8 @@
  */
 
 project.extra.apply {
-    this["versionToPublish"] = "0.0.4"
+    this["kotlinVersion"] = "1.4.21"
+    this["versionToPublish"] = "0.0.5"
     this["spineCoreVersion"] = "1.6.18"
     this["spineBaseVersion"] = "1.6.16"
     this["spineTimeVersion"] = "1.6.16"
