@@ -70,7 +70,7 @@ final class CommandFactory {
     AddGroupToGroup joinParentGroup(GoogleGroupJoinedParentGroup event) {
         return AddGroupToGroup
                 .newBuilder()
-                .setGroup(event.getId())
+                .setGroup(event.getGroup())
                 .setParentGroup(event.getNewParentId())
                 .vBuild();
     }
@@ -82,8 +82,8 @@ final class CommandFactory {
     RenameGroup renameGroup(GoogleGroupRenamed event) {
         return RenameGroup
                 .newBuilder()
-                .setGroup(event.getId())
-                .setNewName(event.getDisplayName())
+                .setGroup(event.getGroup())
+                .setName(event.getDisplayName())
                 .vBuild();
     }
 
@@ -94,8 +94,8 @@ final class CommandFactory {
     RemoveGroupFromGroup leaveParentGroup(GoogleGroupLeftParentGroup event) {
         return RemoveGroupFromGroup
                 .newBuilder()
-                .setGroup(event.getId())
-                .setParentGroup(event.getParentGroupId())
+                .setGroup(event.getGroup())
+                .setParentGroup(event.getParentGroup())
                 .vBuild();
     }
 
@@ -106,7 +106,7 @@ final class CommandFactory {
     DeleteGroup deleteGroup(GoogleGroupDeleted event) {
         return DeleteGroup
                 .newBuilder()
-                .setGroup(event.getId())
+                .setGroup(event.getGroup())
                 .vBuild();
     }
 
@@ -118,15 +118,15 @@ final class CommandFactory {
         return ChangeGroupEmail
                 .newBuilder()
                 .setGroup(event.getId())
-                .setNewEmail(event.getNewEmail())
+                .setEmail(event.getEmail())
                 .vBuild();
     }
 
     ChangeGroupDescription changeDescription(GoogleGroupDescriptionChanged event) {
         return ChangeGroupDescription
                 .newBuilder()
-                .setGroup(event.getId())
-                .setDescription(event.getNewDescription())
+                .setGroup(event.getGroup())
+                .setDescription(event.getDescription())
                 .vBuild();
     }
 }

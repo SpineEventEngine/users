@@ -30,7 +30,9 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/core/user_id.proto";
+import "spine/change/change.proto";
 import "spine/net/email_address.proto";
+import "spine/net/net_change.proto";
 import "spine/users/identifiers.proto";
 import "spine/users/user.proto";
 import "spine/users/membership.proto";
@@ -117,8 +119,8 @@ message RenameGroup {
 
     GroupId group = 1;
 
-    // A new name.
-    string new_name = 2 [(required) = true];
+    // The change in the name.
+    change.StringChange name = 2 [(required) = true];
 }
 
 // Change a group email address.
@@ -126,8 +128,8 @@ message ChangeGroupEmail {
 
     GroupId group = 1;
 
-    // A new email address of the group.
-    net.EmailAddress new_email = 2 [(required) = true];
+    // A change in the email address.
+    net.EmailAddressChange email = 2 [(required) = true];
 }
 
 // Change a description of a group.
@@ -136,11 +138,8 @@ message ChangeGroupDescription {
     // The group for which we update the description.
     GroupId group = 1;
 
-    // A new human-friendly description of a group.
-    string description = 2 [(required) = true];
-
-    // A previous value of the description, if available.
-    string previous_description = 3;
+    // The change in the group description.
+    change.StringChange description = 2 [(required) = true];
 }
 
 // Add a user to a group.

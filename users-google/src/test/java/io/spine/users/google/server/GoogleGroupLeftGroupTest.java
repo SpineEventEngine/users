@@ -43,7 +43,7 @@ class GoogleGroupLeftGroupTest extends UsersContextTest {
         RemoveGroupFromGroup expectedCmd = RemoveGroupFromGroup
                 .newBuilder()
                 .setGroup(groupId)
-                .setParentGroup(event.getParentGroupId())
+                .setParentGroup(event.getParentGroup())
                 .build();
         context().receivesEvent(event)
                  .assertCommands()

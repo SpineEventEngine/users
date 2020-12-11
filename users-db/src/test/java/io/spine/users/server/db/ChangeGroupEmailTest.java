@@ -50,7 +50,7 @@ class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmail
         return GroupEmailChanged
                 .newBuilder()
                 .setGroup(command.getGroup())
-                .setNewEmail(command.getNewEmail())
+                .setEmail(command.getEmail())
                 .buildPartial();
     }
 
@@ -59,7 +59,7 @@ class ChangeGroupEmailTest extends GroupCommandTest<ChangeGroupEmail, GroupEmail
         return Group
                 .newBuilder()
                 .setId(command.getGroup())
-                .setEmail(command.getNewEmail())
+                .setEmail(command.getEmail().newValue())
                 .build();
     }
 }

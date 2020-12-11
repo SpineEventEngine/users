@@ -51,7 +51,7 @@ class ChangeGroupDescriptionTest
         return GroupDescriptionChanged
                 .newBuilder()
                 .setGroup(command.getGroup())
-                .setNewDescription(command.getDescription())
+                .setDescription(command.getDescription())
                 .build();
     }
 
@@ -60,7 +60,7 @@ class ChangeGroupDescriptionTest
         return Group
                 .newBuilder()
                 .setId(command.getGroup())
-                .setDescription(command.getDescription())
+                .setDescription(command.getDescription().getNewValue())
                 .build();
     }
 }

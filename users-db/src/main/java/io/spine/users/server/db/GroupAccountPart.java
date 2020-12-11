@@ -30,13 +30,13 @@ import io.spine.users.db.command.ChangeGroupEmail;
 import io.spine.users.db.command.CreateGroup;
 import io.spine.users.db.command.DeleteGroup;
 import io.spine.users.db.command.RenameGroup;
+import io.spine.users.db.rejection.GroupAlreadyExists;
 import io.spine.users.db.rejection.UnavailableForDeletedGroup;
 import io.spine.users.event.GroupCreated;
 import io.spine.users.event.GroupDeleted;
 import io.spine.users.event.GroupDescriptionChanged;
 import io.spine.users.event.GroupEmailChanged;
 import io.spine.users.event.GroupRenamed;
-import io.spine.users.db.rejection.GroupAlreadyExists;
 
 /**
  * An aggregate part of a {@link GroupRoot} that handles basic lifecycle events of a group.
@@ -92,8 +92,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
         return GroupRenamed
                 .newBuilder()
                 .setGroup(c.getGroup())
-                .setNewName(c.getNewName())
-                .setOldName(state().getDisplayName())
+                .setName(c.getName())
                 .vBuild();
     }
 
@@ -102,8 +101,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
         return GroupEmailChanged
                 .newBuilder()
                 .setGroup(c.getGroup())
-                .setNewEmail(c.getNewEmail())
-                .setOldEmail(state().getEmail())
+                .setEmail(c.getEmail())
                 .vBuild();
     }
 
@@ -112,8 +110,7 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
         return GroupDescriptionChanged
                 .newBuilder()
                 .setGroup(c.getGroup())
-                .setNewDescription(c.getDescription())
-                .setOldDescription(state().getDescription())
+                .setDescription(c.getDescription())
                 .vBuild();
     }
 
@@ -134,16 +131,16 @@ final class GroupAccountPart extends AggregatePart<GroupId, Group, Group.Builder
 
     @Apply
     private void on(GroupRenamed e) {
-        builder().setDisplayName(e.getNewName());
+        builder().setDisplayName(e.getName().getNewValue());
     }
 
     @Apply
     private void on(GroupEmailChanged e) {
-        builder().setEmail(e.getNewEmail());
+        builder().setEmail(e.getEmail().newValue());
     }
 
     @Apply
     private void on(GroupDescriptionChanged e) {
-        builder().setDescription(e.getNewDescription());
+        builder().setDescription(e.getDescription().getNewValue());
     }
 }

@@ -51,7 +51,7 @@ plugins {
     idea
     id("com.google.protobuf").version(io.spine.gradle.internal.Deps.versions.protobufPlugin)
     id("net.ltgt.errorprone").version(io.spine.gradle.internal.Deps.versions.errorPronePlugin)
-    id("io.spine.tools.gradle.bootstrap") version "1.6.0" apply false
+    id("io.spine.tools.gradle.bootstrap") version "1.6.15" apply false
 }
 
 apply(from = "version.gradle.kts")
@@ -132,7 +132,7 @@ subprojects {
                 force(
                         "io.spine:spine-base:$spineBaseVersion",
                         "io.spine:spine-testlib:$spineBaseVersion",
-                        "io.spine:spine-base:$spineCoreVersion",
+                        "io.spine:spine-core:$spineCoreVersion",
                         "io.spine:spine-time:$spineTimeVersion"
                 )
             }

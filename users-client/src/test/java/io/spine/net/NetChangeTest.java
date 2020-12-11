@@ -18,9 +18,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-project.extra.apply {
-    this["versionToPublish"] = "0.0.4"
-    this["spineCoreVersion"] = "1.6.18"
-    this["spineBaseVersion"] = "1.6.16"
-    this["spineTimeVersion"] = "1.6.16"
+package io.spine.net;
+
+import com.google.common.testing.NullPointerTester;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
+
+@DisplayName("`NetChange` utility class should")
+class NetChangeTest extends UtilityClassTest<NetChange> {
+
+    NetChangeTest() {
+        super(NetChange.class);
+    }
+
+    @Override
+    protected void configure(NullPointerTester tester) {
+        super.configure(tester);
+        tester.setDefault(EmailAddress.class, EmailAddress.getDefaultInstance());
+    }
 }

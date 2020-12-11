@@ -18,9 +18,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-project.extra.apply {
-    this["versionToPublish"] = "0.0.4"
-    this["spineCoreVersion"] = "1.6.18"
-    this["spineBaseVersion"] = "1.6.16"
-    this["spineTimeVersion"] = "1.6.16"
+package io.spine.net;
+
+import io.spine.annotation.GeneratedMixin;
+import io.spine.change.Change;
+
+/**
+ * Makes {@code EmailAddressChange} implement {@code Change<EmailAddress>}.
+ */
+@GeneratedMixin
+public interface EmailAddressChangeMixin extends Change<EmailAddress> {
 }

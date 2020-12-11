@@ -18,9 +18,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-project.extra.apply {
-    this["versionToPublish"] = "0.0.4"
-    this["spineCoreVersion"] = "1.6.18"
-    this["spineBaseVersion"] = "1.6.16"
-    this["spineTimeVersion"] = "1.6.16"
-}
+//TODO:2020-12-10:alexander.yevsyukov: Merge this code into `common-types` library.
+
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.change;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;
