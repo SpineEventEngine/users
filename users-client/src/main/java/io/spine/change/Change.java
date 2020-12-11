@@ -26,24 +26,24 @@ package io.spine.change;
  * <p>When used as a field of a command, a change instance holds a request to change a field value
  * from the {@linkplain #getPreviousValue() current one} to a {@linkplain #getNewValue() new one}:
  *
- * <pre>{@code
+ * <pre>
  * // The command to change a title of a task.
  * message ChangeTitle {
  *     TaskId task = 1;
  *     spine.change.StringChange title = 2 [(required) = true];
  * }
- * }</pre>
+ * </pre>
  *
  * <p>When used in an event, a change instance provides information about the values changed
  * in a field:
  *
- * <pre>{@code
+ * <pre>
  * // A task title changed.
  * message TitleChanged {
  *     TaskId task = 1 [(required) = true];
  *     spine.change.StringChange title = 2 [(required) = true];
  * }
- * }</pre>
+ * </pre>
  *
  * @param <T>
  *         the type of the changing field
