@@ -22,11 +22,36 @@ package io.spine.net
 import com.google.common.testing.NullPointerTester
 import io.spine.testing.UtilityClassTest
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`NetChange` utility class should")
-class NetChangeTest : UtilityClassTest<NetChange>(NetChange::class.java) {
+internal class NetChangeTest : UtilityClassTest<NetChange>(NetChange::class.java) {
     override fun configure(tester: NullPointerTester) {
         super.configure(tester)
         tester.setDefault(EmailAddress::class.java, EmailAddress.getDefaultInstance())
+              .setDefault(Url::class.java, Url.getDefaultInstance())
+    }
+
+    @Nested
+    @DisplayName("not allow same")
+    inner class NotSame {
+
+        @Test
+        fun `email address`() {
+            val address = EmailAddresses.valueOf("one@example.com")
+            assertRejects { NetChange.of(address, address) }
+        }
+
+        @Test
+        fun `URL instances`() {
+            val url = Urls.create("example.com")
+            assertRejects { NetChange.of(url, url) }
+        }
+
+        private fun assertRejects(executable: () -> Unit) {
+            assertThrows<IllegalArgumentException>(executable)
+        }
     }
 }
