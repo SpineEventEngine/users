@@ -130,7 +130,6 @@ subprojects {
         errorprone(Deps.build.errorProneCore)
         errorproneJavac(Deps.build.errorProneJavac)
 
-        implementation(kotlin("stdlib-jdk8"))
         implementation(Deps.build.guava)
         implementation(Deps.build.jsr305Annotations)
         implementation(Deps.build.checkerAnnotations)
@@ -138,6 +137,7 @@ subprojects {
 
         testImplementation(Deps.test.guavaTestlib)
         Deps.test.junit5Api.forEach { testImplementation(it) }
+        testImplementation(kotlin("stdlib-jdk8"))
         testImplementation(Deps.test.junit5Runner)
         testImplementation("io.spine.tools:spine-mute-logging:$spineBaseVersion")
     }

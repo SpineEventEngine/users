@@ -17,23 +17,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.net
 
-package io.spine.net;
-
-import com.google.common.testing.NullPointerTester;
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
+import com.google.common.testing.NullPointerTester
+import io.spine.testing.UtilityClassTest
+import org.junit.jupiter.api.DisplayName
 
 @DisplayName("`NetChange` utility class should")
-class NetChangeTest extends UtilityClassTest<NetChange> {
-
-    NetChangeTest() {
-        super(NetChange.class);
-    }
-
-    @Override
-    protected void configure(NullPointerTester tester) {
-        super.configure(tester);
-        tester.setDefault(EmailAddress.class, EmailAddress.getDefaultInstance());
+class NetChangeTest : UtilityClassTest<NetChange>(NetChange::class.java) {
+    override fun configure(tester: NullPointerTester) {
+        super.configure(tester)
+        tester.setDefault(EmailAddress::class.java, EmailAddress.getDefaultInstance())
     }
 }
