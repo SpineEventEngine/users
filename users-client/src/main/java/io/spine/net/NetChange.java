@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Utility class for changes of network-related values.
  */
-public class NetChange {
+public final class NetChange {
 
     /** Prevents instantiation of this utility class. */
     private NetChange() {
@@ -51,6 +51,7 @@ public class NetChange {
     private static <T> void checkNotEqual(T previousValue, T newValue) {
         checkNotNull(previousValue);
         checkNotNull(newValue);
-        checkArgument(!newValue.equals(previousValue), "newValue cannot be equal to previousValue");
+        checkArgument(!newValue.equals(previousValue),
+                      "`newValue` cannot be equal to `previousValue`.");
     }
 }
