@@ -28,6 +28,7 @@ import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`NetChange` utility class should")
 internal class NetChangeTest : UtilityClassTest<NetChange>(NetChange::class.java) {
+    
     override fun configure(tester: NullPointerTester) {
         super.configure(tester)
         tester.setDefault(EmailAddress::class.java, EmailAddress.getDefaultInstance())
