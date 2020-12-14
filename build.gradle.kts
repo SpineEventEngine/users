@@ -115,10 +115,14 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    /* Uncomment, when Kotlin is used for the production code.
+
     val compileKotlin: KotlinCompile by tasks
     compileKotlin.kotlinOptions {
         jvmTarget = "1.8"
     }
+    */
+
     val compileTestKotlin: KotlinCompile by tasks
     compileTestKotlin.kotlinOptions {
         jvmTarget = "1.8"
@@ -130,6 +134,10 @@ subprojects {
         errorprone(Deps.build.errorProneCore)
         errorproneJavac(Deps.build.errorProneJavac)
 
+        /*  Uncomment, when Kotlin is used for the production code.
+        implementation(kotlin("stdlib-jdk8"))
+        */
+
         implementation(Deps.build.guava)
         implementation(Deps.build.jsr305Annotations)
         implementation(Deps.build.checkerAnnotations)
@@ -137,6 +145,7 @@ subprojects {
 
         testImplementation(Deps.test.guavaTestlib)
         Deps.test.junit5Api.forEach { testImplementation(it) }
+
         testImplementation(kotlin("stdlib-jdk8"))
         testImplementation(Deps.test.junit5Runner)
         testImplementation("io.spine.tools:spine-mute-logging:$spineBaseVersion")
@@ -201,18 +210,4 @@ apply {
 
     // Generate a `pom.xml` file containing first-level dependency of all projects in the repository.
     from(Deps.scripts.generatePom(project))
-}
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-}
-repositories {
-    mavenCentral()
-}
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
 }
