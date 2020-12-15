@@ -20,6 +20,8 @@
 
 package io.spine.net;
 
+import com.google.protobuf.Message;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,13 +37,30 @@ public final class NetChange {
     /**
      * Creates a change object for an email address.
      */
-    public static EmailAddressChange of(EmailAddress prevValue, EmailAddress newValue) {
-        checkNotNull(prevValue);
-        checkNotNull(newValue);
-        checkNotEqual(prevValue, newValue);
+    public static EmailAddressChange of(EmailAddress previousValue, EmailAddress newValue) {
+        checkChangeArgs(previousValue, newValue);
         return EmailAddressChange
                 .newBuilder()
-                .setPreviousValue(prevValue)
+                .setPreviousValue(previousValue)
+                .setNewValue(newValue)
+                .vBuild();
+    }
+
+    private static <T extends Message>
+    void checkChangeArgs(T previousValue, T newValue) {
+        checkNotNull(previousValue);
+        checkNotNull(newValue);
+        checkNotEqual(previousValue, newValue);
+    }
+
+    /**
+     * Creates a change object for a URL.
+     */
+    public static UrlChange of(Url previousValue, Url newValue) {
+        checkChangeArgs(previousValue, newValue);
+        return UrlChange
+                .newBuilder()
+                .setPreviousValue(previousValue)
                 .setNewValue(newValue)
                 .vBuild();
     }
