@@ -40,7 +40,7 @@ internal class NetChangeTest : UtilityClassTest<NetChange>(NetChange::class.java
     inner class NotSame {
 
         @Test
-        fun `email address`() {
+        fun `email addresses`() {
             val address = EmailAddresses.valueOf("one@example.com")
             assertRejects { NetChange.of(address, address) }
         }
